@@ -1,7 +1,11 @@
 {
   "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "deploy": "Deploy",
+  "accounts": "Accounts",
+  "project": "Project",
+  "share": "Share",
+  "view-results": "View Results",
+  "workspace": "Workspace",
   "about": {
     "title": "About",
     "type": "page"
