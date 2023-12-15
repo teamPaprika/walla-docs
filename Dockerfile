@@ -1,6 +1,6 @@
 # Use the official lightweight Node.js 16 image.
 # https://hub.docker.com/_/node
-FROM node:18-bullseye AS base
+FROM node:18-slim AS base
 
 FROM base AS deps
 WORKDIR /app
