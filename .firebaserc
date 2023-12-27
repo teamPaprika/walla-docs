@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "paprika-cada"
+  },
+  "targets": {
+    "paprika-cada": {
+      "hosting": {
+        "walla-docs": [
+          "walla-docs"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
