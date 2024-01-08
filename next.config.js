@@ -11,9 +11,11 @@ const withNextra = require("nextra")({
   },
 });
 
-module.exports = withNextra({
-  i18n: {
-    locales: ["ko", "en"],
-    defaultLocale: "ko",
-  },
-});
+module.exports = withNextra(
+//   {
+//   // i18n: {
+//   //   locales: ["ko", "en"],
+//   //   defaultLocale: "ko",
+//   // },
+// }
+);
