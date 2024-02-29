@@ -1,9 +1,19 @@
 {
   "index": "Introduction",
+  "teamOwnershipChangeRequest": {
+    "title": "Team Ownership Transfer",
+    "href": "https://walla.my/survey/dBYpZ05oMg5Bl1XxMGkj",
+    "newWindow": true
+  },
+  "getStarted": "Get Started",
+  "createForm&surveyAndShare": "Create Form & Survey and Share",
+  "project&analysisAndReward": "Manage Project, Result Analysis and Reward Distribution",
+  "featuresAndPlanPrice": "Features and Plan Price",
+  "commonlyAskedQuestions": "Commonly Asked Questions",
   "deploy": "Deploy",
   "accounts": "Accounts",
   "project": "Project",
   "share": "Share",
-  "view-results": "View Results",
+  "viewResults": "View Results",
   "workspace": "Workspace"
 }
