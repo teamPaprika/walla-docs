@@ -8,19 +8,13 @@ module.exports = withNextra({
         locales: ["ko", "en"],
         defaultLocale: "ko",
     },
-    webpack: (config, {}) => {
+    webpack: (config, options) => {
         config.module.rules.push({
-            test: /\.(mp4)$/,
-            use: [
-                {
-                    loader: 'file-loader',
-                    options: {
-                        name: '[path][name].[ext]',
-                        outputPath: 'static/videos/',
-                        publicPath: '_next/static/videos/',
-                    },
-                },
-            ],
+            test: /\.mp4$/,
+            type: 'asset/resource',
+            generator: {
+                filename: 'static/videos/[name][ext][query]',
+            }
         });
 
         return config;
