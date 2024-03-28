@@ -12,31 +12,13 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN yarn build
-
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 ENV NODE_ENV production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-
-
-
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-COPY --from=builder /app .
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./next
-
-USER nextjs
 
 EXPOSE 3000
 
@@ -45,4 +27,4 @@ ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
 # Run the web service on container startup.
-CMD [ "yarn", "start" ]
+CMD [ "pnpm", "start" ]
