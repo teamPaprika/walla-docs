@@ -39,18 +39,22 @@ const config: DocsThemeConfig = {
         </svg>
     </Link>,
     footer: {
-        component: () => <div></div>,
+        component: () => null,
     },
     feedback: {
-        content: () => <div></div>,
+        content: () => null,
     },
     editLink: {
-        component: () => <div></div>,
+        component: () => null,
     },
     i18n: [
         {locale: "ko", text: "한국어"},
         {locale: "en", text: "English"},
     ],
+    search: {
+        placeholder: "🔍",
+    },
+    darkMode: false
 };
 
 export default config;
