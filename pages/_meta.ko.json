@@ -1,13 +1,14 @@
 {
-  "introduction": "소개",
-  "commonlyAskedQuestions": "자주 묻는 질문",
-  "teamOwnershipChangeRequest": {
+  "Introduction": "소개",
+  "Commonly_Asked_Questions": "자주 묻는 질문",
+  "Team_Ownership_Change_Request": {
     "title": "팀 소유주 변경 신청",
     "href": "https://walla.my/survey/dBYpZ05oMg5Bl1XxMGkj",
     "newWindow": true
   },
-  "getStarted": "시작하기",
-  "createForm&surveyAndShare": "설문 제작 및 공유",
-  "project&analysisAndReward": "프로젝트 관리, 분석 및 보상",
-  "featuresAndPlanPrice": "플랜별 기능 및 가격"
+  "Get_Started": "시작하기",
+  "Create_Form_&_Survey_And_Share": "설문 제작 및 공유",
+  "Project_&_Analysis_And_Reward": "프로젝트 관리, 분석 및 보상",
+  "Features_And_Plan_Price": "플랜별 기능 및 가격",
+  "AI_Subjective_Response_Analysis": "AI 주관식 응답 분석"
 }

@@ -16,7 +16,7 @@ export default withNextra({
         return [
             {
                 source: '/',
-                destination: '/introduction',
+                destination: '/Introduction',
                 permanent: true,
             },
         ];

@@ -1,13 +1,14 @@
 {
-  "introduction": "Introduction",
-  "commonlyAskedQuestions": "Commonly Asked Questions",
-  "teamOwnershipChangeRequest": {
+  "Introduction": "Introduction",
+  "Commonly_Asked_Questions": "Commonly Asked Questions",
+  "Team_Ownership_Change_Request": {
     "title": "Team Ownership Transfer",
     "href": "https://walla.my/survey/VfhH8tCawHu3J6obRct9",
     "newWindow": true
   },
-  "getStarted": "Get Started",
-  "createForm&surveyAndShare": "Create Form & Survey and Share",
-  "project&analysisAndReward": "Manage Project, Result Analysis and Reward Distribution",
-  "featuresAndPlanPrice": "Features and Plan Price"
+  "Get_Started": "Get Started",
+  "Create_Form_&_Survey_And_Share": "Create Form & Survey and Share",
+  "Project_&_Analysis_And_Reward": "Manage Project, Result Analysis and Reward Distribution",
+  "Features_And_Plan_Price": "Features and Plan Price",
+  "AI_Subjective_Response_Analysis": "AI subjective response analysis"
 }
