@@ -17,7 +17,7 @@ export default withNextra({
             {
                 source: '/',
                 destination: '/Introduction',
-                permanent: true,
+                permanent: false,
             },
         ];
     },
