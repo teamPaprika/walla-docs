@@ -1,0 +1,86 @@
+import {Callout, Steps} from 'nextra/components'
+
+## 왈라 응답 API 시작하기
+
+<Callout type='info'>**왈라 응답 API는 Enterprise 플랜부터 이용 가능합니다.**</Callout>
+
+**왈라 응답 API**는 **왈라로 수집한 데이터를 외부 시스템과 연동**할 수 있도록 하는 API입니다. 왈라 응답 API를 사용하면 왈라로 수집한 데이터를 외부 시스템으로 전달할 수 있습니다.
+
+## 사전 준비
+
+* 왈라 응답 API는 팀 내 **관리자** 권한을 가져야만 사용할 수 있습니다. 팀 내 관리자가 아니라면 팀 관리자에게 문의하여 권한을 받거나, 관리자로부터 API 키를 받아 사용할 수 있습니다.
+* API로 탐색하고자 하는 프로젝트가 속한 팀이 `Enterprise 플랜`에 가입되어 있어야 합니다.
+
+
+
+## API 키 발급
+왈라의 팀 관리자는 왈라의 팀 설정 페이지에서 API 키를 확인하고 발급할 수 있습니다.
+
+![Untitled](https://paprikastorage.com/images%2Fwalla_api%2Fget_api_key.png)
+
+**API 키와 Client ID를 확인하고 메모장 등에 저장해두세요.**
+
+API 키는 외부에 노출되지 않도록 주의해야 합니다.
+
+## 용어 해설
+
+### `projectKey`
+왈라의 프로젝트 키는 작성하는 폼 별로 생성되는 고유한 값입니다.
+
+이 값은 배포된 왈라 폼의 공유 URL에서 확인할 수 있습니다.
+
+```
+ex)
+https://walla.my/v/{PROJECT_KEY}
+https://walla.my/survey/{PROJECT_KEY}
+```
+
+---
+
+### `fieldLabel`
+왈라 폼을 구성하는 문항의 라벨입니다.
+
+즉, 왈라 폼의 질문을 의미합니다.
+
+---
+
+### `responseKey`
+왈라 설문에 대한 각 응답은 고유한 응답 키를 가지고 있습니다.
+
+해당 응답 키는 왈라의 응답시트에서 확인하거나 웹훅을 통해 전달받을 수 있습니다.
+
+---
+
+### `customerKey`
+
+왈라 설문에 참여한 고객의 고유한 식별자입니다.
+해당 키는 응답자가 응답하는 설문 URL의 파라미터로 전달하여 기록할 수 있습니다.
+
+외부 시스템에서 관리하고자 하는 고객의 고유한 식별자를 사용하여 사용자가 응답한 설문을 식별할 수 있습니다.
+
+```
+ex)
+https://walla.my/survey/{PROJECT_KEY}?customerKey={CUSTOMER_KEY}
+https://walla.my/v/{PROJECT_KEY}?customerKey={CUSTOMER_KEY}
+```
+
+
+## API 사용하기
+
+<Steps>
+  ### Authorization 토큰 만들기
+  왈라 응답 API를 사용하기 위해서는 먼저 `Authorization` 헤더에 `Basic {TOKEN}`를 포함하는 토큰을 만들어야 합니다.
+
+
+  **TOKEN은 `{API_KEY}:{CLIENT_ID}`를 base64로 인코딩한 값입니다.**
+
+  TOKEN을 획득한 후, Header에 `Authorization: Basic {TOKEN}`을 포함하여 API 요청을 보내면 됩니다.
+
+
+  ### API 테스트하기
+
+  [이 링크](https://staging---walla-api-thqwfj7gra-uc.a.run.app/api-docs/#/Check%20Response%20Exists/post_checkFieldDataExists)를 통해 왈라 응답 API를 테스트해볼 수 있습니다.
+
+
+
+</Steps>
