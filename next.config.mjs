@@ -8,6 +8,7 @@ const withNextra = nextra({
 
 export default withNextra({
     reactStrictMode: true,
+    output: 'standalone',
     i18n: {
         locales: ["en", "ko"],
         defaultLocale: "ko",
