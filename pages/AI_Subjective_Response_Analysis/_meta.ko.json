@@ -1,5 +1,6 @@
 {
   "K-Means_Clustering": "K-평균 군집화",
   "Zero-shot_Classification": "제로샷 분류",
-  "Keyword_Analysis": "키워드 분석"
+  "Keyword_Analysis": "키워드 분석",
+  "SVM": "서포트 벡터 머신"
 }
