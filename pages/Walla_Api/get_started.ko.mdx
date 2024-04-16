@@ -1,59 +1,64 @@
 import {Callout, Steps} from 'nextra/components'
 
-## 왈라 응답 API 시작하기
-
-<Callout type='info'>**왈라 응답 API는 Enterprise 플랜부터 이용 가능합니다.**</Callout>
+<Callout type='info' emoji="🔔">**왈라 응답 API는 Enterprise 플랜부터 이용 가능합니다.**</Callout>
 
 **왈라 응답 API**는 **왈라로 수집한 데이터를 외부 시스템과 연동**할 수 있도록 하는 API입니다. 왈라 응답 API를 사용하면 왈라로 수집한 데이터를 외부 시스템으로 전달할 수 있습니다.
 
-## 사전 준비
+### 사전 준비
 
-* 왈라 응답 API는 팀 내 **관리자** 권한을 가져야만 사용할 수 있습니다. 팀 내 관리자가 아니라면 팀 관리자에게 문의하여 권한을 받거나, 관리자로부터 API 키를 받아 사용할 수 있습니다.
-* API로 탐색하고자 하는 프로젝트가 속한 팀이 `Enterprise 플랜`에 가입되어 있어야 합니다.
+<Callout type='error' emoji="🚨">**왈라 응답 API는 Enterprise 플랜부터 이용 가능합니다.**</Callout>
+
+- 왈라 응답 API는 팀 내 **관리자** 권한을 가져야만 사용할 수 있습니다. 팀 내 관리자가 아니라면 팀 관리자에게 문의하여 권한을 받거나, 관리자로부터 API 키를 받아 사용할 수 있습니다.
+- API로 탐색하고자 하는 프로젝트가 속한 팀이 **Enterprise 플랜**에 가입되어 있어야 합니다.
 
 
 
-## API 키 발급
+### API 키 발급
+
 왈라의 팀 관리자는 왈라의 팀 설정 페이지에서 API 키를 확인하고 발급할 수 있습니다.
 
 ![Untitled](https://paprikastorage.com/images%2Fwalla_api%2Fget_api_key.png)
 
-**API 키와 Client ID를 확인하고 메모장 등에 저장해두세요.**
+API 키와 Client ID를 확인하고 메모장 등에 저장해두세요.
 
-API 키는 외부에 노출되지 않도록 주의해야 합니다.
+<Callout type='error' emoji="🚨">**API 키는 외부에 노출되지 않도록 주의해야 합니다.**</Callout>
 
-## 용어 해설
+### 용어 해설
 
-### `projectKey`
+#### `projectKey`
 왈라의 프로젝트 키는 작성하는 폼 별로 생성되는 고유한 값입니다.
 
 이 값은 배포된 왈라 폼의 공유 URL에서 확인할 수 있습니다.
 
 ```
-ex)
 https://walla.my/v/{PROJECT_KEY}
 https://walla.my/survey/{PROJECT_KEY}
 ```
 
 ---
 
-### `fieldLabel`
-왈라 폼을 구성하는 문항의 라벨입니다.
+#### `fieldLabel`
 
-즉, 왈라 폼의 질문을 의미합니다.
+왈라 폼의 각 문항 안의 Title 을 의미합니다.
 
 ---
 
-### `responseKey`
-왈라 설문에 대한 각 응답은 고유한 응답 키를 가지고 있습니다.
+#### `value`
+
+fieldLabel 에 대한 설문조사한 사람들의 응답 값입니다.
+
+#### `responseKey`
+
+왈라 설문에 대한 각 응답은 고유한 응답 키입니다.
 
 해당 응답 키는 왈라의 응답시트에서 확인하거나 웹훅을 통해 전달받을 수 있습니다.
 
 ---
 
-### `customerKey`
+#### `customerKey`
 
-왈라 설문에 참여한 고객의 고유한 식별자입니다.
+왈라 설문에 참여한 사람의 고유한 식별자입니다.
+
 해당 키는 응답자가 응답하는 설문 URL의 파라미터로 전달하여 기록할 수 있습니다.
 
 외부 시스템에서 관리하고자 하는 고객의 고유한 식별자를 사용하여 사용자가 응답한 설문을 식별할 수 있습니다.
@@ -64,26 +69,356 @@ https://walla.my/survey/{PROJECT_KEY}?customerKey={CUSTOMER_KEY}
 https://walla.my/v/{PROJECT_KEY}?customerKey={CUSTOMER_KEY}
 ```
 
+#### `fieldId`
 
-## API 사용하기
+왈라 설문의 각 문항 당 고유한 키값입니다.
+
+#### `response`
+
+왈라 설문에 대해 응답한 사람들의 응답 값입니다.
+
+- id: 문항에 대한 고유 키 값입니다. 즉 fieldId 와 같은 형태입니다.
+
+- label: 문항에 대한 Title 입니다. 즉 fieldLabel 와 같은 형태입니다.
+
+- answer: 문항에 대해 응답한 값입니다. 즉 value 와 같은 형태입니다.
+
+```json
+{
+  "response": [
+    {
+      "id": "fieldId",
+      "label": "fieldLabel",
+      "answer": "value"
+    },
+    {
+      "id": "fieldId",
+      "label": "fieldLabel",
+      "answer": "value"
+    }
+  ]
+}
+```
+
+### API 사용하기
 
 <Steps>
-  ### Authorization 토큰 만들기
-  왈라 응답 API를 사용하기 위해서는 먼저 `Authorization` 헤더에 `Basic {TOKEN}`를 포함하는 토큰을 만들어야 합니다.
+    ### Authorization 토큰 만들기
 
+    - 왈라 응답 API를 사용하기 위해서는 먼저 Headers 안에 key: "Authorization" value: **TOKEN** 을 넣어야 합니다.
 
-  **TOKEN은 `{API_KEY}:{CLIENT_ID}`를 base64로 인코딩한 값입니다.**
+    ```markdown
+    TOKEN 은 {Client ID}:{API Key} 를 base64로 인코딩한 값입니다.
+    ```
 
-  TOKEN을 획득한 후, Header에 `Authorization: Basic {TOKEN}`을 포함하여 API 요청을 보내면 됩니다.
+    ### API 테스트하기
 
+    [이
+    링크](https://staging---walla-api-thqwfj7gra-uc.a.run.app/api-docs/#/Check%20Response%20Exists/post_checkFieldDataExists)를
+    통해 왈라 응답 API를 테스트해볼 수 있습니다.
 
-  ### API 테스트하기
+    ![Untitled](https://paprikastorage.com/images%2Fwalla_api%2Fswagger_authorize.png)
 
-  [이 링크](https://staging---walla-api-thqwfj7gra-uc.a.run.app/api-docs/#/Check%20Response%20Exists/post_checkFieldDataExists)를 통해 왈라 응답 API를 테스트해볼 수 있습니다.
-
-  ![Untitled](https://paprikastorage.com/images%2Fwalla_api%2Fswagger_authorize.png)
-
-  해당 위치에서 생성한 토큰을 입력하고, `Try it out` 버튼을 클릭하여 API를 테스트해보세요.
-
-
+    해당 위치에서 생성한 토큰을 입력하고, `Try it out` 버튼을 클릭하여 API를 테스트할 수 있습니다.
 </Steps>
+
+### API 상세 스펙
+
+- base URL: `https://staging---walla-api-thqwfj7gra-uc.a.run.app`
+
+#### checkFieldDataExists
+
+특정 필드에 대한 응답이 존재하는지 확인합니다.
+
+- method: POST
+- url: `https://staging---walla-api-thqwfj7gra-uc.a.run.app/checkFieldDataExists`
+- parameters: empty
+- header: `Authorization: {TOKEN}`
+- request body:
+```json
+{
+"projectKey": "string",
+"fieldLabel": "string",
+"value": "string"
+}
+```
+
+- response: `boolean` 결과 값에 대한 true / false 값을 반환합니다.
+
+#### checkCustomerKeyExists
+
+특정 고객이 응답한 설문이 존재하는지 확인합니다.
+
+- method: POST
+- url: `https://staging---walla-api-thqwfj7gra-uc.a.run.app/checkCustomerKeyExists`
+- parameters: empty
+- header: `Authorization: {TOKEN}`
+- request body:
+```json
+{
+"projectKey": "string",
+"customerKey": "string"
+}
+```
+
+- response: `boolean` 결과 값에 대한 true / false 값을 반환합니다.
+
+#### listColumnData
+
+특정 필드에 대한 응답을 리스트로 반환합니다.
+
+- method: POST
+- url: `https://staging---walla-api-thqwfj7gra-uc.a.run.app/listColumnData`
+- parameters: empty
+- header: `Authorization: {TOKEN}`
+- request body:
+```json
+{
+  "projectKey": "string",
+  "fieldLabel": "string"
+}
+```
+- response: 특정 프로젝트의 특정 필드에 대한 응답에 대한 정보를 배열로 반환합니다. 각 응답에는 응답 내용, 타임스탬프, 응답 키가 포함됩니다.
+
+<Callout type='info' emoji="🔔">**timestamp**는 ISO 8601 형식의 Date 문자열입니다. ex) 2024-04-15T09:28:55.000Z</Callout>
+
+```json
+{
+"fieldLabel": "string",
+"responses": [
+    {
+      "response": "string",
+      "timestamp": "string",
+      "responseKey": "string"
+    }
+  ],
+"fieldId": "string"
+}
+```
+
+#### listCustomerKeys
+
+customerKey 가 사용된 응답의 데이터를 배열로 반환합니다.
+
+- method: POST
+- url: `https://staging---walla-api-thqwfj7gra-uc.a.run.app/listCustomerKeys`
+- parameters: empty
+- header: `Authorization: {TOKEN}`
+- request body:
+
+```json
+{
+  "projectKey": "string"
+}
+```
+
+- response: 각 응답의 customerKey, 타임스탬프를 반환합니다.
+
+```json
+[
+    {
+        "customerKey": "string",
+        "timestamp": "string"
+    },
+    {
+        "customerKey": "string",
+        "timestamp": "string"
+    }
+]
+```
+
+#### getResponseByCustomerKey
+
+특정 고객이 응답한 설문을 반환합니다.
+
+- method: POST
+- url: `https://staging---walla-api-thqwfj7gra-uc.a.run.app/getResponseByCustomerKey`
+- parameters: empty
+- header: `Authorization: {TOKEN}`
+- request body:
+```json
+{
+  "projectKey": "string",
+  "customerKey": "string"
+}
+```
+
+- response: customerKey 에 연관된 응답을 반환합니다. 타임스탬프, 프로젝트 키, 응답 키, 고객 키가 포함되어 있으며,
+
+각각의 객체에 문항의 고유 fieldId(id), 문항의 Title(label), 그리고 문항에 대한 응답(answer)을 포함합니다.
+
+```json
+{
+  "timestamp": "string",
+  "projectKey": "string",
+  "responseKey": "string",
+  "customerKey": "string",
+  "response": [
+    {
+      "id": "string",
+      "label": "string",
+      "answer": "string"
+    }
+  ]
+}
+```
+
+#### getResponseByResponseKey
+
+특정 응답 키에 대한 응답을 반환합니다.
+
+- method: POST
+- url: `https://staging---walla-api-thqwfj7gra-uc.a.run.app/getResponseByResponseKey`
+- parameters: empty
+- header: `Authorization: {TOKEN}`
+- request body:
+```json
+{
+  "projectKey": "string",
+  "responseKey": "string"
+}
+```
+
+- response: responseKey 에 연관된 응답을 반환합니다. 타임스탬프, 프로젝트 키, 응답 키, 고객 키가 포함되어 있으며,
+
+각각의 객체에 문항의 고유 fieldId(id), 문항의 Title(label), 그리고 문항에 대한 응답(answer)을 포함합니다.
+
+```json
+{
+  "timestamp": "string",
+  "projectKey": "string",
+  "customerKey": "string",
+  "response": [
+    {
+      "id": "string",
+      "label": "string",
+      "answer": "string"
+    }
+  ]
+}
+```
+
+#### getProjectResponses
+
+특정 프로젝트에 대한 모든 응답을 반환합니다.
+
+- method: POST
+- url: `https://staging---walla-api-thqwfj7gra-uc.a.run.app/getProjectResponses`
+- parameters: empty
+- header: `Authorization: {TOKEN}`
+- request body:
+
+```json
+{
+  "projectKey": "string"
+}
+```
+
+- response: 프로젝트에 대한 모든 응답을 반환합니다. 각 응답에는 fieldId(id), 문항 Title(label), 타임스탬프, [hiddenFields](/Create_Form_&_Survey_And_Share/Hidden_Field) 가 포함되어 있습니다.
+
+```json
+{
+    "projectDetails": {
+        "fields": [
+            {
+                "id": "string",
+                "label": "string"
+            }
+        ],
+        "hiddenFields": [],
+        "projectKey": "string"
+    },
+    "responses": [
+        {
+            "timestamp": "string",
+            "customerKey": "string",
+            "responseKey": "string",
+            "response": [
+                {
+                    "id": "string",
+                    "label": "string",
+                    "answer": "string"
+                }
+            ]
+        },
+        {
+            "timestamp": "string",
+            "customerKey": "string",
+            "responseKey": "string",
+            "response": [
+                {
+                    "id": "string",
+                    "label": "string",
+                    "answer": "string"
+                }
+            ]
+        }
+    ]
+}
+```
+
+### 에러 응답 코드
+
+<Callout type='error' emoji="🚨">**모든 API 호출에는 TOKEN 이 필요합니다.**</Callout>
+
+#### 400 Bad Request
+
+- 특정 키에 대해 잘못된 값이 들어갔을 때 반환됩니다.
+
+```json
+{
+  "message": "Bad Request"
+}
+```
+
+- 조회할 프로젝트가 존재하지 않을 때 반환됩니다.
+
+```json
+{
+  "message": "Bad Request: Project does not exist"
+}
+```
+
+#### 403 Unauthorized & Forbidden
+
+- 발급받는 Client ID가 프로젝트에 접근할 권한이 없는 경우 반환됩니다.
+
+```json
+{
+  "message": "Unauthorized: No Access to Project"
+}
+```
+
+- 헤더에 Authorization 토큰이 없는 경우에 반환됩니다.
+
+```json
+{
+  "message": "Unauthorized: No API Key"
+}
+```
+
+- 헤더에 잘못된 Authorization 토큰이 들어간 경우에 반환됩니다.
+
+```json
+{
+  "message": "Unauthorized: Invalid API Key"
+}
+```
+
+- 팀 내 관리자가 아닌 사람이 API를 사용하려고 할 때 반환됩니다.
+
+```json
+{
+  "message": "Unauthorized: No Access to API"
+}
+```
+
+#### 500 Internal Server Error
+
+- 서버상의 오류가 발생했을 때 반환됩니다.
+
+```json
+{
+  "message": "Internal Server Error"
+}
+```
