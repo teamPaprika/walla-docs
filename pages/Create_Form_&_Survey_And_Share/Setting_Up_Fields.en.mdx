@@ -360,6 +360,32 @@ import {Callout, Steps} from 'nextra/components'
 - To request a specific time selection, use the "Time" field.
 - Respondents can input the time directly or choose it using the clock icon, with options for both AM and PM.
 
+## 🙅‍ EXIT TYPE Category
+
+<aside style={{backgroundColor: 'red', padding: '16px', background: 'rgb(241, 241, 239)', borderRadius: '4px', fontSize: '16px', lineHeight: '1.5', fontWeight: '500', margin: '20px 0px'}}>
+    💡 An exit field is a field that prevents respondents from continuing before submission. You can set various logic in the exit field to utilize it in different ways.
+</aside>
+
+#### Please add an exit field.
+You can freely insert text, images, etc., into the exit field.
+![Untitled](https://paprikastorage.com/images%2FsettingUpFields%2Fko%2F32.png)
+
+#### Set the logic for the filter question.
+- You cannot set logic for the exit field itself.
+- If the default move is 'Next Question', it will conflict with the 'Exit Field' that appears immediately after. Be sure to specify the default move.
+- For example, in a survey targeting people in their 20s, if you want to exclude respondents who are not in their 20s, set the logic in the question asking about age.
+  - Default move: Q2. What is your occupation?
+  - Logic 1: Select 'Teens' → Move to 'Exit Field'
+![Untitled](https://paprikastorage.com/images%2FsettingUpFields%2Fko%2F33.png)
+
+#### Shall we check?
+
+- You can move respondents who selected 'Teens' to the exit field and inform them '**You are not eligible to respond!**'.
+- Respondents who selected '20s' can proceed with the survey normally.
+
+<video controls width="100%" height="480" src='https://paprikastorage.com/videos%2FsettingUpFieldsKo0.mp4'></video>
+
+
 <Callout type='info' emoji="🔔">
     Do you want to check Walla's future development plans or suggest new features? <br/>Click <a
     href='https://app.walla.my/signin?redirectUrl=/support/featureRequest'
