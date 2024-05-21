@@ -3,5 +3,6 @@
   "Reward_Distribution": "보상 전달하기",
   "Manage_Project": "프로젝트 관리하기",
   "Organizing_Data": "그룹바이로 데이터 묶기",
-  "Integrating_With_Third-Party": "서드파티 연동하기"
+  "Integrating_With_Third-Party": "서드파티 연동하기",
+  "Integrating_With_Webhook": "웹훅 연동하기"
 }
