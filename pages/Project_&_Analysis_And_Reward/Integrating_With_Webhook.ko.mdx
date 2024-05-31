@@ -4,6 +4,41 @@ import {Callout, Steps} from 'nextra/components'
 
 <Callout type='info' emoji="🔔">**웹훅을 통해 응답이 도착했을 때 알림을 받거나, 다른 서비스와 연동해 설문과 관련된 다양한 정보를 받아볼 수 있어요.**</Callout>
 
+### 웹훅 연동의 기본
+
+1. 웹훅 종류
+    - Submit: 응답이 제출된 경우, 알림을 보내요.
+    - Reject: 응답이 제출되지 못하고 중간에 탈락된 경우 (탈락 필드로 이어진 경우), 알림을 보내요.
+
+2. 웹훅 이름: 웹훅의 이름이에요.
+3. 웹훅 주소: 서드파티 툴에서 웹훅 연동을 위해 제공하는 URL이에요.
+4. 요청 종류: https 요청의 종류를 Post 와 Get 중에서 선택할 수 있어요.
+5. 커스텀 Header: Key-Value를 자유롭게 커스터마이징 할 수 있어요.
+    - Header Name: Discord, Slack 등에서는 기본적으로 'Content-Type'을 사용해요.
+    - Value: Discord, Slack 등에서는 기본적으로 'application/json'을 사용해요.
+6. Body 설정:
+    - 커스텀 Body: Body 프리셋 값을 이용해 웹훅 알림의 내용을 입력할 수 있어요.
+    - Body 프리셋: 기본적으로 `"":"{{res:응답값}}"` 의 형식으로, 따옴표 안의 값을 복사해 커스텀 Body에 붙여넣어 이용할 수 있어요.
+        - 문항: 어떤 문항의 응답인지 확인할 수 있어요.
+            - ‘히든필드’를 추가한 경우, 맨 아래에 생기는 ‘히든필드’의 프리셋을 복사할 수 있어요.
+        - projectKey: 어떤 프로젝트인지 project Key를 확인할 수 있어요.
+        - customerKey: 어떤 응답자인지 customer Key를 확인할 수 있어요.
+            - 이때 URL에 히든필드와 마찬가지로 **customerKey=value** 를 입력해주어야 해요. ex) `https://walla.my/v/~~~?source=Instagram&`<a style={{color: 'blue'}}>customerKey=Minsu</a>
+        - responseKey: 어떤 응답인지 response Key를 확인할 수 있어요.
+    - 만약 응답 내용과 히든필드의 종류를 알림 받기 위해 `https://walla.my/v/`<a style={{color: 'red'}}>fLptDL9bbvlxRvWRTNud</a>?source=<a style={{color: 'orange'}}>Instagram</a>&customerKey=<a style={{color: 'blue'}}>Minsu</a> 라는 설문 URL을 공유하고, 아래와 같이 Body를 설정한다면
+
+```json
+{
+"content": "{{projectKey}} 설문의 응답이 도착했습니다! 응답자의 생일은 {{res:2865092957}}입니다. 이 응답의 CustomerKey는 {{customerKey}}이고, ResponseKey는 {{responseKey}}입니다. 히든필드 {{hidden:1495742778}}를 통해 기록된 응답입니다."
+}
+```
+이러한 웹훅 알림을 받을 수 있어요.
+
+![Untitled](https://paprikastorage.com/images%2FintegratingWithThirdParty%2Fko%2F58.png)
+
+
+<Callout type='warning' emoji="⚠️">**웹훅의 요청 데이터의 형식은 각 서비스의 APP 에서 제공하는 DOCS를 확인해야될 경우가 있습니다.**</Callout>
+
 ### Discord 연동하기
 
 #### 1. 알림을 받고자 하는 Discord 서버의 '채널 편집' 설정에 들어가주세요.
@@ -141,10 +176,10 @@ import {Callout, Steps} from 'nextra/components'
 #### 2. 기본 내용을 모두 지운 후, 아래의 코드를 붙여넣어주세요.
 
 - 코드 중 `"------@------.---"` 부분에는 따옴표 사이에 알림을 받을 이메일을 적어주세요.
-  - ex) `"minsu@walla.my, yeonghee@walla.my"`
+- ex) `"minsu@walla.my, yeonghee@walla.my"`
 
 - 코드 중 `<${FORM_TITLE}> ------------` 부분에는 메일의 제목을 입력해 주세요.
-  - ex) `<${FORM_TITLE}> 설문에 제출된 응답`
+- ex) `<${FORM_TITLE}> 설문에 제출된 응답`
 
 ```javascript
 function doPost(e) {
@@ -363,5 +398,5 @@ function doPost(e) {
 <Callout type='info' emoji="🔔">
     왈라의 개발 계획을 확인하거나 새로운 기능을 제안하고 싶으신가요? <a href='https://app.walla.my/signin?redirectUrl=/support/featureRequest'
                                             target="_blank" rel="noopener noreferrer"
-                                            style={{textDecoration: 'underline'}}>**제품 로드맵 및 기능 제안**</a> 페이지로 이동하세요!
+                                            style={{textDecoration: 'underline'}}>**제품 로드맵 및 기능 제안**</a> 페이지로 이동해요!
 </Callout>

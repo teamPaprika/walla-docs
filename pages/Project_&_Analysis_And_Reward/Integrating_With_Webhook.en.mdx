@@ -4,6 +4,39 @@ import {Callout, Steps} from 'nextra/components'
 
 <Callout type='info' emoji="🔔">**You can receive notifications or get various information related to surveys by integrating with other services when a response is received through webhooks.**</Callout>
 
+### Basics of Webhook Integration
+
+1. Types of Webhooks
+    - Submit: Sends a notification when a response is submitted.
+    - Reject: Sends a notification when a response is rejected (e.g., when it leads to a disqualification field).
+
+2. Webhook Name: The name of the webhook.
+3. Webhook URL: The URL provided by third-party tools for webhook integration.
+4. Request Type: You can choose between Post and Get for the type of HTTP request.
+5. Custom Header: You can customize Key-Value pairs freely.
+    - Header Name: Typically, 'Content-Type' is used in services like Discord and Slack.
+    - Value: Typically, 'application/json' is used in services like Discord and Slack.
+6. Body Settings:
+    - Custom Body: You can input the contents of the webhook notification using body presets.
+    - Body Preset: Usually in the format `"":"{{res:response_value}}"`, you can copy the value inside the quotes and paste it into the custom body.
+        - Field: You can identify the response to a specific field.
+            - If you add a ‘hidden field’, you can copy the preset of the hidden field that appears at the bottom.
+        - projectKey: You can identify which project it belongs to using the project key.
+        - customerKey: You can identify which respondent it belongs to using the customer key.
+            - In this case, you need to add **customerKey=value** to the URL similarly to the hidden field. e.g., `https://walla.my/v/~~~?source=Instagram&`<a style={{color: 'blue'}}>customerKey=Minsu</a>
+        - responseKey: You can identify which response it belongs to using the response key.
+    - If you want to receive notifications of the response content and the type of hidden field, share the survey URL like `https://walla.my/v/`<a style={{color: 'red'}}>fLptDL9bbvlxRvWRTNud</a>?source=<a style={{color: 'orange'}}>Instagram</a>&customerKey=<a style={{color: 'blue'}}>Minsu</a>, and set the body as follows:
+
+```json
+{
+"content": "A response to the {{projectKey}} survey has arrived! The respondent's birthday is {{res:2865092957}}. The CustomerKey of this response is {{customerKey}}, and the ResponseKey is {{responseKey}}. This response was recorded through the hidden field {{hidden:1495742778}}."
+}
+```
+
+You can receive such a webhook notification.
+
+![Untitled](https://paprikastorage.com/images%2FintegratingWithThirdParty%2Fen%2F58.png)
+
 ### Integrating with Discord
 
 #### 1. Go to 'Edit Channel' of the Discord server where you want to receive notifications.
