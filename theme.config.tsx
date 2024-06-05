@@ -3,6 +3,9 @@ import Link from "next/link";
 import {DocsThemeConfig} from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
+    useNextSeoProps() {
+        return {titleTemplate: '%s - Walla Docs'}
+    },
     logo: <Link legacyBehavior href="/">
         <svg width="520" height="24" viewBox="0 0 2000 90" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_1908_765)">
@@ -54,7 +57,7 @@ const config: DocsThemeConfig = {
     search: {
         placeholder: "🔍",
     },
-    darkMode: false
+    darkMode: false,
 };
 
 export default config;
