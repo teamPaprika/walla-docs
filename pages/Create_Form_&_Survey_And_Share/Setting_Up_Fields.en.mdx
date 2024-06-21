@@ -92,22 +92,22 @@ import {Callout, Steps} from 'nextra/components'
     4️⃣ 'I want to receive only phone numbers formatted like '010-1111-2222' with dashes in the middle!
     - Response Type : Regex (Regular Expression)
     - Response Condition : Contains
-    - Reference Value: ^\d{3}-\d{3,4}-\d{4}$
+    - Reference Value: `^\d{3}-\d{3,4}-\d{4}$`
     - Error Message : Please enter the phone number in the format '010-1111-2222'.
 
     #### I'll provide a summary of commonly used regular expressions
-    - Name(2 character minimum, 26자 character maximum) : ^[A-Z]{1,26}$ →
-    - Postal Code(6 Character: Ex. 🇨🇦) : ^\d{6}$%
-    - Email : ^[A-z0-9._-]+@[A-z0-9-]+\.[A-z]+$
+    - Name(2 character minimum, 26자 character maximum) : `^[A-Z]{1,26}$`
+    - Postal Code(6 Character: Ex. 🇨🇦) : `^\d{6}$`
+    - Email : `^[A-z0-9._-]+@[A-z0-9-]+\.[A-z]+$`
     - Cell Phone(Ex. 🇨🇦)
-    - If separated by - (ex. 613-1111-2222) : ^\d{3}-\d{3,4}-\d{4}$
-    - If separated by . (ex. 613.1111.2222) : ^\d{3}.\d{3,4}.\d{4}$
-    - If separated by number only (ex. 16311112222) : ^\d{10,11}$
+    - If separated by - (ex. 613-1111-2222) : `^\d{3}-\d{3,4}-\d{4}$`
+    - If separated by . (ex. 613.1111.2222) : `^\d{3}.\d{3,4}.\d{4}$`
+    - If separated by number only (ex. 16311112222) : `^\d{10,11}$`
     - Date of Birth
-    - YYYY.MM.DD : ^\d{4}.\d{2}.\d{2}$
-    - YY.MM.DD : ^\d{2}.\d{2}.\d{2}$
-    - YYYYMMDD : ^\d{8}$
-    - YYMMDD : ^\d{6}$
+    - YYYY.MM.DD : `^\d{4}.\d{2}.\d{2}$`
+    - YY.MM.DD : `^\d{2}.\d{2}.\d{2}$`
+    - YYYYMMDD : `^\d{8}$`
+    - YYMMDD : `^\d{6}$`
 </Steps>
 
 ## 💽 Data Category
