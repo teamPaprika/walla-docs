@@ -1,0 +1,31 @@
+import {Callout} from 'nextra/components'
+
+<Callout type='info' emoji="🔔">'Dropout respondents' allows you to check where respondents dropped out of the form and how far they progressed.</Callout>
+
+1. You can check the progress rate through 'Dropout respondents' at the bottom of the 'Analytics' tab.
+    - The dropout respondents table has different meanings depending on the color.
+        - Blue: The respondent visited this question.
+        - Light blue: The respondent did not visit this question.
+        - Red: The respondent dropped out at this question.
+    - Let's look at some examples:
+        - <strong style={{color: 'blue'}}>Blue</strong>-Light blue-Light blue-<strong style={{color: 'red'}}>Red</strong>: Moved from question 1 to question 4 via logic and then dropped out.
+        - <strong style={{color: 'red'}}>Red</strong>-<strong style={{color: 'blue'}}>Blue</strong>-Light blue-<strong style={{color: 'blue'}}>Blue</strong>: Visited questions 1 and 2, then moved to question 4 via logic and dropped out at question 1.
+
+![image](https://paprikastorage.com/images/dropoutRespondents(progressRate)/en/1.png)
+
+2. You can change the view mode or save the table by clicking the icons shown.
+    - Full screen toggle: View the dropout respondents table in full screen.
+    - Hide/show columns: Select only the questions you want to see in the table.
+    - Download: Download the selected rows as a CSV.
+    - Sort: Sort the rows in ascending/descending order based on the selected item.
+
+![image](https://paprikastorage.com/images/dropoutRespondents(progressRate)/en/2.png)
+
+<Callout type='info' emoji="🔔">
+    Do you want to check Walla's future development plans or suggest new features? <br/>Click <a
+    href='https://app.walla.my/signin?redirectUrl=/support/featureRequest'
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{textDecoration: 'underline'}}>**Product
+    Roadmap and Feature Suggestions**</a>
+</Callout>
