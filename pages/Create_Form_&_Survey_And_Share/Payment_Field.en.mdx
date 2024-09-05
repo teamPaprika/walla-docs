@@ -1,0 +1,48 @@
+import {Callout} from 'nextra/components'
+
+## Payment Field
+
+<Callout type='info' emoji="⚠️">**The Payment Field feature is available from the Pro plan.**</Callout>
+
+1. Please add a payment field.
+
+![Untitled](https://paprikastorage.com/images/paymentField/en/1.png)
+
+2. Enter the necessary information for the payment.
+
+a. **Variant Key**: A unique value that distinguishes the payment UI, displayed in blue in the payment field as <span style={{ color: '#337EA9' }}>Check the Payment UI Variant Key</span>
+![Untitled](https://paprikastorage.com/images/paymentField/en/2.png)
+![Untitled](https://paprikastorage.com/images/paymentField/en/3.png)
+
+ - If you insert the live UI, actual payments will be processed. If you insert the test UI, no real payments will be made, so be sure to differentiate when entering.
+ - If you’re just starting, you can click the ‘Add UI’ button to configure various payment UIs.
+  - After clicking the 'Add UI' button, select 'Domestic General Payment.'
+![Untitled](https://paprikastorage.com/images/paymentField/en/4.png)
+ - Virtual accounts cannot be used.
+  - Be sure to **uncheck** virtual accounts in [Features] - [Payment Methods List] within the payment UI editor.
+  - Walla records a payment as completed once a response is submitted, but virtual accounts do not process payments instantly. This means that respondents may not complete the payment after submitting the form. As a result, it could appear in the response sheet that the payment was made, even though no money was actually transferred. To ensure proper payment, make sure to uncheck virtual accounts.
+![Untitled](https://paprikastorage.com/images/paymentField/en/5.png)
+b. **Client Key, Secret Key**: The client and secret keys can be found on the Toss Payments Developer Center (https://developers.tosspayments.com/) under 'My Development Information' or by checking the payment widget integration key, which is displayed in blue in the payment field.
+
+ - On the left, select your store and copy the client and secret keys for that store.
+![Untitled](https://paprikastorage.com/images/paymentField/en/6.png)
+c. **Order ID**: A unique value is issued to identify the ordered payment, displayed in the format 'OrderID_RandomKey_Time.'
+ - If you’re creating an order form for fish-shaped bread, you can freely generate order IDs like 'redbean' for red bean fish-shaped bread or 'chouxcream' for custard cream fish-shaped bread.
+d. **Product Name**: The name of the product the respondent will order.
+ - For a fish-shaped bread order form, product names could be 'Red Bean Fish-shaped Bread' or 'Custard Cream Fish-shaped Bread.'
+e. **Product Price**: The price of the product the respondent will order.
+
+3. Now you can create an order form using the payment field.
+ - If you duplicate a payment field, the secret key will not be duplicated. Please re-enter it in the duplicated field.
+ - When using the test UI, real payments will not be processed, so be sure to differentiate from the live UI.
+ - You can use logic to show different payment fields based on the respondent's choices.
+ - Check out an example survey to quickly see the payment field in action. https://walla.my/v/PaJl6AmkXUW5NRsVoNQT
+
+<Callout type='info' emoji="🔔">
+    Do you want to check Walla's future development plans or suggest new features? <br/>Click <a
+    href='https://app.walla.my/signin?redirectUrl=/support/featureRequest'
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{textDecoration: 'underline'}}>**Product
+    Roadmap and Feature Suggestions**</a>
+</Callout>

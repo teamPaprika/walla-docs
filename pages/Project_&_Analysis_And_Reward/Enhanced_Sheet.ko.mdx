@@ -1,0 +1,159 @@
+import {Callout} from 'nextra/components'
+
+<Callout type='info' emoji="⚠️">**고급 시트 기능은 Enterprise 플랜부터 이용 가능합니다.**</Callout>
+<Callout type='info' emoji="⚠️">**고급 시트를 이용하면 보다 빠르고 편리하게 응답을 분류하고, 원하는 값을 찾아낼 수 있어요.**</Callout>
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/1.png)
+
+(1) 테마 변경 (현재 사용 불가 기능입니다)
+
+(2) 스크롤 잠금
+    - Free Scroll: 자유 방향 스크롤
+    - Align Scroll: 고정 방향 스크롤
+(3) 편집 잠금 (현재 사용 불가 기능입니다)
+
+(4) 초기화: 설정 초기화하기
+
+(5) 내보내기
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/2.png)
+
+(6) 복사하기
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/3.png)
+
+(7) 편집하기
+    - Fromat: 굵기, 기울기, 하이퍼링크 설정
+    - Color: 열의 글자 색상, 배경 색상 설정
+    - Timezone: Timestamp의 기반 지역 변경
+    - Date Style: 날짜 표기 방식 변경
+    - Time Style: 시간대 표기 방식 변경
+
+(8) 숨기기
+
+(9) 숨기기취소
+
+(10) 편집하기: (7)과 동일
+
+(A) Group By: 복수의 데이터를 묶어서 보기
+    - 연령과 가장 좋아하는 계절을 Group By로 묶으면 시트가 아래와 같이 **19살 이하이면서 봄을 좋아하는 경우**나 **27-30살이면서 여름을 좋아하는 경우** 등 두 가지 조건을 가진 대상을 빠르게 파악할 수 있어요.
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/4.png)
+
+    - 이때 Columns에 변화가 생긴 것을 확인할 수 있어요.
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/5.png)
+
+현재는 Count로 되어 있기 때문에 Group By에 옮겼을 때는 응답값이 숫자로만 표현되었어요. 하지만 이 설정을 바꾸면 시트에서 다양한 값을 확인할 수 있어요.
+
+    - any: 조건에 포함되는 응답 중 무작위 값
+    - count: 조건에 포함되는 응답의 수
+    - distinct count: 조건에 포함되는 응답의 종류 (= join의 수)
+    - dominant: 조건에 포함되는 응답 중 지배적인 응답 (가장 많은 중복 응답이 나온 값)
+    - first: 조건에 포함되는 응답 중 처음 제출된 응답
+    - join: 조건에 포함되는 응답 중 중복을 제외한 응답의 종류
+    - last: 조건에 포함되는 응답 중 마지막으로 제출된 응답
+    - last by index: 조건에 포함되는 응답 종류 중 마지막으로 제출된 값
+    - median: 해당 조건을 기준으로 정렬했을 때의 중위값
+    - unique: 조건에 포함되는 응답 중 단일한 종류만 존재하는 응답
+
+(B) Split By
+    - 기존에는 제목 열에 응답 시간과 문항이 표시되었다면, Split By를 통해 제목 열에 표시될 항목을 변경할 수 있어요.
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/6.png)
+
+Split By를 '이름'으로 설정하니 시트가 응답자의 이름을 기준으로 분류되었어요.
+
+(C) Order By
+    - Order By를 이용하면 선택된 항목을 기준으로 시트를 정렬할 수 있어요.
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/7.png)
+
+Order By를 '이름'으로 설정하면 이름 순서대로 정렬할 수 있고, 우측의 붉게 표시된 아이콘을 클릭해 오름차순/내림차순 정렬도 설정할 수 있어요.
+
+(D) Where
+    - Where를 설정하면 조건을 만족하는 응답만 노출시킬 수 있어요.
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/8.png)
+
+Where를 '가장 좋아하는 계절'로 설정하고 조건인 Value값을 가을로 지정하면, 가을이 포함된 응답만 확인할 수 있어요.
+
+(E) 차트 종류 변경
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/9.png)
+
+- Datagrid
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/10.png)
+
+앞서 살펴보았던 표 형식의 차트 유형이에요.
+
+- Treemap
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/11.png)
+
+Treemap은 계층적 데이터를 시각화하는 데 사용되는 차트 유형으로, 데이터를 **중첩된 직사각형**으로 표현해요. 색상과 직사각형의 크기를 통해 쉽게 시각화할 수 있어요.
+
+- Sunburst
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/12.png)
+
+Sunburst는 데이터를 원형 모양으로 시각화한 차트 유형으로, 주로 각 데이터 항목이 전체의 일부로서 얼마나 차지하는지를 나타낼 때 사용돼요.
+
+- Heatmap
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/13.png)
+
+Heatmap은 데이터의 값을 색상으로 시각화하는 차트 유형이에요. 색상의 강도나 톤이 값의 크기에 따라 달라지며, 이를 통해 데이터의 패턴이나 경향을 시각적으로 쉽게 파악할 수 있어요.
+
+- X Bar
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/14.png)
+
+X Bar는 X축을 기준으로 데이터의 비교를 시각화할 때 사용되는 차트 유형으로, 우리가 흔히 사용하는 가로 막대 그래프라고 할 수 있어요. X axis에 여러 필드를 추가해 다양한 데이터를 비교할 수 있어요.
+
+- X/Y Line
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/15.png)
+
+- X/Y Scatter
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/16.png)
+
+- Y Bar
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/17.png)
+
+Y Bar는 Y축을 기준으로 데이터의 비교를 시각화할 때 사용되는 차트 유형으로, 우리가 흔히 사용하는 가로 막대 그래프라고 할 수 있어요. Y axis에 여러 필드를 추가해 다양한 데이터를 비교할 수 있어요.
+
+- Y Line
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/18.png)
+
+Y Line은 X축과 Y축에 대응하는 데이터를 선으로 연결하여 시각화하는 차트 유형이에요.
+
+- Y Area
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/19.png)
+
+Y Area는 특정 지점에서의 값을 면적으로 표현하는 차트 유형으로, 보통 시간 경과에 따른 데이터 변화를 나타내는 데 사용돼요. 선 그래프와 유사하지만, 선 아래의 영역이 채워져 있어 값을 강조할 수 있어요.
+
+- Y Scatter
+
+![Untitled](https://paprikastorage.com/images/enhancedSheet/ko/20.png)
+
+Y Scatter는 데이터를 X축과 Y축에 배치하여 산점도를 그리는 차트 유형이에요.
+
+- OHLC
+
+OHLC 그래프는 Open, High, Low, Close의 약자로, 상품의 가격 변동을 시각적으로 나타내는 차트 유형이에요.
+
+- Candlestick
+
+캔들스틱(candlestick) 그래프는 OHLC 그래프와 비슷하게 자산의 가격 변동을 시각적으로 표현하는 데 사용되는 차트 유형이에요.
+
+<Callout type='info' emoji="🔔">
+    왈라의 개발 계획을 확인하거나 새로운 기능을 제안하고 싶으신가요? <a href='https://app.walla.my/signin?redirectUrl=/support/featureRequest' target="_blank" rel="noopener noreferrer"
+                                            style={{textDecoration: 'underline'}}>**제품 로드맵 및 기능 제안**</a> 페이지로
+    이동해요!
+</Callout>

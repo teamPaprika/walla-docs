@@ -1,10 +1,22 @@
 import React from "react";
 import Link from "next/link";
-import {DocsThemeConfig} from "nextra-theme-docs";
+import {DocsThemeConfig, useConfig} from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
     useNextSeoProps() {
         return {titleTemplate: '%s - Walla Docs'}
+    },
+    head: () => {
+        const { title } = useConfig();
+        const pageTitle = title ? `${title} - Walla Docs` : 'Walla Docs';
+        return (
+            <>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta name="description" content="My Project description" />
+                <link rel="icon" href="/images/favicon.ico" />
+                <title>{pageTitle}</title>
+            </>
+        )
     },
     logo: <Link legacyBehavior href="/">
         <svg width="520" height="24" viewBox="0 0 2000 90" fill="none" xmlns="http://www.w3.org/2000/svg">
