@@ -8,7 +8,8 @@ export default async function Layout({
   children,
   params,
 }: LayoutProps<'/docs'>) {
-  const { lang } = await params;
+  const resolvedParams = await params;
+  const lang = resolvedParams?.lang || 'en';
 
   return (
     <DocsLayout
