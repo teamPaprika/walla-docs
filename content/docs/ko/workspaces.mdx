@@ -1,0 +1,335 @@
+---
+title: 워크스페이스 API
+description: 워크스페이스 관리를 위한 API 레퍼런스
+---
+
+# 워크스페이스 API
+
+워크스페이스 API를 사용하면 접근 권한이 있는 워크스페이스에 대한 정보를 조회할 수 있습니다. 워크스페이스는 폼과 팀을 포함하는 Walla의 최상위 조직 단위입니다.
+
+## 엔드포인트
+
+### 모든 워크스페이스 조회
+
+접근 권한이 있는 모든 워크스페이스 목록을 조회합니다.
+
+```http
+GET /open-api/v1/workspaces
+```
+
+#### 요청
+
+**헤더**
+- `X-WALLA-API-KEY` (필수): API 키
+- `Content-Type`: application/json
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "workspace_123",
+      "name": "마케팅 팀",
+      "teamId": "team_456",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-20T14:45:00Z"
+    },
+    {
+      "id": "workspace_789",
+      "name": "고객 성공",
+      "teamId": "team_012",
+      "createdAt": "2024-02-01T09:00:00Z",
+      "updatedAt": "2024-02-10T16:20:00Z"
+    }
+  ]
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data` | array | 워크스페이스 객체 배열 |
+| `data[].id` | string | 고유 워크스페이스 식별자 |
+| `data[].name` | string | 워크스페이스 이름 |
+| `data[].teamId` | string | 연관된 팀 식별자 |
+| `data[].createdAt` | string (date-time) | 워크스페이스 생성 타임스탬프 |
+| `data[].updatedAt` | string (date-time) | 마지막 업데이트 타임스탬프 |
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+  ```json
+  {
+    "error": "인증 실패 또는 권한 없음"
+  }
+  ```
+
+- **500 Internal Server Error**: 서버 오류
+  ```json
+  {
+    "error": "내부 서버 오류"
+  }
+  ```
+
+---
+
+### ID로 워크스페이스 조회
+
+특정 워크스페이스에 대한 상세 정보를 조회합니다.
+
+```http
+GET /open-api/v1/workspaces/{workspaceId}
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `workspaceId` | string | 예 | 고유 워크스페이스 식별자 |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "workspace_123",
+    "name": "마케팅 팀",
+    "teamId": "team_456",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-20T14:45:00Z"
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data` | object | 워크스페이스 상세 정보 |
+| `data.id` | string | 고유 워크스페이스 식별자 |
+| `data.name` | string | 워크스페이스 이름 |
+| `data.teamId` | string | 연관된 팀 식별자 |
+| `data.createdAt` | string (date-time) | 워크스페이스 생성 타임스탬프 |
+| `data.updatedAt` | string (date-time) | 마지막 업데이트 타임스탬프 |
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 워크스페이스를 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### 워크스페이스 내 폼 조회
+
+특정 워크스페이스 내의 모든 폼을 조회합니다.
+
+```http
+GET /open-api/v1/workspaces/{workspaceId}/forms
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `workspaceId` | string | 예 | 고유 워크스페이스 식별자 |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123/forms" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "form": {
+        "id": "form_abc",
+        "workspaceId": "workspace_123",
+        "title": "고객 만족도 설문조사",
+        "description": "분기별 고객 피드백 폼",
+        "badge": "2024년 1분기",
+        "teamId": "team_456",
+        "creator": "user_789",
+        "lastEditedBy": "user_012",
+        "isDeleted": false,
+        "createdAt": "2024-01-15T10:30:00Z",
+        "updatedAt": "2024-01-20T14:45:00Z"
+      },
+      "formSettings": {
+        // 폼 구성 설정
+      },
+      "analytics": {
+        "submissions": 150
+      }
+    }
+  ]
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data` | array | 설정 및 분석 데이터가 포함된 폼 객체 배열 |
+| `data[].form` | object | 폼 상세 정보 |
+| `data[].form.id` | string | 고유 폼 식별자 |
+| `data[].form.workspaceId` | string | 부모 워크스페이스 식별자 |
+| `data[].form.title` | string | 폼 제목 |
+| `data[].form.description` | string | 폼 설명 |
+| `data[].form.badge` | string | 폼 뱃지/라벨 |
+| `data[].form.teamId` | string | 연관된 팀 식별자 |
+| `data[].form.creator` | string | 생성자 사용자 식별자 |
+| `data[].form.lastEditedBy` | string | 마지막 편집자 사용자 식별자 |
+| `data[].form.isDeleted` | boolean | 삭제 상태 |
+| `data[].form.createdAt` | string (date-time) | 폼 생성 타임스탬프 |
+| `data[].form.updatedAt` | string (date-time) | 마지막 업데이트 타임스탬프 |
+| `data[].formSettings` | object | 폼 구성 설정 |
+| `data[].analytics` | object | 폼 분석 데이터 |
+| `data[].analytics.submissions` | number | 총 제출 수 |
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 워크스페이스를 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+## 코드 예시
+
+### JavaScript/TypeScript
+
+```typescript
+async function getAllWorkspaces() {
+  const response = await fetch('https://api.walla.my/open-api/v1/workspaces', {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+async function getWorkspaceById(workspaceId: string) {
+  const response = await fetch(
+    `https://api.walla.my/open-api/v1/workspaces/${workspaceId}`,
+    {
+      method: 'GET',
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  const data = await response.json();
+  return data.data;
+}
+```
+
+### Python
+
+```python
+import requests
+import os
+
+def get_all_workspaces():
+    url = "https://api.walla.my/open-api/v1/workspaces"
+    headers = {
+        "X-WALLA-API-KEY": os.getenv("WALLA_API_KEY"),
+        "Content-Type": "application/json"
+    }
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()["data"]
+
+def get_workspace_by_id(workspace_id):
+    url = f"https://api.walla.my/open-api/v1/workspaces/{workspace_id}"
+    headers = {
+        "X-WALLA-API-KEY": os.getenv("WALLA_API_KEY"),
+        "Content-Type": "application/json"
+    }
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()["data"]
+```
+
+## 사용 사례
+
+### 워크스페이스 정보 대시보드
+
+```typescript
+// 모든 워크스페이스와 폼 수를 표시하는 대시보드 생성
+async function createWorkspaceDashboard() {
+  const workspaces = await getAllWorkspaces();
+
+  for (const workspace of workspaces) {
+    const forms = await getWorkspaceForms(workspace.id);
+    console.log(`${workspace.name}: ${forms.length}개의 폼`);
+  }
+}
+```
+
+### 워크스페이스별 데이터 필터링
+
+```python
+# 특정 팀의 워크스페이스만 가져오기
+def get_workspaces_by_team(team_id):
+    all_workspaces = get_all_workspaces()
+    return [ws for ws in all_workspaces if ws['teamId'] == team_id]
+```
+
+## 다음 단계
+
+<Cards>
+  <Card title="폼 API" href="/ko/docs/forms" />
+  <Card title="폼 발송 API" href="/ko/docs/delivery" />
+  <Card title="에러 코드" href="/ko/docs/error-codes" />
+</Cards>

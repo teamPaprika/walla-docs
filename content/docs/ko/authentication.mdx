@@ -1,0 +1,255 @@
+---
+title: 인증
+description: Walla Open API 인증 방법을 알아보세요
+---
+
+# 인증
+
+Walla Open API는 API 키 인증을 사용하여 워크스페이스 데이터에 대한 안전한 접근을 보장합니다. 모든 API 요청에는 요청 헤더에 유효한 API 키가 포함되어야 합니다.
+
+## API 키 인증
+
+API 요청을 인증하려면 `X-WALLA-API-KEY` 헤더에 API 키를 포함해야 합니다.
+
+### 헤더 형식
+
+```
+X-WALLA-API-KEY: your_api_key_here
+```
+
+## API 키 발급받기
+
+API 키를 발급받으려면:
+
+1. Walla 계정에 로그인합니다
+2. 워크스페이스 설정으로 이동합니다
+3. API 섹션으로 이동합니다
+4. API 키를 생성하거나 복사합니다
+
+> **중요**: API 키를 안전하게 보관하고 공개적으로 공유하지 마세요. 비밀번호처럼 취급하세요.
+
+## 인증된 요청 만들기
+
+다양한 프로그래밍 언어에서 API 키를 포함하는 방법의 예시입니다:
+
+### cURL
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+### JavaScript (Fetch)
+
+```javascript
+fetch('https://api.walla.my/open-api/v1/workspaces', {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('오류:', error));
+```
+
+### Python (requests)
+
+```python
+import requests
+
+url = "https://api.walla.my/open-api/v1/workspaces"
+headers = {
+    "X-WALLA-API-KEY": "your_api_key_here",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+data = response.json()
+print(data)
+```
+
+### Node.js (axios)
+
+```javascript
+const axios = require('axios');
+
+const config = {
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+};
+
+axios.get('https://api.walla.my/open-api/v1/workspaces', config)
+  .then(response => console.log(response.data))
+  .catch(error => console.error('오류:', error));
+```
+
+## 인증 오류
+
+인증이 실패하면 API는 다음 중 하나의 오류 응답을 반환합니다:
+
+### 403 Forbidden
+
+다음과 같은 경우에 이 오류가 발생합니다:
+- API 키가 유효하지 않거나 만료됨
+- 요청한 리소스에 접근할 권한이 없음
+- 요청에 API 키가 누락됨
+
+**응답 예시:**
+
+```json
+{
+  "error": "인증 실패 또는 권한 없음"
+}
+```
+
+## 모범 사례
+
+### 보안
+
+- **API 키를 커밋하지 마세요** - 버전 관리 시스템(Git, SVN 등)에 API 키를 커밋하지 마세요
+- **환경 변수를 사용하세요** - 애플리케이션에서 API 키를 환경 변수로 저장하세요
+- **키를 정기적으로 교체하세요** - 보안 강화를 위해 키를 정기적으로 교체하세요
+- **다른 키를 사용하세요** - 개발, 스테이징, 프로덕션 환경에 각각 다른 키를 사용하세요
+
+### 환경 변수
+
+환경 변수에 API 키를 저장하세요:
+
+```bash
+# .env 파일
+WALLA_API_KEY=your_api_key_here
+```
+
+그런 다음 코드에서 접근하세요:
+
+```javascript
+// JavaScript
+const apiKey = process.env.WALLA_API_KEY;
+```
+
+```python
+# Python
+import os
+api_key = os.getenv('WALLA_API_KEY')
+```
+
+### 속도 제한
+
+현재 API는 속도 제한을 명시하지 않지만 다음 모범 사례를 따르세요:
+
+- 재시도 시 지수 백오프를 구현하세요
+- 적절한 경우 응답을 캐시하세요
+- 불필요한 중복 요청을 피하세요
+- API 사용량을 모니터링하세요
+
+## 문제 해결
+
+### 일반적인 문제
+
+**문제**: API 키를 사용했는데도 403 오류가 발생함
+
+**해결 방법**:
+- API 키가 올바르고 만료되지 않았는지 확인하세요
+- 워크스페이스에 대한 필요한 권한이 있는지 확인하세요
+- 헤더 이름이 정확히 `X-WALLA-API-KEY`인지 확인하세요(대소문자 구분)
+- 승인된 워크스페이스 내의 리소스에 접근하고 있는지 확인하세요
+
+**문제**: API 키가 전송되지 않음
+
+**해결 방법**:
+- 헤더가 올바르게 형식화되었는지 확인하세요
+- HTTP 클라이언트가 사용자 정의 헤더를 포함하고 있는지 확인하세요
+- 헤더 이름에 오타가 없는지 확인하세요
+
+## 다음 단계
+
+이제 인증을 이해했으니 다음을 수행할 수 있습니다:
+
+<Cards>
+  <Card title="빠른 시작 가이드" href="/ko/docs/quick-start" />
+  <Card title="워크스페이스 API" href="/ko/docs/workspaces" />
+  <Card title="폼 API" href="/ko/docs/forms" />
+</Cards>
+
+## 추가 보안 고려사항
+
+### API 키 보호
+
+1. **코드에 하드코딩하지 마세요**
+   - 소스 코드에 직접 API 키를 입력하지 마세요
+   - 항상 환경 변수나 비밀 관리 서비스를 사용하세요
+
+2. **HTTPS만 사용하세요**
+   - API는 HTTPS를 통해서만 접근해야 합니다
+   - HTTP를 통한 요청은 거부됩니다
+
+3. **키 노출 모니터링**
+   - 공개 저장소를 정기적으로 확인하세요
+   - 키가 노출된 경우 즉시 취소하고 새로 발급받으세요
+
+### 권한 관리
+
+- API 키는 워크스페이스 권한과 연결되어 있습니다
+- 팀 멤버마다 별도의 API 키를 발급하세요
+- 더 이상 필요하지 않은 키는 즉시 취소하세요
+- API 키 사용을 정기적으로 감사하세요
+
+### 에러 처리 모범 사례
+
+```javascript
+async function makeAuthenticatedRequest(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status === 403) {
+      console.error('인증 실패: API 키를 확인하세요');
+      // 사용자에게 알리거나 재인증 프로세스 시작
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP 오류! 상태: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('요청 실패:', error);
+    throw error;
+  }
+}
+```
+
+```python
+import requests
+import os
+
+def make_authenticated_request(url):
+    headers = {
+        'X-WALLA-API-KEY': os.getenv('WALLA_API_KEY'),
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 403:
+            print('인증 실패: API 키를 확인하세요')
+            return None
+
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as e:
+        print(f'요청 실패: {e}')
+        raise
+```
