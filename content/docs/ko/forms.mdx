@@ -1,0 +1,370 @@
+---
+title: 폼 API
+description: 폼 관리를 위한 API 레퍼런스
+---
+
+# 폼 API
+
+폼 API를 사용하면 워크스페이스 내의 폼(설문/프로젝트)에 대한 정보를 조회할 수 있습니다. 모든 폼을 나열하고, 특정 폼 세부 정보를 가져오고, 폼 설정에 접근할 수 있습니다.
+
+## 엔드포인트
+
+### 모든 폼 조회
+
+접근 권한이 있는 모든 워크스페이스의 모든 폼을 조회합니다.
+
+```http
+GET /open-api/v1/forms
+```
+
+#### 요청
+
+**헤더**
+- `X-WALLA-API-KEY` (필수): API 키
+- `Content-Type`: application/json
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "workspaceId": "workspace_123",
+      "workspaceName": "마케팅 팀",
+      "forms": [
+        {
+          "form": {
+            "id": "form_abc",
+            "workspaceId": "workspace_123",
+            "title": "고객 만족도 설문조사",
+            "description": "분기별 고객 피드백 폼",
+            "badge": "2024년 1분기",
+            "teamId": "team_456",
+            "creator": "user_789",
+            "lastEditedBy": "user_012",
+            "isDeleted": false,
+            "createdAt": "2024-01-15T10:30:00Z",
+            "updatedAt": "2024-01-20T14:45:00Z"
+          },
+          "formSettings": {
+            // 폼 구성 설정
+          },
+          "analytics": {
+            "submissions": 150
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data` | array | 폼이 포함된 워크스페이스 객체 배열 |
+| `data[].workspaceId` | string | 워크스페이스 식별자 |
+| `data[].workspaceName` | string | 워크스페이스 이름 |
+| `data[].forms` | array | 워크스페이스 내 폼 배열 |
+| `data[].forms[].form` | object | 폼 상세 정보 |
+| `data[].forms[].formSettings` | object | 폼 구성 |
+| `data[].forms[].analytics` | object | 폼 분석 데이터 |
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### ID로 폼 조회
+
+특정 폼에 대한 상세 정보를 조회합니다.
+
+```http
+GET /open-api/v1/forms/{formId}
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `formId` | string | 예 | 고유 폼 식별자 |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "form_abc",
+    "title": "고객 만족도 설문조사",
+    "description": "분기별 고객 피드백 폼",
+    "badge": "2024년 1분기",
+    "teamId": "team_456",
+    "workspaceId": "workspace_123",
+    "creator": "user_789",
+    "lastEditedBy": "user_012",
+    "isDeleted": false,
+    "createdAt": "2024-01-15T10:30:00Z",
+    "updatedAt": "2024-01-20T14:45:00Z"
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data` | object | 폼 상세 정보 |
+| `data.id` | string | 고유 폼 식별자 |
+| `data.title` | string | 폼 제목 |
+| `data.description` | string | 폼 설명 |
+| `data.badge` | string | 폼 뱃지/라벨 |
+| `data.teamId` | string | 연관된 팀 식별자 |
+| `data.workspaceId` | string | 부모 워크스페이스 식별자 |
+| `data.creator` | string | 생성자 사용자 식별자 |
+| `data.lastEditedBy` | string | 마지막 편집자 사용자 식별자 |
+| `data.isDeleted` | boolean | 삭제 상태 |
+| `data.createdAt` | string (date-time) | 폼 생성 타임스탬프 |
+| `data.updatedAt` | string (date-time) | 마지막 업데이트 타임스탬프 |
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+  ```json
+  {
+    "error": "인증 실패 또는 권한 없음"
+  }
+  ```
+
+- **404 Not Found**: 폼을 찾을 수 없음
+  ```json
+  {
+    "error": "폼을 찾을 수 없음"
+  }
+  ```
+
+- **500 Internal Server Error**: 서버 오류
+  ```json
+  {
+    "error": "내부 서버 오류"
+  }
+  ```
+
+## 폼 속성 설명
+
+### 폼 상태
+
+- **isDeleted**: 폼이 소프트 삭제되었는지 나타내는 불리언 플래그입니다. 삭제된 폼은 API를 통해 여전히 접근할 수 있지만 메인 인터페이스에서는 숨겨집니다.
+
+### 폼 뱃지
+
+`badge` 필드는 분류 또는 식별 목적으로 폼에 할당할 수 있는 사용자 정의 라벨입니다. 일반적인 용도는 다음과 같습니다:
+- 버전 번호 (예: "v2.0")
+- 기간 (예: "2024년 1분기", "1월")
+- 상태 표시기 (예: "활성", "초안")
+- 캠페인 이름
+
+### 감사 추적
+
+폼에는 감사 추적 정보가 포함됩니다:
+- `creator`: 폼을 생성한 사람의 사용자 ID
+- `lastEditedBy`: 폼을 마지막으로 수정한 사람의 사용자 ID
+- `createdAt`: 폼이 생성된 시간 타임스탬프
+- `updatedAt`: 마지막 수정 타임스탬프
+
+## 코드 예시
+
+### JavaScript/TypeScript
+
+```typescript
+interface Form {
+  id: string;
+  title: string;
+  description: string;
+  badge: string;
+  teamId: string;
+  workspaceId: string;
+  creator: string;
+  lastEditedBy: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+async function getAllForms(): Promise<any[]> {
+  const response = await fetch('https://api.walla.my/open-api/v1/forms', {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP 오류! 상태: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+async function getFormById(formId: string): Promise<Form> {
+  const response = await fetch(
+    `https://api.walla.my/open-api/v1/forms/${formId}`,
+    {
+      method: 'GET',
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP 오류! 상태: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 활성(삭제되지 않은) 폼 모두 가져오기
+async function getActiveForms(): Promise<Form[]> {
+  const workspaces = await getAllForms();
+  const activeForms: Form[] = [];
+
+  workspaces.forEach(workspace => {
+    workspace.forms.forEach(formWrapper => {
+      if (!formWrapper.form.isDeleted) {
+        activeForms.push(formWrapper.form);
+      }
+    });
+  });
+
+  return activeForms;
+}
+```
+
+### Python
+
+```python
+import requests
+import os
+from typing import List, Dict, Any
+
+class WallaFormsAPI:
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.base_url = "https://api.walla.my/open-api/v1"
+        self.headers = {
+            "X-WALLA-API-KEY": api_key,
+            "Content-Type": "application/json"
+        }
+
+    def get_all_forms(self) -> List[Dict[str, Any]]:
+        """모든 워크스페이스의 모든 폼 가져오기"""
+        url = f"{self.base_url}/forms"
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        return response.json()["data"]
+
+    def get_form_by_id(self, form_id: str) -> Dict[str, Any]:
+        """ID로 특정 폼 가져오기"""
+        url = f"{self.base_url}/forms/{form_id}"
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        return response.json()["data"]
+
+    def get_active_forms(self) -> List[Dict[str, Any]]:
+        """삭제되지 않은 모든 폼 가져오기"""
+        workspaces = self.get_all_forms()
+        active_forms = []
+
+        for workspace in workspaces:
+            for form_wrapper in workspace["forms"]:
+                if not form_wrapper["form"]["isDeleted"]:
+                    active_forms.append(form_wrapper["form"])
+
+        return active_forms
+
+# 사용법
+api = WallaFormsAPI(os.getenv("WALLA_API_KEY"))
+forms = api.get_all_forms()
+specific_form = api.get_form_by_id("form_abc")
+```
+
+## 사용 사례
+
+### 모든 활성 폼 나열
+
+워크스페이스 전체에서 삭제되지 않은 모든 폼 조회:
+
+```javascript
+const workspaces = await getAllForms();
+const activeForms = workspaces.flatMap(ws =>
+  ws.forms
+    .filter(f => !f.form.isDeleted)
+    .map(f => f.form)
+);
+```
+
+### 워크스페이스별 폼 찾기
+
+특정 워크스페이스의 모든 폼 가져오기:
+
+```javascript
+const workspaces = await getAllForms();
+const targetWorkspace = workspaces.find(ws => ws.workspaceId === 'workspace_123');
+const forms = targetWorkspace?.forms || [];
+```
+
+### 폼 분석 확인
+
+제출 수 및 기타 분석 데이터 접근:
+
+```javascript
+const workspaces = await getAllForms();
+workspaces.forEach(ws => {
+  ws.forms.forEach(formWrapper => {
+    console.log(`${formWrapper.form.title}: ${formWrapper.analytics.submissions}건의 제출`);
+  });
+});
+```
+
+## 다음 단계
+
+<Cards>
+  <Card title="폼 발송 API" href="/ko/docs/delivery" />
+  <Card title="폼 응답 API" href="/ko/docs/responses" />
+  <Card title="워크스페이스 API" href="/ko/docs/workspaces" />
+</Cards>

@@ -1,0 +1,473 @@
+---
+title: 오류 코드
+description: Walla API 오류 코드 및 문제 해결 종합 가이드
+---
+
+# 오류 코드
+
+이 가이드는 Walla Open API 사용 시 발생할 수 있는 오류 응답에 대한 자세한 정보를 제공합니다.
+
+## HTTP 상태 코드
+
+Walla API는 표준 HTTP 상태 코드를 사용하여 요청의 성공 또는 실패를 나타냅니다.
+
+### 성공 코드
+
+| 코드 | 상태 | 설명 |
+|------|--------|-------------|
+| 200 | OK | 요청 성공 |
+
+### 오류 코드
+
+| 코드 | 상태 | 설명 |
+|------|--------|-------------|
+| 400 | Bad Request | 잘못된 요청 매개변수 또는 형식이 올바르지 않은 요청 |
+| 403 | Forbidden | 인증 실패 또는 권한 부족 |
+| 404 | Not Found | 리소스를 찾을 수 없음 |
+| 500 | Internal Server Error | 서버 오류 발생 |
+
+## 오류 응답 형식
+
+모든 오류 응답은 일관된 JSON 형식을 따릅니다:
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+## 상세 오류 코드
+
+### 400 Bad Request
+
+요청이 잘못되었거나 잘못된 매개변수를 포함하고 있음을 나타냅니다.
+
+**주요 원인:**
+
+1. **필수 필드 누락**
+   ```json
+   {
+     "error": "Invalid request: recipients array is required"
+   }
+   ```
+   **해결 방법**: 요청 본문에 모든 필수 필드를 포함하세요.
+
+2. **잘못된 데이터 형식**
+   ```json
+   {
+     "error": "Invalid email format"
+   }
+   ```
+   **해결 방법**: 이메일 주소가 `user@domain.com` 형식을 따르는지 확인하세요.
+
+3. **빈 배열**
+   ```json
+   {
+     "error": "Recipients array must contain at least one recipient"
+   }
+   ```
+   **해결 방법**: 필수 배열에 최소한 하나의 항목을 제공하세요.
+
+4. **잘못된 페이지네이션 매개변수**
+   ```json
+   {
+     "error": "Invalid page number. Page must be >= 1"
+   }
+   ```
+   **해결 방법**: 페이지 번호는 0이 아닌 1부터 시작합니다.
+
+5. **제한 초과**
+   ```json
+   {
+     "error": "Limit cannot exceed 100"
+   }
+   ```
+   **해결 방법**: `limit` 매개변수를 100 이하로 유지하세요.
+
+**예시 시나리오:**
+
+```javascript
+// ❌ 잘못된 예 - 필수 필드 누락
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    // 'recipients' 필드 누락
+    subject: 'Survey'
+  })
+});
+// 반환: 400: recipients array is required
+
+// ✅ 올바른 예
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    recipients: [
+      { customerKey: 'customer_001', email: 'user@example.com' }
+    ],
+    subject: 'Survey'
+  })
+});
+```
+
+---
+
+### 403 Forbidden
+
+인증 실패 또는 요청된 리소스에 접근할 권한이 부족함을 나타냅니다.
+
+**주요 원인:**
+
+1. **API 키 누락**
+   ```json
+   {
+     "error": "Authentication failed or insufficient permissions"
+   }
+   ```
+   **해결 방법**: 요청에 `X-WALLA-API-KEY` 헤더를 포함하세요.
+
+2. **잘못된 API 키**
+   ```json
+   {
+     "error": "Authentication failed or insufficient permissions"
+   }
+   ```
+   **해결 방법**: API 키가 올바르고 만료되지 않았는지 확인하세요.
+
+3. **권한 부족**
+   ```json
+   {
+     "error": "Authentication failed or insufficient permissions"
+   }
+   ```
+   **해결 방법**: 요청된 워크스페이스 또는 폼에 대한 액세스 권한이 있는지 확인하세요.
+
+4. **워크스페이스 액세스 거부**
+   - 권한이 없는 워크스페이스에 액세스하려고 시도하는 경우
+   - **해결 방법**: 워크스페이스 관리자에게 연락하여 액세스 권한을 요청하세요.
+
+**예시 시나리오:**
+
+```javascript
+// ❌ 잘못된 예 - API 키 누락
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+    // X-WALLA-API-KEY 누락
+  }
+});
+// 반환: 403
+
+// ✅ 올바른 예
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+**문제 해결 단계:**
+
+1. API 키가 환경에 올바르게 설정되었는지 확인
+2. 헤더 이름이 정확히 `X-WALLA-API-KEY`인지 확인 (대소문자 구분)
+3. API 키가 취소되거나 만료되지 않았는지 확인
+4. 요청된 워크스페이스에 대한 액세스 권한이 있는지 확인
+5. 환경(개발/스테이징/프로덕션)에 맞는 올바른 API 키를 사용하고 있는지 확인
+
+---
+
+### 404 Not Found
+
+요청된 리소스가 존재하지 않거나 액세스할 수 없음을 나타냅니다.
+
+**주요 원인:**
+
+1. **폼을 찾을 수 없음**
+   ```json
+   {
+     "error": "Form not found"
+   }
+   ```
+   **해결 방법**: 폼 ID가 존재하고 액세스 권한이 있는지 확인하세요.
+
+2. **게시되지 않은 폼**
+   ```json
+   {
+     "error": "Form not found or not published"
+   }
+   ```
+   **해결 방법**: 발송을 시도하기 전에 폼이 게시되었는지 확인하세요.
+
+3. **응답을 찾을 수 없음**
+   ```json
+   {
+     "error": "Form or response not found"
+   }
+   ```
+   **해결 방법**: 폼 ID와 응답 ID가 모두 올바른지 확인하세요.
+
+4. **워크스페이스를 찾을 수 없음**
+   ```json
+   {
+     "error": "Workspace not found"
+   }
+   ```
+   **해결 방법**: 워크스페이스 ID를 확인하고 액세스 권한이 있는지 확인하세요.
+
+**예시 시나리오:**
+
+```javascript
+// ❌ 잘못된 예 - 게시되지 않은 폼 발송 시도
+await sendForm('unpublished_form_id', recipients);
+// 반환: 404: Form not found or not published
+
+// ✅ 올바른 예 - 게시된 폼
+await sendForm('published_form_id', recipients);
+```
+
+**문제 해결 단계:**
+
+1. 리소스 ID (폼, 응답, 워크스페이스)가 올바른지 확인
+2. 폼이 게시되었는지 확인 (발송 작업의 경우)
+3. 리소스가 삭제되지 않았는지 확인
+4. 올바른 환경(개발/프로덕션)을 사용하고 있는지 확인
+
+---
+
+### 500 Internal Server Error
+
+서버에서 예기치 않은 오류가 발생했음을 나타냅니다.
+
+**응답:**
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+**대처 방법:**
+
+1. **요청 재시도**: 오류가 일시적일 수 있습니다
+2. **지수 백오프 구현**: 재시도 전 대기
+3. **상태 확인**: 광범위한 문제인지 확인
+4. **지원팀 문의**: 오류가 지속되면 Walla 지원팀에 문의
+
+**재시도 전략 예시:**
+
+```javascript
+async function makeRequestWithRetry(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      if (response.status === 500 && i < maxRetries - 1) {
+        // 지수 백오프: 1초, 2초, 4초
+        const delay = Math.pow(2, i) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_retry(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 500 and i < max_retries - 1:
+                # 지수 백오프
+                delay = 2 ** i
+                time.sleep(delay)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+## 오류 처리 모범 사례
+
+### 1. 항상 응답 상태 확인
+
+```javascript
+const response = await fetch(url, options);
+
+if (!response.ok) {
+  const error = await response.json();
+  console.error(`Error ${response.status}:`, error.error);
+  throw new Error(error.error);
+}
+
+const data = await response.json();
+```
+
+### 2. 적절한 오류 처리 구현
+
+```typescript
+try {
+  const result = await sendForm(formId, recipients);
+  console.log('Success:', result);
+} catch (error) {
+  if (error.status === 400) {
+    console.error('Invalid request:', error.message);
+    // 유효성 검사 오류 처리
+  } else if (error.status === 403) {
+    console.error('Authentication failed');
+    // API 키 확인
+  } else if (error.status === 404) {
+    console.error('Resource not found');
+    // ID 확인
+  } else if (error.status === 500) {
+    console.error('Server error, retrying...');
+    // 재시도 로직 구현
+  } else {
+    console.error('Unexpected error:', error);
+  }
+}
+```
+
+### 3. 디버깅을 위한 오류 로그 기록
+
+```javascript
+function logError(error, context) {
+  console.error({
+    timestamp: new Date().toISOString(),
+    context,
+    status: error.status,
+    message: error.message,
+    stack: error.stack
+  });
+}
+
+try {
+  await api.getResponses(formId);
+} catch (error) {
+  logError(error, { operation: 'getResponses', formId });
+  throw error;
+}
+```
+
+### 4. 사용자 친화적인 메시지 제공
+
+```javascript
+function getUserFriendlyError(error) {
+  const messages = {
+    400: '입력한 내용을 확인하고 다시 시도해주세요.',
+    403: '이 작업을 수행할 권한이 없습니다.',
+    404: '요청한 리소스를 찾을 수 없습니다.',
+    500: '문제가 발생했습니다. 나중에 다시 시도해주세요.'
+  };
+
+  return messages[error.status] || '예기치 않은 오류가 발생했습니다.';
+}
+```
+
+### 5. 부분 실패 처리
+
+```javascript
+// 여러 수신자에게 발송할 때
+const result = await sendForm(formId, recipients);
+
+if (result.data.failedDeliveries.length > 0) {
+  console.warn('일부 발송에 실패했습니다:');
+  result.data.failedDeliveries.forEach(failure => {
+    console.error(`${failure.customerKey}: ${failure.error}`);
+  });
+
+  // 실패한 발송 재시도
+  const failedRecipients = result.data.failedDeliveries.map(f => ({
+    customerKey: f.customerKey,
+    email: f.email,
+    phoneNumber: f.phoneNumber
+  }));
+
+  // 재시도 로직 구현
+}
+```
+
+## 일반적인 오류 시나리오 및 해결 방법
+
+### 시나리오 1: "Authentication failed"
+
+**문제**: API 키가 있는데도 403 오류 발생
+
+**체크리스트:**
+- [ ] API 키가 `X-WALLA-API-KEY` 헤더에 포함되어 있는지 확인
+- [ ] 헤더 이름이 정확한지 확인 (대소문자 구분)
+- [ ] API 키가 유효하고 만료되지 않았는지 확인
+- [ ] 요청된 워크스페이스에 대한 액세스 권한이 있는지 확인
+- [ ] 올바른 환경의 API 키를 사용하고 있는지 확인
+
+### 시나리오 2: "Form not found or not published"
+
+**문제**: 폼 발송을 할 수 없음
+
+**체크리스트:**
+- [ ] 폼 ID가 올바른지 확인
+- [ ] 폼이 워크스페이스에 존재하는지 확인
+- [ ] 폼이 게시되었는지 확인 (초안 모드가 아님)
+- [ ] 폼에 액세스할 권한이 있는지 확인
+
+### 시나리오 3: "Invalid page number"
+
+**문제**: 응답을 가져올 때 페이지네이션 오류 발생
+
+**체크리스트:**
+- [ ] 페이지 번호가 1부터 시작하는지 확인 (0이 아님)
+- [ ] 페이지 번호가 양의 정수인지 확인
+- [ ] 전체 페이지 수를 초과하지 않는지 확인
+
+### 시나리오 4: 빈 응답 배열
+
+**문제**: 데이터를 기대했지만 빈 배열을 받음
+
+**가능한 이유:**
+- 아직 데이터가 존재하지 않음 (오류가 아님)
+- 잘못된 필터 또는 매개변수
+- 잘못된 워크스페이스/폼에 액세스
+- 데이터가 삭제됨
+
+**해결 방법**: 리소스에 데이터가 있고 올바르게 쿼리하고 있는지 확인
+
+## 도움 받기
+
+이 문서에서 다루지 않은 오류가 발생한 경우:
+
+1. **API 응답 확인**: 오류 메시지에 유용한 세부 정보가 포함되어 있는 경우가 많습니다
+2. **요청 검토**: 모든 필수 매개변수가 포함되어 있는지 확인
+3. **cURL로 테스트**: cURL로 테스트하여 문제를 격리
+4. **권한 확인**: 필요한 액세스 권한이 있는지 확인
+5. **지원팀 문의**: 다음 정보와 함께 Walla 지원팀에 문의:
+   - 요청 세부 정보 (엔드포인트, 메서드, 매개변수)
+   - 전체 오류 응답
+   - 오류 발생 시간
+   - 워크스페이스/폼 ID (해당되는 경우)
+
+## 다음 단계
+
+<Cards>
+  <Card title="인증" href="/ko/docs/authentication" />
+  <Card title="빠른 시작 가이드" href="/ko/docs/quick-start" />
+  <Card title="API 레퍼런스" href="/ko/docs/workspaces" />
+</Cards>

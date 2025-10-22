@@ -1,0 +1,683 @@
+---
+title: 빠른 시작 가이드
+description: 몇 분 안에 Walla Open API 시작하기
+---
+
+# 빠른 시작 가이드
+
+이 가이드는 Walla Open API에 대한 첫 API 호출을 수행하는 데 도움을 드립니다. 인증, 폼 전송 및 응답 검색 과정을 안내해 드리겠습니다.
+
+## 사전 준비사항
+
+시작하기 전에 다음 사항을 확인하세요:
+
+- 하나 이상의 워크스페이스에 대한 액세스 권한이 있는 Walla 계정
+- API 키 (Walla 워크스페이스 설정에서 얻을 수 있음)
+- 워크스페이스에 게시된 폼
+
+## 1단계: 환경 설정
+
+먼저 환경 변수를 사용하여 API 키를 안전하게 저장합니다.
+
+### 옵션 A: .env 파일 사용
+
+프로젝트 루트에 `.env` 파일을 생성합니다:
+
+```bash
+WALLA_API_KEY=your_api_key_here
+```
+
+> **중요**: API 키가 커밋되지 않도록 `.env` 파일을 `.gitignore`에 추가하세요.
+
+### 옵션 B: 셸에서 내보내기
+
+```bash
+export WALLA_API_KEY=your_api_key_here
+```
+
+## 2단계: 첫 API 호출하기
+
+API 키가 작동하는지 확인하기 위해 워크스페이스를 조회해 보겠습니다.
+
+### cURL 사용
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: $WALLA_API_KEY" \
+  -H "Content-Type: application/json"
+```
+
+### JavaScript/TypeScript 사용
+
+```javascript
+// dotenv를 설치해야 합니다: npm install dotenv
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+async function getWorkspaces() {
+  const response = await fetch(`${BASE_URL}/workspaces`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 실행
+getWorkspaces()
+  .then(workspaces => {
+    console.log('Your workspaces:');
+    workspaces.forEach(ws => {
+      console.log(`- ${ws.name} (ID: ${ws.id})`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python 사용
+
+```python
+# requests 설치: pip install requests python-dotenv
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_KEY = os.getenv('WALLA_API_KEY')
+BASE_URL = 'https://api.walla.my/open-api/v1'
+
+def get_workspaces():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/workspaces', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# 실행
+if __name__ == '__main__':
+    workspaces = get_workspaces()
+    print('Your workspaces:')
+    for ws in workspaces:
+        print(f"- {ws['name']} (ID: {ws['id']})")
+```
+
+**예상 출력:**
+
+```
+Your workspaces:
+- Marketing Team (ID: workspace_123)
+- Customer Success (ID: workspace_456)
+```
+
+## 3단계: 폼 목록 조회하기
+
+이제 작업할 수 있는 폼을 찾기 위해 모든 폼을 조회해 보겠습니다.
+
+### JavaScript
+
+```javascript
+async function getAllForms() {
+  const response = await fetch(`${BASE_URL}/forms`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+getAllForms()
+  .then(workspaces => {
+    workspaces.forEach(workspace => {
+      console.log(`\nWorkspace: ${workspace.workspaceName}`);
+      workspace.forms.forEach(formWrapper => {
+        const form = formWrapper.form;
+        console.log(`  - ${form.title} (ID: ${form.id})`);
+        console.log(`    Submissions: ${formWrapper.analytics.submissions}`);
+      });
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_all_forms():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/forms', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# 실행
+workspaces = get_all_forms()
+for workspace in workspaces:
+    print(f"\nWorkspace: {workspace['workspaceName']}")
+    for form_wrapper in workspace['forms']:
+        form = form_wrapper['form']
+        print(f"  - {form['title']} (ID: {form['id']})")
+        print(f"    Submissions: {form_wrapper['analytics']['submissions']}")
+```
+
+## 4단계: 수신자에게 폼 전송하기
+
+게시된 폼을 일부 수신자에게 전송해 보겠습니다.
+
+### JavaScript
+
+```javascript
+async function sendForm(formId, recipients, options = {}) {
+  const response = await fetch(`${BASE_URL}/forms/${formId}/delivery`, {
+    method: 'POST',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      recipients,
+      subject: options.subject || 'We value your feedback!',
+      message: options.message || 'Please take a moment to complete our survey.'
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error);
+  }
+
+  return await response.json();
+}
+
+// 예제: 수신자에게 전송
+const formId = 'form_abc'; // 폼 ID로 교체하세요
+const recipients = [
+  {
+    customerKey: 'customer_001',
+    email: 'john@example.com'
+  },
+  {
+    customerKey: 'customer_002',
+    email: 'jane@example.com',
+    phoneNumber: '+821012345678'
+  }
+];
+
+sendForm(formId, recipients, {
+  subject: 'Customer Satisfaction Survey',
+  message: 'We would love to hear your feedback!'
+})
+  .then(result => {
+    console.log('Delivery successful!');
+    console.log(`Total recipients: ${result.data.totalRecipients}`);
+    console.log(`Successful: ${result.data.successfulDeliveries}`);
+
+    if (result.data.failedDeliveries.length > 0) {
+      console.log('\nFailed deliveries:');
+      result.data.failedDeliveries.forEach(failure => {
+        console.log(`- ${failure.customerKey}: ${failure.error}`);
+      });
+    }
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def send_form(form_id, recipients, subject=None, message=None):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'recipients': recipients,
+        'subject': subject or 'We value your feedback!',
+        'message': message or 'Please take a moment to complete our survey.'
+    }
+
+    response = requests.post(
+        f'{BASE_URL}/forms/{form_id}/delivery',
+        headers=headers,
+        json=payload
+    )
+    response.raise_for_status()
+    return response.json()
+
+# 예제
+form_id = 'form_abc'  # 폼 ID로 교체하세요
+recipients = [
+    {
+        'customerKey': 'customer_001',
+        'email': 'john@example.com'
+    },
+    {
+        'customerKey': 'customer_002',
+        'email': 'jane@example.com',
+        'phoneNumber': '+821012345678'
+    }
+]
+
+result = send_form(
+    form_id,
+    recipients,
+    subject='Customer Satisfaction Survey',
+    message='We would love to hear your feedback!'
+)
+
+print('Delivery successful!')
+print(f"Total recipients: {result['data']['totalRecipients']}")
+print(f"Successful: {result['data']['successfulDeliveries']}")
+
+if result['data']['failedDeliveries']:
+    print('\nFailed deliveries:')
+    for failure in result['data']['failedDeliveries']:
+        print(f"- {failure['customerKey']}: {failure['error']}")
+```
+
+## 5단계: 전송 상태 확인하기
+
+폼 전송의 상태를 모니터링합니다.
+
+### JavaScript
+
+```javascript
+async function getDeliveryStatus(formId, customerKeys) {
+  const response = await fetch(`${BASE_URL}/forms/${formId}/delivery/status`, {
+    method: 'POST',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ customerKeys })
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 상태 확인
+getDeliveryStatus('form_abc', ['customer_001', 'customer_002'])
+  .then(statuses => {
+    console.log('\nDelivery Status:');
+    statuses.forEach(status => {
+      console.log(`${status.customerKey}: ${status.status}`);
+      console.log(`  Email: ${status.email}`);
+      console.log(`  Last sent: ${status.lastSentAt}`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_delivery_status(form_id, customer_keys):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.post(
+        f'{BASE_URL}/forms/{form_id}/delivery/status',
+        headers=headers,
+        json={'customerKeys': customer_keys}
+    )
+    response.raise_for_status()
+    return response.json()['data']
+
+# 상태 확인
+statuses = get_delivery_status('form_abc', ['customer_001', 'customer_002'])
+
+print('\nDelivery Status:')
+for status in statuses:
+    print(f"{status['customerKey']}: {status['status']}")
+    print(f"  Email: {status['email']}")
+    print(f"  Last sent: {status['lastSentAt']}")
+```
+
+**상태 값:**
+- `NOT_SENT`: 생성되었으나 전송되지 않음
+- `SENT`: 성공적으로 전달됨
+- `OPENED`: 수신자가 폼을 열람함
+- `RESPONDED`: 수신자가 폼을 제출함
+
+## 6단계: 폼 응답 조회하기
+
+폼에서 응답을 가져옵니다.
+
+### JavaScript
+
+```javascript
+async function getResponses(formId, page = 1, limit = 20) {
+  const url = new URL(`${BASE_URL}/forms/${formId}/responses`);
+  url.searchParams.set('page', page);
+  url.searchParams.set('limit', limit);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 응답 조회
+getResponses('form_abc', 1, 10)
+  .then(data => {
+    console.log(`\nTotal responses: ${data.pagination.totalCount}`);
+    console.log(`Page ${data.pagination.page} of ${data.pagination.totalPages}\n`);
+
+    data.responses.forEach((response, index) => {
+      console.log(`Response ${index + 1}:`);
+      console.log(`  ID: ${response.responseId}`);
+      console.log(`  Customer: ${response.customerKey || 'Anonymous'}`);
+      console.log(`  Submitted: ${response.submittedAt}`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_responses(form_id, page=1, limit=20):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(
+        f'{BASE_URL}/forms/{form_id}/responses',
+        headers=headers,
+        params={'page': page, 'limit': limit}
+    )
+    response.raise_for_status()
+    return response.json()['data']
+
+# 응답 조회
+data = get_responses('form_abc', page=1, limit=10)
+
+print(f"\nTotal responses: {data['pagination']['totalCount']}")
+print(f"Page {data['pagination']['page']} of {data['pagination']['totalPages']}\n")
+
+for i, response in enumerate(data['responses'], 1):
+    print(f"Response {i}:")
+    print(f"  ID: {response['responseId']}")
+    print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
+    print(f"  Submitted: {response['submittedAt']}")
+```
+
+## 완전한 예제: 전체 워크플로
+
+모든 것을 통합한 완전한 예제입니다:
+
+### JavaScript
+
+```javascript
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+class WallaAPI {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.headers = {
+      'X-WALLA-API-KEY': apiKey,
+      'Content-Type': 'application/json'
+    };
+  }
+
+  async request(endpoint, options = {}) {
+    const url = `${BASE_URL}${endpoint}`;
+    const response = await fetch(url, {
+      ...options,
+      headers: { ...this.headers, ...options.headers }
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error);
+    }
+
+    return await response.json();
+  }
+
+  async getWorkspaces() {
+    const data = await this.request('/workspaces');
+    return data.data;
+  }
+
+  async getForms() {
+    const data = await this.request('/forms');
+    return data.data;
+  }
+
+  async sendForm(formId, recipients, options = {}) {
+    const data = await this.request(`/forms/${formId}/delivery`, {
+      method: 'POST',
+      body: JSON.stringify({
+        recipients,
+        subject: options.subject,
+        message: options.message
+      })
+    });
+    return data.data;
+  }
+
+  async getDeliveryStatus(formId, customerKeys) {
+    const data = await this.request(`/forms/${formId}/delivery/status`, {
+      method: 'POST',
+      body: JSON.stringify({ customerKeys })
+    });
+    return data.data;
+  }
+
+  async getResponses(formId, page = 1, limit = 20) {
+    const data = await this.request(
+      `/forms/${formId}/responses?page=${page}&limit=${limit}`
+    );
+    return data.data;
+  }
+}
+
+// 사용법
+async function main() {
+  const api = new WallaAPI(API_KEY);
+
+  try {
+    // 1. 워크스페이스 조회
+    const workspaces = await api.getWorkspaces();
+    console.log(`Found ${workspaces.length} workspaces`);
+
+    // 2. 폼 조회
+    const forms = await api.getForms();
+    const firstForm = forms[0]?.forms[0]?.form;
+
+    if (!firstForm) {
+      console.log('No forms found');
+      return;
+    }
+
+    console.log(`Using form: ${firstForm.title} (${firstForm.id})`);
+
+    // 3. 폼 전송
+    const deliveryResult = await api.sendForm(firstForm.id, [
+      { customerKey: 'demo_001', email: 'demo@example.com' }
+    ]);
+    console.log(`Sent to ${deliveryResult.successfulDeliveries} recipients`);
+
+    // 4. 상태 확인
+    const statuses = await api.getDeliveryStatus(firstForm.id, ['demo_001']);
+    console.log(`Status: ${statuses[0].status}`);
+
+    // 5. 응답 조회
+    const responses = await api.getResponses(firstForm.id);
+    console.log(`Total responses: ${responses.pagination.totalCount}`);
+
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+main();
+```
+
+### Python
+
+```python
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class WallaAPI:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = 'https://api.walla.my/open-api/v1'
+        self.headers = {
+            'X-WALLA-API-KEY': api_key,
+            'Content-Type': 'application/json'
+        }
+
+    def request(self, endpoint, method='GET', **kwargs):
+        url = f'{self.base_url}{endpoint}'
+        response = requests.request(
+            method,
+            url,
+            headers=self.headers,
+            **kwargs
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_workspaces(self):
+        return self.request('/workspaces')['data']
+
+    def get_forms(self):
+        return self.request('/forms')['data']
+
+    def send_form(self, form_id, recipients, subject=None, message=None):
+        payload = {
+            'recipients': recipients,
+            'subject': subject,
+            'message': message
+        }
+        return self.request(
+            f'/forms/{form_id}/delivery',
+            method='POST',
+            json=payload
+        )['data']
+
+    def get_delivery_status(self, form_id, customer_keys):
+        return self.request(
+            f'/forms/{form_id}/delivery/status',
+            method='POST',
+            json={'customerKeys': customer_keys}
+        )['data']
+
+    def get_responses(self, form_id, page=1, limit=20):
+        return self.request(
+            f'/forms/{form_id}/responses',
+            params={'page': page, 'limit': limit}
+        )['data']
+
+# 사용법
+def main():
+    api = WallaAPI(os.getenv('WALLA_API_KEY'))
+
+    try:
+        # 1. 워크스페이스 조회
+        workspaces = api.get_workspaces()
+        print(f'Found {len(workspaces)} workspaces')
+
+        # 2. 폼 조회
+        forms = api.get_forms()
+        if not forms or not forms[0]['forms']:
+            print('No forms found')
+            return
+
+        first_form = forms[0]['forms'][0]['form']
+        print(f"Using form: {first_form['title']} ({first_form['id']})")
+
+        # 3. 폼 전송
+        delivery_result = api.send_form(
+            first_form['id'],
+            [{'customerKey': 'demo_001', 'email': 'demo@example.com'}]
+        )
+        print(f"Sent to {delivery_result['successfulDeliveries']} recipients")
+
+        # 4. 상태 확인
+        statuses = api.get_delivery_status(first_form['id'], ['demo_001'])
+        print(f"Status: {statuses[0]['status']}")
+
+        # 5. 응답 조회
+        responses = api.get_responses(first_form['id'])
+        print(f"Total responses: {responses['pagination']['totalCount']}")
+
+    except requests.RequestException as e:
+        print(f'Error: {e}')
+
+if __name__ == '__main__':
+    main()
+```
+
+## 다음 단계
+
+첫 API 호출을 완료했으니 더 많은 것을 살펴보세요:
+
+<Cards>
+  <Card title="Workspaces API" href="/ko/docs/workspaces" />
+  <Card title="Forms API" href="/ko/docs/forms" />
+  <Card title="Form Delivery API" href="/ko/docs/delivery" />
+  <Card title="Form Responses API" href="/ko/docs/responses" />
+</Cards>
+
+## 일반적인 문제
+
+### "Authentication failed"
+
+- API 키가 올바른지 확인하세요
+- `X-WALLA-API-KEY` 헤더가 포함되어 있는지 확인하세요
+- 올바른 환경의 API 키를 사용하고 있는지 확인하세요
+
+### "Form not found or not published"
+
+- Walla에서 폼이 게시되었는지 확인하세요
+- 폼 ID가 올바른지 확인하세요
+- 워크스페이스에 대한 액세스 권한이 있는지 확인하세요
+
+### 빈 결과 받기
+
+- 요청한 리소스에 대한 데이터가 존재하는지 확인하세요
+- 올바른 워크스페이스/폼을 쿼리하고 있는지 확인하세요
+- 필요한 권한이 있는지 확인하세요
+
+더 많은 도움이 필요하시면 [오류 코드](/ko/docs/error-codes) 문서를 참조하세요.

@@ -1,0 +1,683 @@
+---
+title: Quick Start Guide
+description: Get started with the Walla Open API in minutes
+---
+
+# Quick Start Guide
+
+This guide will help you make your first API calls to the Walla Open API. We'll walk through authentication, sending a form, and retrieving responses.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- A Walla account with access to at least one workspace
+- An API key (obtainable from your Walla workspace settings)
+- A published form in your workspace
+
+## Step 1: Set Up Your Environment
+
+First, store your API key securely using environment variables.
+
+### Option A: Using a .env file
+
+Create a `.env` file in your project root:
+
+```bash
+WALLA_API_KEY=your_api_key_here
+```
+
+> **Important**: Add `.env` to your `.gitignore` to prevent committing your API key.
+
+### Option B: Export in your shell
+
+```bash
+export WALLA_API_KEY=your_api_key_here
+```
+
+## Step 2: Make Your First API Call
+
+Let's retrieve your workspaces to verify your API key works.
+
+### Using cURL
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: $WALLA_API_KEY" \
+  -H "Content-Type: application/json"
+```
+
+### Using JavaScript/TypeScript
+
+```javascript
+// Make sure to install dotenv: npm install dotenv
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+async function getWorkspaces() {
+  const response = await fetch(`${BASE_URL}/workspaces`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+// Execute
+getWorkspaces()
+  .then(workspaces => {
+    console.log('Your workspaces:');
+    workspaces.forEach(ws => {
+      console.log(`- ${ws.name} (ID: ${ws.id})`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Using Python
+
+```python
+# Install requests: pip install requests python-dotenv
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_KEY = os.getenv('WALLA_API_KEY')
+BASE_URL = 'https://api.walla.my/open-api/v1'
+
+def get_workspaces():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/workspaces', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# Execute
+if __name__ == '__main__':
+    workspaces = get_workspaces()
+    print('Your workspaces:')
+    for ws in workspaces:
+        print(f"- {ws['name']} (ID: {ws['id']})")
+```
+
+**Expected Output:**
+
+```
+Your workspaces:
+- Marketing Team (ID: workspace_123)
+- Customer Success (ID: workspace_456)
+```
+
+## Step 3: List Your Forms
+
+Now let's retrieve all forms to find one we can work with.
+
+### JavaScript
+
+```javascript
+async function getAllForms() {
+  const response = await fetch(`${BASE_URL}/forms`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+getAllForms()
+  .then(workspaces => {
+    workspaces.forEach(workspace => {
+      console.log(`\nWorkspace: ${workspace.workspaceName}`);
+      workspace.forms.forEach(formWrapper => {
+        const form = formWrapper.form;
+        console.log(`  - ${form.title} (ID: ${form.id})`);
+        console.log(`    Submissions: ${formWrapper.analytics.submissions}`);
+      });
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_all_forms():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/forms', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# Execute
+workspaces = get_all_forms()
+for workspace in workspaces:
+    print(f"\nWorkspace: {workspace['workspaceName']}")
+    for form_wrapper in workspace['forms']:
+        form = form_wrapper['form']
+        print(f"  - {form['title']} (ID: {form['id']})")
+        print(f"    Submissions: {form_wrapper['analytics']['submissions']}")
+```
+
+## Step 4: Send a Form to Recipients
+
+Let's send a published form to some recipients.
+
+### JavaScript
+
+```javascript
+async function sendForm(formId, recipients, options = {}) {
+  const response = await fetch(`${BASE_URL}/forms/${formId}/delivery`, {
+    method: 'POST',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      recipients,
+      subject: options.subject || 'We value your feedback!',
+      message: options.message || 'Please take a moment to complete our survey.'
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error);
+  }
+
+  return await response.json();
+}
+
+// Example: Send to recipients
+const formId = 'form_abc'; // Replace with your form ID
+const recipients = [
+  {
+    customerKey: 'customer_001',
+    email: 'john@example.com'
+  },
+  {
+    customerKey: 'customer_002',
+    email: 'jane@example.com',
+    phoneNumber: '+821012345678'
+  }
+];
+
+sendForm(formId, recipients, {
+  subject: 'Customer Satisfaction Survey',
+  message: 'We would love to hear your feedback!'
+})
+  .then(result => {
+    console.log('Delivery successful!');
+    console.log(`Total recipients: ${result.data.totalRecipients}`);
+    console.log(`Successful: ${result.data.successfulDeliveries}`);
+
+    if (result.data.failedDeliveries.length > 0) {
+      console.log('\nFailed deliveries:');
+      result.data.failedDeliveries.forEach(failure => {
+        console.log(`- ${failure.customerKey}: ${failure.error}`);
+      });
+    }
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def send_form(form_id, recipients, subject=None, message=None):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        'recipients': recipients,
+        'subject': subject or 'We value your feedback!',
+        'message': message or 'Please take a moment to complete our survey.'
+    }
+
+    response = requests.post(
+        f'{BASE_URL}/forms/{form_id}/delivery',
+        headers=headers,
+        json=payload
+    )
+    response.raise_for_status()
+    return response.json()
+
+# Example
+form_id = 'form_abc'  # Replace with your form ID
+recipients = [
+    {
+        'customerKey': 'customer_001',
+        'email': 'john@example.com'
+    },
+    {
+        'customerKey': 'customer_002',
+        'email': 'jane@example.com',
+        'phoneNumber': '+821012345678'
+    }
+]
+
+result = send_form(
+    form_id,
+    recipients,
+    subject='Customer Satisfaction Survey',
+    message='We would love to hear your feedback!'
+)
+
+print('Delivery successful!')
+print(f"Total recipients: {result['data']['totalRecipients']}")
+print(f"Successful: {result['data']['successfulDeliveries']}")
+
+if result['data']['failedDeliveries']:
+    print('\nFailed deliveries:')
+    for failure in result['data']['failedDeliveries']:
+        print(f"- {failure['customerKey']}: {failure['error']}")
+```
+
+## Step 5: Check Delivery Status
+
+Monitor the status of your form deliveries.
+
+### JavaScript
+
+```javascript
+async function getDeliveryStatus(formId, customerKeys) {
+  const response = await fetch(`${BASE_URL}/forms/${formId}/delivery/status`, {
+    method: 'POST',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ customerKeys })
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+// Check status
+getDeliveryStatus('form_abc', ['customer_001', 'customer_002'])
+  .then(statuses => {
+    console.log('\nDelivery Status:');
+    statuses.forEach(status => {
+      console.log(`${status.customerKey}: ${status.status}`);
+      console.log(`  Email: ${status.email}`);
+      console.log(`  Last sent: ${status.lastSentAt}`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_delivery_status(form_id, customer_keys):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.post(
+        f'{BASE_URL}/forms/{form_id}/delivery/status',
+        headers=headers,
+        json={'customerKeys': customer_keys}
+    )
+    response.raise_for_status()
+    return response.json()['data']
+
+# Check status
+statuses = get_delivery_status('form_abc', ['customer_001', 'customer_002'])
+
+print('\nDelivery Status:')
+for status in statuses:
+    print(f"{status['customerKey']}: {status['status']}")
+    print(f"  Email: {status['email']}")
+    print(f"  Last sent: {status['lastSentAt']}")
+```
+
+**Status Values:**
+- `NOT_SENT`: Created but not sent
+- `SENT`: Successfully delivered
+- `OPENED`: Recipient opened the form
+- `RESPONDED`: Recipient submitted the form
+
+## Step 6: Retrieve Form Responses
+
+Fetch responses from your form.
+
+### JavaScript
+
+```javascript
+async function getResponses(formId, page = 1, limit = 20) {
+  const url = new URL(`${BASE_URL}/forms/${formId}/responses`);
+  url.searchParams.set('page', page);
+  url.searchParams.set('limit', limit);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+// Get responses
+getResponses('form_abc', 1, 10)
+  .then(data => {
+    console.log(`\nTotal responses: ${data.pagination.totalCount}`);
+    console.log(`Page ${data.pagination.page} of ${data.pagination.totalPages}\n`);
+
+    data.responses.forEach((response, index) => {
+      console.log(`Response ${index + 1}:`);
+      console.log(`  ID: ${response.responseId}`);
+      console.log(`  Customer: ${response.customerKey || 'Anonymous'}`);
+      console.log(`  Submitted: ${response.submittedAt}`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_responses(form_id, page=1, limit=20):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(
+        f'{BASE_URL}/forms/{form_id}/responses',
+        headers=headers,
+        params={'page': page, 'limit': limit}
+    )
+    response.raise_for_status()
+    return response.json()['data']
+
+# Get responses
+data = get_responses('form_abc', page=1, limit=10)
+
+print(f"\nTotal responses: {data['pagination']['totalCount']}")
+print(f"Page {data['pagination']['page']} of {data['pagination']['totalPages']}\n")
+
+for i, response in enumerate(data['responses'], 1):
+    print(f"Response {i}:")
+    print(f"  ID: {response['responseId']}")
+    print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
+    print(f"  Submitted: {response['submittedAt']}")
+```
+
+## Complete Example: Full Workflow
+
+Here's a complete example that ties everything together:
+
+### JavaScript
+
+```javascript
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+class WallaAPI {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.headers = {
+      'X-WALLA-API-KEY': apiKey,
+      'Content-Type': 'application/json'
+    };
+  }
+
+  async request(endpoint, options = {}) {
+    const url = `${BASE_URL}${endpoint}`;
+    const response = await fetch(url, {
+      ...options,
+      headers: { ...this.headers, ...options.headers }
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error);
+    }
+
+    return await response.json();
+  }
+
+  async getWorkspaces() {
+    const data = await this.request('/workspaces');
+    return data.data;
+  }
+
+  async getForms() {
+    const data = await this.request('/forms');
+    return data.data;
+  }
+
+  async sendForm(formId, recipients, options = {}) {
+    const data = await this.request(`/forms/${formId}/delivery`, {
+      method: 'POST',
+      body: JSON.stringify({
+        recipients,
+        subject: options.subject,
+        message: options.message
+      })
+    });
+    return data.data;
+  }
+
+  async getDeliveryStatus(formId, customerKeys) {
+    const data = await this.request(`/forms/${formId}/delivery/status`, {
+      method: 'POST',
+      body: JSON.stringify({ customerKeys })
+    });
+    return data.data;
+  }
+
+  async getResponses(formId, page = 1, limit = 20) {
+    const data = await this.request(
+      `/forms/${formId}/responses?page=${page}&limit=${limit}`
+    );
+    return data.data;
+  }
+}
+
+// Usage
+async function main() {
+  const api = new WallaAPI(API_KEY);
+
+  try {
+    // 1. Get workspaces
+    const workspaces = await api.getWorkspaces();
+    console.log(`Found ${workspaces.length} workspaces`);
+
+    // 2. Get forms
+    const forms = await api.getForms();
+    const firstForm = forms[0]?.forms[0]?.form;
+
+    if (!firstForm) {
+      console.log('No forms found');
+      return;
+    }
+
+    console.log(`Using form: ${firstForm.title} (${firstForm.id})`);
+
+    // 3. Send form
+    const deliveryResult = await api.sendForm(firstForm.id, [
+      { customerKey: 'demo_001', email: 'demo@example.com' }
+    ]);
+    console.log(`Sent to ${deliveryResult.successfulDeliveries} recipients`);
+
+    // 4. Check status
+    const statuses = await api.getDeliveryStatus(firstForm.id, ['demo_001']);
+    console.log(`Status: ${statuses[0].status}`);
+
+    // 5. Get responses
+    const responses = await api.getResponses(firstForm.id);
+    console.log(`Total responses: ${responses.pagination.totalCount}`);
+
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+main();
+```
+
+### Python
+
+```python
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class WallaAPI:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = 'https://api.walla.my/open-api/v1'
+        self.headers = {
+            'X-WALLA-API-KEY': api_key,
+            'Content-Type': 'application/json'
+        }
+
+    def request(self, endpoint, method='GET', **kwargs):
+        url = f'{self.base_url}{endpoint}'
+        response = requests.request(
+            method,
+            url,
+            headers=self.headers,
+            **kwargs
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_workspaces(self):
+        return self.request('/workspaces')['data']
+
+    def get_forms(self):
+        return self.request('/forms')['data']
+
+    def send_form(self, form_id, recipients, subject=None, message=None):
+        payload = {
+            'recipients': recipients,
+            'subject': subject,
+            'message': message
+        }
+        return self.request(
+            f'/forms/{form_id}/delivery',
+            method='POST',
+            json=payload
+        )['data']
+
+    def get_delivery_status(self, form_id, customer_keys):
+        return self.request(
+            f'/forms/{form_id}/delivery/status',
+            method='POST',
+            json={'customerKeys': customer_keys}
+        )['data']
+
+    def get_responses(self, form_id, page=1, limit=20):
+        return self.request(
+            f'/forms/{form_id}/responses',
+            params={'page': page, 'limit': limit}
+        )['data']
+
+# Usage
+def main():
+    api = WallaAPI(os.getenv('WALLA_API_KEY'))
+
+    try:
+        # 1. Get workspaces
+        workspaces = api.get_workspaces()
+        print(f'Found {len(workspaces)} workspaces')
+
+        # 2. Get forms
+        forms = api.get_forms()
+        if not forms or not forms[0]['forms']:
+            print('No forms found')
+            return
+
+        first_form = forms[0]['forms'][0]['form']
+        print(f"Using form: {first_form['title']} ({first_form['id']})")
+
+        # 3. Send form
+        delivery_result = api.send_form(
+            first_form['id'],
+            [{'customerKey': 'demo_001', 'email': 'demo@example.com'}]
+        )
+        print(f"Sent to {delivery_result['successfulDeliveries']} recipients")
+
+        # 4. Check status
+        statuses = api.get_delivery_status(first_form['id'], ['demo_001'])
+        print(f"Status: {statuses[0]['status']}")
+
+        # 5. Get responses
+        responses = api.get_responses(first_form['id'])
+        print(f"Total responses: {responses['pagination']['totalCount']}")
+
+    except requests.RequestException as e:
+        print(f'Error: {e}')
+
+if __name__ == '__main__':
+    main()
+```
+
+## Next Steps
+
+Now that you've made your first API calls, explore more:
+
+<Cards>
+  <Card title="Workspaces API" href="/docs/workspaces" />
+  <Card title="Forms API" href="/docs/forms" />
+  <Card title="Form Delivery API" href="/docs/delivery" />
+  <Card title="Form Responses API" href="/docs/responses" />
+</Cards>
+
+## Common Issues
+
+### "Authentication failed"
+
+- Verify your API key is correct
+- Ensure the `X-WALLA-API-KEY` header is included
+- Check you're using the right environment's API key
+
+### "Form not found or not published"
+
+- Make sure the form is published in Walla
+- Verify the form ID is correct
+- Check you have access to the workspace
+
+### Getting empty results
+
+- Verify data exists for the requested resource
+- Check you're querying the correct workspace/form
+- Ensure you have the necessary permissions
+
+For more help, see the [Error Codes](/docs/error-codes) documentation.

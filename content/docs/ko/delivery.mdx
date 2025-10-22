@@ -1,0 +1,534 @@
+---
+title: 폼 전송 API
+description: 폼 전송 및 전달 상태 추적을 위한 API 레퍼런스
+---
+
+# 폼 전송 API
+
+폼 전송 API를 사용하면 수신자에게 폼을 전송하고 전달 및 응답 상태를 추적할 수 있습니다. 이메일 또는 SMS를 통해 폼을 전송하고, 수신자의 참여도를 모니터링하며, 전송 통계를 조회할 수 있습니다.
+
+## 엔드포인트
+
+### 수신자에게 폼 전송
+
+하나 이상의 수신자에게 게시된 폼을 전송합니다.
+
+```http
+POST /open-api/v1/forms/{formId}/delivery
+```
+
+> **중요**: 게시된 폼만 전송할 수 있습니다. 게시되지 않은 폼은 404 오류를 반환합니다.
+
+#### 매개변수
+
+**경로 매개변수**
+
+| 매개변수 | 타입 | 필수 여부 | 설명 |
+|-----------|------|----------|-------------|
+| `formId` | string | 예 | 고유한 폼 식별자 |
+
+**요청 본문**
+
+| 필드 | 타입 | 필수 여부 | 설명 |
+|-------|------|----------|-------------|
+| `recipients` | array | 예 | 수신자 객체 배열 (최소 1개) |
+| `recipients[].customerKey` | string | 예 | 고유한 고객 식별자 |
+| `recipients[].email` | string | 아니오 | 수신자 이메일 주소 |
+| `recipients[].phoneNumber` | string | 아니오 | 수신자 전화번호 |
+| `subject` | string | 아니오 | 이메일 제목 (기본값: "설문이 도착했습니다.") |
+| `message` | string | 아니오 | 전송 메시지 (기본값: "설문 링크를 확인하세요.") |
+
+> **참고**: 각 수신자는 최소 하나의 연락 방법(이메일 또는 전화번호)이 있어야 합니다.
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "recipients": [
+      {
+        "customerKey": "customer_001",
+        "email": "john@example.com",
+        "phoneNumber": "+821012345678"
+      },
+      {
+        "customerKey": "customer_002",
+        "email": "jane@example.com"
+      }
+    ],
+    "subject": "We value your feedback!",
+    "message": "Please take a moment to complete our survey."
+  }'
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "totalRecipients": 2,
+    "successfulDeliveries": 2,
+    "failedDeliveries": []
+  }
+}
+```
+
+**부분 성공 응답 (200 OK)**
+
+일부 전송이 실패한 경우:
+
+```json
+{
+  "success": true,
+  "data": {
+    "totalRecipients": 3,
+    "successfulDeliveries": 2,
+    "failedDeliveries": [
+      {
+        "customerKey": "customer_003",
+        "email": "invalid-email",
+        "phoneNumber": null,
+        "error": "Invalid email format"
+      }
+    ]
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|-------|------|-------------|
+| `success` | boolean | 요청 성공 여부를 나타냅니다 |
+| `data.totalRecipients` | number | 전체 수신자 수 |
+| `data.successfulDeliveries` | number | 성공적으로 전송된 수 |
+| `data.failedDeliveries` | array | 오류 세부 정보가 포함된 실패한 전송 목록 |
+
+**오류 응답**
+
+- **400 Bad Request**: 잘못된 요청 데이터
+  ```json
+  {
+    "error": "Invalid request: recipients array is required"
+  }
+  ```
+
+- **403 Forbidden**: 인증 실패 또는 권한 부족
+  ```json
+  {
+    "error": "Authentication failed or insufficient permissions"
+  }
+  ```
+
+- **404 Not Found**: 폼을 찾을 수 없거나 게시되지 않음
+  ```json
+  {
+    "error": "Form not found or not published"
+  }
+  ```
+
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### 모든 전송 수신자 조회
+
+특정 폼의 모든 수신자 및 상태를 조회합니다.
+
+```http
+GET /open-api/v1/forms/{formId}/delivery
+```
+
+#### 매개변수
+
+**경로 매개변수**
+
+| 매개변수 | 타입 | 필수 여부 | 설명 |
+|-----------|------|----------|-------------|
+| `formId` | string | 예 | 고유한 폼 식별자 |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "delivery_123",
+      "formId": "form_abc",
+      "customerKey": "customer_001",
+      "email": "john@example.com",
+      "phone": "+821012345678",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T11:45:00Z"
+    },
+    {
+      "id": "delivery_456",
+      "formId": "form_abc",
+      "customerKey": "customer_002",
+      "email": "jane@example.com",
+      "phone": null,
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z"
+    }
+  ]
+}
+```
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 부족
+- **404 Not Found**: 폼을 찾을 수 없거나 게시되지 않음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### 특정 수신자의 전송 상태 조회
+
+특정 수신자의 전송 및 응답 상태를 확인합니다.
+
+```http
+POST /open-api/v1/forms/{formId}/delivery/status
+```
+
+#### 매개변수
+
+**경로 매개변수**
+
+| 매개변수 | 타입 | 필수 여부 | 설명 |
+|-----------|------|----------|-------------|
+| `formId` | string | 예 | 고유한 폼 식별자 |
+
+**요청 본문**
+
+| 필드 | 타입 | 필수 여부 | 설명 |
+|-------|------|----------|-------------|
+| `customerKeys` | array | 예 | 확인할 고객 키 배열 (최소 1개) |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customerKeys": ["customer_001", "customer_002", "customer_003"]
+  }'
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "delivery_123",
+      "formId": "form_abc",
+      "customerKey": "customer_001",
+      "email": "john@example.com",
+      "phone": "+821012345678",
+      "status": "RESPONDED",
+      "lastSentAt": "2024-01-15T10:30:00Z",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T14:20:00Z"
+    },
+    {
+      "id": "delivery_456",
+      "formId": "form_abc",
+      "customerKey": "customer_002",
+      "email": "jane@example.com",
+      "phone": null,
+      "status": "OPENED",
+      "lastSentAt": "2024-01-15T10:30:00Z",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T11:15:00Z"
+    },
+    {
+      "id": "delivery_789",
+      "formId": "form_abc",
+      "customerKey": "customer_003",
+      "email": "bob@example.com",
+      "phone": null,
+      "status": "SENT",
+      "lastSentAt": "2024-01-15T10:30:00Z",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z"
+    }
+  ]
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|-------|------|-------------|
+| `success` | boolean | 요청 성공 여부를 나타냅니다 |
+| `data` | array | 전송 상태 객체 배열 |
+| `data[].id` | string | 전송 식별자 |
+| `data[].formId` | string | 폼 식별자 |
+| `data[].customerKey` | string | 고객 식별자 |
+| `data[].email` | string | 수신자 이메일 |
+| `data[].phone` | string | 수신자 전화번호 |
+| `data[].status` | string | 전송 상태 (아래 참조) |
+| `data[].lastSentAt` | string (date-time) | 마지막 전송 타임스탬프 |
+| `data[].createdAt` | string (date-time) | 최초 전송 생성 타임스탬프 |
+| `data[].updatedAt` | string (date-time) | 마지막 업데이트 타임스탬프 |
+
+**전송 상태 값**
+
+| 상태 | 설명 |
+|--------|-------------|
+| `NOT_SENT` | 전송이 생성되었지만 아직 발송되지 않음 |
+| `SENT` | 폼이 성공적으로 전달됨 |
+| `OPENED` | 수신자가 폼을 열람함 |
+| `RESPONDED` | 수신자가 폼을 작성하고 제출함 |
+
+**오류 응답**
+
+- **400 Bad Request**: 잘못된 요청 (예: customerKeys 배열이 비어있음)
+- **403 Forbidden**: 인증 실패 또는 권한 부족
+- **404 Not Found**: 폼을 찾을 수 없거나 게시되지 않음
+- **500 Internal Server Error**: 서버 오류
+
+## 코드 예제
+
+### JavaScript/TypeScript
+
+```typescript
+interface Recipient {
+  customerKey: string;
+  email?: string;
+  phoneNumber?: string;
+}
+
+interface DeliveryOptions {
+  subject?: string;
+  message?: string;
+}
+
+async function sendForm(
+  formId: string,
+  recipients: Recipient[],
+  options?: DeliveryOptions
+) {
+  const response = await fetch(
+    `https://api.walla.my/open-api/v1/forms/${formId}/delivery`,
+    {
+      method: 'POST',
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        recipients,
+        subject: options?.subject || '설문이 도착했습니다.',
+        message: options?.message || '설문 링크를 확인하세요.'
+      })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+async function getDeliveryStatus(formId: string, customerKeys: string[]) {
+  const response = await fetch(
+    `https://api.walla.my/open-api/v1/forms/${formId}/delivery/status`,
+    {
+      method: 'POST',
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ customerKeys })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+// Usage example
+const result = await sendForm('form_abc', [
+  {
+    customerKey: 'customer_001',
+    email: 'john@example.com'
+  },
+  {
+    customerKey: 'customer_002',
+    email: 'jane@example.com',
+    phoneNumber: '+821012345678'
+  }
+], {
+  subject: 'We need your feedback!',
+  message: 'Please help us improve our services.'
+});
+
+console.log(`Successfully sent to ${result.data.successfulDeliveries} recipients`);
+
+// Check status
+const statuses = await getDeliveryStatus('form_abc', ['customer_001', 'customer_002']);
+statuses.forEach(status => {
+  console.log(`${status.customerKey}: ${status.status}`);
+});
+```
+
+### Python
+
+```python
+import requests
+import os
+from typing import List, Dict, Any, Optional
+
+class WallaDeliveryAPI:
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.base_url = "https://api.walla.my/open-api/v1"
+        self.headers = {
+            "X-WALLA-API-KEY": api_key,
+            "Content-Type": "application/json"
+        }
+
+    def send_form(
+        self,
+        form_id: str,
+        recipients: List[Dict[str, str]],
+        subject: Optional[str] = None,
+        message: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Send form to recipients"""
+        url = f"{self.base_url}/forms/{form_id}/delivery"
+        payload = {
+            "recipients": recipients,
+            "subject": subject or "설문이 도착했습니다.",
+            "message": message or "설문 링크를 확인하세요."
+        }
+
+        response = requests.post(url, headers=self.headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def get_all_deliveries(self, form_id: str) -> List[Dict[str, Any]]:
+        """Get all delivery recipients for a form"""
+        url = f"{self.base_url}/forms/{form_id}/delivery"
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        return response.json()["data"]
+
+    def get_delivery_status(
+        self,
+        form_id: str,
+        customer_keys: List[str]
+    ) -> List[Dict[str, Any]]:
+        """Get delivery status for specific recipients"""
+        url = f"{self.base_url}/forms/{form_id}/delivery/status"
+        payload = {"customerKeys": customer_keys}
+
+        response = requests.post(url, headers=self.headers, json=payload)
+        response.raise_for_status()
+        return response.json()["data"]
+
+    def get_response_rate(self, form_id: str) -> float:
+        """Calculate response rate for a form"""
+        deliveries = self.get_all_deliveries(form_id)
+        if not deliveries:
+            return 0.0
+
+        customer_keys = [d["customerKey"] for d in deliveries]
+        statuses = self.get_delivery_status(form_id, customer_keys)
+
+        responded = sum(1 for s in statuses if s["status"] == "RESPONDED")
+        return (responded / len(statuses)) * 100
+
+# Usage
+api = WallaDeliveryAPI(os.getenv("WALLA_API_KEY"))
+
+# Send form
+result = api.send_form(
+    "form_abc",
+    [
+        {"customerKey": "customer_001", "email": "john@example.com"},
+        {"customerKey": "customer_002", "email": "jane@example.com"}
+    ],
+    subject="Your feedback matters!",
+    message="Please take 2 minutes to complete our survey."
+)
+
+print(f"Sent to {result['data']['successfulDeliveries']} recipients")
+
+# Check response rate
+response_rate = api.get_response_rate("form_abc")
+print(f"Response rate: {response_rate:.2f}%")
+```
+
+## 모범 사례
+
+### 고객 키 관리
+
+- 시스템 전반에 걸쳐 일관된 고객 키를 사용하세요
+- 고객 키는 고객당 고유해야 합니다
+- 내부 고객 ID를 고객 키로 사용하는 것을 고려하세요
+- 고객 키와 내부 시스템 간의 매핑을 저장하세요
+
+### 전송 최적화
+
+- **일괄 처리**: 단일 요청으로 여러 수신자에게 전송하세요
+- **오류 처리**: 항상 `failedDeliveries` 배열을 확인하고 실패한 전송을 재시도하세요
+- **상태 추적**: 정기적으로 전송 상태를 확인하여 참여도를 모니터링하세요
+
+### 제목 및 메시지 맞춤화
+
+```javascript
+// 캠페인에 따른 맞춤화
+const campaigns = {
+  feedback: {
+    subject: 'We value your feedback!',
+    message: 'Help us improve our services by completing this quick survey.'
+  },
+  nps: {
+    subject: 'How likely are you to recommend us?',
+    message: 'Your opinion matters. Please share your thoughts.'
+  }
+};
+
+await sendForm(formId, recipients, campaigns.feedback);
+```
+
+## 다음 단계
+
+<Cards>
+  <Card title="폼 응답 API" href="/ko/docs/responses" />
+  <Card title="폼 API" href="/ko/docs/forms" />
+  <Card title="오류 코드" href="/ko/docs/error-codes" />
+</Cards>
