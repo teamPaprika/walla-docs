@@ -24,6 +24,7 @@ The Walla API uses standard HTTP status codes to indicate the success or failure
 | 400 | Bad Request | Invalid request parameters or malformed request |
 | 403 | Forbidden | Authentication failed or insufficient permissions |
 | 404 | Not Found | Resource not found |
+| 429 | Too Many Requests | Rate limit exceeded |
 | 500 | Internal Server Error | Server error occurred |
 
 ## Error Response Format
@@ -238,6 +239,91 @@ await sendForm('published_form_id', recipients);
 
 ---
 
+### 429 Too Many Requests
+
+Indicates that you have exceeded the API rate limit.
+
+**Rate Limits:**
+- **Limit**: 6000 requests per hour per API key
+- **Time Window**: 1 hour (rolling window)
+
+**Response:**
+```json
+{
+  "error": "Rate limit exceeded"
+}
+```
+
+**What to Do:**
+
+1. **Implement Rate Limit Handling**: Check response status and handle 429 appropriately
+2. **Use Exponential Backoff**: Wait before retrying with increasing delays
+3. **Cache Responses**: Store frequently accessed data to reduce API calls
+4. **Batch Operations**: Combine multiple operations when possible
+5. **Monitor Usage**: Track your API consumption to stay within limits
+
+**Rate Limit Handling Example:**
+
+```javascript
+async function makeRequestWithRateLimit(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      // Handle rate limit
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After') || Math.pow(2, i);
+        console.log(`Rate limit exceeded. Retrying after ${retryAfter}s...`);
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_rate_limit(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            # Handle rate limit
+            if response.status_code == 429:
+                retry_after = int(response.headers.get('Retry-After', 2 ** i))
+                print(f'Rate limit exceeded. Retrying after {retry_after}s...')
+                time.sleep(retry_after)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+**Best Practices:**
+
+- **Respect Rate Limits**: Design your application to stay within the 6000 requests/hour limit
+- **Implement Caching**: Cache API responses for data that doesn't change frequently
+- **Use Webhooks**: For real-time updates, consider using webhooks instead of polling
+- **Batch Requests**: Retrieve multiple items in a single request when supported
+- **Monitor and Alert**: Set up monitoring to track API usage and alert before hitting limits
+
+---
+
 ### 500 Internal Server Error
 
 Indicates an unexpected error occurred on the server.
@@ -338,6 +424,9 @@ try {
   } else if (error.status === 404) {
     console.error('Resource not found');
     // Verify IDs
+  } else if (error.status === 429) {
+    console.error('Rate limit exceeded');
+    // Wait and retry with exponential backoff
   } else if (error.status === 500) {
     console.error('Server error, retrying...');
     // Implement retry logic
@@ -376,6 +465,7 @@ function getUserFriendlyError(error) {
     400: 'Please check your input and try again.',
     403: 'You do not have permission to perform this action.',
     404: 'The requested resource was not found.',
+    429: 'Too many requests. Please wait a moment and try again.',
     500: 'Something went wrong. Please try again later.'
   };
 
