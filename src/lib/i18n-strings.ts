@@ -1,8 +1,8 @@
-import type { TranslationFile } from 'fumadocs-ui/i18n';
+import type { Translations } from 'fumadocs-ui/i18n';
 
-export const koTranslations: TranslationFile = {
+export const koTranslations: Translations = {
   search: '검색',
-  searchNoResults: '결과 없음',
+  searchNoResult: '결과 없음',
   toc: '목차',
   tocNoHeadings: '제목 없음',
   lastUpdate: '마지막 업데이트',

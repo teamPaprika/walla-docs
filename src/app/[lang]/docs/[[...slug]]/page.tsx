@@ -9,9 +9,12 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
-import { i18n } from '@/lib/i18n';
 
-export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
+type PageProps = {
+  params: Promise<{ lang: string; slug?: string[] }>;
+};
+
+export default async function Page(props: PageProps) {
   const params = await props.params;
   const lang = params?.lang || 'en';
   const page = source.getPage(params.slug, lang);
@@ -43,7 +46,7 @@ export function generateStaticParams(props: { params: { lang: string } }) {
 }
 
 export async function generateMetadata(
-  props: PageProps<'/docs/[[...slug]]'>,
+  props: PageProps,
 ): Promise<Metadata> {
   const params = await props.params;
   const lang = params?.lang || 'en';
