@@ -5,7 +5,7 @@ description: Get started with the Walla Open API in minutes
 
 # Quick Start Guide
 
-This guide will help you make your first API calls to the Walla Open API. We'll walk through authentication, sending a form, and retrieving responses.
+This guide will help you make your first API calls to the Walla Open API. We'll walk through authentication, listing forms, and retrieving responses.
 
 ## Prerequisites
 
@@ -180,190 +180,7 @@ for workspace in workspaces:
         print(f"    Submissions: {form_wrapper['analytics']['submissions']}")
 ```
 
-## Step 4: Send a Form to Recipients
-
-Let's send a published form to some recipients.
-
-### JavaScript
-
-```javascript
-async function sendForm(formId, recipients, options = {}) {
-  const response = await fetch(`${BASE_URL}/forms/${formId}/delivery`, {
-    method: 'POST',
-    headers: {
-      'X-WALLA-API-KEY': API_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      recipients,
-      subject: options.subject || 'We value your feedback!',
-      message: options.message || 'Please take a moment to complete our survey.'
-    })
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error);
-  }
-
-  return await response.json();
-}
-
-// Example: Send to recipients
-const formId = 'form_abc'; // Replace with your form ID
-const recipients = [
-  {
-    customerKey: 'customer_001',
-    email: 'john@example.com'
-  },
-  {
-    customerKey: 'customer_002',
-    email: 'jane@example.com',
-    phoneNumber: '+821012345678'
-  }
-];
-
-sendForm(formId, recipients, {
-  subject: 'Customer Satisfaction Survey',
-  message: 'We would love to hear your feedback!'
-})
-  .then(result => {
-    console.log('Delivery successful!');
-    console.log(`Total recipients: ${result.data.totalRecipients}`);
-    console.log(`Successful: ${result.data.successfulDeliveries}`);
-
-    if (result.data.failedDeliveries.length > 0) {
-      console.log('\nFailed deliveries:');
-      result.data.failedDeliveries.forEach(failure => {
-        console.log(`- ${failure.customerKey}: ${failure.error}`);
-      });
-    }
-  })
-  .catch(error => console.error('Error:', error));
-```
-
-### Python
-
-```python
-def send_form(form_id, recipients, subject=None, message=None):
-    headers = {
-        'X-WALLA-API-KEY': API_KEY,
-        'Content-Type': 'application/json'
-    }
-
-    payload = {
-        'recipients': recipients,
-        'subject': subject or 'We value your feedback!',
-        'message': message or 'Please take a moment to complete our survey.'
-    }
-
-    response = requests.post(
-        f'{BASE_URL}/forms/{form_id}/delivery',
-        headers=headers,
-        json=payload
-    )
-    response.raise_for_status()
-    return response.json()
-
-# Example
-form_id = 'form_abc'  # Replace with your form ID
-recipients = [
-    {
-        'customerKey': 'customer_001',
-        'email': 'john@example.com'
-    },
-    {
-        'customerKey': 'customer_002',
-        'email': 'jane@example.com',
-        'phoneNumber': '+821012345678'
-    }
-]
-
-result = send_form(
-    form_id,
-    recipients,
-    subject='Customer Satisfaction Survey',
-    message='We would love to hear your feedback!'
-)
-
-print('Delivery successful!')
-print(f"Total recipients: {result['data']['totalRecipients']}")
-print(f"Successful: {result['data']['successfulDeliveries']}")
-
-if result['data']['failedDeliveries']:
-    print('\nFailed deliveries:')
-    for failure in result['data']['failedDeliveries']:
-        print(f"- {failure['customerKey']}: {failure['error']}")
-```
-
-## Step 5: Check Delivery Status
-
-Monitor the status of your form deliveries.
-
-### JavaScript
-
-```javascript
-async function getDeliveryStatus(formId, customerKeys) {
-  const response = await fetch(`${BASE_URL}/forms/${formId}/delivery/status`, {
-    method: 'POST',
-    headers: {
-      'X-WALLA-API-KEY': API_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ customerKeys })
-  });
-
-  const data = await response.json();
-  return data.data;
-}
-
-// Check status
-getDeliveryStatus('form_abc', ['customer_001', 'customer_002'])
-  .then(statuses => {
-    console.log('\nDelivery Status:');
-    statuses.forEach(status => {
-      console.log(`${status.customerKey}: ${status.status}`);
-      console.log(`  Email: ${status.email}`);
-      console.log(`  Last sent: ${status.lastSentAt}`);
-    });
-  })
-  .catch(error => console.error('Error:', error));
-```
-
-### Python
-
-```python
-def get_delivery_status(form_id, customer_keys):
-    headers = {
-        'X-WALLA-API-KEY': API_KEY,
-        'Content-Type': 'application/json'
-    }
-
-    response = requests.post(
-        f'{BASE_URL}/forms/{form_id}/delivery/status',
-        headers=headers,
-        json={'customerKeys': customer_keys}
-    )
-    response.raise_for_status()
-    return response.json()['data']
-
-# Check status
-statuses = get_delivery_status('form_abc', ['customer_001', 'customer_002'])
-
-print('\nDelivery Status:')
-for status in statuses:
-    print(f"{status['customerKey']}: {status['status']}")
-    print(f"  Email: {status['email']}")
-    print(f"  Last sent: {status['lastSentAt']}")
-```
-
-**Status Values:**
-- `NOT_SENT`: Created but not sent
-- `SENT`: Successfully delivered
-- `OPENED`: Recipient opened the form
-- `RESPONDED`: Recipient submitted the form
-
-## Step 6: Retrieve Form Responses
+## Step 4: Retrieve Form Responses
 
 Fetch responses from your form.
 
@@ -479,26 +296,6 @@ class WallaAPI {
     return data.data;
   }
 
-  async sendForm(formId, recipients, options = {}) {
-    const data = await this.request(`/forms/${formId}/delivery`, {
-      method: 'POST',
-      body: JSON.stringify({
-        recipients,
-        subject: options.subject,
-        message: options.message
-      })
-    });
-    return data.data;
-  }
-
-  async getDeliveryStatus(formId, customerKeys) {
-    const data = await this.request(`/forms/${formId}/delivery/status`, {
-      method: 'POST',
-      body: JSON.stringify({ customerKeys })
-    });
-    return data.data;
-  }
-
   async getResponses(formId, page = 1, limit = 20) {
     const data = await this.request(
       `/forms/${formId}/responses?page=${page}&limit=${limit}`
@@ -527,17 +324,7 @@ async function main() {
 
     console.log(`Using form: ${firstForm.title} (${firstForm.id})`);
 
-    // 3. Send form
-    const deliveryResult = await api.sendForm(firstForm.id, [
-      { customerKey: 'demo_001', email: 'demo@example.com' }
-    ]);
-    console.log(`Sent to ${deliveryResult.successfulDeliveries} recipients`);
-
-    // 4. Check status
-    const statuses = await api.getDeliveryStatus(firstForm.id, ['demo_001']);
-    console.log(`Status: ${statuses[0].status}`);
-
-    // 5. Get responses
+    // 3. Get responses
     const responses = await api.getResponses(firstForm.id);
     console.log(`Total responses: ${responses.pagination.totalCount}`);
 
@@ -584,25 +371,6 @@ class WallaAPI:
     def get_forms(self):
         return self.request('/forms')['data']
 
-    def send_form(self, form_id, recipients, subject=None, message=None):
-        payload = {
-            'recipients': recipients,
-            'subject': subject,
-            'message': message
-        }
-        return self.request(
-            f'/forms/{form_id}/delivery',
-            method='POST',
-            json=payload
-        )['data']
-
-    def get_delivery_status(self, form_id, customer_keys):
-        return self.request(
-            f'/forms/{form_id}/delivery/status',
-            method='POST',
-            json={'customerKeys': customer_keys}
-        )['data']
-
     def get_responses(self, form_id, page=1, limit=20):
         return self.request(
             f'/forms/{form_id}/responses',
@@ -627,18 +395,7 @@ def main():
         first_form = forms[0]['forms'][0]['form']
         print(f"Using form: {first_form['title']} ({first_form['id']})")
 
-        # 3. Send form
-        delivery_result = api.send_form(
-            first_form['id'],
-            [{'customerKey': 'demo_001', 'email': 'demo@example.com'}]
-        )
-        print(f"Sent to {delivery_result['successfulDeliveries']} recipients")
-
-        # 4. Check status
-        statuses = api.get_delivery_status(first_form['id'], ['demo_001'])
-        print(f"Status: {statuses[0]['status']}")
-
-        # 5. Get responses
+        # 3. Get responses
         responses = api.get_responses(first_form['id'])
         print(f"Total responses: {responses['pagination']['totalCount']}")
 
@@ -654,10 +411,9 @@ if __name__ == '__main__':
 Now that you've made your first API calls, explore more:
 
 <Cards>
-  <Card title="Workspaces API" href="/docs/workspaces" />
-  <Card title="Forms API" href="/docs/forms" />
-  <Card title="Form Delivery API" href="/docs/delivery" />
-  <Card title="Form Responses API" href="/docs/responses" />
+  <Card title="Workspaces API" href="/docs/en/workspaces" />
+  <Card title="Forms API" href="/docs/en/forms" />
+  <Card title="Form Responses API" href="/docs/en/responses" />
 </Cards>
 
 ## Common Issues
