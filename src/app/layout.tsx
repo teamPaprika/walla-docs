@@ -3,17 +3,18 @@ import { RootProvider } from 'fumadocs-ui/provider/next';
 import { I18nProvider } from 'fumadocs-ui/i18n';
 import { NextProvider } from 'fumadocs-core/framework/next';
 import { Inter } from 'next/font/google';
+import type { ReactNode } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],
 });
 
-export default async function Layout({
-  children,
-  params,
-}: LayoutProps<'/'>) {
-  const resolvedParams = await params;
-  const lang = resolvedParams?.lang || 'en';
+type RootLayoutProps = {
+  children: ReactNode;
+};
+
+export default function Layout({ children }: RootLayoutProps) {
+  const lang = 'en';
 
   return (
     <html lang={lang} className={inter.className} suppressHydrationWarning>

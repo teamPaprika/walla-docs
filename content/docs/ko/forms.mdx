@@ -180,6 +180,267 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc" \
   }
   ```
 
+---
+
+### 폼 필드 조회
+
+특정 폼의 게시된 필드 목록을 조회합니다.
+
+```http
+GET /open-api/v1/forms/{formId}/fields
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `formId` | string | 예 | 고유 폼 식별자 (게시된 폼 ID) |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "fields": [
+      {
+        "id": "field_abc123",
+        "label": "이름이 무엇인가요?",
+        "fieldType": "SHORT_TEXT",
+        "outputType": "string"
+      },
+      {
+        "id": "field_xyz789",
+        "label": "선호 사항을 선택하세요",
+        "fieldType": "CHECKBOX",
+        "outputType": "array"
+      },
+      {
+        "id": "field_def456",
+        "label": "주소",
+        "fieldType": "ADDRESS",
+        "outputType": "object"
+      }
+    ]
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data.fields` | array | 필드 객체 배열 |
+| `data.fields[].id` | string | 고유 필드 식별자 |
+| `data.fields[].label` | string | 필드 라벨/질문 텍스트 |
+| `data.fields[].fieldType` | string | 필드 타입 (SHORT_TEXT, RADIO, CHECKBOX 등) |
+| `data.fields[].outputType` | string | 출력 스키마 타입 (string, array, object, null) |
+
+**일반적인 필드 타입:**
+- `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE`, `NUMBER`, `DATE`, `TIME`, `URL`, `RADIO`, `DROPDOWN` → 출력 타입: `string`
+- `CHECKBOX`, `MULTI_SELECT`, `FILE_UPLOAD` → 출력 타입: `array`
+- `ADDRESS`, `NAME`, `PHONE_DETAILED`, `DATE_RANGE` → 출력 타입: `object`
+- `GRID` → 출력 타입: `grid`
+- `HEADING`, `DESCRIPTION`, `DIVIDER`, `IMAGE` → 출력 타입: `null`
+
+**오류 응답**
+
+- **400 Bad Request**: 잘못된 요청
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 폼을 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### 필드 상세 정보 조회
+
+특정 필드의 모든 속성, 검증 규칙, 출력 스키마, 조건부 로직을 포함한 종합적인 상세 정보를 조회합니다.
+
+```http
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `formId` | string | 예 | 고유 폼 식별자 (게시된 폼 ID) |
+| `fieldId` | string | 예 | 고유 필드 식별자 |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "field_abc123",
+    "publishedFormId": "form_abc",
+    "label": "이메일 주소가 무엇인가요?",
+    "fieldType": "EMAIL",
+    "outputSchema": {
+      "type": "string",
+      "format": "email"
+    },
+    "properties": {
+      "placeholder": "you@example.com",
+      "required": true
+    },
+    "validations": {
+      "required": true,
+      "email": true
+    },
+    "validationErrorMessage": {
+      "required": "이메일은 필수입니다",
+      "email": "유효한 이메일 주소를 입력하세요"
+    },
+    "branches": [
+      {
+        "condition": {
+          "field": "field_abc123",
+          "operator": "contains",
+          "value": "@company.com"
+        },
+        "action": {
+          "type": "show",
+          "targetField": "field_xyz789"
+        }
+      }
+    ],
+    "isResponseMasked": false,
+    "responseMaskOptions": null
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data.id` | string | 고유 필드 식별자 |
+| `data.publishedFormId` | string | 게시된 폼 식별자 |
+| `data.label` | string | 필드 라벨/질문 텍스트 |
+| `data.fieldType` | string | 필드 타입 (SHORT_TEXT, RADIO, CHECKBOX 등) |
+| `data.outputSchema` | object | JSON Schema 형식의 출력 스키마 |
+| `data.properties` | object | 필드별 속성 (옵션, 플레이스홀더, 필수 등) |
+| `data.validations` | object | 필드의 검증 규칙 |
+| `data.validationErrorMessage` | object | 사용자 정의 검증 오류 메시지 |
+| `data.branches` | array | 조건부 로직/분기 규칙 (nullable) |
+| `data.isResponseMasked` | boolean | 프라이버시를 위해 응답이 마스킹되는지 여부 (nullable) |
+| `data.responseMaskOptions` | object | 응답 마스킹 구성 (nullable) |
+
+**필드 타입별 속성:**
+
+필드 타입에 따라 다른 속성이 있습니다:
+
+- **SHORT_TEXT/LONG_TEXT**: `placeholder`, `minLength`, `maxLength`, `required`
+- **EMAIL**: `placeholder`, `required`
+- **PHONE**: `defaultCountryCode`, `required`
+- **NUMBER**: `min`, `max`, `step`, `required`
+- **RADIO/CHECKBOX/DROPDOWN**: `options` (선택 항목 배열)
+- **DATE**: `minDate`, `maxDate`, `format`
+- **FILE_UPLOAD**: `maxFiles`, `maxFileSize`, `allowedTypes`
+
+**오류 응답**
+
+- **400 Bad Request**: 잘못된 요청
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 폼 또는 필드를 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### 필드 설명 조회
+
+특정 필드의 설명/도움말 텍스트를 조회합니다.
+
+```http
+GET /open-api/v1/forms/{formId}/fields/{fieldId}/description
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `formId` | string | 예 | 고유 폼 식별자 (게시된 폼 ID) |
+| `fieldId` | string | 예 | 고유 필드 식별자 |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123/description" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "field_abc123",
+    "publishedFormId": "form_abc",
+    "publishedFormFieldId": "published_field_123",
+    "html": "<p>연락 가능한 유효한 이메일 주소를 입력해주세요.</p>",
+    "tiptapType": "doc"
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data.id` | string | 필드 식별자 |
+| `data.publishedFormId` | string | 게시된 폼 식별자 |
+| `data.publishedFormFieldId` | string | 게시된 필드 식별자 (nullable) |
+| `data.html` | string | 필드 설명 HTML 내용 (nullable) |
+| `data.tiptapType` | string | TipTap 에디터 타입 (nullable) |
+
+**오류 응답**
+
+- **400 Bad Request**: 잘못된 요청
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 폼 또는 필드 설명을 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
 ## 폼 속성 설명
 
 ### 폼 상태

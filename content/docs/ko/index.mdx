@@ -16,6 +16,21 @@ Walla Open API는 RESTful API로, 다음과 같은 기능을 제공합니다:
 - **폼 발송**: 이메일 또는 SMS를 통해 수신자에게 폼을 배포합니다
 - **응답 추적**: 폼 응답 및 제출 데이터를 모니터링하고 조회합니다
 
+## 리소스 계층 구조
+
+Walla API는 리소스를 계층적 구조로 구성합니다:
+
+```
+Team → Workspace → Form → Response
+```
+
+- **Team(팀)**: 최상위 조직 단위입니다. API 키는 팀 수준에서 생성되며 자동으로 팀 컨텍스트를 포함합니다.
+- **Workspace(워크스페이스)**: 팀 내에서 폼과 프로젝트를 구성하는 컨테이너입니다.
+- **Form(폼)**: 워크스페이스 내에서 생성된 설문 또는 폼입니다.
+- **Response(응답)**: 폼에 대해 받은 개별 제출입니다.
+
+**중요**: API 키는 팀 범위로 지정되므로 API 요청에 팀 정보를 제공할 필요가 없습니다. 팀 컨텍스트는 API 키에서 자동으로 결정됩니다.
+
 ## 기본 URL
 
 모든 API 요청은 다음 주소로 보내야 합니다:
@@ -27,10 +42,10 @@ https://api.walla.my/open-api/v1
 ## 시작하기
 
 <Cards>
-  <Card title="인증" href="/ko/docs/authentication" />
-  <Card title="빠른 시작 가이드" href="/ko/docs/quick-start" />
-  <Card title="API 레퍼런스" href="/ko/docs/workspaces" />
-  <Card title="에러 코드" href="/ko/docs/error-codes" />
+  <Card title="인증" href="/docs/ko/authentication" />
+  <Card title="빠른 시작 가이드" href="/docs/ko/quick-start" />
+  <Card title="API 레퍼런스" href="/docs/ko/workspaces" />
+  <Card title="에러 코드" href="/docs/ko/error-codes" />
 </Cards>
 
 ## 주요 기능
@@ -67,6 +82,10 @@ https://api.walla.my/open-api/v1
 | 워크스페이스 | `GET /workspaces/{workspaceId}/forms` | 워크스페이스 내 폼 목록 조회 |
 | 폼 | `GET /forms` | 모든 폼 조회 |
 | 폼 | `GET /forms/{formId}` | 특정 폼 조회 |
+| 필드 | `GET /field-output-schemas` | 필드 출력 스키마 조회 |
+| 필드 | `GET /forms/{formId}/fields` | 폼 필드 목록 조회 |
+| 필드 | `GET /forms/{formId}/fields/{fieldId}` | 특정 필드 상세 정보 조회 |
+| 필드 | `GET /forms/{formId}/fields/{fieldId}/description` | 필드 설명 조회 |
 | 발송 | `POST /forms/{formId}/delivery` | 폼 발송 |
 | 발송 | `GET /forms/{formId}/delivery` | 발송 수신자 목록 조회 |
 | 발송 | `POST /forms/{formId}/delivery/status` | 발송 상태 조회 |

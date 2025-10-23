@@ -16,6 +16,21 @@ The Walla Open API is a RESTful API that enables developers to:
 - **Send Form Deliveries**: Distribute forms to recipients via email or SMS
 - **Track Responses**: Monitor and retrieve form responses and submission data
 
+## Resource Hierarchy
+
+The Walla API follows a hierarchical structure for organizing resources:
+
+```
+Team → Workspace → Form → Response
+```
+
+- **Team**: The top-level organization unit. API keys are created at the team level and automatically include team context.
+- **Workspace**: A container within a team for organizing forms and projects.
+- **Form**: A survey or form created within a workspace.
+- **Response**: Individual submissions received for a form.
+
+**Important**: Since API keys are team-scoped, you don't need to provide team information in your API requests. The team context is automatically determined from your API key.
+
 ## Base URL
 
 All API requests should be made to:
@@ -27,10 +42,10 @@ https://api.walla.my/open-api/v1
 ## Getting Started
 
 <Cards>
-  <Card title="Authentication" href="/docs/authentication" />
-  <Card title="Quick Start Guide" href="/docs/quick-start" />
-  <Card title="API Reference" href="/docs/workspaces" />
-  <Card title="Error Codes" href="/docs/error-codes" />
+  <Card title="Authentication" href="/docs/en/authentication" />
+  <Card title="Quick Start Guide" href="/docs/en/quick-start" />
+  <Card title="API Reference" href="/docs/en/workspaces" />
+  <Card title="Error Codes" href="/docs/en/error-codes" />
 </Cards>
 
 ## Key Features
