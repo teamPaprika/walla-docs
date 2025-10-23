@@ -180,6 +180,267 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc" \
   }
   ```
 
+---
+
+### Get Form Fields
+
+Retrieve a list of all published fields in a specific form.
+
+```http
+GET /open-api/v1/forms/{formId}/fields
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier (published form ID) |
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "fields": [
+      {
+        "id": "field_abc123",
+        "label": "What is your name?",
+        "fieldType": "SHORT_TEXT",
+        "outputType": "string"
+      },
+      {
+        "id": "field_xyz789",
+        "label": "Select your preferences",
+        "fieldType": "CHECKBOX",
+        "outputType": "array"
+      },
+      {
+        "id": "field_def456",
+        "label": "Your address",
+        "fieldType": "ADDRESS",
+        "outputType": "object"
+      }
+    ]
+  }
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.fields` | array | Array of field objects |
+| `data.fields[].id` | string | Unique field identifier |
+| `data.fields[].label` | string | Field label/question text |
+| `data.fields[].fieldType` | string | Field type (SHORT_TEXT, RADIO, CHECKBOX, etc.) |
+| `data.fields[].outputType` | string | Output schema type (string, array, object, null) |
+
+**Common Field Types:**
+- `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE`, `NUMBER`, `DATE`, `TIME`, `URL`, `RADIO`, `DROPDOWN` → output type: `string`
+- `CHECKBOX`, `MULTI_SELECT`, `FILE_UPLOAD` → output type: `array`
+- `ADDRESS`, `NAME`, `PHONE_DETAILED`, `DATE_RANGE` → output type: `object`
+- `GRID` → output type: `grid`
+- `HEADING`, `DESCRIPTION`, `DIVIDER`, `IMAGE` → output type: `null`
+
+**Error Responses**
+
+- **400 Bad Request**: Invalid request
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form not found
+- **500 Internal Server Error**: Server error
+
+---
+
+### Get Field Details
+
+Retrieve comprehensive details about a specific field, including all properties, validation rules, output schema, and conditional logic.
+
+```http
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier (published form ID) |
+| `fieldId` | string | Yes | The unique field identifier |
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "field_abc123",
+    "publishedFormId": "form_abc",
+    "label": "What is your email address?",
+    "fieldType": "EMAIL",
+    "outputSchema": {
+      "type": "string",
+      "format": "email"
+    },
+    "properties": {
+      "placeholder": "you@example.com",
+      "required": true
+    },
+    "validations": {
+      "required": true,
+      "email": true
+    },
+    "validationErrorMessage": {
+      "required": "Email is required",
+      "email": "Please enter a valid email address"
+    },
+    "branches": [
+      {
+        "condition": {
+          "field": "field_abc123",
+          "operator": "contains",
+          "value": "@company.com"
+        },
+        "action": {
+          "type": "show",
+          "targetField": "field_xyz789"
+        }
+      }
+    ],
+    "isResponseMasked": false,
+    "responseMaskOptions": null
+  }
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.id` | string | Unique field identifier |
+| `data.publishedFormId` | string | Published form identifier |
+| `data.label` | string | Field label/question text |
+| `data.fieldType` | string | Field type (SHORT_TEXT, RADIO, CHECKBOX, etc.) |
+| `data.outputSchema` | object | Output schema in JSON Schema format |
+| `data.properties` | object | Field-specific properties (options, placeholder, required, etc.) |
+| `data.validations` | object | Validation rules for the field |
+| `data.validationErrorMessage` | object | Custom validation error messages |
+| `data.branches` | array | Conditional logic/branching rules (nullable) |
+| `data.isResponseMasked` | boolean | Whether responses are masked for privacy (nullable) |
+| `data.responseMaskOptions` | object | Response masking configuration (nullable) |
+
+**Field Properties by Type:**
+
+Different field types have different properties:
+
+- **SHORT_TEXT/LONG_TEXT**: `placeholder`, `minLength`, `maxLength`, `required`
+- **EMAIL**: `placeholder`, `required`
+- **PHONE**: `defaultCountryCode`, `required`
+- **NUMBER**: `min`, `max`, `step`, `required`
+- **RADIO/CHECKBOX/DROPDOWN**: `options` (array of choices)
+- **DATE**: `minDate`, `maxDate`, `format`
+- **FILE_UPLOAD**: `maxFiles`, `maxFileSize`, `allowedTypes`
+
+**Error Responses**
+
+- **400 Bad Request**: Invalid request
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form or field not found
+- **500 Internal Server Error**: Server error
+
+---
+
+### Get Field Description
+
+Retrieve the description/help text for a specific field.
+
+```http
+GET /open-api/v1/forms/{formId}/fields/{fieldId}/description
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier (published form ID) |
+| `fieldId` | string | Yes | The unique field identifier |
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123/description" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "field_abc123",
+    "publishedFormId": "form_abc",
+    "publishedFormFieldId": "published_field_123",
+    "html": "<p>Please enter a valid email address where we can reach you.</p>",
+    "tiptapType": "doc"
+  }
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.id` | string | Field identifier |
+| `data.publishedFormId` | string | Published form identifier |
+| `data.publishedFormFieldId` | string | Published field identifier (nullable) |
+| `data.html` | string | Field description HTML content (nullable) |
+| `data.tiptapType` | string | TipTap editor type (nullable) |
+
+**Error Responses**
+
+- **400 Bad Request**: Invalid request
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form or field description not found
+- **500 Internal Server Error**: Server error
+
 ## Form Properties Explained
 
 ### Form Status
