@@ -1,13 +1,25 @@
+import { i18n } from '@/lib/i18n';
+import { defineI18nUI } from 'fumadocs-ui/i18n';
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 
-/**
- * Shared layout configurations
- *
- * you can customise layouts individually from:
- * Home Layout: app/(home)/layout.tsx
- * Docs Layout: app/docs/layout.tsx
- */
-export function baseOptions(): BaseLayoutProps {
+export const i18nUI = defineI18nUI(i18n, {
+  en: {
+    displayName: 'English',
+  },
+  ko: {
+    displayName: '한국어',
+    search: '검색',
+    searchNoResult: '결과 없음',
+    toc: '목차',
+    lastUpdate: '마지막 업데이트',
+    nextPage: '다음',
+    previousPage: '이전',
+    chooseLanguage: '언어 선택',
+    chooseTheme: '테마 선택',
+  },
+});
+
+export function baseOptions(lang: string): BaseLayoutProps {
   return {
     nav: {
       title: (
@@ -20,17 +32,10 @@ export function baseOptions(): BaseLayoutProps {
           >
             <circle cx={12} cy={12} r={12} fill="currentColor" />
           </svg>
-          Walla Open API
+          Walla Docs
         </>
       ),
     },
-    // see https://fumadocs.dev/docs/ui/navigation/links
-    links: [
-      {
-        text: 'Documentation',
-        url: '/docs',
-        active: 'nested-url',
-      },
-    ],
+    links: [],
   };
 }

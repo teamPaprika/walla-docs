@@ -1,29 +1,10 @@
-import '@/app/global.css';
-import { RootProvider } from 'fumadocs-ui/provider/next';
-import { I18nProvider } from 'fumadocs-ui/i18n';
-import { NextProvider } from 'fumadocs-core/framework/next';
-import { Inter } from 'next/font/google';
-import type { ReactNode } from 'react';
+import './global.css';
 
-const inter = Inter({
-  subsets: ['latin'],
-});
-
-type RootLayoutProps = {
-  children: ReactNode;
-};
-
-export default function Layout({ children }: RootLayoutProps) {
-  const lang = 'en';
-
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={lang} className={inter.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
-        <NextProvider>
-          <I18nProvider locale={lang}>
-            <RootProvider>{children}</RootProvider>
-          </I18nProvider>
-        </NextProvider>
+        {children}
       </body>
     </html>
   );

@@ -1,22 +1,31 @@
-import { docs } from '@/.source';
+import { docs } from 'collections/server';
 import { type InferPageType, loader } from 'fumadocs-core/source';
-import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
-import { i18n } from '@/lib/i18n';
+import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
+import { i18n } from './i18n';
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
-  baseUrl: '/docs',
+  baseUrl: docsRoute,
   i18n,
   source: docs.toFumadocsSource(),
-  plugins: [lucideIconsPlugin()],
+  plugins: [],
 });
 
 export function getPageImage(page: InferPageType<typeof source>) {
-  const segments = [...page.slugs, 'image.png'];
+  const segments = [...page.slugs, 'image.webp'];
 
   return {
     segments,
-    url: `/og/docs/${segments.join('/')}`,
+    url: `${docsImageRoute}/${segments.join('/')}`,
+  };
+}
+
+export function getPageMarkdownUrl(page: InferPageType<typeof source>) {
+  const segments = [...page.slugs, 'content.md'];
+
+  return {
+    segments,
+    url: `${docsContentRoute}/${segments.join('/')}`,
   };
 }
 
