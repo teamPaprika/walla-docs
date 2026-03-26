@@ -5,6 +5,7 @@ export const revalidate = false;
 
 export const { staticGET: GET } = createFromSource(source, {
   localeMap: {
+    // @ts-expect-error -- custom tokenizer for Korean CJK support
     ko: {
       components: {
         tokenizer: {
