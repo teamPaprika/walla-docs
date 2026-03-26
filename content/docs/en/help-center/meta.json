@@ -1,0 +1,21 @@
+{
+  "title": "Help Center",
+  "root": true,
+  "pages": [
+    "index",
+    "---Getting Started---",
+    "getting-started",
+    "team-workspace",
+    "---Forms---",
+    "create-forms",
+    "manage-forms",
+    "share-forms",
+    "custom-design",
+    "---Data & Integration---",
+    "result-analysis",
+    "integrate-forms",
+    "---Settings---",
+    "security",
+    "reward"
+  ]
+}

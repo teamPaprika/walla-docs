@@ -1,0 +1,21 @@
+{
+  "title": "헬프센터",
+  "root": true,
+  "pages": [
+    "index",
+    "---시작하기---",
+    "getting-started",
+    "team-workspace",
+    "---설문---",
+    "create-forms",
+    "manage-forms",
+    "share-forms",
+    "custom-design",
+    "---데이터 & 연동---",
+    "result-analysis",
+    "integrate-forms",
+    "---설정---",
+    "security",
+    "reward"
+  ]
+}

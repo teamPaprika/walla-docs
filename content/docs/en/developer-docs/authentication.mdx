@@ -1,0 +1,192 @@
+---
+title: Authentication
+description: Learn how to authenticate with the Walla Open API
+---
+
+# Authentication
+
+The Walla Open API uses API key authentication to secure access to your workspace data. All API requests must include a valid API key in the request header.
+
+## API Key Authentication
+
+To authenticate your API requests, you need to include your API key in the `X-WALLA-API-KEY` header.
+
+### Header Format
+
+```
+X-WALLA-API-KEY: your_api_key_here
+```
+
+### Team-Scoped API Keys
+
+API keys in Walla are created at the **team level**. This means:
+
+- Each API key is associated with a specific team
+- The team context is automatically included with every API request
+- You don't need to provide team information in your API calls
+- All workspaces, forms, and responses you access are automatically filtered by your team
+
+## Obtaining Your API Key
+
+To get your API key:
+
+1. Log in to your Walla account at [app.walla.my](https://app.walla.my)
+2. Navigate to [app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+3. Find the API key section at the top of the page
+4. Generate or copy your API key
+
+> **Important**: Keep your API key secure and never share it publicly. Treat it like a password.
+
+## Making Authenticated Requests
+
+Here are examples of how to include your API key in different programming languages:
+
+### cURL
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+### JavaScript (Fetch)
+
+```javascript
+fetch('https://api.walla.my/open-api/v1/workspaces', {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+### Python (requests)
+
+```python
+import requests
+
+url = "https://api.walla.my/open-api/v1/workspaces"
+headers = {
+    "X-WALLA-API-KEY": "your_api_key_here",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+data = response.json()
+print(data)
+```
+
+### Node.js (axios)
+
+```javascript
+const axios = require('axios');
+
+const config = {
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+};
+
+axios.get('https://api.walla.my/open-api/v1/workspaces', config)
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+```
+
+## Authentication Errors
+
+If authentication fails, the API will return one of the following error responses:
+
+### 403 Forbidden
+
+This error occurs when:
+- The API key is invalid or expired
+- You don't have permission to access the requested resource
+- The API key is missing from the request
+
+**Response Example:**
+
+```json
+{
+  "error": "Authentication failed or insufficient permissions"
+}
+```
+
+## Best Practices
+
+### Security
+
+- **Never commit API keys** to version control systems (Git, SVN, etc.)
+- **Use environment variables** to store API keys in your application
+- **Rotate keys regularly** for enhanced security
+- **Use different keys** for development, staging, and production environments
+
+### Environment Variables
+
+Store your API key in environment variables:
+
+```bash
+# .env file
+WALLA_API_KEY=your_api_key_here
+```
+
+Then access it in your code:
+
+```javascript
+// JavaScript
+const apiKey = process.env.WALLA_API_KEY;
+```
+
+```python
+# Python
+import os
+api_key = os.getenv('WALLA_API_KEY')
+```
+
+### Rate Limiting
+
+The Walla Open API enforces rate limits to ensure fair usage and system stability:
+
+- **Rate Limit**: 6000 requests per hour per API key
+- **Time Window**: 1 hour (rolling window)
+
+If you exceed the rate limit, the API will return a `429 Too Many Requests` response. When this happens:
+
+- Implement exponential backoff for retries
+- Cache responses when appropriate
+- Avoid making unnecessary duplicate requests
+- Monitor your API usage to stay within limits
+- Consider batching operations where possible
+
+## Troubleshooting
+
+### Common Issues
+
+**Problem**: Getting 403 errors despite using the API key
+
+**Solutions**:
+- Verify the API key is correct and hasn't expired
+- Check that you have the necessary permissions for the workspace
+- Ensure the header name is exactly `X-WALLA-API-KEY` (case-sensitive)
+- Verify you're accessing resources within your authorized workspaces
+
+**Problem**: API key not being sent
+
+**Solutions**:
+- Check that the header is properly formatted
+- Ensure your HTTP client is including custom headers
+- Verify there are no typos in the header name
+
+## Next Steps
+
+Now that you understand authentication, you can:
+
+<Cards>
+  <Card title="Quick Start Guide" href="/en/docs/developer-docs/quick-start" />
+  <Card title="Workspaces API" href="/en/docs/developer-docs/workspaces" />
+  <Card title="Forms API" href="/en/docs/developer-docs/forms" />
+</Cards>

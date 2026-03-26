@@ -1,0 +1,10 @@
+{
+  "title": "Security",
+  "pages": [
+    "auto-delete-responses",
+    "two-factor-authentication",
+    "ip-address-verification",
+    "activity-logs",
+    "data-masking"
+  ]
+}

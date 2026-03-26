@@ -1,0 +1,9 @@
+{
+  "title": "Integrate Forms",
+  "pages": [
+    "connecting-to-google-sheets",
+    "connecting-with-zapier",
+    "webhook-automation",
+    "response-api"
+  ]
+}

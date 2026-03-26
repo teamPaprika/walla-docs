@@ -1,0 +1,12 @@
+{
+  "title": "Manage Forms",
+  "pages": [
+    "field-template",
+    "managing-projects",
+    "closing-a-survey",
+    "project-tags",
+    "saving-responses-temporarily",
+    "scheduling-survey-start-end-times",
+    "preventing-duplicate-responses"
+  ]
+}

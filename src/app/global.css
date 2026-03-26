@@ -3,6 +3,10 @@
 @import 'fumadocs-ui/css/preset.css';
 
 :root {
+  --color-fd-info: hsl(193 99% 70%);
+  --color-fd-warning: hsl(42, 100%, 67%);
+  --color-fd-error: hsl(0, 55%, 64%);
+  --color-fd-idea: hsl(168 65% 67%);
 
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 3.9%);
@@ -21,13 +25,37 @@
   --border: hsl(0 0% 89.8%);
   --input: hsl(0 0% 89.8%);
   --ring: hsl(193 100% 50%);
-  --sidebar: hsl(0 0% 98%);
+  --sidebar: hsl(0 0% 100%);
   --sidebar-foreground: hsl(0 0% 3.9%);
   --sidebar-border: hsl(0 0% 89.8%);
   --sidebar-accent: hsl(0 0% 96.1%);
   --sidebar-accent-foreground: hsl(0 0% 9%);
   --sidebar-ring: hsl(193 100% 50%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
+}
+
+#nd-docs-layout {
+  grid-template:
+    "sidebar header header header header"
+    "sidebar toc-popover toc-popover toc-popover toc-popover"
+    "sidebar . main toc ." 1fr /
+    var(--fd-sidebar-col) 1fr minmax(0, calc(var(--fd-layout-width, 97rem) - var(--fd-sidebar-width) - var(--fd-toc-width))) var(--fd-toc-width) 1fr !important;
+}
+
+#nd-sidebar p.inline-flex,
+#nd-sidebar-mobile p.inline-flex {
+  font-weight: 600;
+  color: var(--sidebar-foreground);
+}
+
+#nd-sidebar a[data-active] {
+  padding-block: 0.4rem;
+  font-size: 0.8125rem;
+}
+
+#nd-sidebar-mobile a[data-active] {
+  padding-block: 0.4rem;
+  font-size: 0.875rem;
 }
 
 .dark {

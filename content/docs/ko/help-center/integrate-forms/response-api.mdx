@@ -1,0 +1,403 @@
+---
+title: "응답 API"
+description: "Walla Open API를 사용하여 폼 데이터와 응답을 프로그래밍 방식으로 조회하고 관리할 수 있습니다."
+---
+
+## Walla Open API 가이드
+
+Walla Open API를 사용하여 폼 데이터와 응답을 프로그래밍 방식으로 조회하고 관리할 수 있습니다.
+
+## 버전 정보
+
+- **현재 API 버전:** v1
+- **Swagger 문서:** [https://app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+
+향후 변경 사항이 있을 경우 새로운 버전으로 제공될 수 있습니다.
+
+## API 인증 설정
+## API 키 발급
+
+- Walla에 로그인합니다.
+- API 키 뷰어([https://app.walla.my/open-api/doc](https://app.walla.my/))에 접속합니다.
+- API 키를 발급받은 후 안전한 곳에 보관합니다.
+## 인증 방식
+
+Walla API는 API Key 인증 방식을 사용합니다. 모든 API 요청 시 헤더에 API 키를 포함해야 합니다.
+
+```
+X-WALLA-API-KEY: {발급받은 API 키}
+```
+
+## 기본 URL
+
+```
+https://app.walla.my/open-api/v1
+```
+
+## API 엔드포인트
+## 워크스페이스
+## 워크스페이스 목록 조회
+
+본인이 권한을 가진 전체 워크스페이스 목록을 조회합니다.
+
+```
+GET /open-api/v1/workspaces
+```
+
+**응답 예시:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "workspace_abc123",      "name": "마케팅팀 워크스페이스",  
+      "teamId": "team_xyz789",      "createdAt": "2024-01-15T09:00:00Z",      "updatedAt": "2024-01-20T14:30:00Z"    }  ]}
+```
+
+## 워크스페이스 상세 조회
+
+특정 워크스페이스의 상세 정보를 조회합니다.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| workspaceId | 경로 | O | 워크스페이스 ID |
+## 폼 (프로젝트)
+## 전체 폼 목록 조회
+
+본인이 권한을 가진 모든 워크스페이스의 전체 폼 목록을 조회합니다.
+
+```
+GET /open-api/v1/forms
+```
+
+## 워크스페이스 내 폼 목록 조회
+
+특정 워크스페이스 내의 폼 목록을 조회합니다.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}/forms
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| workspaceId | 경로 | O | 워크스페이스 ID |
+## 폼 상세 조회
+
+특정 폼의 상세 정보를 조회합니다.
+
+```
+GET /open-api/v1/forms/{formId}
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| formId | 경로 | O | 폼 ID |
+
+**응답 예시:**
+
+```
+{  
+  "success": true,  "data": {    "id": "form_abc123",    "title": "고객 만족도 조사",  
+    "description": "서비스 이용 후 만족도를 평가해주세요",  
+    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "creator": "user_123",    "isDeleted": false,    "createdAt": "2024-01-15T09:00:00Z",    "updatedAt": "2024-01-20T14:30:00Z"  }}
+```
+
+## 필드
+## 폼 필드 목록 조회
+
+특정 폼의 게시된 필드 목록을 조회합니다.
+
+```
+GET /open-api/v1/forms/{formId}/fields
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| formId | 경로 | O | 폼 ID (게시된 설문의 ID) |
+
+**응답 예시:**
+
+```
+{  
+  "success": true,  "data": {    "fields": [      {        "id": "field_001",        "label": "이름을 입력해주세요",  
+        "fieldType": "SHORT_TEXT",        "outputType": "string"      },      {        "id": "field_002",        "label": "만족도를 선택해주세요",  
+        "fieldType": "RADIO",        "outputType": "string"      }    ]  }}
+```
+
+## 필드 상세 조회
+
+특정 필드의 상세 정보를 조회합니다. 필드의 모든 속성, 검증 규칙, 출력 스키마 등을 포함합니다.
+
+```
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| formId | 경로 | O | 폼 ID |
+| fieldId | 경로 | O | 필드 ID |
+## 필드 출력 스키마 조회
+
+필드 타입별 출력 스키마 매핑 정보를 조회합니다. 응답 데이터를 해석할 때 각 필드 타입이 어떤 데이터 형식을 반환하는지 이해하는 데 도움이 됩니다.
+
+```
+GET /open-api/v1/field-output-schemas
+```
+
+## 응답 데이터
+## 응답 목록 조회
+
+특정 폼의 응답 목록을 페이지네이션하여 조회합니다. `customerKey` 파라미터를 사용하여 특정 고객의 응답만 필터링할 수 있습니다.
+
+```
+GET /open-api/v1/forms/{formId}/responses
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| formId | 경로 | O | 폼 ID |
+| customerKey | 쿼리 | X | 고객 키로 필터링 (해당 customerKey를 가진 응답만 조회) |
+| page | 쿼리 | X | 페이지 번호 (1부터 시작, 기본값: 1) |
+| limit | 쿼리 | X | 페이지당 응답 개수 (최대 100, 기본값: 20) |
+
+**응답 예시:**
+
+```
+{  
+  "success": true,  "data": {    "responses": [      {        "responseId": "resp_abc123",        "customerKey": "customer_001",        "submittedAt": "2024-01-20T14:30:00Z",        "field_001": "홍길동",  
+        "field_002": "매우 만족",  
+        "hidden-field_utm": "facebook"      }    ],    "pagination": {      "page": 1,      "limit": 20,      "totalCount": 150,      "totalPages": 8    }  }}
+```
+
+**customerKey로 필터링 예시:**
+
+```
+GET /open-api/v1/forms/{formId}/responses?customerKey=customer_001
+```
+
+## 단일 응답 조회
+
+특정 응답의 상세 정보를 조회합니다.
+
+```
+GET /open-api/v1/forms/{formId}/responses/{responseId}
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| formId | 경로 | O | 폼 ID |
+| responseId | 경로 | O | 응답 ID |
+
+**응답 예시:**
+
+```
+{  
+  "success": true,  "data": {    "responseId": "resp_abc123",    "formId": "form_abc123",    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "response": {      "field_001": "홍길동",  
+      "field_002": "매우 만족",  
+      "hidden-field_utm": "facebook"    },    "submittedAt": "2024-01-20T14:30:00Z",    "customerKey": "customer_001",    "startedAt": "2024-01-20T14:25:00Z"  }}
+```
+
+## Form Delivery (발송)
+> **참고:** Form Delivery 기능은 ONPREM 환경에서만 사용 가능합니다. SaaS 환경에서는 사용할 수 없습니다.
+## 폼 발송
+
+특정 프로젝트(게시된 설문)를 수신인에게 발송합니다. 게시되지 않은 설문은 발송할 수 없습니다.
+
+```
+POST /open-api/v1/forms/{formId}/delivery
+```
+
+**파라미터:**
+
+| 이름 | 위치 | 필수 | 설명 |
+| --- | --- | --- | --- |
+| formId | 경로 | O | 폼 ID |
+
+**요청 본문:**
+
+```
+{  
+  "recipients": [    {      "customerKey": "customer_001",      "email": "user@example.com",      "phoneNumber": "010-1234-5678"    }  ],  "subject": "설문이 도착했습니다.",  
+  "message": "설문 링크를 확인하세요."  
+}
+```
+
+| 필드 | 필수 | 설명 |
+| --- | --- | --- |
+| recipients | O | 수신자 목록 (배열) |
+| recipients[].customerKey | O | 고객 식별 키 |
+| recipients[].email | X | 이메일 주소 |
+| recipients[].phoneNumber | X | 전화번호 |
+| subject | X | 이메일 제목 (기본값: "설문이 도착했습니다.") |
+| message | X | 발송 메시지 |
+## 수신인 목록 조회
+
+특정 프로젝트의 전체 수신인 목록을 조회합니다.
+
+```
+GET /open-api/v1/forms/{formId}/delivery
+```
+
+## 수신인 상태 조회
+
+특정 수신인들의 진행 상태를 조회합니다.
+
+```
+POST /open-api/v1/forms/{formId}/delivery/status
+```
+
+**요청 본문:**
+
+```
+{  
+  "customerKeys": ["customer_001", "customer_002"]}
+```
+
+**응답 예시:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "delivery_abc123",      "formId": "form_abc123",      "customerKey": "customer_001",      "email": "user@example.com",      "status": "RESPONDED",      "lastSentAt": "2024-01-20T10:00:00Z",      "createdAt": "2024-01-19T09:00:00Z"    }  ]}
+```
+
+**발송 상태 값:**
+
+| 상태 | 설명 |
+| --- | --- |
+| NOT_SENT | 아직 발송되지 않음 |
+| SENT | 발송됨 |
+| OPENED | 링크 열람함 |
+| RESPONDED | 응답 완료함 |
+## 응답 데이터 구조
+## 필드 타입별 응답 값 형식
+
+응답 데이터의 각 필드 값은 필드 타입에 따라 다른 형식을 가집니다.
+
+| 필드 타입 | 출력 형식 | 예시 |
+| --- | --- | --- |
+| SHORT_TEXT, LONG_TEXT | string | `"홍길동"` |
+| RADIO, DROPDOWN | string | `"옵션1"` |
+| CHECKBOX | string[] | `["옵션1", "옵션2"]` |
+| FILE_UPLOAD | string[] | `["https://...file1.pdf"]` |
+| DATE | string | `"2024-01-20"` |
+| NUMBER | string | `"42"` |
+
+상세한 출력 스키마는 `GET /open-api/v1/field-output-schemas` API를 참조하세요.
+
+## 히든 필드
+
+히든 필드는 `hidden-{필드ID}` 형식의 키로 응답 데이터에 포함됩니다.
+
+```
+{  
+  "hidden-field_abc123": "facebook",  "hidden-field_xyz789": "spring_campaign"}
+```
+
+히든 필드는 URL 파라미터를 통해 값이 전달됩니다:
+
+```
+https://walla.my/v/{formId}?utm_source=facebook&utm_campaign=spring_campaign
+```
+
+## customerKey
+
+`customerKey`는 Form Delivery 기능 사용 시 각 수신자를 식별하기 위해 자동 생성되는 값입니다.
+
+- 발송 상태 추적 (발송됨 → 열람 → 응답완료)에 사용됩니다.
+- 응답 데이터 필터링 시 사용할 수 있습니다.
+- Form Delivery를 사용하지 않는 경우 비어있을 수 있습니다.
+## 에러 응답
+
+API 요청이 실패하면 표준 HTTP 상태 코드와 함께 에러 메시지가 반환됩니다.
+
+| 상태 코드 | 설명 |
+| --- | --- |
+| 400 | 잘못된 요청 (파라미터 오류 등) |
+| 403 | 인증 실패 또는 권한 없음 |
+| 404 | 리소스를 찾을 수 없음 |
+| 500 | 서버 에러 |
+
+**에러 응답 예시:**
+
+```
+{  
+  "error": "Form not found or not published"}
+```
+
+## 사용 예시
+## 1. customerKey를 활용한 응답 연동 시나리오
+
+- 외부 시스템의 고객 ID를 Walla의 `customerKey`로 사용합니다.
+- `GET /forms/{formId}/responses?customerKey={customerKey}` API로 해당 고객의 응답 데이터를 조회합니다.
+- 응답 목록의 `totalCount`가 0보다 크면 응답이 존재하는 것입니다.
+## 2. 폼 응답 목록 조회
+
+```
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 3. 특정 응답 조회  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 4. customerKey로 응답 필터링  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 5. Form Delivery로 설문 발송  
+  
+```bash  
+curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X-WALLA-API-KEY: your_api_key" \  -H "Content-Type: application/json" \  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "고객 만족도 조사",  
+    "message": "소중한 의견을 남겨주세요."  
+  }'```
+```
+
+## Field Type
+| Type | Name |
+| --- | --- |
+| RADIO | 객관식 |
+| CHECKBOX | 객관식 (다중선택) |
+| PICTURE_CHOICE | 사진선택 |
+| DROPDOWN | 드롭다운 |
+| LINEAR | 선형배율 |
+| RADIO_GRID | 객관식 표 |
+| CHECKBOX_GRID | 객관식 표 (다중선택) |
+| PRIVACY_POLICY_INFORMATION | 개인정보 수집 |
+| SHORT_TEXT | 단답형 |
+| LONG_TEXT | 장문형 |
+| NUMBER | 숫자 |
+| TABLE | 표 |
+| SECRETS | 비밀 정보 입력 |
+| DESCRIPTION | 설명 |
+| WEBSITE_LINK | 임베딩 |
+| DATE | 날짜 |
+| TIME | 시간 |
+| EMAIL | 이메일 |
+| ADDRESS | 주소 |
+| PHONE_NUMBER | 전화번호 |
+| FILE_UPLOAD | 파일 업로드 |
+| IMAGE_UPLOAD | 사진 촬영 |
+| VIDEO_UPLOAD | 영상 촬영 |
+| GEOLOCATION | 위치기록 |
+| TOSS_PAYMENTS | 토스 페이먼츠 |
+| REJECT | 탈락 |
+| ENDING_DESCRIPTION | 엔딩필드 (종료페이지) |
+| ENDING_REDIRECT | 엔딩필드 (URL로 이동) |
+| SUBMIT | 제출하기 |

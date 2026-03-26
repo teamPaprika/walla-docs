@@ -1,0 +1,74 @@
+---
+title: Introduction
+description: Welcome to the Walla Open API documentation
+---
+
+# Walla Open API Documentation
+
+Welcome to the Walla Open API documentation. This API allows you to programmatically interact with Walla forms, manage workspaces, send form deliveries, and retrieve form responses.
+
+## Overview
+
+The Walla Open API is a RESTful API that enables developers to:
+
+- **Manage Workspaces**: Retrieve information about your workspaces
+- **Manage Forms**: Access and retrieve form data and settings
+- **Send Form Deliveries**: Distribute forms to recipients via email or SMS
+- **Track Responses**: Monitor and retrieve form responses and submission data
+
+## Resource Hierarchy
+
+The Walla API follows a hierarchical structure for organizing resources:
+
+```
+Team → Workspace → Form → Response
+```
+
+- **Team**: The top-level organization unit. API keys are created at the team level and automatically include team context.
+- **Workspace**: A container within a team for organizing forms and projects.
+- **Form**: A survey or form created within a workspace.
+- **Response**: Individual submissions received for a form.
+
+**Important**: Since API keys are team-scoped, you don't need to provide team information in your API requests. The team context is automatically determined from your API key.
+
+## Base URL
+
+All API requests should be made to:
+
+```
+https://api.walla.my/open-api/v1
+```
+
+## Getting Started
+
+<Cards>
+  <Card title="Authentication" href="/en/docs/developer-docs/authentication" />
+  <Card title="Quick Start Guide" href="/en/docs/developer-docs/quick-start" />
+  <Card title="API Reference" href="/en/docs/developer-docs/workspaces" />
+  <Card title="Error Codes" href="/en/docs/developer-docs/error-codes" />
+</Cards>
+
+## Key Features
+
+### Workspace Management
+Retrieve all workspaces you have access to and get detailed information about specific workspaces.
+
+### Form Management
+Access your forms, view form settings, and retrieve form analytics including submission counts.
+
+### Form Delivery
+Send forms to multiple recipients with customized email subjects and messages. Track delivery status and monitor recipient engagement.
+
+### Response Collection
+Retrieve form responses with pagination support. Access detailed response data including customer keys and submission timestamps.
+
+## API Specifications
+
+- **Version**: 1.0
+- **Protocol**: HTTPS
+- **Data Format**: JSON
+- **Authentication**: API Key (via header)
+
+## Support
+
+For issues, questions, or feature requests, please contact Walla support or refer to our comprehensive API documentation.

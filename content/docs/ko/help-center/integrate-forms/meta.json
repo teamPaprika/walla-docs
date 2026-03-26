@@ -1,0 +1,9 @@
+{
+  "title": "설문 연동하기",
+  "pages": [
+    "connecting-to-google-sheets",
+    "connecting-with-zapier",
+    "webhook-automation",
+    "response-api"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "title": "설문 만들기",
+  "pages": [
+    "creating-project-ai",
+    "creating-new-project",
+    "editing-field-text",
+    "grouping-fields",
+    "multiple-choice-checkbox-fields",
+    "multiple-choice-grid-checkbox-grid-fields",
+    "dropdown-linear-scale-fields",
+    "privacy-policy-field",
+    "picture-choice-field",
+    "short-text-long-text-number-table-fields",
+    "secrets-field",
+    "phone-number-email-address-fields",
+    "description-embed-fields",
+    "date-time-fields",
+    "image-upload-video-upload-fields",
+    "geolocation-field",
+    "file-upload-field",
+    "payment-field-toss-payment",
+    "rejection-field",
+    "ending-field",
+    "response-validation",
+    "adding-or-deleting-fields",
+    "customize-button-labels",
+    "creating-personalized-questions",
+    "limiting-option-selections-by-quota",
+    "template",
+    "team-template",
+    "setting-up-logic"
+  ]
+}

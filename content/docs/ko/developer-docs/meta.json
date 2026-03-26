@@ -1,0 +1,17 @@
+{
+  "title": "개발자 문서",
+  "root": true,
+  "pages": [
+    "index",
+    "---가이드---",
+    "quick-start",
+    "authentication",
+    "error-codes",
+    "---API 레퍼런스---",
+    "workspaces",
+    "forms",
+    "field-schemas",
+    "responses",
+    "delivery"
+  ]
+}

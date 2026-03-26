@@ -1,0 +1,17 @@
+{
+  "title": "Developer Docs",
+  "root": true,
+  "pages": [
+    "index",
+    "---Guides---",
+    "quick-start",
+    "authentication",
+    "error-codes",
+    "---API Reference---",
+    "workspaces",
+    "forms",
+    "field-schemas",
+    "responses",
+    "delivery"
+  ]
+}
