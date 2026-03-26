@@ -23,7 +23,7 @@ export const i18nUI = defineI18nUI(i18n, {
 export function baseOptions(lang: string): BaseLayoutProps {
   return {
     nav: {
-      title: <NavLogo />,
+      title: <NavLogo lang={lang} />,
     },
     links: [],
   };

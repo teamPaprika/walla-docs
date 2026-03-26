@@ -9,7 +9,7 @@
   --color-fd-idea: hsl(168 65% 67%);
 
   --background: hsl(0 0% 100%);
-  --foreground: hsl(0 0% 3.9%);
+  --foreground: hsl(224, 56%, 23%);
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(0 0% 3.9%);
   --popover: hsl(0 0% 100%);
@@ -26,7 +26,7 @@
   --input: hsl(0 0% 89.8%);
   --ring: hsl(193 100% 50%);
   --sidebar: hsl(0 0% 100%);
-  --sidebar-foreground: hsl(0 0% 3.9%);
+  --sidebar-foreground: hsl(224, 56%, 23%);
   --sidebar-border: hsl(0 0% 89.8%);
   --sidebar-accent: hsl(0 0% 96.1%);
   --sidebar-accent-foreground: hsl(0 0% 9%);
