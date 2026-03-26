@@ -21,7 +21,9 @@ function initOrama(locale?: string) {
       components: {
         tokenizer: {
           tokenize: (text: string) => text.split(/[\s,.!?;:()[\]{}'"]+/).filter(Boolean),
-        },
+          language: 'english',
+          normalizationCache: new Map(),
+        } as never,
       },
     });
   }
