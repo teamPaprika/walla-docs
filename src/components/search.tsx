@@ -12,18 +12,34 @@ import {
 } from 'fumadocs-ui/components/dialog/search';
 import { useDocsSearch } from 'fumadocs-core/search/client';
 import { create } from '@orama/orama';
-import { useI18n } from 'fumadocs-ui/contexts/i18n';
+import { usePathname } from 'next/navigation';
 
-function initOrama() {
+function initOrama(locale?: string) {
+  if (locale === 'ko') {
+    return create({
+      schema: { _: 'string' },
+      components: {
+        tokenizer: {
+          tokenize: (text: string) => text.split(/[\s,.!?;:()[\]{}'"]+/).filter(Boolean),
+        },
+      },
+    });
+  }
   return create({
     schema: { _: 'string' },
-    // https://docs.orama.com/docs/orama-js/supported-languages
     language: 'english',
   });
 }
 
+function useLocaleFromPath(): string {
+  const pathname = usePathname();
+  const segments = pathname.split('/').filter(Boolean);
+  const supported = ['en', 'ko', 'ja', 'zh', 'vi', 'th'];
+  return supported.includes(segments[0]) ? segments[0] : 'en';
+}
+
 export default function DefaultSearchDialog(props: SharedProps) {
-  const { locale } = useI18n(); // (optional) for i18n
+  const locale = useLocaleFromPath();
   const { search, setSearch, query } = useDocsSearch({
     type: 'static',
     initOrama,

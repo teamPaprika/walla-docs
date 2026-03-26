@@ -1,0 +1,10 @@
+{
+  "title": "보안",
+  "pages": [
+    "auto-delete-responses",
+    "two-factor-authentication",
+    "ip-address-verification",
+    "activity-logs",
+    "data-masking"
+  ]
+}

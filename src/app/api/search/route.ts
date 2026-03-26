@@ -5,6 +5,12 @@ export const revalidate = false;
 
 export const { staticGET: GET } = createFromSource(source, {
   localeMap: {
-    ko: 'english',
+    ko: {
+      components: {
+        tokenizer: {
+          tokenize: (text: string) => text.split(/[\s,.!?;:()[\]{}'"]+/).filter(Boolean),
+        },
+      },
+    },
   },
 });

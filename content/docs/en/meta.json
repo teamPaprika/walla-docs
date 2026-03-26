@@ -1,4 +1,4 @@
 {
   "title": "Documentation",
-  "pages": ["index", "quick-start", "authentication", "workspaces", "forms", "field-schemas", "responses", "delivery", "error-codes"]
+  "pages": ["help-center", "developer-docs"]
 }
