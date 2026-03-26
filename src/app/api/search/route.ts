@@ -3,13 +3,17 @@ import { createFromSource } from 'fumadocs-core/search/server';
 
 export const revalidate = false;
 
+const koTokenizer = {
+  tokenize: (text: string) => text.split(/[\s,.!?;:()[\]{}'"]+/).filter(Boolean),
+  language: 'english',
+  normalizationCache: new Map(),
+};
+
 export const { staticGET: GET } = createFromSource(source, {
   localeMap: {
     ko: {
       components: {
-        tokenizer: {
-          tokenize: (text: string) => text.split(/[\s,.!?;:()[\]{}'"]+/).filter(Boolean),
-        },
+        tokenizer: koTokenizer as never,
       },
     },
   },
