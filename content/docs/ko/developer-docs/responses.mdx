@@ -103,7 +103,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
 | `data.pagination.totalCount` | integer | 전체 응답 수 |
 | `data.pagination.totalPages` | integer | 전체 페이지 수 |
 
-> **참고**: 응답 객체에는 폼 구조에 따른 동적 필드가 포함됩니다. 각 폼 필드는 응답 객체의 속성으로 나타납니다.
+> **참고**: 응답 객체에는 폼 구조에 따른 동적 필드가 포함됩니다. 각 폼 필드의 ID가 키로, 필드 타입에 따른 값이 동적으로 들어갑니다. 필드 타입별 출력 형식은 [필드 출력 스키마](/ko/docs/developer-docs/field-schemas) 문서를 참고하세요.
 
 **오류 응답**
 
@@ -200,7 +200,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses/response_
 
 ### 동적 응답 구조
 
-폼 응답에는 폼 구조에 따라 동적 필드가 포함됩니다. 응답의 필드 이름은 폼의 질문 ID 또는 필드 이름과 동일합니다.
+폼 응답에는 폼 구조에 따라 동적 필드가 포함됩니다. 응답의 키는 폼 필드 ID이며, 값은 필드 타입에 따라 문자열, 배열, 객체 등 다양한 형태로 반환됩니다. 각 필드 타입별 출력 형식은 [필드 출력 스키마](/ko/docs/developer-docs/field-schemas) 문서에서 확인할 수 있습니다.
 
 **폼 구조 예시:**
 ```json
@@ -587,7 +587,7 @@ for response in responses:
 
 - 필요한 경우 응답을 캐시하세요
 - 대량 데이터는 한 번에 가져오지 말고 페이지네이션을 활용하세요
-- 애플리케이션에서 속도 제한을 고려하세요
+- API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다
 
 ### 데이터 처리
 

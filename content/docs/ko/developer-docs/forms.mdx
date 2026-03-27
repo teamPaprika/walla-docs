@@ -7,6 +7,8 @@ description: 폼 관리를 위한 API 레퍼런스
 
 폼 API로 워크스페이스 내 폼(설문/프로젝트)의 목록, 상세 정보, 설정 등을 조회할 수 있습니다.
 
+> **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다.
+
 ## 엔드포인트
 
 ### 모든 폼 조회
@@ -80,7 +82,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms" \
 | `data[].workspaceName` | string | 워크스페이스 이름 |
 | `data[].forms` | array | 워크스페이스 내 폼 배열 |
 | `data[].forms[].form` | object | 폼 상세 정보 |
-| `data[].forms[].formSettings` | object | 폼 구성 |
+| `data[].forms[].formSettings` | object | 폼 구성 설정 (테마, 언어, 알림 등 폼별 환경설정) |
 | `data[].forms[].analytics` | object | 폼 분석 데이터 |
 
 **오류 응답**

@@ -5,7 +5,9 @@ description: 폼 전송 및 전달 상태 추적을 위한 API 레퍼런스
 
 # 폼 전송 API
 
-폼 전송 API로 이메일이나 SMS를 통해 폼을 발송하고, 전달 상태와 응답 여부를 추적할 수 있습니다.
+폼 전송 API로 이메일이나 SMS를 통해 폼을 전송하고, 전송 상태와 응답 여부를 추적할 수 있습니다.
+
+이 API는 특정 수신자에게 폼을 직접 보내고 싶을 때 사용합니다. 수신자별로 고유한 `customerKey`를 지정해 전송하면, 이후 전송 상태(전송됨/열람/응답 완료)를 추적할 수 있습니다. 수신자의 응답 데이터는 [폼 응답 API](/ko/docs/developer-docs/responses)로 조회하세요.
 
 > **⚠️ 중요**: 폼 전송 API는 Walla와 사전 협의가 필요합니다. 사용을 원하시면 Walla 지원팀에 문의하세요.
 
@@ -13,7 +15,7 @@ description: 폼 전송 및 전달 상태 추적을 위한 API 레퍼런스
 
 ### 수신자에게 폼 전송
 
-하나 이상의 수신자에게 게시된 폼을 발송합니다.
+하나 이상의 수신자에게 게시된 폼을 전송합니다.
 
 ```http
 POST /open-api/v1/forms/{formId}/delivery
@@ -294,7 +296,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
 | `data[].formId` | string | 폼 식별자 |
 | `data[].customerKey` | string | 고객 식별자 |
 | `data[].email` | string | 수신자 이메일 |
-| `data[].phone` | string | 수신자 전화번호 |
+| `data[].phone` | string | 수신자 전화번호 (요청 시 `phoneNumber`로 전송, 응답에서는 `phone`으로 반환) |
 | `data[].status` | string | 전송 상태 (아래 참조) |
 | `data[].lastSentAt` | string (date-time) | 마지막 전송 타임스탬프 |
 | `data[].createdAt` | string (date-time) | 최초 전송 생성 타임스탬프 |
@@ -304,7 +306,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
 
 | 상태 | 설명 |
 |--------|-------------|
-| `NOT_SENT` | 전송이 생성되었지만 아직 발송되지 않음 |
+| `NOT_SENT` | 전송이 생성되었지만 아직 전송되지 않음 |
 | `SENT` | 폼이 성공적으로 전달됨 |
 | `OPENED` | 수신자가 폼을 열람함 |
 | `RESPONDED` | 수신자가 폼을 작성하고 제출함 |
@@ -508,6 +510,7 @@ print(f"Response rate: {response_rate:.2f}%")
 - **일괄 처리**: 한 번의 요청으로 여러 수신자에게 보내세요
 - **오류 처리**: `failedDeliveries` 배열을 항상 확인하고, 실패 건은 재시도하세요
 - **상태 추적**: 주기적으로 전송 상태를 확인해서 참여도를 파악하세요
+- **속도 제한**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다
 
 ### 제목 및 메시지 맞춤화
 

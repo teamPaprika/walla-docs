@@ -7,6 +7,10 @@ description: 워크스페이스 관리를 위한 API 레퍼런스
 
 워크스페이스 API로 접근 가능한 워크스페이스 정보를 조회할 수 있습니다. 워크스페이스는 Walla에서 폼과 팀을 묶는 최상위 단위입니다.
 
+특정 워크스페이스에 속한 폼만 조회하려면 `GET /workspaces/{workspaceId}/forms`를, 전체 폼을 한꺼번에 조회하려면 [폼 API](/ko/docs/developer-docs/forms)의 `GET /forms`를 사용하세요.
+
+> **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다.
+
 ## 엔드포인트
 
 ### 모든 워크스페이스 조회
