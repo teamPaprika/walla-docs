@@ -23,7 +23,7 @@ export default async function Page(props: {
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
       <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription className="bg-fd-muted rounded-xl p-4 text-sm">
+      <DocsDescription className="bg-fd-muted rounded-xl p-4 text-sm leading-6">
         {page.data.description}
       </DocsDescription>
       <DocsBody>
