@@ -9,6 +9,7 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { i18n } from '@/lib/i18n';
 
 export default async function Page(props: {
   params: Promise<{ lang: string; slug?: string[] }>;
@@ -22,7 +23,9 @@ export default async function Page(props: {
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
       <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
+      <DocsDescription className="bg-fd-muted rounded-xl p-4 text-sm">
+        {page.data.description}
+      </DocsDescription>
       <DocsBody>
         <MDX
           components={getMDXComponents({
@@ -35,7 +38,11 @@ export default async function Page(props: {
 }
 
 export function generateStaticParams() {
-  return source.generateParams('slug', 'lang');
+  const params = source.generateParams('slug', 'lang');
+  for (const lang of i18n.languages) {
+    params.push({ lang, slug: [] });
+  }
+  return params;
 }
 
 export async function generateMetadata(props: {

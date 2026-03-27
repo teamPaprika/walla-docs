@@ -1,5 +1,6 @@
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import SearchDialog from '@/components/search';
+import { LangCookie } from '@/components/lang-cookie';
 import { i18nUI } from '@/lib/layout.shared';
 import type { ReactNode } from 'react';
 
@@ -17,6 +18,7 @@ export default async function LangLayout({
       i18n={i18nUI.provider(lang)}
       search={{ SearchDialog }}
     >
+      <LangCookie lang={lang} />
       {children}
     </RootProvider>
   );

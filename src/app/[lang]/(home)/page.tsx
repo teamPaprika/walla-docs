@@ -5,7 +5,7 @@ export default async function HomePage(props: {
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await props.params;
-  redirect(`/${lang}/docs`);
+  redirect(`/${lang}/docs/help-center`);
 }
 
 export function generateStaticParams() {

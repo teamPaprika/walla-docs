@@ -18,8 +18,8 @@
   --primary-foreground: hsl(0 0% 100%);
   --secondary: hsl(0 0% 96.1%);
   --secondary-foreground: hsl(0 0% 9%);
-  --muted: hsl(0 0% 96.1%);
-  --muted-foreground: hsl(0 0% 45.1%);
+  --muted: hsl(200, 33%, 98%);
+  --muted-foreground: hsl(198, 12%, 50%);
   --accent: hsl(0 0% 96.1%);
   --accent-foreground: hsl(0 0% 9%);
   --border: hsl(0 0% 89.8%);
@@ -60,7 +60,7 @@
 
 .dark {
   --background: hsl(0 0% 3.9%);
-  --foreground: hsl(0 0% 98%);
+  --foreground: hsl(0 0% 90%);
   --card: hsl(0 0% 3.9%);
   --card-foreground: hsl(0 0% 98%);
   --popover: hsl(0 0% 3.9%);
@@ -77,7 +77,7 @@
   --input: hsl(0 0% 14.9%);
   --ring: hsl(193 100% 50%);
   --sidebar: hsl(0 0% 5.9%);
-  --sidebar-foreground: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(0 0% 90%);
   --sidebar-border: hsl(0 0% 14.9%);
   --sidebar-accent: hsl(0 0% 14.9%);
   --sidebar-accent-foreground: hsl(0 0% 98%);
