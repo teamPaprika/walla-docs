@@ -1,23 +1,121 @@
 ---
 title: 소개
 description: 왈라 헬프센터에 오신 것을 환영합니다
+icon: House
 ---
 
-# 왈라 헬프센터
+import { Rocket, Users, PenTool, FolderOpen, Share2, Palette, Plug, Shield, BarChart2, Gift, Home, Zap, BookOpen, MessageCircle, CreditCard, ExternalLink } from 'lucide-react';
 
-왈라 헬프센터에 오신 것을 환영합니다. 왈라의 다양한 기능을 활용하는 방법을 안내해 드립니다.
+<div className="not-prose mb-10 rounded-2xl overflow-hidden border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-8">
+  <div className="flex flex-col gap-3">
+    <div className="flex items-center gap-2">
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/15">
+        <Zap className="h-5 w-5 text-[hsl(193,100%,40%)]" />
+      </div>
+      <span className="text-sm font-semibold text-[hsl(193,100%,38%)] uppercase tracking-wider">Walla Help Center</span>
+    </div>
+    <h1 className="text-3xl font-bold text-fd-foreground">왈라 헬프센터</h1>
+    <p className="text-fd-muted-foreground text-base leading-relaxed max-w-xl">
+      왈라의 모든 기능을 쉽고 빠르게 배워보세요. 설문 제작부터 결과 분석까지, 필요한 모든 가이드를 제공합니다.
+    </p>
+  </div>
+</div>
 
 ## 카테고리
 
 <Cards>
-  <Card title="시작하기" href="/ko/docs/help-center/getting-started/creating-account" />
-  <Card title="팀/워크스페이스" href="/ko/docs/help-center/team-workspace/managing-your-team" />
-  <Card title="설문 만들기" href="/ko/docs/help-center/create-forms/creating-project-ai" />
-  <Card title="설문 관리하기" href="/ko/docs/help-center/manage-forms/managing-projects" />
-  <Card title="설문 공유하기" href="/ko/docs/help-center/share-forms/sharing-your-survey" />
-  <Card title="커스텀 디자인" href="/ko/docs/help-center/custom-design/changing-your-survey-theme" />
-  <Card title="설문 연동하기" href="/ko/docs/help-center/integrate-forms/connecting-to-google-sheets" />
-  <Card title="보안" href="/ko/docs/help-center/security/auto-delete-responses" />
-  <Card title="결과 분석" href="/ko/docs/help-center/result-analysis/cross-tabulation" />
-  <Card title="리워드" href="/ko/docs/help-center/reward/managing-gifticons" />
+  <Card title="시작하기" description="계정 생성, 프로필 설정, 요금제 안내" href="/ko/docs/help-center/getting-started/creating-account" icon={<Rocket />} />
+  <Card title="팀/워크스페이스" description="팀 구성과 워크스페이스 관리 방법" href="/ko/docs/help-center/team-workspace/managing-your-team" icon={<Users />} />
+  <Card title="설문 만들기" description="다양한 필드와 로직으로 설문 제작" href="/ko/docs/help-center/create-forms/creating-project-ai" icon={<PenTool />} />
+  <Card title="설문 관리하기" description="설문 일정, 마감, 태그 관리" href="/ko/docs/help-center/manage-forms/managing-projects" icon={<FolderOpen />} />
+  <Card title="설문 공유하기" description="URL, 숨김 필드, 페이지 분기 설정" href="/ko/docs/help-center/share-forms/sharing-your-survey" icon={<Share2 />} />
+  <Card title="커스텀 디자인" description="브랜드에 맞는 테마와 로고 적용" href="/ko/docs/help-center/custom-design/changing-your-survey-theme" icon={<Palette />} />
+  <Card title="설문 연동하기" description="Google Sheets, Zapier, Webhook 연동" href="/ko/docs/help-center/integrate-forms/connecting-to-google-sheets" icon={<Plug />} />
+  <Card title="보안" description="2FA, IP 인증, 데이터 마스킹 설정" href="/ko/docs/help-center/security/auto-delete-responses" icon={<Shield />} />
+  <Card title="결과 분석" description="통계, 교차 분석, 개별 응답 확인" href="/ko/docs/help-center/result-analysis/cross-tabulation" icon={<BarChart2 />} />
+  <Card title="리워드" description="기프티콘 구매·발송·관리 방법" href="/ko/docs/help-center/reward/managing-gifticons" icon={<Gift />} />
 </Cards>
+
+## 왈라 바로가기
+
+<div className="not-prose mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+  <a
+    href="https://home.walla.my/ko/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Home className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-fd-foreground">홈</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">왈라 홈페이지</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://app.walla.my"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Zap className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-fd-foreground">왈라</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">앱 바로가기</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/ko/blog"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <BookOpen className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-fd-foreground">왈라 블로그</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">최신 소식 및 팁</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://discord.gg/vSkQbCwPYV"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <MessageCircle className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-fd-foreground">커뮤니티</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Discord 참여하기</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/ko/pricing/main"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <CreditCard className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-fd-foreground">가격정책</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">요금제 살펴보기</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+</div>
