@@ -5,13 +5,15 @@ description: 폼 관리를 위한 API 레퍼런스
 
 # 폼 API
 
-폼 API를 사용하면 워크스페이스 내의 폼(설문/프로젝트)에 대한 정보를 조회할 수 있습니다. 모든 폼을 나열하고, 특정 폼 세부 정보를 가져오고, 폼 설정에 접근할 수 있습니다.
+폼 API로 워크스페이스 내 폼(설문/프로젝트)의 목록, 상세 정보, 설정 등을 조회할 수 있습니다.
+
+> **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다.
 
 ## 엔드포인트
 
 ### 모든 폼 조회
 
-접근 권한이 있는 모든 워크스페이스의 모든 폼을 조회합니다.
+접근 가능한 모든 워크스페이스의 폼 목록을 반환합니다.
 
 ```http
 GET /open-api/v1/forms
@@ -80,7 +82,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms" \
 | `data[].workspaceName` | string | 워크스페이스 이름 |
 | `data[].forms` | array | 워크스페이스 내 폼 배열 |
 | `data[].forms[].form` | object | 폼 상세 정보 |
-| `data[].forms[].formSettings` | object | 폼 구성 |
+| `data[].forms[].formSettings` | object | 폼 구성 설정 (테마, 언어, 알림 등 폼별 환경설정) |
 | `data[].forms[].analytics` | object | 폼 분석 데이터 |
 
 **오류 응답**
@@ -92,7 +94,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms" \
 
 ### ID로 폼 조회
 
-특정 폼에 대한 상세 정보를 조회합니다.
+특정 폼의 상세 정보를 반환합니다.
 
 ```http
 GET /open-api/v1/forms/{formId}
@@ -184,7 +186,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc" \
 
 ### 폼 필드 조회
 
-특정 폼의 게시된 필드 목록을 조회합니다.
+특정 폼의 게시된 필드 목록을 반환합니다.
 
 ```http
 GET /open-api/v1/forms/{formId}/fields
@@ -269,7 +271,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields" \
 
 ### 필드 상세 정보 조회
 
-특정 필드의 모든 속성, 검증 규칙, 출력 스키마, 조건부 로직을 포함한 종합적인 상세 정보를 조회합니다.
+특정 필드의 속성, 검증 규칙, 출력 스키마, 조건부 로직 등 전체 상세 정보를 반환합니다.
 
 ```http
 GET /open-api/v1/forms/{formId}/fields/{fieldId}
@@ -381,7 +383,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 
 ### 필드 설명 조회
 
-특정 필드의 설명/도움말 텍스트를 조회합니다.
+특정 필드의 설명/도움말 텍스트를 반환합니다.
 
 ```http
 GET /open-api/v1/forms/{formId}/fields/{fieldId}/description
@@ -445,11 +447,11 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 
 ### 폼 상태
 
-- **isDeleted**: 폼이 소프트 삭제되었는지 나타내는 불리언 플래그입니다. 삭제된 폼은 API를 통해 여전히 접근할 수 있지만 메인 인터페이스에서는 숨겨집니다.
+- **isDeleted**: 폼이 소프트 삭제되었는지 나타내는 플래그입니다. 삭제된 폼도 API로는 조회할 수 있지만, 메인 인터페이스에서는 숨겨집니다.
 
 ### 폼 뱃지
 
-`badge` 필드는 분류 또는 식별 목적으로 폼에 할당할 수 있는 사용자 정의 라벨입니다. 일반적인 용도는 다음과 같습니다:
+`badge` 필드는 폼에 붙이는 사용자 정의 라벨입니다. 주로 다음과 같이 사용됩니다.
 - 버전 번호 (예: "v2.0")
 - 기간 (예: "2024년 1분기", "1월")
 - 상태 표시기 (예: "활성", "초안")
@@ -457,11 +459,11 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 
 ### 감사 추적
 
-폼에는 감사 추적 정보가 포함됩니다:
-- `creator`: 폼을 생성한 사람의 사용자 ID
-- `lastEditedBy`: 폼을 마지막으로 수정한 사람의 사용자 ID
-- `createdAt`: 폼이 생성된 시간 타임스탬프
-- `updatedAt`: 마지막 수정 타임스탬프
+폼에는 다음과 같은 감사 추적 정보가 포함됩니다.
+- `creator`: 폼을 만든 사용자 ID
+- `lastEditedBy`: 마지막으로 수정한 사용자 ID
+- `createdAt`: 폼 생성 시각
+- `updatedAt`: 마지막 수정 시각
 
 ## 코드 예시
 
@@ -586,9 +588,9 @@ specific_form = api.get_form_by_id("form_abc")
 
 ## 사용 사례
 
-### 모든 활성 폼 나열
+### 모든 활성 폼 조회
 
-워크스페이스 전체에서 삭제되지 않은 모든 폼 조회:
+전체 워크스페이스에서 삭제되지 않은 폼만 필터링합니다.
 
 ```javascript
 const workspaces = await getAllForms();
@@ -601,7 +603,7 @@ const activeForms = workspaces.flatMap(ws =>
 
 ### 워크스페이스별 폼 찾기
 
-특정 워크스페이스의 모든 폼 가져오기:
+특정 워크스페이스의 폼만 가져옵니다.
 
 ```javascript
 const workspaces = await getAllForms();
@@ -609,9 +611,9 @@ const targetWorkspace = workspaces.find(ws => ws.workspaceId === 'workspace_123'
 const forms = targetWorkspace?.forms || [];
 ```
 
-### 폼 분석 확인
+### 폼 분석 데이터 확인
 
-제출 수 및 기타 분석 데이터 접근:
+제출 수 등 분석 데이터를 확인합니다.
 
 ```javascript
 const workspaces = await getAllForms();
@@ -625,7 +627,7 @@ workspaces.forEach(ws => {
 ## 다음 단계
 
 <Cards>
-  <Card title="폼 발송 API" href="/ko/docs/delivery" />
-  <Card title="폼 응답 API" href="/ko/docs/responses" />
-  <Card title="워크스페이스 API" href="/ko/docs/workspaces" />
+  <Card title="폼 발송 API" href="/ko/docs/developer-docs/delivery" />
+  <Card title="폼 응답 API" href="/ko/docs/developer-docs/responses" />
+  <Card title="워크스페이스 API" href="/ko/docs/developer-docs/workspaces" />
 </Cards>

@@ -5,13 +5,17 @@ description: 워크스페이스 관리를 위한 API 레퍼런스
 
 # 워크스페이스 API
 
-워크스페이스 API를 사용하면 접근 권한이 있는 워크스페이스에 대한 정보를 조회할 수 있습니다. 워크스페이스는 폼과 팀을 포함하는 Walla의 최상위 조직 단위입니다.
+워크스페이스 API로 접근 가능한 워크스페이스 정보를 조회할 수 있습니다. 워크스페이스는 Walla에서 폼과 팀을 묶는 최상위 단위입니다.
+
+특정 워크스페이스에 속한 폼만 조회하려면 `GET /workspaces/{workspaceId}/forms`를, 전체 폼을 한꺼번에 조회하려면 [폼 API](/ko/docs/developer-docs/forms)의 `GET /forms`를 사용하세요.
+
+> **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다.
 
 ## 엔드포인트
 
 ### 모든 워크스페이스 조회
 
-접근 권한이 있는 모든 워크스페이스 목록을 조회합니다.
+접근 가능한 모든 워크스페이스 목록을 반환합니다.
 
 ```http
 GET /open-api/v1/workspaces
@@ -89,7 +93,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
 
 ### ID로 워크스페이스 조회
 
-특정 워크스페이스에 대한 상세 정보를 조회합니다.
+특정 워크스페이스의 상세 정보를 반환합니다.
 
 ```http
 GET /open-api/v1/workspaces/{workspaceId}
@@ -152,7 +156,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123" \
 
 ### 워크스페이스 내 폼 조회
 
-특정 워크스페이스 내의 모든 폼을 조회합니다.
+특정 워크스페이스에 속한 모든 폼을 반환합니다.
 
 ```http
 GET /open-api/v1/workspaces/{workspaceId}/forms
@@ -214,7 +218,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123/forms" \
 | 필드 | 타입 | 설명 |
 |------|------|------|
 | `success` | boolean | 요청 성공 여부 |
-| `data` | array | 설정 및 분석 데이터가 포함된 폼 객체 배열 |
+| `data` | array | 설정, 분석 데이터가 포함된 폼 객체 배열 |
 | `data[].form` | object | 폼 상세 정보 |
 | `data[].form.id` | string | 고유 폼 식별자 |
 | `data[].form.workspaceId` | string | 부모 워크스페이스 식별자 |
@@ -329,7 +333,7 @@ def get_workspaces_by_team(team_id):
 ## 다음 단계
 
 <Cards>
-  <Card title="폼 API" href="/ko/docs/forms" />
-  <Card title="폼 발송 API" href="/ko/docs/delivery" />
-  <Card title="에러 코드" href="/ko/docs/error-codes" />
+  <Card title="폼 API" href="/ko/docs/developer-docs/forms" />
+  <Card title="폼 발송 API" href="/ko/docs/developer-docs/delivery" />
+  <Card title="에러 코드" href="/ko/docs/developer-docs/error-codes" />
 </Cards>
