@@ -3,6 +3,7 @@
   "root": true,
   "pages": [
     "index",
+    "faq",
     "---시작하기---",
     "getting-started",
     "team-workspace",

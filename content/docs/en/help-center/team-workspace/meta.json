@@ -2,6 +2,7 @@
   "title": "Team/Workspace",
   "pages": [
     "managing-your-team",
-    "managing-workspaces"
+    "managing-workspaces",
+    "workspace-panel"
   ]
 }
