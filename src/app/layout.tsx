@@ -2,6 +2,7 @@ import './global.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://docs.walla.my'),
   icons: {
     icon: '/favicon.ico',
   },
