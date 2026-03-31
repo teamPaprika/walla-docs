@@ -9,31 +9,31 @@
 :root {
   --color-fd-info: hsl(193 99% 70%);
   --color-fd-warning: hsl(42, 100%, 67%);
-  --color-fd-error: hsl(0, 55%, 64%);
+  --color-fd-error: hsl(0, 59%, 60%);
   --color-fd-idea: hsl(168 65% 67%);
 
   --background: hsl(0 0% 100%);
   --foreground: hsl(224, 56%, 23%);
   --card: hsl(0 0% 100%);
-  --card-foreground: hsl(0 0% 3.9%);
+  --card-foreground: hsl(224, 56%, 23%);
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(0 0% 3.9%);
+  --popover-foreground: hsl(224, 56%, 23%);
   --primary: hsl(193 100% 50%);
   --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(0 0% 96.1%);
-  --secondary-foreground: hsl(0 0% 9%);
+  --secondary: hsl(240, 18%, 96%);
+  --secondary-foreground: hsl(224, 56%, 23%);
   --muted: hsl(200, 33%, 98%);
   --muted-foreground: hsl(198, 12%, 50%);
-  --accent: hsl(0 0% 96.1%);
-  --accent-foreground: hsl(0 0% 9%);
-  --border: hsl(0 0% 89.8%);
-  --input: hsl(0 0% 89.8%);
+  --accent: hsl(240, 18%, 96%);
+  --accent-foreground: hsl(224, 56%, 23%);
+  --border: hsl(220, 18%, 92%);
+  --input: hsl(240, 18%, 96%);
   --ring: hsl(193 100% 50%);
   --sidebar: hsl(0 0% 100%);
   --sidebar-foreground: hsl(224, 56%, 23%);
-  --sidebar-border: hsl(0 0% 89.8%);
-  --sidebar-accent: hsl(0 0% 96.1%);
-  --sidebar-accent-foreground: hsl(0 0% 9%);
+  --sidebar-border: hsl(220, 18%, 92%);
+  --sidebar-accent: hsl(240, 18%, 96%);
+  --sidebar-accent-foreground: hsl(224, 56%, 23%);
   --sidebar-ring: hsl(193 100% 50%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
 }
@@ -60,6 +60,19 @@
 #nd-sidebar-mobile a[data-active] {
   padding-block: 0.4rem;
   font-size: 0.875rem;
+}
+
+[role="tablist"] {
+  border-radius: 0;
+  background-color: var(--muted);
+}
+
+[role="tabpanel"] {
+  border-radius: 0;
+}
+
+.grid > a[class*="rounded-xl"]:hover {
+  background-color: color-mix(in oklab, var(--color-fd-accent) 50%, transparent);
 }
 
 .dark {
