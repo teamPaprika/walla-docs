@@ -5,13 +5,13 @@ description: 폼 응답 및 제출 데이터를 조회하기 위한 API 레퍼�
 
 # 폼 응답 API
 
-폼 응답 API를 사용하면 폼 제출 데이터를 조회하고 분석할 수 있습니다. 페이지네이션을 사용하여 모든 응답을 나열하고, 상세한 응답 데이터를 가져오며, 개별 제출 정보에 액세스할 수 있습니다.
+폼 응답 API로 폼 제출 데이터를 조회하고 분석할 수 있습니다. 페이지네이션을 지원하며, 전체 응답 목록 조회와 개별 응답 상세 조회가 가능합니다.
 
 ## 엔드포인트
 
 ### 폼 응답 조회 (페이지네이션)
 
-페이지네이션을 지원하는 폼 응답을 조회합니다.
+페이지네이션을 지원하는 응답 목록을 반환합니다.
 
 ```http
 GET /open-api/v1/forms/{formId}/responses
@@ -103,7 +103,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
 | `data.pagination.totalCount` | integer | 전체 응답 수 |
 | `data.pagination.totalPages` | integer | 전체 페이지 수 |
 
-> **참고**: 응답 객체에는 폼 구조에 따른 동적 필드가 포함됩니다. 각 폼 필드는 응답 객체의 속성으로 나타납니다.
+> **참고**: 응답 객체에는 폼 구조에 따른 동적 필드가 포함됩니다. 각 폼 필드의 ID가 키로, 필드 타입에 따른 값이 동적으로 들어갑니다. 필드 타입별 출력 형식은 [필드 출력 스키마](/ko/docs/developer-docs/field-schemas) 문서를 참고하세요.
 
 **오류 응답**
 
@@ -122,7 +122,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
 
 ### 특정 응답 조회
 
-특정 폼 응답에 대한 상세 정보를 조회합니다.
+특정 응답의 상세 정보를 반환합니다.
 
 ```http
 GET /open-api/v1/forms/{formId}/responses/{responseId}
@@ -200,7 +200,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses/response_
 
 ### 동적 응답 구조
 
-폼 응답에는 폼 구조에 따른 동적 필드가 포함됩니다. 응답의 필드 이름은 폼의 질문 ID 또는 필드 이름에 해당합니다.
+폼 응답에는 폼 구조에 따라 동적 필드가 포함됩니다. 응답의 키는 폼 필드 ID이며, 값은 필드 타입에 따라 문자열, 배열, 객체 등 다양한 형태로 반환됩니다. 각 필드 타입별 출력 형식은 [필드 출력 스키마](/ko/docs/developer-docs/field-schemas) 문서에서 확인할 수 있습니다.
 
 **폼 구조 예시:**
 ```json
@@ -226,11 +226,11 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses/response_
 
 ### 응답 타임라인
 
-응답은 두 가지 중요한 타임스탬프를 추적합니다:
+응답에는 두 가지 타임스탬프가 기록됩니다.
 
-- **startedAt**: 수신자가 처음 폼에 액세스한 시간
-- **submittedAt**: 수신자가 폼을 완료하고 제출한 시간
-  - `null`은 폼이 시작되었지만 아직 제출되지 않았음을 나타냅니다
+- **startedAt**: 수신자가 폼에 처음 접근한 시각
+- **submittedAt**: 수신자가 폼을 제출한 시각
+  - `null`이면 폼을 열었지만 아직 제출하지 않은 상태입니다
 
 **완료 시간 계산:**
 ```javascript
@@ -579,26 +579,26 @@ for response in responses:
 
 ### 페이지네이션
 
-- 대량 내보내기 시 `limit=100`을 사용하여 API 호출 최소화
-- 테스트 중에는 더 작은 제한으로 시작
-- 페이지네이션을 중단할 시점을 알기 위해 항상 `totalPages` 확인
+- 대량 내보내기 시 `limit=100`으로 API 호출 횟수를 줄이세요
+- 테스트할 때는 작은 limit 값으로 시작하세요
+- `totalPages`를 확인해서 페이지네이션 종료 시점을 판단하세요
 
 ### 성능
 
-- 적절한 경우 응답 캐싱
-- 대규모 데이터셋의 경우 모든 응답을 한 번에 가져오는 대신 페이지네이션 사용
-- 애플리케이션에서 속도 제한 구현
+- 필요한 경우 응답을 캐시하세요
+- 대량 데이터는 한 번에 가져오지 말고 페이지네이션을 활용하세요
+- API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다
 
 ### 데이터 처리
 
-- `submittedAt`의 `null` 값 처리 (미완료 응답을 나타냄)
-- 처리 로직에서 동적 필드 이름 고려
-- 처리하기 전에 데이터 타입 검증 (필드는 다양한 타입을 가질 수 있음)
+- `submittedAt`이 `null`인 경우 (미완료 응답)를 처리하세요
+- 동적 필드 이름을 고려한 처리 로직을 작성하세요
+- 필드 타입이 다양하므로 처리 전에 데이터 타입을 확인하세요
 
 ## 다음 단계
 
 <Cards>
-  <Card title="폼 전달 API" href="/ko/docs/delivery" />
-  <Card title="폼 API" href="/ko/docs/forms" />
-  <Card title="빠른 시작 가이드" href="/ko/docs/quick-start" />
+  <Card title="폼 전송 API" href="/ko/docs/developer-docs/delivery" />
+  <Card title="폼 API" href="/ko/docs/developer-docs/forms" />
+  <Card title="빠른 시작 가이드" href="/ko/docs/developer-docs/quick-start" />
 </Cards>

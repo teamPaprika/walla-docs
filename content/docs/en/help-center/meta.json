@@ -3,6 +3,7 @@
   "root": true,
   "pages": [
     "index",
+    "faq",
     "---Getting Started---",
     "getting-started",
     "team-workspace",
