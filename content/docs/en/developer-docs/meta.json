@@ -14,6 +14,10 @@
     "responses",
     "delivery",
     "---Custom Field SDK---",
-    "custom-fields"
+    "custom-fields-overview",
+    "custom-fields-quick-start",
+    "custom-fields-lifecycle",
+    "custom-fields-api-reference",
+    "custom-fields-properties-schema"
   ]
 }
