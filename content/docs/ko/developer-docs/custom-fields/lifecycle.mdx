@@ -1,0 +1,299 @@
+---
+title: 라이프사이클 & 통신
+description: 커스텀 필드의 라이프사이클, 통신 프로토콜, 데이터 흐름 이해하기
+---
+
+# 라이프사이클 & 통신
+
+이 페이지에서는 커스텀 필드가 호스트 폼에 연결되는 방법, 수신하는 데이터, 그리고 iframe 로드부터 필드 제거까지의 통신 라이프사이클을 설명합니다.
+
+## 연결
+
+호스트 폼이 커스텀 필드를 로드하면 다음 순서로 진행됩니다:
+
+1. 호스트가 렌더 URL로 `<iframe>`을 생성하고 URL에 `?fieldId=xxx`를 추가합니다
+2. iframe이 로드되면 SDK 생성자가 실행되어 `MessagePort` 수신을 대기합니다
+3. 호스트가 `MessageChannel`을 생성하고 `postMessage`를 통해 포트를 iframe에 전달합니다
+4. SDK가 포트를 수신하여 Cap'n Web RPC 세션을 수립합니다
+5. 호스트가 전체 초기화 페이로드와 함께 필드의 `init()`을 호출합니다
+
+이 모든 과정은 자동으로 이루어집니다 — `onInit` 콜백만 등록하면 됩니다.
+
+```
+iframe loads
+    │
+    ▼
+SDK waits for MessagePort ──── host transfers port via postMessage
+    │
+    ▼
+RPC session established
+    │
+    ▼
+host calls init(payload) ──── your onInit callback fires
+    │
+    ▼
+Field is ready for interaction
+```
+
+## Init 페이로드
+
+`onInit` 콜백은 필드에 필요한 모든 정보가 담긴 `FieldInitPayload` 객체를 수신합니다:
+
+```typescript
+field.onInit((payload) => {
+  const {
+    properties,   // Your custom field's configured properties
+    value,        // Previously saved value (null if new)
+    theme,        // Host form's visual theme
+    locale,       // Current locale ('en', 'ko', 'ja', etc.)
+    fieldInfo,    // { fieldId, formId, label }
+    formContext,  // { fields: FieldSummary[], values: Record<string, unknown> }
+    mode,         // 'live' or 'preview'
+  } = payload;
+});
+```
+
+### 모드
+
+`mode` 필드는 필드가 렌더링되는 컨텍스트를 알려줍니다:
+
+| 모드 | 컨텍스트 | 설명 |
+|------|---------|------|
+| `live` | 폼 응답자 화면 | 실제 폼 작성 — 유효성 검사가 적용되고 값이 저장됩니다 |
+| `preview` | 대시보드 폼 에디터 | 에디터 내 미리보기 — 시각적 확인 용도로만 사용됩니다 |
+
+`mode`를 사용하여 기능을 조건부로 활성화하거나 비활성화할 수 있습니다:
+
+```typescript
+field.onInit(({ mode }) => {
+  if (mode === 'preview') {
+    // Show placeholder content, disable heavy initialization
+    return;
+  }
+  // Full initialization for live mode
+});
+```
+
+## 값 흐름
+
+커스텀 필드는 호스트 폼을 통해 값을 저장합니다. 값의 라이프사이클은 다음과 같습니다.
+
+### 값 설정
+
+```typescript
+// User interacts with your field → report the new value
+field.setValue({ hex: '#FF6B6B', opacity: 0.8 });
+```
+
+`setValue()`를 호출할 때마다 호스트가 자동으로 저장합니다. 값은 JSON 직렬화 가능한 모든 타입 — 문자열, 숫자, 객체, 배열, `null`이 될 수 있습니다.
+
+### 값 복원
+
+폼이 다시 로드되거나 페이지 이동이 발생하거나 필드가 다시 렌더링되면, 호스트가 이전에 저장한 값과 함께 `init()`을 호출합니다:
+
+```typescript
+field.onInit(({ value }) => {
+  if (value) {
+    // Restore your UI state from the saved value
+    applyValue(value);
+  }
+});
+```
+
+### 외부 값 주입
+
+호스트가 외부에서 값을 주입할 수도 있습니다 (예: URL 파라미터를 통한 사전 입력):
+
+```typescript
+field.onValueSet((value) => {
+  // Update your UI with the externally provided value
+  applyValue(value);
+});
+```
+
+### 호스트 측 제한
+
+| 제한 | 값 |
+|------|-----|
+| 최대 값 크기 | 64 KB (JSON 직렬화 기준) |
+| 디바운스 간격 | 50 ms |
+
+50ms 이내의 연속 `setValue()` 호출은 디바운스되어 마지막 값만 저장됩니다.
+
+## 유효성 검사
+
+사용자가 폼을 제출하거나 다음 페이지로 이동하면 호스트가 유효성 검사를 요청합니다:
+
+```typescript
+field.onValidate((submitType) => {
+  // submitType: 'next' (page navigation) or 'submit' (final submission)
+
+  const value = getCurrentValue();
+  if (!value) {
+    return {
+      valid: false,
+      errors: [{ message: 'This field is required' }]
+    };
+  }
+  return { valid: true };
+});
+```
+
+### 유효성 검사 규칙
+
+- 동기 및 비동기 콜백 모두 지원됩니다
+- `onValidate` 콜백이 등록되지 않으면 항상 유효한 것으로 처리됩니다
+- 콜백에서 예외가 발생하면 `{ valid: false }`로 처리됩니다
+- 호스트는 **10초 타임아웃**을 적용합니다 — 콜백이 응답하지 않으면 유효성 검사에 실패합니다
+
+### 비동기 유효성 검사
+
+```typescript
+field.onValidate(async (submitType) => {
+  const response = await fetch('/api/validate', {
+    method: 'POST',
+    body: JSON.stringify({ value: getCurrentValue() }),
+  });
+  const { ok, message } = await response.json();
+  return {
+    valid: ok,
+    errors: ok ? undefined : [{ message }],
+  };
+});
+```
+
+## 높이 관리
+
+커스텀 필드는 호스트에 높이를 명시적으로 알려야 합니다. iframe은 자동으로 리사이즈되지 않습니다.
+
+```typescript
+// Set height after rendering content
+field.setHeight(document.body.scrollHeight);
+```
+
+콘텐츠 크기가 변경될 때마다 `setHeight()`를 호출하세요 — 초기화 후, 섹션 확장/축소 시, 동적 콘텐츠 로드 후 등.
+
+| 제한 | 값 |
+|------|-----|
+| 높이 범위 | 0–5000 px |
+| 스로틀 간격 | 100 ms |
+
+0–5000 범위를 벗어나는 값은 범위 내로 제한됩니다. 100ms 이내의 연속 호출은 스로틀됩니다.
+
+## 파일 업로드
+
+커스텀 필드는 호스트를 통해 바이너리 데이터를 업로드할 수 있습니다:
+
+```typescript
+// Example: upload a canvas signature as PNG
+const canvas = document.getElementById('signature');
+const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+const buffer = await blob.arrayBuffer();
+
+const { url } = await field.uploadBlob(buffer, 'image/png', 'signature.png');
+// url contains the uploaded file URL — store it in your value
+field.setValue({ signatureUrl: url });
+```
+
+`filename` 파라미터는 선택사항입니다. 호스트가 실제 스토리지 업로드를 처리하고 공개 URL을 반환합니다.
+
+## 소멸과 정리
+
+필드가 폼에서 제거되거나 분기 로직에 의해 숨겨지면 호스트가 `destroy()`를 호출합니다:
+
+```typescript
+field.onDestroy(() => {
+  // Clean up resources: timers, event listeners, WebSocket connections, etc.
+});
+```
+
+SDK 인스턴스를 수동으로 소멸시킬 수도 있습니다:
+
+```typescript
+field.destroy();
+```
+
+이렇게 하면 `MessagePort` 리스너가 제거되고 RPC 세션이 종료됩니다.
+
+## 조건부 렌더링
+
+분기 로직으로 필드가 숨겨지면 iframe이 **완전히 unmount**됩니다 — CSS로 숨기는 것이 아닙니다. 필드가 다시 표시되면:
+
+1. 새 iframe이 생성됩니다
+2. SDK 생성자가 다시 실행됩니다
+3. 호스트가 이전에 저장된 `value`와 함께 `init()`을 호출합니다
+
+이는 다음을 의미합니다:
+- 내부 UI 상태(커서 위치, 스크롤, 애니메이션)는 **사라집니다**
+- `setValue()`로 마지막에 전달한 시맨틱 `value`만 `onInit`을 통해 보존되고 복원됩니다
+
+필드는 `value`만으로 완전히 재구성할 수 있도록 설계하세요.
+
+## 포커스
+
+호스트가 필드에 포커스를 요청할 수 있습니다 (예: 특정 페이지로 이동하거나 유효성 검사 실패 시):
+
+```typescript
+field.onFocus(() => {
+  document.getElementById('my-input').focus();
+});
+```
+
+## 폼 컨텍스트
+
+커스텀 필드는 다른 필드의 메타데이터와 값을 관찰할 수 있습니다. 제공되는 데이터는 커스텀 필드 버전에 설정된 `observeFields` 정책에 따라 달라집니다:
+
+| 모드 | `formContext.fields` | `formContext.values` | 활용 사례 |
+|------|---------------------|---------------------|----------|
+| `none` | 빈 배열 | 빈 객체 | 독립형 필드 (색상 선택기, 서명) |
+| `all` | 전체 필드 (민감 필드 제외) | 전체 값 | 요약, 계산 필드 |
+| `configured` | 관리자가 선택한 필드 | 선택된 값 | 특정 입력을 참조하는 필드 |
+
+> 민감 필드 타입(`SECRETS`, `PHONE_NUMBER`, `EMAIL`)은 `all` 모드에서도 항상 폼 컨텍스트에서 제외됩니다.
+
+### 초기 컨텍스트 수신
+
+```typescript
+field.onInit(({ formContext }) => {
+  console.log('Fields:', formContext.fields);
+  console.log('Values:', formContext.values);
+});
+```
+
+### 값 변경에 반응
+
+```typescript
+field.onFormValuesChanged((values) => {
+  // Called when any observed field's value changes
+  const total = Object.values(values)
+    .filter(v => typeof v === 'number')
+    .reduce((sum, v) => sum + v, 0);
+  field.setValue(total);
+});
+```
+
+## 에러 보고
+
+호스트에 에러를 보고하여 폼 UI에 표시할 수 있습니다:
+
+```typescript
+field.reportError({
+  message: 'Failed to load external data',
+  recoverable: true,  // true = user can retry, false = permanent failure
+});
+```
+
+`message`는 호스트 측에서 500자로 잘립니다.
+
+## 전체 라이프사이클 요약
+
+```
+1. iframe loads → SDK constructor waits for MessagePort
+2. Host transfers MessagePort → RPC session established
+3. Host calls init(payload) → onInit callback fires
+4. User interacts → setValue() → host auto-saves
+5. Other fields change → onFormValuesChanged(values)
+6. Host requests focus → onFocus callback fires
+7. Form submit/navigate → validate(submitType) → onValidate returns result
+8. Field removed → destroy() → onDestroy fires → port closed
+```

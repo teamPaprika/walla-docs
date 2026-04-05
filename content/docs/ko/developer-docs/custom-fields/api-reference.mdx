@@ -1,0 +1,465 @@
+---
+title: API 레퍼런스
+description: Custom Field SDK 전체 API 레퍼런스
+---
+
+# API 레퍼런스
+
+`@wallaform/custom-field-sdk` 패키지의 전체 레퍼런스입니다.
+
+## WallaField
+
+커스텀 필드를 만들기 위한 메인 클래스입니다. 연결 설정, RPC 세션 관리, 호스트 폼과의 통신을 처리합니다.
+
+### 생성자
+
+```typescript
+import { WallaField } from '@wallaform/custom-field-sdk';
+
+const field = new WallaField(options?: WallaFieldOptions);
+```
+
+| 파라미터 | 타입 | 기본값 | 설명 |
+|---------|------|-------|------|
+| `options.debug` | `boolean` | `false` | 모든 RPC 메시지를 브라우저 콘솔에 출력 |
+
+생성자가 자동으로 수행하는 작업:
+- URL 쿼리 파라미터에서 `fieldId` 추출 (`?fieldId=xxx`)
+- 호스트의 `MessagePort` 전달 대기
+- 포트 수신 시 Cap'n Web RPC 세션 수립
+
+## 콜백
+
+호스트 이벤트에 응답하는 콜백을 등록합니다. 모든 콜백은 선택사항이며, 동일한 메서드를 다시 호출하면 이전 콜백이 교체됩니다.
+
+### onInit
+
+```typescript
+field.onInit(callback: (payload: FieldInitPayload) => void): void
+```
+
+호스트가 필드를 초기화할 때 호출됩니다. 필드 UI를 설정하는 주요 진입점입니다.
+
+```typescript
+field.onInit(({ properties, value, theme, locale, fieldInfo, formContext, mode }) => {
+  document.body.style.fontFamily = theme.fontFamily;
+  if (value) restoreState(value);
+  field.setHeight(document.body.scrollHeight);
+});
+```
+
+### onValidate
+
+```typescript
+field.onValidate(callback: ValidateCallback): void
+```
+
+호스트가 유효성 검사를 요청할 때 호출됩니다 (폼 제출 또는 페이지 이동 시). `WallaFieldValidationResult`를 동기 또는 `Promise`로 반환합니다.
+
+```typescript
+field.onValidate((submitType) => {
+  if (!currentValue) {
+    return { valid: false, errors: [{ message: 'Required' }] };
+  }
+  return { valid: true };
+});
+```
+
+- `submitType`: `'next'` (페이지 이동) 또는 `'submit'` (최종 제출)
+- 콜백이 등록되지 않으면 자동으로 `{ valid: true }`가 반환됩니다
+- 콜백에서 예외가 발생하면 `{ valid: false, errors: [{ message: String(error) }] }`로 처리됩니다
+- 호스트가 10초 타임아웃을 적용합니다
+
+### onValueSet
+
+```typescript
+field.onValueSet(callback: (value: unknown) => void): void
+```
+
+호스트가 외부에서 값을 주입할 때 호출됩니다 (예: 사전 입력, 페이지 이동 후 복원).
+
+```typescript
+field.onValueSet((value) => {
+  applyValue(value);
+});
+```
+
+### onDestroy
+
+```typescript
+field.onDestroy(callback: () => void): void
+```
+
+필드가 폼에서 제거될 때 호출됩니다. 타이머, 이벤트 리스너, 네트워크 연결 등의 리소스를 정리하세요.
+
+```typescript
+field.onDestroy(() => {
+  clearInterval(myTimer);
+  myWebSocket.close();
+});
+```
+
+### onFocus
+
+```typescript
+field.onFocus(callback: () => void): void
+```
+
+호스트가 이 필드에 포커스를 요청할 때 호출됩니다 (예: 페이지 이동 후 또는 유효성 검사 실패 시).
+
+```typescript
+field.onFocus(() => {
+  document.getElementById('main-input').focus();
+});
+```
+
+### onFormValuesChanged
+
+```typescript
+field.onFormValuesChanged(callback: (values: Record<string, unknown>) => void): void
+```
+
+관찰 중인 다른 필드의 값이 변경될 때 호출됩니다. 커스텀 필드 버전의 `observeFields` 정책이 `all` 또는 `configured`로 설정되어 있어야 동작합니다.
+
+```typescript
+field.onFormValuesChanged((values) => {
+  const total = Object.values(values)
+    .filter(v => typeof v === 'number')
+    .reduce((sum, v) => sum + v, 0);
+  field.setValue(total);
+});
+```
+
+## 액션 메서드
+
+호스트 폼과 통신하기 위해 호출하는 메서드들입니다. RPC 연결이 수립되기 전에 호출해도 안전합니다 — 디버그 모드에서 경고만 출력하고 조용히 반환됩니다.
+
+### setValue
+
+```typescript
+field.setValue(value: unknown): void
+```
+
+현재 필드 값을 호스트에 보고합니다. 호스트가 매 호출마다 자동으로 저장합니다.
+
+- `value`는 JSON 직렬화 가능해야 합니다
+- 최대 크기: 64 KB (JSON 직렬화 기준)
+- 디바운스: 50ms 이내의 연속 호출은 마지막 값으로 배치 처리됩니다
+
+```typescript
+field.setValue('#FF6B6B');
+field.setValue({ hex: '#FF6B6B', opacity: 0.8 });
+field.setValue(['option1', 'option2']);
+```
+
+### setHeight
+
+```typescript
+field.setHeight(height: number): void
+```
+
+호스트에 iframe 높이를 지정된 픽셀로 변경하도록 요청합니다.
+
+- 범위: 0–5000 px (범위를 벗어나는 값은 제한됩니다)
+- 스로틀: 100ms 이내의 연속 호출은 스로틀됩니다
+
+```typescript
+field.setHeight(document.body.scrollHeight);
+```
+
+### uploadBlob
+
+```typescript
+field.uploadBlob(
+  data: ArrayBuffer,
+  mimeType: string,
+  filename?: string
+): Promise<{ url: string }>
+```
+
+호스트를 통해 바이너리 데이터를 업로드합니다. 업로드된 파일의 URL을 포함하는 Promise를 반환합니다.
+
+```typescript
+const canvas = document.getElementById('signature');
+const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+const buffer = await blob.arrayBuffer();
+
+const { url } = await field.uploadBlob(buffer, 'image/png', 'signature.png');
+```
+
+RPC 연결이 수립되지 않은 상태에서 호출하면 에러가 발생합니다.
+
+### reportError
+
+```typescript
+field.reportError(error: { message: string; recoverable: boolean }): void
+```
+
+호스트에 에러를 보고하여 폼 UI에 표시합니다.
+
+- `message`: 에러 설명 (호스트 측에서 500자로 잘림)
+- `recoverable`: `true`이면 사용자가 재시도 가능, `false`이면 영구적 실패
+
+```typescript
+field.reportError({
+  message: 'Failed to load external data source',
+  recoverable: true,
+});
+```
+
+### destroy
+
+```typescript
+field.destroy(): void
+```
+
+SDK 인스턴스를 수동으로 소멸합니다. `MessagePort` 리스너를 제거하고 RPC 세션을 종료합니다.
+
+```typescript
+field.destroy();
+```
+
+## 상태 조회
+
+필드의 현재 상태를 읽습니다. 마지막 `init()` 호출에서 수신한 값을 반환합니다.
+
+### getProperties
+
+```typescript
+field.getProperties<T = Record<string, unknown>>(): T
+```
+
+현재 필드 속성을 반환합니다. 타입 안전성을 위해 제네릭 파라미터를 사용합니다:
+
+```typescript
+interface MyProperties {
+  placeholder: string;
+  maxLength: number;
+}
+const props = field.getProperties<MyProperties>();
+```
+
+### getTheme
+
+```typescript
+field.getTheme(): WallaFieldTheme
+```
+
+현재 폼 테마를 반환합니다. `init()`이 호출되기 전에는 기본 테마를 반환합니다.
+
+### getLocale
+
+```typescript
+field.getLocale(): string
+```
+
+현재 로케일 문자열을 반환합니다 (예: `'en'`, `'ko'`, `'ja'`).
+
+### getFieldInfo
+
+```typescript
+field.getFieldInfo(): WallaFieldInfo
+```
+
+이 필드 인스턴스의 메타데이터를 반환합니다.
+
+### getFormContext
+
+```typescript
+field.getFormContext(): { fields: FieldSummary[]; values: Record<string, unknown> }
+```
+
+현재 폼 컨텍스트(다른 필드의 메타데이터와 값)를 반환합니다. 내용은 `observeFields` 정책에 따라 달라집니다.
+
+### isConnected
+
+```typescript
+field.isConnected(): boolean
+```
+
+호스트와 RPC 채널이 수립되었으면 `true`를 반환합니다.
+
+### getVersion
+
+```typescript
+field.getVersion(): string
+```
+
+SDK 버전 문자열을 반환합니다 (예: `'0.2.0'`).
+
+## 타입
+
+### WallaFieldOptions
+
+```typescript
+interface WallaFieldOptions {
+  debug?: boolean;
+}
+```
+
+### FieldInitPayload
+
+```typescript
+interface FieldInitPayload {
+  protocolVersion: number;
+  mode: 'live' | 'preview';
+  fieldInfo: WallaFieldInfo;
+  properties: Record<string, unknown>;
+  value: unknown | null;
+  theme: WallaFieldTheme;
+  locale: string;
+  formContext: {
+    fields: FieldSummary[];
+    values: Record<string, unknown>;
+  };
+}
+```
+
+### WallaFieldTheme
+
+```typescript
+interface WallaFieldTheme {
+  background: string;        // Form background color
+  foreground: string;        // Primary text color
+  primary: string;           // Accent/brand color
+  primaryForeground: string; // Text color on primary background
+  field: string;             // Input field background color
+  fieldForeground: string;   // Input placeholder color
+  border: string;            // Border color
+  accent: string;            // Secondary accent color
+  fontFamily: string;        // CSS font-family value
+  borderRadius: string;      // CSS border-radius value
+  direction: 'ltr' | 'rtl'; // Text direction
+}
+```
+
+### WallaFieldInfo
+
+```typescript
+interface WallaFieldInfo {
+  fieldId: string;
+  formId: string;
+  label: string;
+}
+```
+
+### WallaFieldValidationResult
+
+```typescript
+interface WallaFieldValidationResult {
+  valid: boolean;
+  errors?: WallaFieldValidationError[];
+}
+```
+
+### WallaFieldValidationError
+
+```typescript
+interface WallaFieldValidationError {
+  message: string;
+  itemId?: string;
+}
+```
+
+### FieldSummary
+
+폼 컨텍스트를 통해 제공되는 다른 필드의 정보를 나타냅니다.
+
+```typescript
+interface FieldSummary {
+  id: string;
+  fieldType: string;
+  label: string;
+  description?: string;
+  isRequired: boolean;
+  properties: Record<string, unknown>;
+  customField?: {
+    typeId: string;
+    typeName: string;
+    outputSchema: Record<string, unknown>;
+  };
+}
+```
+
+`customField` 속성은 `fieldType`이 `'CUSTOM'`인 경우에만 존재합니다.
+
+### ValidateCallback
+
+```typescript
+type ValidateCallback = (
+  submitType: 'next' | 'submit',
+) => WallaFieldValidationResult | Promise<WallaFieldValidationResult>;
+```
+
+### ObserveFieldsMode
+
+```typescript
+type ObserveFieldsMode = 'none' | 'all' | 'configured';
+```
+
+커스텀 필드에 제공되는 폼 컨텍스트 데이터를 제어합니다:
+
+| 모드 | 설명 |
+|------|------|
+| `none` | 폼 컨텍스트 미제공 — `fields`와 `values`가 빈 상태 |
+| `all` | 모든 필드와 값 제공 (민감 타입은 항상 제외) |
+| `configured` | 관리자가 선택한 필드만 제공 |
+
+### FieldRpcApi
+
+커스텀 필드가 노출하는 메서드 (호스트 → iframe 방향)입니다. SDK가 내부적으로 구현합니다.
+
+```typescript
+interface FieldRpcApi {
+  init(payload: FieldInitPayload): void;
+  destroy(): void;
+  focus(): void;
+  setValue(value: unknown): void;
+  onFormValuesChanged(values: Record<string, unknown>): void;
+  validate(submitType: 'next' | 'submit'): Promise<WallaFieldValidationResult>;
+}
+```
+
+### HostRpcApi
+
+호스트가 노출하는 메서드 (iframe → 호스트 방향)입니다. SDK 액션 메서드가 호출합니다.
+
+```typescript
+interface HostRpcApi {
+  setValue(value: unknown): void;
+  setHeight(height: number): void;
+  uploadBlob(data: ArrayBuffer, mimeType: string, filename?: string): Promise<{ url: string }>;
+  reportError(error: { message: string; recoverable: boolean }): void;
+}
+```
+
+## 호스트 측 제한
+
+| 동작 | 제한 | 설명 |
+|------|------|------|
+| `setValue` 크기 | 64 KB | 최대 JSON 직렬화 값 크기 |
+| `setValue` 디바운스 | 50 ms | 연속 호출은 배치 처리 |
+| `setHeight` 범위 | 0–5000 px | 범위를 벗어나면 제한됨 |
+| `setHeight` 스로틀 | 100 ms | 연속 호출은 스로틀 |
+| `reportError` 메시지 | 500자 | 초과 시 잘림 |
+| `validate` 타임아웃 | 10초 | 응답 없으면 타임아웃 |
+
+## 내보내는 멤버
+
+```typescript
+export {
+  WallaField,
+  type WallaFieldTheme,
+  type WallaFieldInfo,
+  type WallaFieldOptions,
+  type WallaFieldValidationError,
+  type WallaFieldValidationResult,
+  type ValidateCallback,
+  type FieldInitPayload,
+  type FieldRpcApi,
+  type HostRpcApi,
+  type FieldSummary,
+  type WallaPortInitMessage,
+  type ObserveFieldsMode,
+} from '@wallaform/custom-field-sdk';
+```

@@ -12,6 +12,8 @@
     "forms",
     "field-schemas",
     "responses",
-    "delivery"
+    "delivery",
+    "---Custom Field SDK---",
+    "custom-fields"
   ]
 }

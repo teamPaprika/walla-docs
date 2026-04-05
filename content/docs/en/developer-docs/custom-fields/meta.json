@@ -1,0 +1,9 @@
+{
+  "title": "Custom Field SDK",
+  "pages": [
+    "quick-start",
+    "lifecycle",
+    "api-reference",
+    "properties-schema"
+  ]
+}

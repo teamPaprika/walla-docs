@@ -1,0 +1,215 @@
+# Walla Developer Documentation
+
+> Walla is a modern form builder platform. This document covers the Open API and Custom Field SDK.
+> Full docs: https://docs.walla.my
+
+---
+
+# Open API
+
+Base URL: `https://api.walla.my/open-api/v1`
+
+## Authentication
+
+Header: `X-WALLA-API-KEY: <your_api_key>`
+
+API keys are team-scoped — team context is automatic. Get your key at https://app.walla.my/open-api/doc
+
+Rate limit: 6000 requests/hour per key.
+
+## Endpoints
+
+### Workspaces
+
+```
+GET /workspaces                              → { success, data: Workspace[] }
+GET /workspaces/{workspaceId}                → { success, data: Workspace }
+GET /workspaces/{workspaceId}/forms          → { success, data: FormWithSettings[] }
+```
+
+Workspace: `{ id, name, teamId, createdAt, updatedAt }`
+
+### Forms
+
+```
+GET /forms                                   → { success, data: [{ workspaceId, workspaceName, forms }] }
+GET /forms/{formId}                          → { success, data: Form }
+GET /forms/{formId}/fields                   → { success, data: { fields: Field[] } }
+GET /forms/{formId}/fields/{fieldId}         → { success, data: FieldDetail }
+GET /forms/{formId}/fields/{fieldId}/description → { success, data: { html, tiptapType } }
+```
+
+Form: `{ id, workspaceId, title, description, badge, teamId, creator, lastEditedBy, isDeleted, createdAt, updatedAt }`
+Field: `{ id, label, fieldType, outputType }`
+FieldDetail: `{ id, label, fieldType, outputSchema, properties, validations, validationErrorMessage, branches, isResponseMasked }`
+
+### Responses
+
+```
+GET /forms/{formId}/responses                → { success, data: { responses, pagination } }
+GET /forms/{formId}/responses/{responseId}   → { success, data: ResponseDetail }
+```
+
+Query params: `page` (default 1), `limit` (default 20, max 100)
+Pagination: `{ page, limit, totalCount, totalPages }`
+Response fields are dynamic — keys are field IDs, values depend on field type.
+
+### Delivery (requires prior agreement with Walla)
+
+```
+POST /forms/{formId}/delivery                → Send form to recipients
+GET  /forms/{formId}/delivery                → Get all delivery recipients
+POST /forms/{formId}/delivery/status         → Check delivery status by customerKeys
+```
+
+Send body: `{ recipients: [{ customerKey, email?, phoneNumber? }], subject?, message? }`
+Status values: `NOT_SENT`, `SENT`, `OPENED`, `RESPONDED`
+
+### Field Output Schemas
+
+```
+GET /field-output-schemas                    → Field type → output type mapping
+```
+
+Output types: `string` (SHORT_TEXT, RADIO, EMAIL, etc.), `array` (CHECKBOX, FILE_UPLOAD), `object` (ADDRESS), `grid` (GRID), `null` (HEADING, DESCRIPTION)
+
+## Error Codes
+
+| Code | Meaning |
+|------|---------|
+| 400 | Bad request (missing fields, invalid format, bad pagination) |
+| 403 | Auth failed or insufficient permissions |
+| 404 | Resource not found or form not published |
+| 429 | Rate limit exceeded (6000/hr) |
+| 500 | Server error (retry with exponential backoff) |
+
+---
+
+# @wallaform/custom-field-sdk
+
+> Lightweight SDK (~35KB) for building custom form fields embedded in Walla forms via sandboxed iframe. Cap'n Web RPC over MessagePort.
+
+## Install
+
+```bash
+npm install @wallaform/custom-field-sdk
+```
+
+ESM-only. CDN: `import { WallaField } from 'https://esm.sh/@wallaform/custom-field-sdk'`
+
+## Quick Start
+
+```typescript
+import { WallaField } from '@wallaform/custom-field-sdk';
+
+const field = new WallaField();
+
+field.onInit(({ properties, value, theme, locale, fieldInfo, formContext, mode }) => {
+  if (value) applyExistingValue(value);
+});
+
+field.onValidate((submitType) => {
+  if (!myValue) return { valid: false, errors: [{ message: 'Required' }] };
+  return { valid: true };
+});
+
+field.setValue(newValue);
+field.setHeight(document.body.scrollHeight);
+```
+
+## Constructor
+
+```typescript
+new WallaField(options?: { debug?: boolean })
+```
+
+Auto-extracts `fieldId` from URL param `?fieldId=xxx`. Waits for MessagePort from host.
+
+## Callbacks (Host → iframe)
+
+```typescript
+field.onInit(cb: (payload: FieldInitPayload) => void)
+field.onValidate(cb: (submitType: 'next' | 'submit') => ValidationResult | Promise<ValidationResult>)
+field.onValueSet(cb: (value: unknown) => void)
+field.onDestroy(cb: () => void)
+field.onFocus(cb: () => void)
+field.onFormValuesChanged(cb: (values: Record<string, unknown>) => void)
+```
+
+## Actions (iframe → Host)
+
+```typescript
+field.setValue(value: unknown)                // Host auto-saves. 64KB limit, 50ms debounce.
+field.setHeight(height: number)              // Clamped 0-5000, throttled 100ms.
+await field.uploadBlob(data, mimeType, filename?) // Returns { url }
+field.reportError({ message, recoverable })  // Message max 500 chars.
+field.destroy()                              // Dispose RPC session.
+```
+
+Validate timeout: 10s on host side.
+
+## State Getters
+
+```typescript
+field.getProperties<T>(): T
+field.getTheme(): WallaFieldTheme
+field.getLocale(): string
+field.getFieldInfo(): WallaFieldInfo    // { fieldId, formId, label }
+field.getFormContext(): { fields: FieldSummary[], values: Record<string, unknown> }
+field.isConnected(): boolean
+field.getVersion(): string
+```
+
+## Types
+
+```typescript
+interface WallaFieldTheme {
+  background: string; foreground: string; primary: string; primaryForeground: string;
+  field: string; fieldForeground: string; border: string; accent: string;
+  fontFamily: string; borderRadius: string; direction: 'ltr' | 'rtl';
+}
+
+interface WallaFieldInfo { fieldId: string; formId: string; label: string; }
+interface WallaFieldValidationError { message: string; itemId?: string; }
+interface WallaFieldValidationResult { valid: boolean; errors?: WallaFieldValidationError[]; }
+
+interface FieldSummary {
+  id: string; fieldType: string; label: string; description?: string;
+  isRequired: boolean; properties: Record<string, unknown>;
+  customField?: { typeId: string; typeName: string; outputSchema: Record<string, unknown>; };
+}
+
+interface FieldInitPayload {
+  protocolVersion: number; mode: 'live' | 'preview';
+  fieldInfo: WallaFieldInfo; properties: Record<string, unknown>;
+  value: unknown | null; theme: WallaFieldTheme; locale: string;
+  formContext: { fields: FieldSummary[]; values: Record<string, unknown>; };
+}
+
+type ObserveFieldsMode = 'none' | 'all' | 'configured';
+```
+
+## observeFields Policy
+
+- `none`: No form context (standalone fields)
+- `all`: All fields/values (SECRETS/PHONE_NUMBER/EMAIL always excluded)
+- `configured`: Admin selects specific fields. IDs in `properties._observedFieldIds`.
+
+## Lifecycle
+
+1. iframe loads → SDK waits for MessagePort
+2. Host transfers port → RPC session established
+3. `init()` → `onInit` fires
+4. User interacts → `setValue()` → host auto-saves
+5. Submit → `validate()` → `onValidate` returns result (10s timeout)
+6. Remove → `destroy()` → `onDestroy` fires → port closed
+
+Conditional rendering: iframe unmounts on hide, remounts with saved value on show.
+
+## Security
+
+iframe sandbox: `allow-scripts` only (no `allow-same-origin`). No localStorage/sessionStorage/IndexedDB. All state via `setValue()`.
+
+## Registration
+
+Custom field type registration requires prior arrangement with the Walla team. Contact us to discuss your use case.

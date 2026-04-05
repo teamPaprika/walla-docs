@@ -1,0 +1,299 @@
+---
+title: Lifecycle & Communication
+description: Understand the custom field lifecycle, communication protocol, and data flow
+---
+
+# Lifecycle & Communication
+
+This page explains how custom fields connect to the host form, what data they receive, and how the communication lifecycle works from iframe load to field removal.
+
+## Connection
+
+When the host form loads your custom field, the following sequence occurs:
+
+1. The host creates an `<iframe>` with your render URL and appends `?fieldId=xxx` to the URL
+2. Your iframe loads and the SDK constructor runs, starting to listen for a `MessagePort`
+3. The host creates a `MessageChannel`, transfers one port to your iframe via `postMessage`
+4. The SDK receives the port and establishes a Cap'n Web RPC session
+5. The host calls `init()` on your field with the full initialization payload
+
+All of this happens automatically — you only need to register your `onInit` callback.
+
+```
+iframe loads
+    │
+    ▼
+SDK waits for MessagePort ──── host transfers port via postMessage
+    │
+    ▼
+RPC session established
+    │
+    ▼
+host calls init(payload) ──── your onInit callback fires
+    │
+    ▼
+Field is ready for interaction
+```
+
+## Init Payload
+
+The `onInit` callback receives a `FieldInitPayload` object with everything your field needs:
+
+```typescript
+field.onInit((payload) => {
+  const {
+    properties,   // Your custom field's configured properties
+    value,        // Previously saved value (null if new)
+    theme,        // Host form's visual theme
+    locale,       // Current locale ('en', 'ko', 'ja', etc.)
+    fieldInfo,    // { fieldId, formId, label }
+    formContext,  // { fields: FieldSummary[], values: Record<string, unknown> }
+    mode,         // 'live' or 'preview'
+  } = payload;
+});
+```
+
+### Mode
+
+The `mode` field tells you the context in which your field is being rendered:
+
+| Mode | Context | Description |
+|------|---------|-------------|
+| `live` | Form respondent view | Real form filling — validation matters, values are saved |
+| `preview` | Dashboard form editor | Preview in the editor — used for visual feedback only |
+
+Use `mode` to conditionally enable or disable features:
+
+```typescript
+field.onInit(({ mode }) => {
+  if (mode === 'preview') {
+    // Show placeholder content, disable heavy initialization
+    return;
+  }
+  // Full initialization for live mode
+});
+```
+
+## Value Flow
+
+Custom fields persist their value through the host form. The value lifecycle is:
+
+### Setting values
+
+```typescript
+// User interacts with your field → report the new value
+field.setValue({ hex: '#FF6B6B', opacity: 0.8 });
+```
+
+Every `setValue()` call is automatically saved by the host. The value can be any JSON-serializable type — string, number, object, array, or `null`.
+
+### Restoring values
+
+When the form reloads, navigates between pages, or re-renders the field, the host calls `init()` with the previously saved value:
+
+```typescript
+field.onInit(({ value }) => {
+  if (value) {
+    // Restore your UI state from the saved value
+    applyValue(value);
+  }
+});
+```
+
+### External value injection
+
+The host may also inject a value from outside (e.g., pre-fill from URL parameters):
+
+```typescript
+field.onValueSet((value) => {
+  // Update your UI with the externally provided value
+  applyValue(value);
+});
+```
+
+### Host-side limits
+
+| Limit | Value |
+|-------|-------|
+| Maximum value size | 64 KB (JSON-serialized) |
+| Debounce interval | 50 ms |
+
+Rapid `setValue()` calls within 50ms are debounced — only the last value is saved.
+
+## Validation
+
+When the user submits the form or navigates to the next page, the host requests validation:
+
+```typescript
+field.onValidate((submitType) => {
+  // submitType: 'next' (page navigation) or 'submit' (final submission)
+
+  const value = getCurrentValue();
+  if (!value) {
+    return {
+      valid: false,
+      errors: [{ message: 'This field is required' }]
+    };
+  }
+  return { valid: true };
+});
+```
+
+### Validation rules
+
+- Both synchronous and asynchronous callbacks are supported
+- If no `onValidate` callback is registered, the field is treated as always valid
+- If the callback throws an exception, it is caught and treated as `{ valid: false }`
+- The host enforces a **10-second timeout** — if your callback doesn't resolve, the field fails validation
+
+### Async validation
+
+```typescript
+field.onValidate(async (submitType) => {
+  const response = await fetch('/api/validate', {
+    method: 'POST',
+    body: JSON.stringify({ value: getCurrentValue() }),
+  });
+  const { ok, message } = await response.json();
+  return {
+    valid: ok,
+    errors: ok ? undefined : [{ message }],
+  };
+});
+```
+
+## Height Management
+
+Custom fields must explicitly tell the host how tall they are. The iframe does not auto-resize.
+
+```typescript
+// Set height after rendering content
+field.setHeight(document.body.scrollHeight);
+```
+
+Call `setHeight()` whenever your content changes size — after initialization, after expanding/collapsing sections, or after loading dynamic content.
+
+| Limit | Value |
+|-------|-------|
+| Height range | 0–5000 px |
+| Throttle interval | 100 ms |
+
+Values outside the 0–5000 range are clamped. Rapid calls within 100ms are throttled.
+
+## File Uploads
+
+Custom fields can upload binary data through the host:
+
+```typescript
+// Example: upload a canvas signature as PNG
+const canvas = document.getElementById('signature');
+const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+const buffer = await blob.arrayBuffer();
+
+const { url } = await field.uploadBlob(buffer, 'image/png', 'signature.png');
+// url contains the uploaded file URL — store it in your value
+field.setValue({ signatureUrl: url });
+```
+
+The `filename` parameter is optional. The host handles the actual upload to storage and returns a public URL.
+
+## Destroy and Cleanup
+
+When the field is removed from the form (or hidden by branch logic), the host calls `destroy()`:
+
+```typescript
+field.onDestroy(() => {
+  // Clean up resources: timers, event listeners, WebSocket connections, etc.
+});
+```
+
+You can also manually destroy the SDK instance:
+
+```typescript
+field.destroy();
+```
+
+This removes the `MessagePort` listener and disposes the RPC session.
+
+## Conditional Rendering
+
+When a field is hidden by branch logic, the iframe is **fully unmounted** — not CSS-hidden. When the field becomes visible again:
+
+1. A new iframe is created
+2. The SDK constructor runs again
+3. The host calls `init()` with the previously saved `value`
+
+This means:
+- Internal UI state (cursor position, scroll, animations) is **lost**
+- Only the semantic `value` (whatever you last passed to `setValue()`) is preserved and restored via `onInit`
+
+Design your field to be fully reconstructable from its `value` alone.
+
+## Focus
+
+The host may request focus on your field (e.g., when navigating to a specific page or when validation fails):
+
+```typescript
+field.onFocus(() => {
+  document.getElementById('my-input').focus();
+});
+```
+
+## Form Context
+
+Custom fields can observe other fields' metadata and values. The available data depends on the `observeFields` policy configured on the custom field version:
+
+| Mode | `formContext.fields` | `formContext.values` | Use case |
+|------|---------------------|---------------------|----------|
+| `none` | Empty | Empty | Standalone fields (color picker, signature) |
+| `all` | All fields (sensitive excluded) | All values | Summary, calculation fields |
+| `configured` | Admin-selected fields | Selected values | Fields that reference specific inputs |
+
+> Sensitive field types (`SECRETS`, `PHONE_NUMBER`, `EMAIL`) are always excluded from form context, even in `all` mode.
+
+### Receiving initial context
+
+```typescript
+field.onInit(({ formContext }) => {
+  console.log('Fields:', formContext.fields);
+  console.log('Values:', formContext.values);
+});
+```
+
+### Reacting to value changes
+
+```typescript
+field.onFormValuesChanged((values) => {
+  // Called when any observed field's value changes
+  const total = Object.values(values)
+    .filter(v => typeof v === 'number')
+    .reduce((sum, v) => sum + v, 0);
+  field.setValue(total);
+});
+```
+
+## Error Reporting
+
+Report errors to the host for display in the form UI:
+
+```typescript
+field.reportError({
+  message: 'Failed to load external data',
+  recoverable: true,  // true = user can retry, false = permanent failure
+});
+```
+
+The `message` is truncated to 500 characters on the host side.
+
+## Complete Lifecycle Summary
+
+```
+1. iframe loads → SDK constructor waits for MessagePort
+2. Host transfers MessagePort → RPC session established
+3. Host calls init(payload) → onInit callback fires
+4. User interacts → setValue() → host auto-saves
+5. Other fields change → onFormValuesChanged(values)
+6. Host requests focus → onFocus callback fires
+7. Form submit/navigate → validate(submitType) → onValidate returns result
+8. Field removed → destroy() → onDestroy fires → port closed
+```

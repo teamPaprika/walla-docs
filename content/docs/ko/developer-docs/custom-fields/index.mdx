@@ -1,0 +1,77 @@
+---
+title: Custom Field SDK
+description: iframe 기반 Custom Field SDK를 사용하여 Walla 커스텀 폼 필드 만들기
+---
+
+# Custom Field SDK
+
+Custom Field SDK를 사용하면 나만의 폼 필드 타입을 만들어 Walla 폼에 삽입할 수 있습니다. 커스텀 필드는 sandboxed iframe 내에서 실행되며, 타입 안전한 양방향 RPC 채널을 통해 호스트 폼과 통신합니다.
+
+## 작동 원리
+
+커스텀 필드는 Walla 폼 내부의 iframe에 로드되는 일반 HTML 페이지입니다. SDK가 필드와 호스트 폼 간의 모든 통신을 자동으로 처리합니다.
+
+```
+Host (Walla Form)                      Custom Field (iframe)
+       |                                        |
+       |-- transfers MessagePort --------------►|  One-time postMessage
+       |                                        |
+       |         Cap'n Web RPC channel          |
+       |◄══════════════════════════════════════►|  Bidirectional RPC
+       |                                        |
+       |-- init(payload) ---------------------►|
+       |◄-- setValue(value) -------------------|
+       |-- validate('submit') ----------------►|  Returns Promise
+       |◄-- { valid: true } -------------------|
+```
+
+1. 호스트 폼이 `MessagePort`를 생성하여 `postMessage`를 통해 iframe에 전달합니다
+2. SDK가 해당 포트 위에 [Cap'n Web RPC](https://github.com/nicolo-ribaudo/capnweb) 세션을 수립합니다
+3. 이후 모든 통신은 타입 안전한 RPC 호출로 이루어집니다 — 수동 메시지 파싱이 필요 없습니다
+
+`MessagePort`나 RPC 세션을 직접 다룰 필요가 없습니다. SDK가 연결 설정, 프로토콜 협상, 메시지 라우팅을 모두 처리합니다.
+
+## 만들 수 있는 것들
+
+커스텀 필드는 다양한 활용 사례를 지원합니다:
+
+- **특수 입력** — 색상 선택기, 날짜 범위 선택기, 리치 텍스트 에디터
+- **미디어 캡처** — 서명 패드, 오디오 녹음기, 카메라 입력
+- **데이터 기반 필드** — 주소 자동완성, 상품 선택기, API 연동 조회
+- **계산 필드** — 다른 폼 필드의 값을 기반으로 값을 산출하는 필드
+- **임베디드 경험** — 지도, 차트, 인터랙티브 위젯
+
+## 주요 기능
+
+- **테마** — 호스트 폼의 테마(색상, 폰트, 테두리 둥글기)를 받아 UI를 폼 디자인에 맞출 수 있습니다
+- **유효성 검사** — 폼 제출 시 동기 또는 비동기 검증 결과를 반환합니다
+- **파일 업로드** — 바이너리 데이터(서명, 녹음)를 호스트를 통해 업로드하고 URL을 받습니다
+- **폼 컨텍스트** — 다른 필드의 값을 관찰하여 계산 필드나 종속 필드를 만들 수 있습니다
+- **자동 저장** — `setValue()`를 호출할 때마다 호스트가 자동으로 값을 저장합니다
+
+## 보안 모델
+
+커스텀 필드는 `sandbox="allow-scripts"` (`allow-same-origin` 없음)가 적용된 sandboxed iframe에서 실행됩니다. 이에 따라 필드는:
+
+- JavaScript 실행과 네트워크 요청이 **가능합니다**
+- 호스트 페이지의 DOM, 쿠키, localStorage에 **접근할 수 없습니다**
+- iframe 내에서 `localStorage`, `sessionStorage`, `IndexedDB`를 **사용할 수 없습니다**
+
+모든 영속 상태는 `setValue()`를 통해야 하며, 호스트가 자동으로 저장하고 복원합니다.
+
+## 시작하기
+
+<Cards>
+  <Card title="빠른 시작" href="/ko/docs/developer-docs/custom-fields/quick-start" />
+  <Card title="라이프사이클 & 통신" href="/ko/docs/developer-docs/custom-fields/lifecycle" />
+  <Card title="API 레퍼런스" href="/ko/docs/developer-docs/custom-fields/api-reference" />
+  <Card title="속성 & 출력 스키마" href="/ko/docs/developer-docs/custom-fields/properties-schema" />
+</Cards>
+
+## AI 활용 개발
+
+LLM을 활용하여 커스텀 필드를 개발할 때, 압축된 SDK 레퍼런스를 제공하세요:
+
+```
+https://docs.walla.my/llms.txt
+```
