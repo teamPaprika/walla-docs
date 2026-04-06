@@ -4,36 +4,51 @@
 
 @theme {
   --font-sans: 'Inter', 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+
+  --color-walla-primary: hsl(210.35 100% 50%); /* #007EFF */
+  --color-walla-primary-foreground: hsl(0 0% 98%); /* #EAF2FF */
+
+  --color-walla-info: hsl(215 12% 48% / 0.09); /* #6b778c1a */
+  --color-walla-info-foreground: hsl(215 12% 48%); /* #6b778c */
+  --color-walla-pro: hsl(217 79% 51% / 0.09); /* #1e64e91a */
+  --color-walla-pro-foreground: hsl(217 79% 51%); /* #1e64e9 */
+  --color-walla-enterprise: hsl(170 78% 45% / 0.15); /* #17CFB41a */
+  --color-walla-enterprise-foreground: hsl(170 78% 45%); /* #17CFB4 */
+  --color-walla-beta: hsl(170 78% 45% / 0.1); /* #17CFB41a */
+  --color-walla-beta-foreground: hsl(170 78% 45%); /* #17CFB4 */
+  --color-walla-new: hsl(335 98% 77% / 0.1); /* #FE8AB61a */
+  --color-walla-new-foreground: hsl(335 98% 77%); /* #FE8AB6 */
+
 }
 
 :root {
   --color-fd-info: hsl(193 99% 70%);
   --color-fd-warning: hsl(42, 100%, 67%);
-  --color-fd-error: hsl(0, 55%, 64%);
+  --color-fd-error: hsl(0, 59%, 60%);
   --color-fd-idea: hsl(168 65% 67%);
 
   --background: hsl(0 0% 100%);
   --foreground: hsl(224, 56%, 23%);
   --card: hsl(0 0% 100%);
-  --card-foreground: hsl(0 0% 3.9%);
+  --card-foreground: hsl(224, 56%, 23%);
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(0 0% 3.9%);
+  --popover-foreground: hsl(224, 56%, 23%);
   --primary: hsl(193 100% 50%);
   --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(0 0% 96.1%);
-  --secondary-foreground: hsl(0 0% 9%);
-  --muted: hsl(200, 33%, 98%);
-  --muted-foreground: hsl(198, 12%, 50%);
-  --accent: hsl(0 0% 96.1%);
-  --accent-foreground: hsl(0 0% 9%);
-  --border: hsl(0 0% 89.8%);
-  --input: hsl(0 0% 89.8%);
+  --secondary: hsl(240, 18%, 96%);
+  --secondary-foreground: hsl(224, 56%, 23%);
+  --muted: hsl(240, 18%, 98%);
+  --muted-foreground: hsl(223, 17%, 54%);
+  --accent: hsl(240, 18%, 98%);
+  --accent-foreground: hsl(224, 56%, 23%);
+  --border: hsl(220, 18%, 92%);
+  --input: hsl(240, 18%, 96%);
   --ring: hsl(193 100% 50%);
   --sidebar: hsl(0 0% 100%);
   --sidebar-foreground: hsl(224, 56%, 23%);
-  --sidebar-border: hsl(0 0% 89.8%);
-  --sidebar-accent: hsl(0 0% 96.1%);
-  --sidebar-accent-foreground: hsl(0 0% 9%);
+  --sidebar-border: hsl(220, 18%, 92%);
+  --sidebar-accent: hsl(240, 18%, 96%);
+  --sidebar-accent-foreground: hsl(224, 56%, 23%);
   --sidebar-ring: hsl(193 100% 50%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
 }
@@ -62,29 +77,51 @@
   font-size: 0.875rem;
 }
 
+[role="tablist"] {
+  border-radius: 0;
+  background-color: var(--muted);
+}
+
+[role="tabpanel"] {
+  border-radius: 0;
+}
+
 .dark {
-  --background: hsl(0 0% 3.9%);
-  --foreground: hsl(0 0% 90%);
-  --card: hsl(0 0% 3.9%);
-  --card-foreground: hsl(0 0% 98%);
-  --popover: hsl(0 0% 3.9%);
-  --popover-foreground: hsl(0 0% 98%);
+  --background: hsl(220 8% 8%);
+  --foreground: hsl(0 0% 92%);
+  --card: hsl(220 8% 8%);
+  --card-foreground: hsl(0 0% 92%);
+  --popover: hsl(220 8% 8%);
+  --popover-foreground: hsl(0 0% 92%);
   --primary: hsl(193 100% 50%);
   --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(0 0% 14.9%);
-  --secondary-foreground: hsl(0 0% 98%);
-  --muted: hsl(0 0% 14.9%);
-  --muted-foreground: hsl(0 0% 63.9%);
-  --accent: hsl(0 0% 14.9%);
-  --accent-foreground: hsl(0 0% 98%);
-  --border: hsl(0 0% 14.9%);
-  --input: hsl(0 0% 14.9%);
+  --secondary: hsl(220 6% 14%);
+  --secondary-foreground: hsl(0 0% 92%);
+  --muted: hsl(220 6% 10%);
+  --muted-foreground: hsl(220 5% 65%);
+  --accent: hsl(220 6% 10%);
+  --accent-foreground: hsl(0 0% 92%);
+  --border: hsl(220 6% 18%);
+  --input: hsl(220 6% 14%);
   --ring: hsl(193 100% 50%);
-  --sidebar: hsl(0 0% 5.9%);
-  --sidebar-foreground: hsl(0 0% 90%);
-  --sidebar-border: hsl(0 0% 14.9%);
-  --sidebar-accent: hsl(0 0% 14.9%);
-  --sidebar-accent-foreground: hsl(0 0% 98%);
+  --sidebar: hsl(220 8% 8%);
+  --sidebar-foreground: hsl(0 0% 92%);
+  --sidebar-border: hsl(220 6% 18%);
+  --sidebar-accent: hsl(220 6% 14%);
+  --sidebar-accent-foreground: hsl(0 0% 92%);
   --sidebar-ring: hsl(193 100% 50%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
+
+
+  --color-walla-info: hsl(215 12% 48% / 0.25);
+  --color-walla-info-foreground: hsl(215 12% 65%);
+  --color-walla-pro: hsl(217 79% 51% / 0.3);
+  --color-walla-pro-foreground: hsl(217 79% 65%);
+  --color-walla-enterprise: hsl(170 78% 45% / 0.2);
+  --color-walla-enterprise-foreground: hsl(170 78% 60%);
+  --color-walla-beta: hsl(170 78% 45% / 0.2);
+  --color-walla-beta-foreground: hsl(170 78% 60%);
+  --color-walla-new: hsl(335 98% 77% / 0.2);
+  --color-walla-new-foreground: hsl(335 98% 85%);
+
 }
