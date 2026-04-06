@@ -1,0 +1,363 @@
+---
+title: Properties & Output Schema
+description: Define configurable properties and output data shapes for custom fields
+---
+
+# Properties & Output Schema
+
+When registering a custom field type in Walla, you define two JSON Schemas:
+
+- **Properties Schema** — Controls what settings appear in the dashboard when configuring the field
+- **Output Schema** — Defines the shape of submitted values for the response sheet, CSV export, and API
+
+## Properties Schema
+
+The `propertiesSchema` is a standard JSON Schema that describes the configurable settings for your custom field. Walla's dashboard automatically renders a settings UI based on this schema.
+
+### Basic Example
+
+A color picker with configurable presets and a default color:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "defaultColor": {
+      "type": "string",
+      "title": "Default Color",
+      "description": "Initial color value",
+      "default": "#007EFF"
+    },
+    "presets": {
+      "type": "array",
+      "title": "Preset Colors",
+      "description": "Color swatches shown to the user",
+      "items": {
+        "type": "string"
+      },
+      "default": ["#FF6B6B", "#4ECDC4", "#45B7D1", "#007EFF"]
+    },
+    "showCustomPicker": {
+      "type": "boolean",
+      "title": "Show Custom Picker",
+      "description": "Allow users to pick any color",
+      "default": true
+    }
+  }
+}
+```
+
+These properties are delivered to your field via the `onInit` callback:
+
+```typescript
+field.onInit(({ properties }) => {
+  // properties = { defaultColor: '#007EFF', presets: [...], showCustomPicker: true }
+  renderUI(properties);
+});
+```
+
+### Default Properties
+
+The `defaultProperties` object provides initial values when a form builder adds your custom field type to a form. These values should match the `default` values in your properties schema.
+
+```json
+{
+  "defaultColor": "#007EFF",
+  "presets": ["#FF6B6B", "#4ECDC4", "#45B7D1", "#007EFF"],
+  "showCustomPicker": true
+}
+```
+
+## Output Schema
+
+The `outputSchema` is a JSON Schema that defines the shape of values your field produces when submitted. Walla uses this schema to:
+
+- Generate columns in the response sheet
+- Format CSV and Excel exports
+- Type the value in Open API responses and webhook payloads
+
+### String Output
+
+For fields that produce a single text value (e.g., a color hex code):
+
+```json
+{
+  "type": "string"
+}
+```
+
+Response sheet: one column showing the string value.
+
+**Example value:** `"#FF6B6B"`
+
+### Number Output
+
+For fields that produce a numeric value:
+
+```json
+{
+  "type": "number"
+}
+```
+
+Response sheet: one column showing the number.
+
+**Example value:** `42`
+
+### Boolean Output
+
+For fields that produce a true/false value:
+
+```json
+{
+  "type": "boolean"
+}
+```
+
+Response sheet: one column showing the boolean.
+
+**Example value:** `true`
+
+### Object Output
+
+For fields that produce structured data with named properties. Each property becomes a sub-column in the response sheet.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "hex": {
+      "type": "string",
+      "title": "Hex Color"
+    },
+    "opacity": {
+      "type": "number",
+      "title": "Opacity"
+    }
+  }
+}
+```
+
+Response sheet: two sub-columns — "Hex Color" and "Opacity".
+
+**Example value:** `{ "hex": "#FF6B6B", "opacity": 0.8 }`
+
+### Array Output
+
+For fields that produce a list of values. Arrays of primitives are displayed as a comma-joined string in the response sheet.
+
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "string"
+  }
+}
+```
+
+Response sheet: one column with comma-separated values.
+
+**Example value:** `["red", "blue", "green"]`
+
+### Nested Object Output
+
+You can nest objects for complex data structures:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "object",
+      "title": "Address",
+      "properties": {
+        "street": { "type": "string", "title": "Street" },
+        "city": { "type": "string", "title": "City" },
+        "zip": { "type": "string", "title": "ZIP Code" }
+      }
+    },
+    "coordinates": {
+      "type": "object",
+      "title": "Coordinates",
+      "properties": {
+        "lat": { "type": "number", "title": "Latitude" },
+        "lng": { "type": "number", "title": "Longitude" }
+      }
+    }
+  }
+}
+```
+
+**Example value:**
+```json
+{
+  "address": { "street": "123 Main St", "city": "Seoul", "zip": "06100" },
+  "coordinates": { "lat": 37.5665, "lng": 126.9780 }
+}
+```
+
+## Response Sheet Display Limits
+
+The response sheet and CSV/Excel export auto-generate columns from your `outputSchema`. These limits apply to all tabular display contexts:
+
+| Limit | Value | Description |
+|-------|-------|-------------|
+| Max nesting depth | 3 | Properties deeper than 3 levels are not displayed |
+| Array of objects | Skipped | Only arrays of primitives (`string[]`, `number[]`) are shown |
+
+> Raw data in the Open API and webhooks is always complete — these limits only apply to the tabular response sheet and exports.
+
+Design your `outputSchema` with flat or shallow structures for best display. Use deeply nested objects sparingly.
+
+## Full Example: Signature Pad
+
+A signature pad field with configurable pen settings and structured output:
+
+### Properties Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "penColor": {
+      "type": "string",
+      "title": "Pen Color",
+      "default": "#000000"
+    },
+    "penWidth": {
+      "type": "number",
+      "title": "Pen Width",
+      "default": 2
+    },
+    "canvasHeight": {
+      "type": "number",
+      "title": "Canvas Height (px)",
+      "default": 200
+    }
+  }
+}
+```
+
+### Default Properties
+
+```json
+{
+  "penColor": "#000000",
+  "penWidth": 2,
+  "canvasHeight": 200
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "imageUrl": {
+      "type": "string",
+      "title": "Signature Image"
+    },
+    "timestamp": {
+      "type": "string",
+      "title": "Signed At"
+    }
+  }
+}
+```
+
+### Field Implementation
+
+```typescript
+import { WallaField } from '@wallaform/custom-field-sdk';
+
+const field = new WallaField();
+
+field.onInit(({ properties, value, theme }) => {
+  const { penColor, penWidth, canvasHeight } = properties;
+
+  // Set up canvas with configured dimensions
+  const canvas = document.getElementById('signature');
+  canvas.height = canvasHeight;
+  canvas.style.border = `1px solid ${theme.border}`;
+
+  // Configure drawing context
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = penColor;
+  ctx.lineWidth = penWidth;
+
+  // Restore saved signature if available
+  if (value?.imageUrl) {
+    loadImage(canvas, value.imageUrl);
+  }
+
+  field.setHeight(canvasHeight + 60); // Canvas + toolbar
+});
+
+// On signature completion, upload and report value
+async function onSignatureComplete() {
+  const canvas = document.getElementById('signature');
+  const blob = await new Promise(resolve =>
+    canvas.toBlob(resolve, 'image/png')
+  );
+  const buffer = await blob.arrayBuffer();
+
+  const { url } = await field.uploadBlob(buffer, 'image/png', 'signature.png');
+  field.setValue({
+    imageUrl: url,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+field.onValidate(() => {
+  if (!hasSignature()) {
+    return { valid: false, errors: [{ message: 'Signature is required' }] };
+  }
+  return { valid: true };
+});
+```
+
+## Full Example: Stat Slider
+
+A statistical slider with configurable range:
+
+### Properties Schema
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "min": {
+      "type": "number",
+      "title": "Minimum Value",
+      "default": 0
+    },
+    "max": {
+      "type": "number",
+      "title": "Maximum Value",
+      "default": 100
+    },
+    "step": {
+      "type": "number",
+      "title": "Step Size",
+      "default": 1
+    },
+    "showMarkers": {
+      "type": "boolean",
+      "title": "Show Statistical Markers",
+      "description": "Display Q1, Median, and Q3 markers",
+      "default": true
+    }
+  }
+}
+```
+
+### Output Schema
+
+```json
+{
+  "type": "number"
+}
+```
+
+Simple numeric output — a single column in the response sheet.

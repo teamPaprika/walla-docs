@@ -1,0 +1,363 @@
+---
+title: 속성 & 출력 스키마
+description: 커스텀 필드의 설정 가능한 속성과 출력 데이터 형식 정의하기
+---
+
+# 속성 & 출력 스키마
+
+Walla에 커스텀 필드 타입을 등록할 때 두 가지 JSON Schema를 정의합니다:
+
+- **속성 스키마** — 대시보드에서 필드를 설정할 때 표시되는 설정 항목을 제어합니다
+- **출력 스키마** — 제출된 값의 형식을 정의하여 응답 시트, CSV 내보내기, API에서 사용합니다
+
+## 속성 스키마
+
+`propertiesSchema`는 커스텀 필드의 설정 가능한 항목을 기술하는 표준 JSON Schema입니다. Walla 대시보드는 이 스키마를 기반으로 설정 UI를 자동으로 렌더링합니다.
+
+### 기본 예제
+
+프리셋 색상과 기본 색상을 설정할 수 있는 색상 선택기:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "defaultColor": {
+      "type": "string",
+      "title": "Default Color",
+      "description": "Initial color value",
+      "default": "#007EFF"
+    },
+    "presets": {
+      "type": "array",
+      "title": "Preset Colors",
+      "description": "Color swatches shown to the user",
+      "items": {
+        "type": "string"
+      },
+      "default": ["#FF6B6B", "#4ECDC4", "#45B7D1", "#007EFF"]
+    },
+    "showCustomPicker": {
+      "type": "boolean",
+      "title": "Show Custom Picker",
+      "description": "Allow users to pick any color",
+      "default": true
+    }
+  }
+}
+```
+
+이 속성들은 `onInit` 콜백을 통해 필드에 전달됩니다:
+
+```typescript
+field.onInit(({ properties }) => {
+  // properties = { defaultColor: '#007EFF', presets: [...], showCustomPicker: true }
+  renderUI(properties);
+});
+```
+
+### 기본 속성
+
+`defaultProperties` 객체는 폼 빌더가 커스텀 필드 타입을 폼에 추가할 때 사용되는 초기값을 제공합니다. 속성 스키마의 `default` 값과 일치해야 합니다.
+
+```json
+{
+  "defaultColor": "#007EFF",
+  "presets": ["#FF6B6B", "#4ECDC4", "#45B7D1", "#007EFF"],
+  "showCustomPicker": true
+}
+```
+
+## 출력 스키마
+
+`outputSchema`는 필드가 제출 시 생성하는 값의 형식을 정의하는 JSON Schema입니다. Walla는 이 스키마를 다음과 같이 활용합니다:
+
+- 응답 시트의 컬럼 생성
+- CSV 및 Excel 내보내기 형식 지정
+- Open API 응답 및 웹훅 페이로드의 타입 지정
+
+### 문자열 출력
+
+단일 텍스트 값을 생성하는 필드 (예: 색상 HEX 코드):
+
+```json
+{
+  "type": "string"
+}
+```
+
+응답 시트: 문자열 값을 표시하는 컬럼 1개.
+
+**값 예시:** `"#FF6B6B"`
+
+### 숫자 출력
+
+숫자 값을 생성하는 필드:
+
+```json
+{
+  "type": "number"
+}
+```
+
+응답 시트: 숫자를 표시하는 컬럼 1개.
+
+**값 예시:** `42`
+
+### 불리언 출력
+
+참/거짓 값을 생성하는 필드:
+
+```json
+{
+  "type": "boolean"
+}
+```
+
+응답 시트: 불리언 값을 표시하는 컬럼 1개.
+
+**값 예시:** `true`
+
+### 객체 출력
+
+이름이 있는 속성으로 구성된 구조화된 데이터를 생성하는 필드입니다. 각 속성이 응답 시트에서 하위 컬럼이 됩니다.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "hex": {
+      "type": "string",
+      "title": "Hex Color"
+    },
+    "opacity": {
+      "type": "number",
+      "title": "Opacity"
+    }
+  }
+}
+```
+
+응답 시트: "Hex Color"와 "Opacity" 2개의 하위 컬럼.
+
+**값 예시:** `{ "hex": "#FF6B6B", "opacity": 0.8 }`
+
+### 배열 출력
+
+값 목록을 생성하는 필드입니다. primitive 배열은 응답 시트에서 쉼표로 구분된 문자열로 표시됩니다.
+
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "string"
+  }
+}
+```
+
+응답 시트: 쉼표로 구분된 값이 들어간 컬럼 1개.
+
+**값 예시:** `["red", "blue", "green"]`
+
+### 중첩 객체 출력
+
+복잡한 데이터 구조를 위해 객체를 중첩할 수 있습니다:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "object",
+      "title": "Address",
+      "properties": {
+        "street": { "type": "string", "title": "Street" },
+        "city": { "type": "string", "title": "City" },
+        "zip": { "type": "string", "title": "ZIP Code" }
+      }
+    },
+    "coordinates": {
+      "type": "object",
+      "title": "Coordinates",
+      "properties": {
+        "lat": { "type": "number", "title": "Latitude" },
+        "lng": { "type": "number", "title": "Longitude" }
+      }
+    }
+  }
+}
+```
+
+**값 예시:**
+```json
+{
+  "address": { "street": "123 Main St", "city": "Seoul", "zip": "06100" },
+  "coordinates": { "lat": 37.5665, "lng": 126.9780 }
+}
+```
+
+## 응답 시트 표시 제한
+
+응답 시트와 CSV/Excel 내보내기는 `outputSchema`에서 자동으로 컬럼을 생성합니다. 표 형태 표시에는 다음 제한이 적용됩니다:
+
+| 제한 | 값 | 설명 |
+|------|-----|------|
+| 최대 중첩 깊이 | 3 | depth 3을 초과하는 속성은 표시되지 않습니다 |
+| 객체 배열 | 건너뜀 | primitive 배열(`string[]`, `number[]`)만 표시됩니다 |
+
+> Open API와 웹훅의 원본 데이터에는 항상 전체 데이터가 포함됩니다 — 이 제한은 표 형태의 응답 시트와 내보내기에만 적용됩니다.
+
+시트에서 잘 표시되도록 `outputSchema`를 가능한 평탄하거나 얕은 구조로 설계하세요. 깊은 중첩은 최소화하는 것이 좋습니다.
+
+## 전체 예제: 서명 패드
+
+펜 설정을 구성할 수 있고 구조화된 출력을 가진 서명 패드 필드:
+
+### 속성 스키마
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "penColor": {
+      "type": "string",
+      "title": "Pen Color",
+      "default": "#000000"
+    },
+    "penWidth": {
+      "type": "number",
+      "title": "Pen Width",
+      "default": 2
+    },
+    "canvasHeight": {
+      "type": "number",
+      "title": "Canvas Height (px)",
+      "default": 200
+    }
+  }
+}
+```
+
+### 기본 속성
+
+```json
+{
+  "penColor": "#000000",
+  "penWidth": 2,
+  "canvasHeight": 200
+}
+```
+
+### 출력 스키마
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "imageUrl": {
+      "type": "string",
+      "title": "Signature Image"
+    },
+    "timestamp": {
+      "type": "string",
+      "title": "Signed At"
+    }
+  }
+}
+```
+
+### 필드 구현
+
+```typescript
+import { WallaField } from '@wallaform/custom-field-sdk';
+
+const field = new WallaField();
+
+field.onInit(({ properties, value, theme }) => {
+  const { penColor, penWidth, canvasHeight } = properties;
+
+  // Set up canvas with configured dimensions
+  const canvas = document.getElementById('signature');
+  canvas.height = canvasHeight;
+  canvas.style.border = `1px solid ${theme.border}`;
+
+  // Configure drawing context
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = penColor;
+  ctx.lineWidth = penWidth;
+
+  // Restore saved signature if available
+  if (value?.imageUrl) {
+    loadImage(canvas, value.imageUrl);
+  }
+
+  field.setHeight(canvasHeight + 60); // Canvas + toolbar
+});
+
+// On signature completion, upload and report value
+async function onSignatureComplete() {
+  const canvas = document.getElementById('signature');
+  const blob = await new Promise(resolve =>
+    canvas.toBlob(resolve, 'image/png')
+  );
+  const buffer = await blob.arrayBuffer();
+
+  const { url } = await field.uploadBlob(buffer, 'image/png', 'signature.png');
+  field.setValue({
+    imageUrl: url,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+field.onValidate(() => {
+  if (!hasSignature()) {
+    return { valid: false, errors: [{ message: 'Signature is required' }] };
+  }
+  return { valid: true };
+});
+```
+
+## 전체 예제: 통계 슬라이더
+
+설정 가능한 범위를 가진 통계 슬라이더:
+
+### 속성 스키마
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "min": {
+      "type": "number",
+      "title": "Minimum Value",
+      "default": 0
+    },
+    "max": {
+      "type": "number",
+      "title": "Maximum Value",
+      "default": 100
+    },
+    "step": {
+      "type": "number",
+      "title": "Step Size",
+      "default": 1
+    },
+    "showMarkers": {
+      "type": "boolean",
+      "title": "Show Statistical Markers",
+      "description": "Display Q1, Median, and Q3 markers",
+      "default": true
+    }
+  }
+}
+```
+
+### 출력 스키마
+
+```json
+{
+  "type": "number"
+}
+```
+
+단순 숫자 출력 — 응답 시트에서 컬럼 1개로 표시됩니다.

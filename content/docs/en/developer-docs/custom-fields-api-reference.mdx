@@ -1,0 +1,465 @@
+---
+title: API Reference
+description: Complete API reference for the Custom Field SDK
+---
+
+# API Reference
+
+Complete reference for the `@wallaform/custom-field-sdk` package.
+
+## WallaField
+
+The main class for building custom fields. Handles connection setup, RPC session management, and communication with the host form.
+
+### Constructor
+
+```typescript
+import { WallaField } from '@wallaform/custom-field-sdk';
+
+const field = new WallaField(options?: WallaFieldOptions);
+```
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `options.debug` | `boolean` | `false` | Log all RPC messages to the browser console |
+
+The constructor automatically:
+- Extracts `fieldId` from the URL query parameter (`?fieldId=xxx`)
+- Listens for the host's `MessagePort` transfer
+- Establishes a Cap'n Web RPC session when the port is received
+
+## Callbacks
+
+Register callbacks to respond to host events. All callbacks are optional. Each is single-registration — calling the same method again replaces the previous callback.
+
+### onInit
+
+```typescript
+field.onInit(callback: (payload: FieldInitPayload) => void): void
+```
+
+Called when the host initializes the field. This is the primary entry point for setting up your field UI.
+
+```typescript
+field.onInit(({ properties, value, theme, locale, fieldInfo, formContext, mode }) => {
+  document.body.style.fontFamily = theme.fontFamily;
+  if (value) restoreState(value);
+  field.setHeight(document.body.scrollHeight);
+});
+```
+
+### onValidate
+
+```typescript
+field.onValidate(callback: ValidateCallback): void
+```
+
+Called when the host requests validation (form submission or page navigation). Return a `WallaFieldValidationResult` synchronously or as a `Promise`.
+
+```typescript
+field.onValidate((submitType) => {
+  if (!currentValue) {
+    return { valid: false, errors: [{ message: 'Required' }] };
+  }
+  return { valid: true };
+});
+```
+
+- `submitType`: `'next'` (page navigation) or `'submit'` (final submission)
+- If no callback is registered, `{ valid: true }` is returned automatically
+- If the callback throws, it is caught and returns `{ valid: false, errors: [{ message: String(error) }] }`
+- The host enforces a 10-second timeout
+
+### onValueSet
+
+```typescript
+field.onValueSet(callback: (value: unknown) => void): void
+```
+
+Called when the host injects a value from outside (e.g., pre-fill, restore after page navigation).
+
+```typescript
+field.onValueSet((value) => {
+  applyValue(value);
+});
+```
+
+### onDestroy
+
+```typescript
+field.onDestroy(callback: () => void): void
+```
+
+Called when the field is being removed from the form. Use this to clean up resources like timers, event listeners, or network connections.
+
+```typescript
+field.onDestroy(() => {
+  clearInterval(myTimer);
+  myWebSocket.close();
+});
+```
+
+### onFocus
+
+```typescript
+field.onFocus(callback: () => void): void
+```
+
+Called when the host requests focus on this field (e.g., after page navigation or validation failure).
+
+```typescript
+field.onFocus(() => {
+  document.getElementById('main-input').focus();
+});
+```
+
+### onFormValuesChanged
+
+```typescript
+field.onFormValuesChanged(callback: (values: Record<string, unknown>) => void): void
+```
+
+Called when other observed fields' values change. Only fires if the custom field version's `observeFields` policy is set to `all` or `configured`.
+
+```typescript
+field.onFormValuesChanged((values) => {
+  const total = Object.values(values)
+    .filter(v => typeof v === 'number')
+    .reduce((sum, v) => sum + v, 0);
+  field.setValue(total);
+});
+```
+
+## Action Methods
+
+Call these methods to communicate with the host form. All methods are safe to call before the RPC connection is established — they will log a warning (in debug mode) and return silently.
+
+### setValue
+
+```typescript
+field.setValue(value: unknown): void
+```
+
+Report the current field value to the host. The host auto-saves on every call.
+
+- `value` must be JSON-serializable
+- Maximum size: 64 KB (JSON-serialized)
+- Debounced: rapid calls within 50ms batch to the last value
+
+```typescript
+field.setValue('#FF6B6B');
+field.setValue({ hex: '#FF6B6B', opacity: 0.8 });
+field.setValue(['option1', 'option2']);
+```
+
+### setHeight
+
+```typescript
+field.setHeight(height: number): void
+```
+
+Request the host to resize the iframe to the specified height in pixels.
+
+- Range: 0–5000 px (values outside this range are clamped)
+- Throttled: rapid calls within 100ms are throttled
+
+```typescript
+field.setHeight(document.body.scrollHeight);
+```
+
+### uploadBlob
+
+```typescript
+field.uploadBlob(
+  data: ArrayBuffer,
+  mimeType: string,
+  filename?: string
+): Promise<{ url: string }>
+```
+
+Upload binary data through the host. Returns a promise that resolves with the uploaded file's URL.
+
+```typescript
+const canvas = document.getElementById('signature');
+const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+const buffer = await blob.arrayBuffer();
+
+const { url } = await field.uploadBlob(buffer, 'image/png', 'signature.png');
+```
+
+Throws if the RPC connection is not established.
+
+### reportError
+
+```typescript
+field.reportError(error: { message: string; recoverable: boolean }): void
+```
+
+Report an error to the host for display in the form UI.
+
+- `message`: Error description (truncated to 500 characters by the host)
+- `recoverable`: `true` if the user can retry, `false` for permanent failures
+
+```typescript
+field.reportError({
+  message: 'Failed to load external data source',
+  recoverable: true,
+});
+```
+
+### destroy
+
+```typescript
+field.destroy(): void
+```
+
+Manually dispose the SDK instance. Removes the `MessagePort` listener and closes the RPC session.
+
+```typescript
+field.destroy();
+```
+
+## State Getters
+
+Read the current state of the field. These return the values received in the last `init()` call.
+
+### getProperties
+
+```typescript
+field.getProperties<T = Record<string, unknown>>(): T
+```
+
+Returns the current field properties. Use the generic parameter for type safety:
+
+```typescript
+interface MyProperties {
+  placeholder: string;
+  maxLength: number;
+}
+const props = field.getProperties<MyProperties>();
+```
+
+### getTheme
+
+```typescript
+field.getTheme(): WallaFieldTheme
+```
+
+Returns the current form theme. Before `init()` is called, returns the default theme.
+
+### getLocale
+
+```typescript
+field.getLocale(): string
+```
+
+Returns the current locale string (e.g., `'en'`, `'ko'`, `'ja'`).
+
+### getFieldInfo
+
+```typescript
+field.getFieldInfo(): WallaFieldInfo
+```
+
+Returns metadata about this field instance.
+
+### getFormContext
+
+```typescript
+field.getFormContext(): { fields: FieldSummary[]; values: Record<string, unknown> }
+```
+
+Returns the current form context (other fields' metadata and values). The content depends on the `observeFields` policy.
+
+### isConnected
+
+```typescript
+field.isConnected(): boolean
+```
+
+Returns `true` if the RPC channel has been established with the host.
+
+### getVersion
+
+```typescript
+field.getVersion(): string
+```
+
+Returns the SDK version string (e.g., `'0.2.0'`).
+
+## Types
+
+### WallaFieldOptions
+
+```typescript
+interface WallaFieldOptions {
+  debug?: boolean;
+}
+```
+
+### FieldInitPayload
+
+```typescript
+interface FieldInitPayload {
+  protocolVersion: number;
+  mode: 'live' | 'preview';
+  fieldInfo: WallaFieldInfo;
+  properties: Record<string, unknown>;
+  value: unknown | null;
+  theme: WallaFieldTheme;
+  locale: string;
+  formContext: {
+    fields: FieldSummary[];
+    values: Record<string, unknown>;
+  };
+}
+```
+
+### WallaFieldTheme
+
+```typescript
+interface WallaFieldTheme {
+  background: string;        // Form background color
+  foreground: string;        // Primary text color
+  primary: string;           // Accent/brand color
+  primaryForeground: string; // Text color on primary background
+  field: string;             // Input field background color
+  fieldForeground: string;   // Input placeholder color
+  border: string;            // Border color
+  accent: string;            // Secondary accent color
+  fontFamily: string;        // CSS font-family value
+  borderRadius: string;      // CSS border-radius value
+  direction: 'ltr' | 'rtl'; // Text direction
+}
+```
+
+### WallaFieldInfo
+
+```typescript
+interface WallaFieldInfo {
+  fieldId: string;
+  formId: string;
+  label: string;
+}
+```
+
+### WallaFieldValidationResult
+
+```typescript
+interface WallaFieldValidationResult {
+  valid: boolean;
+  errors?: WallaFieldValidationError[];
+}
+```
+
+### WallaFieldValidationError
+
+```typescript
+interface WallaFieldValidationError {
+  message: string;
+  itemId?: string;
+}
+```
+
+### FieldSummary
+
+Describes another field in the form, provided through form context.
+
+```typescript
+interface FieldSummary {
+  id: string;
+  fieldType: string;
+  label: string;
+  description?: string;
+  isRequired: boolean;
+  properties: Record<string, unknown>;
+  customField?: {
+    typeId: string;
+    typeName: string;
+    outputSchema: Record<string, unknown>;
+  };
+}
+```
+
+The `customField` property is present only when `fieldType` is `'CUSTOM'`.
+
+### ValidateCallback
+
+```typescript
+type ValidateCallback = (
+  submitType: 'next' | 'submit',
+) => WallaFieldValidationResult | Promise<WallaFieldValidationResult>;
+```
+
+### ObserveFieldsMode
+
+```typescript
+type ObserveFieldsMode = 'none' | 'all' | 'configured';
+```
+
+Controls what form context data is provided to the custom field:
+
+| Mode | Description |
+|------|-------------|
+| `none` | No form context provided — `fields` and `values` are empty |
+| `all` | All fields and values are provided (sensitive types always excluded) |
+| `configured` | Only admin-selected fields are provided |
+
+### FieldRpcApi
+
+Methods exposed by the custom field (host → iframe direction). Implemented internally by the SDK.
+
+```typescript
+interface FieldRpcApi {
+  init(payload: FieldInitPayload): void;
+  destroy(): void;
+  focus(): void;
+  setValue(value: unknown): void;
+  onFormValuesChanged(values: Record<string, unknown>): void;
+  validate(submitType: 'next' | 'submit'): Promise<WallaFieldValidationResult>;
+}
+```
+
+### HostRpcApi
+
+Methods exposed by the host (iframe → host direction). Called by the SDK action methods.
+
+```typescript
+interface HostRpcApi {
+  setValue(value: unknown): void;
+  setHeight(height: number): void;
+  uploadBlob(data: ArrayBuffer, mimeType: string, filename?: string): Promise<{ url: string }>;
+  reportError(error: { message: string; recoverable: boolean }): void;
+}
+```
+
+## Host-Side Limits
+
+| Operation | Limit | Description |
+|-----------|-------|-------------|
+| `setValue` size | 64 KB | Maximum JSON-serialized value size |
+| `setValue` debounce | 50 ms | Rapid calls are batched |
+| `setHeight` range | 0–5000 px | Height is clamped to this range |
+| `setHeight` throttle | 100 ms | Rapid calls are throttled |
+| `reportError` message | 500 chars | Message is truncated |
+| `validate` timeout | 10 sec | Host times out if no response |
+
+## Exported Members
+
+```typescript
+export {
+  WallaField,
+  type WallaFieldTheme,
+  type WallaFieldInfo,
+  type WallaFieldOptions,
+  type WallaFieldValidationError,
+  type WallaFieldValidationResult,
+  type ValidateCallback,
+  type FieldInitPayload,
+  type FieldRpcApi,
+  type HostRpcApi,
+  type FieldSummary,
+  type WallaPortInitMessage,
+  type ObserveFieldsMode,
+} from '@wallaform/custom-field-sdk';
+```
