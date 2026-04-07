@@ -1,6 +1,43 @@
 ---
-title: "Privacy Policy Field"
-description: ""
+title: Privacy Policy Field
+description: A field used to collect consent for collecting personal information and sharing it with third parties. It clearly presents the legally required notices and gathers respondent consent.
 ---
 
-This article is not yet translated.
+## Privacy Policy Field
+
+- By default, this field includes the following sections.
+  - Collection and use of personal information
+    - Items collected
+    - Purpose of collection and use
+    - Retention period
+
+  - Sensitive information processing
+    - Items
+    - Purpose of collection
+    - Retention period
+
+  - Third-party sharing of personal information
+    - Recipient
+    - Purpose of sharing
+    - Items shared
+    - Retention period
+
+- Click the `...` (more) button at the bottom right to access these features:
+  - Bulk add options: Enter multiple options at once. *(Separate each option with Enter.)*
+  - Set option values: Assign a custom value to each option. (e.g., set the first option to '1' — it will appear as 1 in the response sheet.)
+
+## Combining with Logic
+
+- The privacy policy field becomes more powerful when combined with logic.
+- For example:
+  - If the respondent selects "Do not agree" → route them to a rejection field so their response is not collected
+  - If the respondent selects "Agree" → continue on to the next personal information fields
+This way, you can control the survey flow naturally based on the respondent's consent.
+
+<Callout title="Tip">
+Combining this with logic lets you cleanly guide only users who selected "Agree" to the next questions.
+</Callout>
+
+<Callout type="warning" title="Warning">
+The privacy policy field must include all legally required notices, and its contents should match your actual data collection practices. Collected personal information must be deleted after the disclosed retention period. Try using the 'Auto-delete responses' feature!
+</Callout>

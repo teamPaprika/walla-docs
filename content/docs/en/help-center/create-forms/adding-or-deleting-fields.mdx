@@ -1,6 +1,39 @@
 ---
 title: "Adding or Deleting Fields"
-description: ""
+description: "On the project edit screen, you can add, delete, or duplicate fields to build your survey. Freely adjust field positions and structure to manage your survey more easily."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Adding a Field
+
+### Click the '+' icon in the left field list
+Select the field you want and it will be added. If you add a field while another field is selected, the new one is automatically placed below it.
+
+### Add from the middle of the edit screen
+Hover the cursor between two fields and an `Add` button appears.
+Click it to insert a new field at that position.
+
+### Add inside a field group
+Hover the cursor at the bottom of a field group to reveal an `Add` button. Click it to add a question inside the group.
+
+## Deleting or Duplicating a Field
+
+<Steps>
+  <Step>
+    ### Hover over the field
+    In the left field list, hover your mouse over the field.
+  </Step>
+  <Step>
+    ### Find the more icon
+    A `...` (more) icon appears on the right side of the field.
+  </Step>
+  <Step>
+    ### Choose Delete or Duplicate
+    Click the icon to choose either 'Delete' or 'Duplicate'.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Caution">
+Deleting a field also deletes all response data collected for that field. Be sure to back up any important data before deleting.
+</Callout>

@@ -1,6 +1,37 @@
 ---
 title: "Limiting Option Selections by Quota"
-description: ""
+description: "For multiple-choice, checkbox, and dropdown questions, you can limit how many times each option can be selected. (e.g., first-come-first-served sign-ups, capping specific choices, etc.)"
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## How to Set It Up
+
+<Steps>
+  <Step>
+    ### Enable the feature
+    Select the question and turn on 'Limit Responses per Option'.
+  </Step>
+  <Step>
+    ### Enter the maximum count
+    Click the 'Configure' button and set the maximum number of responses allowed for each option.
+  </Step>
+  <Step>
+    ### Save
+    Once saved, the number of times an option is selected will not exceed the limit you configured.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Warning">
+- Deleting or modifying an option will reset its limit configuration.
+- Response limits take effect only after the survey is published.
+</Callout>
+
+## How It Appears When Applied
+
+1. If all slots for an option are already filled → the option becomes disabled and cannot be selected.
+2. If an option fills up while the respondent is answering → when they click `Submit`, they'll see an error message: "Something went wrong. Please try again."
+
+<Callout title="Note">
+The per-option response limit is useful for first-come-first-served sign-ups or seat reservations, helping prevent duplicate responses and keep things fair.
+</Callout>

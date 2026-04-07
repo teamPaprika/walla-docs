@@ -1,6 +1,38 @@
 ---
 title: "Creating Personalized Questions"
-description: ""
+description: "Response piping pulls answers from previous questions to display personalized questions to respondents. By reflecting their answers in later questions, you can create more natural and personalized surveys."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Examples of Response Piping
+
+- If a respondent enters "John Doe" in a name field, the next question can display something like "Hello, John Doe!"
+- You can also re-display a previous answer to create verification questions like "Please confirm this information."
+
+## How to Set It Up
+
+<Steps>
+  <Step>
+    ### Go to the input area
+    On the project edit screen, place your cursor in a field title or description input.
+  </Step>
+  <Step>
+    ### Type the '@' symbol
+    When you type '@', a list of previously added questions appears below.
+  </Step>
+  <Step>
+    ### Select a question
+    Choose the question you want to reference, and the field name will be inserted as a blue tag.
+  </Step>
+  <Step>
+    ### Confirm in the actual survey
+    When the survey is displayed, the response value of that question is automatically substituted in.
+    - Example: For the question "Hello, `@Name field`!" — if a respondent enters 'Suzy', the actual survey will show "Hello, Suzy!"
+  </Step>
+</Steps>
+
+<Callout title="Tip">
+- Response piping boosts respondent engagement and creates a more personalized experience. Use it to naturally connect respondent-specific information — such as name, region, or selected service — to subsequent questions.
+- Note that piping can only reference questions that already exist, so be sure to place the source question earlier in the survey.
+</Callout>

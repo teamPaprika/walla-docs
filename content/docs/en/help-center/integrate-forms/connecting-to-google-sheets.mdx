@@ -1,6 +1,39 @@
 ---
 title: "Connecting to Google Sheets"
-description: ""
+description: "Sync response data to Google Sheets in real time. Every time a response is submitted, a new row is automatically added to the sheet you've connected — no manual downloads required."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## How to Connect
+
+<Steps>
+  <Step>
+    ### Go to the Automation tab
+    In the project editor, open the 'Automation' tab.
+  </Step>
+  <Step>
+    ### Click Connect
+    Under 'Google Sheets', click `Connect`.
+  </Step>
+  <Step>
+    ### Sign in with Google
+    Click `Sign in with Google` and log in with your Google account.
+    - All Google accounts available in this workspace will be shown.
+    - You can pick an existing account or sign in with a new one.
+  </Step>
+  <Step>
+    ### Sheet created
+    Once connected, Walla automatically creates a Google Sheet (owned by you and saved to your Drive). You can copy the sheet's link to open it.
+  </Step>
+  <Step>
+    ### Disconnect (if needed)
+    To disconnect, click the `Disconnect` button.
+  </Step>
+</Steps>
+## How It Works
+- When a new response is submitted, each response field is automatically mapped to a column in the sheet.
+- Data syncs in real time, so you can see responses immediately without any manual export.
+<Callout type="warning" title="Warning">
+The connected Google account must have edit access to the sheet. If the sheet is shared, make sure it has edit access as well.
+</Callout>

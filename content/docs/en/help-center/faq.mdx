@@ -6,24 +6,133 @@ icon: CircleQuestionMark
 
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
+## Team / Workspace
+
 <Accordions>
-  <Accordion title="Is Walla free to use?">
-    Yes, Walla offers a free plan. You can create forms, collect responses, and access core features at no cost. Check out our paid plans if you need more advanced features.
+
+  <Accordion title="Can Free teams invite members?">
+    Yes, Walla offers a free plan. Even on the free plan, you can use core features like creating forms and collecting responses. If you need more advanced features, take a look at our paid plans.
   </Accordion>
 
-  <Accordion title="Where can I view response data?">
-    Click the [Responses] tab in the form dashboard to view collected responses. You can also download the data in Excel or CSV format.
+  <Accordion title="I invited someone to my team, but they can't see the project.">
+    They've been invited to the team, but it looks like they haven't been added as a workspace member yet. Click the gear icon at the top of the workspace, then add the user to the workspace under [Manage Members]. Once added, they'll be able to see the workspace they were invited to.
   </Accordion>
 
-  <Accordion title="How do I share my form?">
-    Click the [Share] button in the top right corner of the form editor to copy the link or share it via social media.
+  <Accordion title="I want only specific members to be able to view response results.">
+    To restrict response viewing to specific members, adjust workspace member permissions. Click the gear icon at the top of the workspace, then go to [Roles and Permissions] to configure which features each role can access.
+
+    ※ This feature is only available on the Enterprise plan.
   </Accordion>
 
-  <Accordion title="Can respondents attach files?">
-    Yes, add a file upload question type to your form to allow respondents to attach images, documents, and other files.
-  </Accordion>
-
-  <Accordion title="Will response data be deleted if I delete a form?">
-    Yes, deleting a form will also delete all associated response data. Make sure to download your response data before deleting the form.
-  </Accordion>
 </Accordions>
+
+## Subscription & Billing
+
+<Accordions>
+
+  <Accordion title="Is Walla free to use?">
+    Yes, Walla lets you create unlimited forms, collect unlimited responses, and view statistics and response results — all for free.
+  </Accordion>
+
+  <Accordion title="How do I cancel my subscription?">
+    Go to 'Team Settings → Manage Team' and click the `Manage Plan` button to open the billing page. From there, click `Cancel Subscription` to cancel.
+  </Accordion>
+
+  <Accordion title="Can I cancel my subscription and get a refund?">
+    Whether a refund is available depends on when you paid and which plan you're on. For monthly subscriptions, the service is considered used 24 hours after payment, so refunds are not available after that point. For annual subscriptions, you can get a full refund if you cancel within 14 days of payment; after that, a partial amount will be deducted before the refund. For details, please see our [Refund Policy](https://home.walla.my/ko/policy/refund-latest).
+  </Accordion>
+
+  <Accordion title="The amount I was charged is different from what's listed on the pricing page.">
+    Walla uses an overseas payment provider, so depending on your card issuer's policy, an international transaction fee may apply when subscribing to a plan or purchasing gifticons.
+  </Accordion>
+
+</Accordions>
+
+## Creating Projects
+
+<Accordions>
+
+  <Accordion title="Can I add images to a form?">
+    In any field, type a forward slash (/) in the question title or description box to insert an image. You can write the description first and then insert an image with `/`, or insert the image first and drag it to reposition it.
+  </Accordion>
+
+  <Accordion title="Can I translate text like the submit button?">
+    Default form text (required field labels, submit button, error messages, completion messages, etc.) is automatically translated based on the respondent's browser language — Korean, English, Japanese, Simplified Chinese, Vietnamese, Thai, and more.
+  </Accordion>
+
+  <Accordion title="How is a rejection field different from an ending field?">
+    A rejection field is used to stop respondents who don't qualify for the survey from continuing — responses routed to a rejection field are not saved. If you want to show a message after submission, we recommend using an ending field instead. We also recommend deleting any rejection field, or using logic settings so that it isn't connected to preceding questions.
+  </Accordion>
+
+  <Accordion title="What's the difference between horizontal view and vertical view?">
+    Horizontal view shows one question (one field group) per page, while vertical view shows all questions on a single page.
+  </Accordion>
+
+  <Accordion title="I'd like multiple questions to appear on one page.">
+    In horizontal view, you can use field groups to display multiple questions together on a single screen. In vertical view, you can add `Page Break` between questions to split the page however you like.
+  </Accordion>
+
+</Accordions>
+
+## Integrating Projects
+
+<Accordions>
+
+  <Accordion title="Can I get notifications when responses are submitted?">
+    Yes, you can set up notifications via Slack, Discord, Gmail, and more on the 'Integrate' page. You can also configure a webhook directly to receive notifications on any external platform you want.
+  </Accordion>
+
+  <Accordion title="Can I send a copy of the response to the respondent?">
+    To send respondents a copy of their response, use Gmail automation. In the automation settings, select Gmail and map the field that collects the respondent's email to the To field. Once set up, every time a respondent submits the survey with their email address, their response will be automatically sent to that email.
+  </Accordion>
+
+  <Accordion title="Can I view responses in real time on Google Sheets?">
+    Yes — when you set up the Google Sheets integration, a new sheet is created in the Google account currently logged in. From then on, every time a response is collected from that account, a new row is automatically added to the sheet.
+  </Accordion>
+
+</Accordions>
+
+## Sharing Projects
+
+<Accordions>
+
+  <Accordion title="Can I track where project traffic is coming from?">
+    Set up tracking (hidden fields) and add parameters to the URL when sharing it with respondents. Once responses are collected, you can see which path each respondent came from in the response sheet and statistics view.
+  </Accordion>
+   <Accordion title="Can I use my own brand's thumbnail and URL when sharing a project?">
+    You can set a thumbnail and URL that match your brand when sharing a project. On the 'Share' page, customize the preview image and link as you like and save. Once saved, that thumbnail and URL will be applied when sharing.
+  </Accordion>
+     <Accordion title="I already have a list of respondents — can I invite them to a survey and track who has submitted?">
+    Yes. Upload your existing respondent list as a CSV or XLSX file to register it as a panel, then send the survey to that panel from each project. After sending, you can also track which panel members have responded.
+  </Accordion>
+
+</Accordions>
+
+## Sending Rewards
+
+<Accordions>
+
+  <Accordion title="How do I send rewards?">
+    First, add a phone number field (recommended) to your form to collect respondents' phone numbers. Then purchase rewards, select the recipients, and send.
+  </Accordion>
+   <Accordion title="I didn't collect respondents' phone numbers in my form — can I still send rewards?">
+    Unfortunately, if you didn't collect phone numbers, sending rewards isn't possible. To send rewards, please make sure to collect the necessary information (such as phone numbers) when respondents complete the survey.
+  </Accordion>
+     <Accordion title="Can I give out my brand's own rewards (like our store points) as rewards?">
+    Yes, this is possible. However, this feature is only available on Custom plans and above. For details, please contact cs@walla.my.
+  </Accordion>
+
+</Accordions>
+
+
+
+
+<div className="not-prose mt-10 rounded-2xl border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-6 text-center">
+  <span className="block text-lg font-bold text-[#1A2C5C] mb-1">Didn't find what you were looking for?</span>
+  <span className="block text-[#76809D] text-sm mb-4">The Walla team will get back to you quickly.</span>
+  <div className="flex justify-center">
+    <a href="mailto:cs@walla.my" className="inline-flex items-center justify-center rounded-full bg-[hsl(193,100%,50%)] px-5 py-2 text-sm font-bold text-white hover:opacity-90 transition-opacity no-underline">
+      Contact us →
+    </a>
+  </div>
+</div>

@@ -1,6 +1,404 @@
 ---
 title: "Response API"
-description: ""
+description: "Use the Walla Open API to query and manage your form data and responses."
 ---
 
-This article is not yet translated.
+## Walla Open API Guide
+
+The Walla Open API lets you programmatically query and manage form data and responses.
+
+## Version Info
+
+- **Current API version:** v1
+- **Swagger docs:** [https://app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+
+If there are breaking changes, they'll be released as a new version.
+
+## API Authentication
+### Issuing an API Key
+
+- Log in to Walla.
+- Go to the API key viewer ([https://app.walla.my/open-api/doc](https://app.walla.my/)).
+- Issue your API key and store it somewhere safe.
+### Authentication Method
+
+The Walla API uses API key authentication. Include the following header in every request.
+
+```
+X-WALLA-API-KEY: {your issued API key}
+```
+
+### Base URL
+
+```
+https://app.walla.my/open-api/v1
+```
+
+## API Endpoints
+### Workspaces
+#### List Workspaces
+
+Get a list of all workspaces you have access to.
+
+```
+GET /open-api/v1/workspaces
+```
+
+**Example response:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "workspace_abc123",      "name": "Marketing Team Workspace",  
+      "teamId": "team_xyz789",      "createdAt": "2024-01-15T09:00:00Z",      "updatedAt": "2024-01-20T14:30:00Z"    }  ]}
+```
+
+#### Get Workspace Details
+
+Get detailed information about a specific workspace.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| workspaceId | path | Yes | Workspace ID |
+### Forms (Projects)
+#### List All Forms
+
+Get a list of forms across all workspaces you have access to.
+
+```
+GET /open-api/v1/forms
+```
+
+#### List Forms in a Workspace
+
+Get a list of forms in a specific workspace.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}/forms
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| workspaceId | path | Yes | Workspace ID |
+#### Get Form Details
+
+Get detailed information about a specific form.
+
+```
+GET /open-api/v1/forms/{formId}
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| formId | path | Yes | Form ID |
+
+**Example response:**
+
+```
+{  
+  "success": true,  "data": {    "id": "form_abc123",    "title": "Customer Satisfaction Survey",  
+    "description": "Please rate your satisfaction after using our service",  
+    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "creator": "user_123",    "isDeleted": false,    "createdAt": "2024-01-15T09:00:00Z",    "updatedAt": "2024-01-20T14:30:00Z"  }}
+```
+
+### Fields
+#### List Form Fields
+
+Get a list of published fields for a specific form.
+
+```
+GET /open-api/v1/forms/{formId}/fields
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| formId | path | Yes | Form ID (the ID of the published survey) |
+
+**Example response:**
+
+```
+{  
+  "success": true,  "data": {    "fields": [      {        "id": "field_001",        "label": "Please enter your name",  
+        "fieldType": "SHORT_TEXT",        "outputType": "string"      },      {        "id": "field_002",        "label": "Please select your satisfaction level",  
+        "fieldType": "RADIO",        "outputType": "string"      }    ]  }}
+```
+
+#### Get Field Details
+
+Get detailed information about a specific field (properties, validation rules, output schema, etc.).
+
+```
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| formId | path | Yes | Form ID |
+| fieldId | path | Yes | Field ID |
+#### Get Field Output Schemas
+
+Get the output schema mapping by field type. Use this to see what format each field type returns.
+
+```
+GET /open-api/v1/field-output-schemas
+```
+
+### Response Data
+#### List Responses
+
+Get a paginated list of responses for a specific form. You can also filter to a specific customer with the `customerKey` parameter.
+
+```
+GET /open-api/v1/forms/{formId}/responses
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| formId | path | Yes | Form ID |
+| customerKey | query | No | Filter by customer key (returns only responses with this customerKey) |
+| page | query | No | Page number (starts at 1, default: 1) |
+| limit | query | No | Responses per page (max 100, default: 20) |
+
+**Example response:**
+
+```
+{  
+  "success": true,  "data": {    "responses": [      {        "responseId": "resp_abc123",        "customerKey": "customer_001",        "submittedAt": "2024-01-20T14:30:00Z",        "field_001": "John Doe",  
+        "field_002": "Very satisfied",  
+        "hidden-field_utm": "facebook"      }    ],    "pagination": {      "page": 1,      "limit": 20,      "totalCount": 150,      "totalPages": 8    }  }}
+```
+
+**Filtering by customerKey:**
+
+```
+GET /open-api/v1/forms/{formId}/responses?customerKey=customer_001
+```
+
+#### Get a Single Response
+
+Get detailed information about a specific response.
+
+```
+GET /open-api/v1/forms/{formId}/responses/{responseId}
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| formId | path | Yes | Form ID |
+| responseId | path | Yes | Response ID |
+
+**Example response:**
+
+```
+{  
+  "success": true,  "data": {    "responseId": "resp_abc123",    "formId": "form_abc123",    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "response": {      "field_001": "John Doe",  
+      "field_002": "Very satisfied",  
+      "hidden-field_utm": "facebook"    },    "submittedAt": "2024-01-20T14:30:00Z",    "customerKey": "customer_001",    "startedAt": "2024-01-20T14:25:00Z"  }}
+```
+
+### Form Delivery
+> **Note:** Form Delivery is only available in ONPREM environments. It is not available in SaaS environments.
+#### Send a Form
+
+Send a specific project (published survey) to recipients. Unpublished surveys cannot be sent.
+
+```
+POST /open-api/v1/forms/{formId}/delivery
+```
+
+**Parameters:**
+
+| Name | Location | Required | Description |
+| --- | --- | --- | --- |
+| formId | path | Yes | Form ID |
+
+**Request body:**
+
+```
+{  
+  "recipients": [    {      "customerKey": "customer_001",      "email": "user@example.com",      "phoneNumber": "010-1234-5678"    }  ],  "subject": "Your survey has arrived.",  
+  "message": "Please open the survey link."  
+}
+```
+
+| Field | Required | Description |
+| --- | --- | --- |
+| recipients | Yes | List of recipients (array) |
+| recipients[].customerKey | Yes | Customer identification key |
+| recipients[].email | No | Email address |
+| recipients[].phoneNumber | No | Phone number |
+| subject | No | Email subject (default: "Your survey has arrived.") |
+| message | No | Delivery message |
+#### List Recipients
+
+Get the full list of recipients for a specific project.
+
+```
+GET /open-api/v1/forms/{formId}/delivery
+```
+
+#### Get Recipient Status
+
+Get the delivery progress for specific recipients.
+
+```
+POST /open-api/v1/forms/{formId}/delivery/status
+```
+
+**Request body:**
+
+```
+{  
+  "customerKeys": ["customer_001", "customer_002"]}
+```
+
+**Example response:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "delivery_abc123",      "formId": "form_abc123",      "customerKey": "customer_001",      "email": "user@example.com",      "status": "RESPONDED",      "lastSentAt": "2024-01-20T10:00:00Z",      "createdAt": "2024-01-19T09:00:00Z"    }  ]}
+```
+
+**Delivery status values:**
+
+| Status | Description |
+| --- | --- |
+| NOT_SENT | Not yet sent |
+| SENT | Sent |
+| OPENED | Link opened |
+| RESPONDED | Response completed |
+### Response Data Structure
+#### Response Value Format by Field Type
+
+The format of each field's value depends on its field type.
+
+| Field type | Output format | Example |
+| --- | --- | --- |
+| SHORT_TEXT, LONG_TEXT | string | `"John Doe"` |
+| RADIO, DROPDOWN | string | `"Option 1"` |
+| CHECKBOX | string[] | `["Option 1", "Option 2"]` |
+| FILE_UPLOAD | string[] | `["https://...file1.pdf"]` |
+| DATE | string | `"2024-01-20"` |
+| NUMBER | string | `"42"` |
+
+For detailed output schemas, see `GET /open-api/v1/field-output-schemas`.
+
+#### Hidden Fields
+
+Hidden fields are included in response data with keys formatted as `hidden-{fieldId}`.
+
+```
+{  
+  "hidden-field_abc123": "facebook",  "hidden-field_xyz789": "spring_campaign"}
+```
+
+Hidden field values are passed as URL parameters.
+
+```
+https://walla.my/v/{formId}?utm_source=facebook&utm_campaign=spring_campaign
+```
+
+#### customerKey
+
+`customerKey` is a value automatically generated by Form Delivery to identify each recipient.
+
+- Used to track delivery status (sent → opened → responded).
+- Useful for filtering response data.
+- May be empty if Form Delivery is not used.
+## Error Responses
+
+When an API request fails, an HTTP status code and error message are returned.
+
+| Status code | Description |
+| --- | --- |
+| 400 | Bad request (invalid parameters, etc.) |
+| 403 | Authentication failed or insufficient permissions |
+| 404 | Resource not found |
+| 500 | Server error |
+
+**Example error response:**
+
+```
+{  
+  "error": "Form not found or not published"}
+```
+
+## Usage Examples
+### 1. Linking Responses with customerKey
+
+
+- Use your external system's customer ID as the Walla `customerKey`.
+- Call `GET /forms/{formId}/responses?customerKey={customerKey}` to look up that customer's responses.
+- If `totalCount` is greater than 0, a response exists.
+### 2. List Form Responses
+
+```
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 3. Get a Specific Response  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 4. Filter Responses by customerKey  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 5. Send a Survey with Form Delivery  
+  
+```bash  
+curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X-WALLA-API-KEY: your_api_key" \  -H "Content-Type: application/json" \  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "Customer Satisfaction Survey",  
+    "message": "Please share your valuable feedback."  
+  }'```
+```
+
+## Field Type
+| Type | Name |
+| --- | --- |
+| RADIO | Multiple Choice |
+| CHECKBOX | Multiple Choice (Multi-select) |
+| PICTURE_CHOICE | Picture Choice |
+| DROPDOWN | Dropdown |
+| LINEAR | Linear Scale |
+| RADIO_GRID | Multiple Choice Grid |
+| CHECKBOX_GRID | Multiple Choice Grid (Multi-select) |
+| PRIVACY_POLICY_INFORMATION | Privacy Policy |
+| SHORT_TEXT | Short Text |
+| LONG_TEXT | Long Text |
+| NUMBER | Number |
+| TABLE | Table |
+| SECRETS | Secrets |
+| DESCRIPTION | Description |
+| WEBSITE_LINK | Embed |
+| DATE | Date |
+| TIME | Time |
+| EMAIL | Email |
+| ADDRESS | Address |
+| PHONE_NUMBER | Phone Number |
+| FILE_UPLOAD | File Upload |
+| IMAGE_UPLOAD | Photo Capture |
+| VIDEO_UPLOAD | Video Capture |
+| GEOLOCATION | Geolocation |
+| TOSS_PAYMENTS | Toss Payments |
+| REJECT | Rejection |
+| ENDING_DESCRIPTION | Ending Field (End Page) |
+| ENDING_REDIRECT | Ending Field (Redirect to URL) |
+| SUBMIT | Submit |

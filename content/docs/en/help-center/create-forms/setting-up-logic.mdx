@@ -1,6 +1,65 @@
 ---
 title: "Setting Up Logic"
-description: ""
+description: "Logic controls the flow of a survey based on the respondent's answers. Instead of always running in the same order, the survey can branch down different paths depending on how respondents reply."
 ---
 
-This article is not yet translated.
+## The Concept of Logic
+
+- Logic determines "where the respondent goes next based on their answer."
+- The default path is the flow every respondent follows when no logic applies. (This is different from 'Required'.)
+
+## Adding Logic
+
+- In the project editor, click the `+ New Logic` button to add a new rule.
+- A logic rule consists of a 'Condition' and a 'Go to' action.
+### Condition
+    1. Select the reference question – choose which question's answer the logic is based on.
+    2. Select a condition – pick the comparison operator.
+       - Equals
+       - Does not equal
+       - Starts with
+       - Ends with
+       - Contains text
+       - Does not contain text
+       - Contains all
+       - Missing all
+       - Contains at least one
+       - Missing at least one
+       - Less than
+       - Less than or equal to
+       - Greater than
+       - Greater than or equal to
+       - Before
+       - Before or equal
+       - After
+       - After or equal
+    1. Select the option/response – choose which answers trigger the logic.
+       - You can select multiple responses at once.
+    #### Combining Multiple Conditions
+      - Click '+ Add new condition' to combine multiple conditions.
+      - When combining, choose one of the following:
+        - AND: the logic runs only if both conditions are met
+        - OR: the logic runs if either condition is met
+### Go to
+- Once the conditions are set, choose which field the respondent should be sent to.
+- When configured, any respondent who meets the conditions jumps straight to that question.
+
+## Logic Examples
+
+- #### Example 1. Branching based on privacy consent
+  - Condition: `Privacy policy field` = "I agree"
+  - Go to: The question that follows the personal information fields (e.g., phone number field)
+- #### Example 2. Rejecting respondents by age
+  - Condition: `Age question (multiple choice / dropdown field)`, does not equal, "Teens"
+  - Go to: `Rejection field`
+- #### Example 3. Routing based on a keyword
+  - Condition: `Short text / long text field`, contains text, "apple"
+  - Go to: `Apple juice payment field`
+
+## Additional Notes
+
+- If your logic seems to break midway, it's usually because:
+  - A rejection field is sitting in the middle of the flow, or
+  - An earlier question's logic is misconfigured.
+- Questions inside a field group can each have their own logic. If you point logic to a question inside a group, the view starts from that group.
+- Clicking the `Reset` button removes all logic from the current question.

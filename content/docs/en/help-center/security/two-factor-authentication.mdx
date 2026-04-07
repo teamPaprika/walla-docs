@@ -1,6 +1,28 @@
 ---
 title: "Two-Factor Authentication"
-description: ""
+description: "Two-factor authentication adds an extra verification step at login to protect team members' accounts. We strongly recommend enabling it to reduce the risk of password leaks and unauthorized access."
 ---
 
-This article is not yet translated.
+## Team-Level 2FA Setup
+1. Go to Team Settings → [Security] tab.
+2. Enable 'Two-Factor Authentication (MFA)' to require team members to complete 2FA every time they access the team.
+3. This enforces 2FA across your entire team.
+  - By default, each user can register 2FA on their own via profile icon → personal 2FA setup. Enforcing it at the team level ensures every member goes through the verification.
+
+## Setting a Password (for Social Login Users)
+- You'll need to set a 2FA password before you can use two-factor authentication.
+- Accounts that signed up via a social login (e.g., Google, Naver) can also register a password and use email + password login in addition.
+- You can set a password on the My Page screen via the profile icon. If you haven't set one yet, you can also register a password from the 2FA page.
+## Completing 2FA
+1. Install a TOTP-based authenticator app, such as Google Authenticator, Microsoft Authenticator, or Authy.
+2. Scan the QR code in the app, or manually enter the provided secret key if scanning isn't possible.
+3. Enter the 6-digit code shown in your authenticator app to finish verification.
+4. If you check the "Trust this device for 60 days" option, the same device will not be asked to verify again for 60 days.
+5. Then save your backup codes.
+  - Keep backup codes in a safe place in case you lose your phone or can't access your authenticator app.
+  - Each backup code can only be used once, and can be used to log in without the authenticator app in an emergency.
+  - We recommend clicking 'Download backup codes' to save them as a text file.
+
+<Callout title="Tip">
+Enforcing 2FA at the team level requires every team member to go through verification, drastically reducing the risk of unauthorized account access or data leaks.
+</Callout>

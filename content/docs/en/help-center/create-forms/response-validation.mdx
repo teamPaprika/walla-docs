@@ -1,6 +1,31 @@
 ---
 title: "Response Validation"
-description: ""
+description: "Response validation ensures respondents can only continue when their input meets the conditions you've set. You can configure different validation rules for each field type."
 ---
 
-This article is not yet translated.
+## Validation Rules
+
+| Rule | Description |
+|---|---|
+| Required | The respondent must answer. |
+| Response length | Set a minimum and/or maximum character count. |
+| Response include | Show an error if specific text is not included. |
+| Response exclude | Show an error if specific text is included. |
+| Number range | Set an allowed minimum and maximum value. |
+| Selection count | Set a minimum, maximum, or exact number of selections. |
+| Include options | The response must include specific options. |
+| Exclude options | The response must not include specific options. |
+| Per-option response limit | Cap how many times an option can be chosen across all responses. Useful for first-come-first-served sign-ups, seat or quantity limits, and more. |
+| Regular expression (Regex) | Define your own pattern for fine-grained format validation. |
+
+<Callout title="Regex examples">
+- Korean characters only: `^[가-힣]+$`
+- English letters only: `^[A-Za-z]+$`
+- URL format: `^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$`
+- Korean resident registration number (with hyphen): `^\d{6}-\d{7}$`
+- Postal code (5 digits): `^\d{5}$`
+</Callout>
+
+<Callout type="warning" title="Caution when collecting resident registration numbers">
+There are legal restrictions on collecting real resident registration numbers. Be sure to enable **data masking** and **auto-delete responses**.
+</Callout>

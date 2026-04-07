@@ -1,6 +1,40 @@
 ---
 title: "Ending Field"
-description: ""
+description: "The ending field is the final screen shown after a respondent submits their answers. You can freely design the screen displayed at the end of the survey, or redirect respondents to a specific website."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Types of Ending Fields
+
+### End Page
+   - A custom end screen displayed after the response is submitted.
+   - Like a description field, you can include various content such as text, images, and tables.
+   - Examples:
+     - "Your response has been submitted. For questions, contact [cs@walla.my](mailto:cs@walla.my)."
+     - "Exclusive promo code for respondents: WALLA10"
+### Redirect to URL
+   - Redirect respondents to a specific web page after they submit.
+   - In the ending field settings on the project edit screen, enter the URL you want to redirect to.
+
+## Using It with Logic
+
+- If you only add an ending field without configuring logic, the default end page ("Your response has been successfully submitted.") will be displayed automatically.
+- To redirect to a different ending field after submission:
+
+<Steps>
+  <Step>
+    ### Click the Submit button
+    On the logic page, click the 'Submit' button.
+  </Step>
+  <Step>
+    ### Specify the ending field
+    Set which ending field to navigate to based on your conditions.
+  </Step>
+</Steps>
+- If you want to always redirect to a specific ending field without any logic, simply change the default destination to that ending field.
+
+<Callout title="Tip">
+- Ending fields are great for wrapping up your survey with a thank-you message, additional guidance, or promotional information.
+- For brand campaigns or marketing surveys, use a URL-redirect ending field to seamlessly connect respondents to your website or event page.
+</Callout>

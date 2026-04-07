@@ -1,6 +1,199 @@
 ---
 title: "Project Tags"
-description: ""
+description: "New tags, filters, view modes, and bulk selection make it easier to manage projects in your workspace."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 1. Project Tags
+
+Classify and organize projects by adding tags to them.
+
+## What's Changed from the Old Emoji Badges
+
+- Per-project emoji badges (emoji + background color) have been replaced by the tag system.
+- When you update, existing emoji badges are automatically converted into tags.
+- You can no longer set emoji badges on individual projects.
+
+<Callout type="warning" title="Warning">
+Tag names are generated based on the emoji. Projects that used the same emoji will be merged into a single tag even if they had different background colors.
+</Callout>
+
+## Creating a Tag
+
+### Method 1. From Tag Management
+
+<Steps>
+  <Step>
+    ### Click More
+    At the top of the workspace, click `...` (more).
+  </Step>
+  <Step>
+    ### Select Manage Tags
+    Choose Manage Tags.
+  </Step>
+  <Step>
+    ### Create Tag
+    Click Create Tag.
+  </Step>
+  <Step>
+    ### Enter a name
+    Enter a name. (e.g., Marketing, Urgent, Done)
+  </Step>
+  <Step>
+    ### Choose a color and save
+    Pick a color and save.
+  </Step>
+</Steps>
+
+### Method 2. Directly from a Project
+
+<Steps>
+  <Step>
+    ### Click Add Tag
+    Click `+ Add Tag` on the project card or list.
+  </Step>
+  <Step>
+    ### Click Create Tag
+    In the tag selection popover, click Create Tag.
+  </Step>
+  <Step>
+    ### Enter name and color, then save
+    Enter a name and color, then save.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Warning">Tag names must be unique within a workspace.</Callout>
+
+## Tagging Projects
+
+### Adding Tags When Creating a Project
+
+- You can select tags during project creation.
+- Quick creation is available via the add (+) button in column headers.
+  - Status column: Can only be created in the Unpublished column.
+  - Tag column: The tag is automatically applied when the project is created.
+
+### Adding Tags Later
+
+#### Single Project
+
+- Click the `+ Add Tag` button on the project card or list.
+- Or click `...` (more) → Edit Project Info to update the title and tags.
+
+#### Multiple Projects
+
+<Steps>
+  <Step>
+    ### Select projects
+    Hold Shift to select multiple projects.
+  </Step>
+  <Step>
+    ### Click Tag
+    Click Tag in the action bar at the bottom.
+  </Step>
+  <Step>
+    ### Add or remove tags
+    Add or remove tags.
+  </Step>
+</Steps>
+
+## Merging Tags
+
+You can consolidate similar tags into one.
+
+<Steps>
+  <Step>
+    ### Open Tag Management
+    Open Tag Management.
+  </Step>
+  <Step>
+    ### Select tags to merge
+    Select the tags you want to merge. (Shift multi-select is not supported.)
+  </Step>
+  <Step>
+    ### Click Merge
+    Click Merge.
+  </Step>
+  <Step>
+    ### Merge complete
+    The tags are merged into the one selected last.
+  </Step>
+</Steps>
+
+Example: `Marketing / MKT / Marketing Team → Marketing`
+
+## 2. Project Filters
+
+### Filter by Status
+
+- Unpublished: Not yet published
+- Published: Collecting responses
+- Closed: Project has ended
+
+### Filter by Tag
+
+- Select multiple tags: projects that match any of them are shown
+- Select "No tags": only projects without tags are shown
+
+### Combined Filters
+
+When you combine status and tag filters, only projects that match **both** conditions are shown.
+
+Example
+
+`Published + Marketing` → projects that are published and tagged Marketing
+
+## 3. View Modes
+
+### Card View / List View
+
+| Card View | List View |
+| --- | --- |
+| Card layout | List layout |
+| See info at a glance | Shows more projects |
+| Default | Simple structure |
+
+### Grouping
+
+#### Column (group)
+
+- By status
+- By tag
+
+#### Row (sub-group)
+
+- No grouping
+- By status
+- By tag
+
+### Sort by
+
+- Last modified
+- Created date
+- Response count
+  (Ascending / descending can be toggled)
+
+### Saving View Settings
+
+- Automatically saved per workspace
+- Preserved after refresh
+- Use the reset button to restore defaults
+
+
+## 4. Example Use Cases
+
+1. Per-team management (create team name tags → filter to see each team's projects)
+1. Use like a Kanban board (View mode: columns = status → drag to change status)
+1. Clean up completed projects (Closed filter → select all → move to archive)
+2. Tidy up duplicate tags (Tag management → merge)
+
+## 5. Key Terms
+
+| Term | Description |
+| --- | --- |
+| Tag | A label used to classify projects |
+| Filter | Viewing projects by condition |
+| Grouping | Bundling by category |
+| Bulk actions | Acting on multiple projects at once |
+| Archive | Storage space for inactive projects |

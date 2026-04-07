@@ -1,6 +1,47 @@
 ---
 title: "Sending Gifticons"
-description: ""
+description: "In Walla, you can send gifticons (rewards) to your survey respondents. Once you've purchased rewards, you're ready to send them out."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Steps to Send Rewards
+
+<Steps>
+  <Step>
+    ### Go to the Reward Management page
+    Navigate to the `Reward Management` page.
+  </Step>
+  <Step>
+    ### Click Send Reward
+    Under 'My Rewards', click the `Send Reward` button.
+  </Step>
+  <Step>
+    ### Select respondents
+    Choose the question that contains the recipient's contact info (phone number field). You can pick respondents manually, or click `Random Pick` to select them at random.
+
+    <Callout type="warning" title="Warning">
+    Rewards cannot be sent to respondents whose phone number format is invalid.
+    </Callout>
+  </Step>
+  <Step>
+    ### Check eligibility
+    Review the selected respondents and exclude those who have already received a reward.
+    - You can see at a glance who received which rewards, and how many times.
+    - You can also go back to the previous step to reselect respondents.
+  </Step>
+  <Step>
+    ### Write a message
+    Write a message to send along with the reward.
+    - Title: up to 40 bytes
+    - Body: up to 200 characters
+
+    The message will be shown to respondents when they receive their reward.
+
+    <Callout type="warning" title="Warning">
+    - Rewards are sent to the phone number entered in the phone number field.
+    - Once sent, rewards cannot be cancelled or retrieved.
+    - Clicking the Send Reward button is considered acceptance of all terms.
+    </Callout>
+  </Step>
+</Steps>

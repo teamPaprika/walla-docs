@@ -1,6 +1,40 @@
 ---
 title: "Connecting with Zapier"
-description: ""
+description: "Walla connects to a wide range of services through Zapier. Follow the steps below to set it up 👇"
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## How to Set It Up
+
+<Steps>
+  <Step>
+    ### Pick Zapier and log in
+    In the 'Connect' menu, choose Zapier and log in.
+  </Step>
+  <Step>
+    ### Select Walla Form
+    In the App & event step, select 'Walla Form'.
+  </Step>
+  <Step>
+    ### Set the Event
+    Set the Event to 'New Response'.
+  </Step>
+  <Step>
+    ### Sign in with your Walla account
+    Under Account, log in with your Walla account.
+  </Step>
+  <Step>
+    ### Pick a project
+    Choose the project you want to receive response notifications from.
+  </Step>
+  <Step>
+    ### Connect an external service
+    In the next Account step, pick the external service to connect to. (e.g., Google Sheets, Slack, etc.)
+  </Step>
+</Steps>
+
+
+<Callout type="warning" title="Heads up when connecting to Google Sheets">
+To sync with Google Sheets through Zapier, the first row of your sheet must contain headers (column names). Walla responses will only be recorded properly when those headers exist.
+</Callout>

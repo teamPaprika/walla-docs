@@ -1,6 +1,34 @@
 ---
 title: "Rejection Field"
-description: ""
+description: "The rejection field ends the survey without collecting a response when specific conditions are met. Use it to efficiently filter respondents and control your survey flow."
 ---
 
-This article is not yet translated.
+## How Rejection Fields Work
+
+- When a rejection field is shown, the response is not saved.
+- Useful for filtering out respondents who don't qualify.
+  - e.g., people outside your target audience, responses after the deadline, etc.
+
+## Where to Place It
+
+- We recommend placing it at the very end of the survey.
+  - In vertical view, all questions appear on a single page, so a rejection field placed in the middle can immediately end the survey as soon as the page loads.
+  - In horizontal view, placing it at the very beginning can reject respondents right when they start.
+- It's a good idea to add a `page break` before a rejection field.
+
+## Examples
+
+#### Example 1. Filtering respondents by age
+  - **Condition**: `Age question` `is not` `Teens`
+  - **Go to**: `Rejection field`
+  - **Result**: If the respondent is not a teenager, the survey ends immediately.
+#### Example 2. Using it as a "survey closed" notice
+  - If you want to show a custom closing message instead of the default end page when the survey is closed, move the rejection field to the very first question.
+  - **Example**: "This survey has ended."
+
+<Callout type="warning" title="Warning">
+- Don't confuse rejection fields with ending fields.
+  - **Ending field**: Shown "after" submission, leads to a message or URL
+  - **Rejection field**: Ends the survey "during" the response — no data is recorded
+- Rejected responses can never be viewed or recovered, so review your conditions carefully.
+</Callout>

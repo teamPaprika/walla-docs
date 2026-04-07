@@ -1,6 +1,76 @@
 ---
 title: "Activity Logs"
-description: ""
+description: "Every important action that takes place in your team is automatically recorded to the activity log. You can see who did what and when at a glance, which is great for security and operational auditing."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## How to View Activity Logs
+
+<Steps>
+  <Step>
+    ### Go to the Activity Logs tab
+    Navigate to Team Settings → 'Activity Logs' tab.
+  </Step>
+  <Step>
+    ### Review actions
+    You can review the major actions taken across your team in chronological order.
+  </Step>
+  <Step>
+    ### Check log details
+    Each log records who performed the action, when it happened, and what was done.
+  </Step>
+</Steps>
+## Main Log Entries
+
+### Team Actions (7)
+
+| Action | Description |
+| --- | --- |
+| team:leave | Left team |
+| team:member.invite | Invited team member |
+| team:member.invite.cancel | Cancelled team invite |
+| team:member.delete | Removed team member |
+| team:member.role.assign | Changed team member role |
+| team:security.update | Updated team security settings |
+| team:audit.log.download | Downloaded audit logs |
+
+### Workspace Actions (11)
+
+| Action | Description |
+| --- | --- |
+| workspace:create | Created workspace |
+| workspace:update | Renamed workspace |
+| workspace:delete | Deleted workspace |
+| workspace:leave | Left workspace |
+| workspace:member.create | Invited workspace member |
+| workspace:member.delete | Removed workspace member |
+| workspace:member.role.assign | Changed workspace member role |
+| workspace:role.create | Created role |
+| workspace:role.update | Updated role |
+| workspace:role.delete | Deleted role |
+| workspace:permission.update | Updated permissions |
+
+### Project Actions (19)
+
+| Action | Description |
+| --- | --- |
+| project:read | Viewed project |
+| project:create | Created project |
+| project:update | Updated project |
+| project:delete | Deleted project |
+| project:copy | Copied project |
+| project:archive | Archived project |
+| project:move_to_workspace | Moved to another workspace |
+| project:publish | Published project |
+| project:privacy.field_masking.update | Updated field masking settings |
+| project:privacy.auto_delete.update | Updated auto-delete settings |
+| project:privacy.auto_delete.execute | Executed auto-delete |
+| project:automation.create | Created automation |
+| project:automation.update | Updated automation |
+| project:automation.delete | Deleted automation |
+| project:response.read | Viewed responses |
+| project:response.delete | Deleted responses |
+| project:response.download | Downloaded responses |
+| project:response.unmask | Unmasked responses |
+| project:response.field_file_download | Downloaded field file |
