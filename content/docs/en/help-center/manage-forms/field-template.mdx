@@ -1,6 +1,93 @@
 ---
 title: "Field Templates"
-description: ""
+description: "Save frequently used question combinations as field templates. They cut down on repetitive work when building surveys and help your team share a consistent question format, so everyone can spin up surveys in the same format quickly."
 ---
 
-This article is not yet translated.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Creating a Field Template from the Project Editor
+
+You can instantly save questions from the survey you're currently building as a template.
+
+- Save a single question: In the field list, click the `...` (more) menu on the question you want and choose `Save as Field Template`.
+- Save multiple questions at once:
+
+<Steps>
+  <Step>
+    ### Turn on bulk edit
+    Turn on the `Bulk Edit` toggle in the top right.
+  </Step>
+  <Step>
+    ### Select questions and save
+    Check the questions you want to include, then click `Save as Field Template`.
+  </Step>
+  <Step>
+    ### Name the template
+    Enter a template name in the popup and create it.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Warning">
+Some questions that require workspace authentication (such as 'Toss Payments') may not be available for template saving.
+</Callout>
+
+## Editing Templates Directly from the Library
+
+You can also edit existing templates in the library, or build a new template from scratch there.
+
+- Open the library: Go to \[Team Library\] > \[Field Templates\] on the left side of your dashboard.
+- Add and configure questions:
+
+<Steps>
+  <Step>
+    ### Add a question
+    For empty templates, click the `+ Add Question` button.
+  </Step>
+  <Step>
+    ### Choose a question type
+    Pick the question type you want (multiple choice, short text, contact info, etc.) to add it.
+  </Step>
+  <Step>
+    ### Review and manage order
+    Check and manage the order of added questions in the 'Question List' panel on the left.
+  </Step>
+</Steps>
+- Configure detailed properties:
+
+<Steps>
+  <Step>
+    ### Click a question
+    Click the question you want to edit, and you can update the field title, response validation (required, etc.), and security settings in the `Options` panel on the right.
+  </Step>
+  <Step>
+    ### Check your changes
+    When you make changes, an 'Unsaved changes' banner appears at the top.
+  </Step>
+  <Step>
+    ### Save the template
+    Once you're done editing, click `Save Template` in the top right to apply your changes.
+  </Step>
+</Steps>
+
+## Using a Saved Template
+
+With a single click, you can load your preset questions when creating a new project.
+
+<Steps>
+  <Step>
+    ### Find the Templates section
+    At the bottom of the Add Field screen (the center popup) in the survey editor, you'll see a `Templates` section.
+  </Step>
+  <Step>
+    ### Pick a template
+    Click the template you want to use (e.g., 'Contact Info', 'Example 2', etc.).
+  </Step>
+  <Step>
+    ### Done
+    All questions and settings from the template are instantly applied to your survey.
+  </Step>
+</Steps>
+
+<Callout title="Tip">
+Even if you modify the loaded template for a specific project, the original template in the library is left untouched.
+</Callout>

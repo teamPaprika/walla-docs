@@ -1,6 +1,20 @@
 ---
 title: "Auto-Delete Responses"
-description: ""
+description: "For data like personal information that needs to be discarded after a certain period, auto-delete automatically removes responses after the period you set. Your data is safely purged to meet legal requirements — without any manual cleanup."
 ---
 
-This article is not yet translated.
+## How to Set It Up
+
+1. Open the project editor.
+2. Select the question that needs auto-delete (e.g., a personal info field).
+3. At the bottom of the options, find 'Auto-delete responses' and choose a period.
+  - Available periods: 3 months to 5 years
+1. Once you publish the survey, the setting goes live and responses will be automatically deleted after the specified period.
+## How It Works
+
+- After the selected period has passed, the field's response data is completely removed from the response sheet.
+- Deleted data cannot be recovered and can no longer be viewed.
+<Callout type="warning" title="Warning">
+- Auto-delete is applied per field, so we strongly recommend setting a retention period on any field collecting personal information.
+- Deleted data is legally considered destroyed, so if you need a separate backup, export the data before the retention period ends.
+</Callout>

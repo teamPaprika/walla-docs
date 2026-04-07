@@ -1,6 +1,17 @@
 ---
 title: "Data Masking"
-description: ""
+description: "Data masking is essential when you're collecting sensitive personal or business data. Korea's Personal Information Protection Act requires data handlers to take measures to secure personal information. With masking enabled, only authorized users can view the original values, while everyone else sees masked content."
 ---
 
-This article is not yet translated.
+## Applying Data Masking
+- Sensitive data is masked, and only authorized users can see the original values.
+- After you enable data masking and publish the project, all responses for that question will be masked.
+- Because masking hides the original data, it cannot be undone once enabled.
+## Viewing Masked Data
+- You can reveal masked data by hovering over the column header in the response sheet. (Only users with the proper permission can view it.)
+- Depending on admin security settings, viewing masked data may require providing a reason. You can review the reasons under 'Activity Logs' in 'Team Settings'.
+<Callout type="warning" title="Warning">
+- Once masking is enabled, it can never be disabled!
+- Per-option response limits cannot be used on a field with masking enabled.
+- When collecting sensitive data, it's safest to enable masking before you start collecting.
+</Callout>

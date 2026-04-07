@@ -1,6 +1,47 @@
 ---
 title: "Tracking (Hidden Fields)"
-description: ""
+description: "Tracking lets you see how respondents found your survey. It's useful when you want to separate responses by ad channel, customer group, or any other criteria."
 ---
 
-This article is not yet translated.
+## Adding a Tracking Item (Hidden Field)
+
+1. Go to the Share page → click `Manage`.
+2. Enter a tracking name (hidden field name) and press Enter to register it.
+3. Click `Save`.
+4. The hidden field you register acts as a "category for distinguishing where traffic came from."
+- Examples
+  - ① To track traffic by SNS → name the hidden field `SNS` (e.g., Instagram, YouTube, etc.)
+  - ② To separate customer groups → name the hidden field `customer`
+## Creating a Hidden Field URL
+
+- Once you've added a hidden field, you need to attach it to the survey URL.
+1. Start with the base survey URL
+```
+https://walla.my/v/QA9S0i0UfZn5rZTfSbd4
+```
+
+2. Add the hidden field name (in the format `?fieldName=`)
+```
+https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=
+```
+
+3. Add the value (e.g., traffic coming from YouTube)
+```
+https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=youtube
+```
+
+4. Share a different link per channel, and you'll be able to see the traffic source (YouTube, Instagram, etc.) in the response sheet.
+## Using Multiple Hidden Fields
+
+- To add more than one hidden field, join them with `&` instead of another `?`.
+```
+https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=instagram&media=video
+```
+→ Traffic from an Instagram video ad.
+<Callout type="warning" title="Warning">
+- You must press Enter when registering a tracking item.
+- We recommend using only letters, numbers, and underscores (_) for hidden field names.
+</Callout>
+<Callout title="Tip">
+If you need to generate a large batch of hidden field URLs, try duplicating our [hidden field link generator Google Sheet template](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing).
+</Callout>

@@ -1,6 +1,200 @@
 ---
-title: "Webhook Automation"
-description: ""
+title: "Automation (Webhooks)"
+description: "Automation sends data to external services (webhooks, Slack, Discord, Gmail, etc.) the moment a response is submitted to your form."
 ---
+## Creating a Custom Webhook
 
-This article is not yet translated.
+After creating an automation, open the detail editor for more granular configuration.
+<Steps>
+  <Step>
+    ### Open the Connect page
+    In the project editor, click `Connect` at the top.
+  </Step>
+  <Step>
+    ### Add a new automation
+    In the 'My Automations' section, click `New Automation` to get started.
+  </Step>
+  <Step>
+    ### Create it
+    In the popup, enter details like the automation name, choose a trigger type, and click `Create`.
+	    - **Automation name**: A name to identify this automation.
+	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
+  </Step>
+  <Step>
+    ### Configure paths (logic)
+    You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
+	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
+	    - Click `+ Add condition` under each path to build compound conditions.
+  </Step>
+  <Step>
+    ### Enter the webhook URL
+    **Webhook URL**: The server URL that will receive the data.
+  </Step>
+  <Step>
+    ### Choose the webhook payload format
+	    Decide whether to use the default webhook body (automatic) or a custom body. If you choose automatic, you can save and activate right away. If you choose custom, continue to the next step.
+    
+  </Step>
+  <Step>
+    ### Configure request type and headers
+	    - **Request type**: POST / GET / PUT, etc.
+	    - **Headers**: Add `Content-Type`, auth tokens, and any other headers as needed.
+  </Step>
+    <Step>
+    ### Edit the body
+	    Freely edit the message content, and insert response values (`{{responseKey}}`) as variables.
+  </Step>
+    <Step>
+    ### Set up authentication (optional)
+    You can choose security methods like `Bearer Token`, `Basic Auth`, or `API Key` for your webhook.
+  </Step>
+    <Step>
+    ### Save and activate
+    Save your changes and click activate — the webhook only runs once it's turned on.
+  </Step>
+</Steps>
+## Slack Integration — Slack Notifications on Submission
+
+<Steps>
+ <Step>
+    ### Click Create New App
+    Go to [https://api.slack.com/apps](https://api.slack.com/apps) and click 'Create New App'.
+  </Step>
+  <Step>
+    ### Select From scratch
+    Choose 'From scratch'.
+  </Step>
+  <Step>
+    ### Set the app name and workspace
+    Enter an 'App Name' and pick the workspace where the app will run.
+  </Step>
+  <Step>
+    ### Enable Incoming Webhooks
+    Turn on 'Incoming Webhooks' and click 'Add New Webhook'.
+  </Step>
+  <Step>
+    ### Pick a channel
+    Pick the channel in your workspace where the webhook should post.
+  </Step>
+  <Step>
+    ### Copy the Webhook URL
+    Copy the Webhook URL from 'Install App'.
+  </Step>
+<Step>
+    ### Open the Connect page
+    In the project editor, click `Connect` at the top.
+  </Step>
+  <Step>
+    ### Add a new Slack automation
+    In the 'My Automations' section, click `Slack` to get started.
+  </Step>
+  <Step>
+    ### Create it
+    In the popup, enter the automation's details, choose a trigger type, and click `Create`.
+	    - **Automation name**: A name to identify this automation.
+	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
+	    - **Webhook URL**: The Slack server URL that will receive the data. See how to set up a Slack Webhook URL [here](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/).
+	    - **Body Preset**: Choose how webhook notifications should look in Slack.
+  </Step>
+  <Step>
+    ### Configure paths (logic)
+    You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
+	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
+	    - Click `+ Add condition` under each path to build compound conditions.
+  </Step>
+  <Step>
+    ### Save and activate
+    Save your changes and click activate — the webhook only runs once it's turned on.
+  </Step>
+</Steps>
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Discord Integration — Discord Notifications on Submission
+
+<Steps>
+ <Step>
+    ### Open the Discord channel editor
+    Click the gear icon next to the channel name.
+  </Step>
+  <Step>
+    ### Create a new Webhook and copy the URL
+    In the Integrations tab, click `New Webhook` to create a webhook, then click `Copy Webhook URL`.
+  </Step>
+<Step>
+    ### Open the Connect page
+    In the project editor, click `Connect` at the top.
+  </Step>
+  <Step>
+    ### Add a new Discord automation
+    In the 'My Automations' section, click `Discord` to get started.
+  </Step>
+  <Step>
+    ### Create it
+    In the popup, enter the automation's details, choose a trigger type, and click `Create`.
+	    - **Automation name**: A name to identify this automation.
+	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
+	    - **Webhook URL**: The Discord server URL that will receive the data.
+	    - **Body Preset**: Choose how webhook notifications should look in Discord.
+  </Step>
+  <Step>
+    ### Configure paths (logic)
+    You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
+	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
+	    - Click `+ Add condition` under each path to build compound conditions.
+  </Step>
+  <Step>
+    ### Save and activate
+    Save your changes and click activate — the webhook only runs once it's turned on.
+  </Step>
+</Steps>
+
+## Gmail Integration — Send Emails on Submission
+
+<Steps>
+  <Step>
+    ### Open the Connect page
+    In the project editor, click `Connect` at the top.
+  </Step>
+  <Step>
+    ### Add a new automation
+    In the 'My Automations' section, click `Gmail` to get started.
+  </Step>
+  <Step>
+    ### Create it
+    In the popup, enter the automation's details, choose a trigger type, and click `Create`.
+	    - **Automation name**: A name to identify this automation.
+	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
+	    - Sender: The Google account that will send the Gmail. Pick an account already linked to the workspace, or sign in with a new Google account.
+  </Step>
+  <Step>
+    ### Configure paths (logic)
+    You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
+	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
+	    - Click `+ Add condition` under each path to build compound conditions.
+  </Step>
+  <Step>
+    ### Specify the sender
+	    Pick the Google account to send from and enter the sender name.
+    
+  </Step>
+  <Step>
+    ### Specify recipients
+	    - Enter the email addresses that should receive the message.
+	    - You can enter email addresses directly, or use value references (@) to set them dynamically.
+	    - Separate multiple email addresses with commas (,), spaces, or Enter.
+	    - Certain predefined references such as responseKey and timestamp cannot be used as email addresses.
+	    - We recommend using an email field as the reference. If the email format is invalid, sending may fail.
+  </Step>
+    <Step>
+    ### Set CC, BCC, and reply-to
+	    - Enter the email addresses for CC, BCC, or reply-to.
+	    - You can enter email addresses directly, or use value references (@) to set them dynamically.
+	    - Separate multiple email addresses with commas (,), spaces, or Enter.
+	    - Certain predefined references such as responseKey and timestamp cannot be used as email addresses.
+  </Step>
+    <Step>
+    ### Save and activate
+    Save your changes and click activate — the webhook only runs once it's turned on.
+  </Step>
+</Steps>

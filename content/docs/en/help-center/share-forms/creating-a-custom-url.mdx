@@ -1,6 +1,25 @@
 ---
 title: "Creating a Custom URL"
-description: ""
+description: "On the Share page, you can customize your survey link and set the title, description, and thumbnail image that appear in the share preview."
 ---
 
-This article is not yet translated.
+## Creating a Custom URL
+- Share links are created in the format `walla.my/a/customPart` by default.
+- The URL must follow the naming rules.
+- How to set it up:
+  1. Go to the Share page → Customize Link.
+  2. Enter the custom URL you want and save.
+  3. Pick either horizontal or vertical view first, then save — your setting takes effect immediately without clicking Publish again.
+
+- Custom URL rules
+  - Must be between 0 and 30 characters
+  - Cannot include a slash (`/`)
+  - Cannot consist only of a single dot (`.`) or two dots (`..`)
+  - Cannot match the regex `__.*__`
+
+## Share Preview Settings
+- Below the custom URL, you can set the project title, description, and thumbnail image.
+- Saving takes effect immediately — no separate publish step required.
+<Callout type="warning" title="Warning">
+If the title or thumbnail you changed still shows the old image or text in messengers like KakaoTalk or Slack, that's because of the messenger app or browser cache from earlier previews. Anyone receiving the link for the first time will see the correctly updated preview, so you don't need to worry.
+</Callout>
