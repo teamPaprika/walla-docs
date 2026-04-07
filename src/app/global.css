@@ -28,7 +28,7 @@
   --color-fd-idea: hsl(168 65% 67%);
 
   --background: hsl(0 0% 100%);
-  --foreground: hsl(224, 56%, 23%);
+  --foreground: #76809D;
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(224, 56%, 23%);
   --popover: hsl(0 0% 100%);
@@ -61,6 +61,47 @@
     var(--fd-sidebar-col) 1fr minmax(0, calc(var(--fd-layout-width, 97rem) - var(--fd-sidebar-width) - var(--fd-toc-width))) var(--fd-toc-width) 1fr !important;
 }
 
+/* Callout title */
+[style*="--callout-color"] .flex-col > p {
+  color: #1A2C5C;
+}
+
+/* Prev/next navigation card title */
+#nd-page a.rounded-lg div.font-medium {
+  color: #1A2C5C;
+}
+
+/* Spacing above prev/next navigation */
+#nd-page .grid.grid-cols-2:has(a.rounded-lg.border) {
+  margin-top: 2.5rem;
+}
+
+#nd-page a:not(.rounded-lg):not(.rounded-full):not([class*="peer"]) {
+  color: #00C6FE !important;
+  text-decoration: none !important;
+}
+
+#nd-page :not(pre) > code {
+  color: #48567D !important;
+  background-color: #F4F4F7 !important;
+  border-color: #E8EAEF !important;
+}
+
+#nd-page th {
+  color: #1A2C5C;
+}
+
+#nd-page h1,
+#nd-page h2,
+#nd-page h3,
+#nd-page h4,
+#nd-page h5,
+#nd-page h6,
+#nd-page strong,
+#nd-page b {
+  color: #1A2C5C;
+}
+
 #nd-sidebar p.inline-flex,
 #nd-sidebar-mobile p.inline-flex {
   font-weight: 600;
@@ -84,6 +125,20 @@
 
 [role="tabpanel"] {
   border-radius: 0;
+}
+
+.dark [style*="--callout-color"] .flex-col > p,
+.dark #nd-page a.rounded-lg div.font-medium,
+.dark #nd-page th,
+.dark #nd-page h1,
+.dark #nd-page h2,
+.dark #nd-page h3,
+.dark #nd-page h4,
+.dark #nd-page h5,
+.dark #nd-page h6,
+.dark #nd-page strong,
+.dark #nd-page b {
+  color: #ffffff !important;
 }
 
 .dark {
@@ -111,9 +166,7 @@
   --sidebar-accent-foreground: hsl(0 0% 92%);
   --sidebar-ring: hsl(193 100% 50%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-
-
-  --color-walla-info: hsl(215 12% 48% / 0.25);
+    --color-walla-info: hsl(215 12% 48% / 0.25);
   --color-walla-info-foreground: hsl(215 12% 65%);
   --color-walla-pro: hsl(217 79% 51% / 0.3);
   --color-walla-pro-foreground: hsl(217 79% 65%);
@@ -123,5 +176,4 @@
   --color-walla-beta-foreground: hsl(170 78% 60%);
   --color-walla-new: hsl(335 98% 77% / 0.2);
   --color-walla-new-foreground: hsl(335 98% 85%);
-
 }
