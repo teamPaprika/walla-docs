@@ -1,0 +1,219 @@
+---
+title: STYLE
+description: 사용 가능한 모든 MDX 컴포넌트 모음입니다.
+---
+
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
+
+---
+
+## Callout
+
+### 기본 (info)
+
+<Callout>기본 callout입니다. type을 지정하지 않으면 info로 표시돼요.</Callout>
+
+### 타이틀 포함
+
+<Callout title="참고">타이틀이 있는 callout이에요.</Callout>
+
+### Warning
+
+<Callout type="warning" title="주의">주의가 필요한 내용을 작성하세요.</Callout>
+
+### Error
+
+<Callout type="error" title="오류">오류 상황을 안내할 때 사용하세요.</Callout>
+
+### Success (idea)
+
+<Callout type="idea" title="팁">유용한 팁을 공유할 때 사용하세요.</Callout>
+
+---
+
+## Card / Cards
+
+<Cards>
+  <Card title="카드 제목" description="카드 설명이 들어갑니다." href="#" />
+  <Card title="링크 없는 카드" description="href 없이도 사용할 수 있어요." />
+  <Card title="세 번째 카드" description="Cards 안에 여러 Card를 나열하세요." href="#" />
+</Cards>
+
+---
+
+## Accordion / Accordions
+
+<Accordions>
+  <Accordion title="첫 번째 질문">
+    첫 번째 답변 내용이 들어갑니다. 열고 닫을 수 있어요.
+  </Accordion>
+  <Accordion title="두 번째 질문">
+    두 번째 답변 내용이에요. **굵은 글씨**나 `인라인 코드`도 사용할 수 있어요.
+  </Accordion>
+  <Accordion title="세 번째 질문">
+    목록도 넣을 수 있어요:
+    - 항목 1
+    - 항목 2
+    - 항목 3
+  </Accordion>
+</Accordions>
+
+---
+
+## Tabs
+
+<Tabs items={['macOS', 'Windows', 'Linux']}>
+  <Tab value="macOS">macOS에서의 사용 방법을 작성하세요.</Tab>
+  <Tab value="Windows">Windows에서의 사용 방법을 작성하세요.</Tab>
+  <Tab value="Linux">Linux에서의 사용 방법을 작성하세요.</Tab>
+</Tabs>
+
+---
+
+## Steps
+
+<Steps>
+  <Step>
+    ### 첫 번째 단계
+    첫 번째 단계에 대한 설명을 작성하세요.
+  </Step>
+  <Step>
+    ### 두 번째 단계
+    두 번째 단계에 대한 설명을 작성하세요.
+  </Step>
+  <Step>
+    ### 세 번째 단계
+    완료! 모든 단계를 마쳤어요.
+  </Step>
+</Steps>
+
+
+
+---
+
+## Files
+
+파일 및 폴더 구조를 표시할 때 사용해요.
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <Folder name="components">
+      <File name="button.tsx" />
+      <File name="input.tsx" />
+    </Folder>
+    <Folder name="pages">
+      <File name="index.tsx" />
+      <File name="about.tsx" />
+    </Folder>
+    <File name="app.tsx" />
+  </Folder>
+  <File name="package.json" />
+</Files>
+
+---
+
+## TypeTable
+
+API나 props 문서화에 사용해요.
+
+<TypeTable
+  type={{
+    title: {
+      type: 'string',
+      description: '카드 제목',
+      required: true,
+    },
+    description: {
+      type: 'string',
+      description: '카드 설명',
+    },
+    href: {
+      type: 'string',
+      description: '클릭 시 이동할 URL',
+    },
+    icon: {
+      type: 'ReactNode',
+      description: '카드 아이콘',
+    },
+  }}
+/>
+
+---
+
+## Code Block
+
+인라인 코드: `const hello = "world"`
+
+```ts title="example.ts"
+const greeting = (name: string) => {
+  return `안녕하세요, ${name}!`;
+};
+
+console.log(greeting('왈라'));
+```
+
+```bash title="터미널"
+pnpm install
+pnpm dev
+```
+
+---
+
+## 텍스트 스타일
+
+일반 본문 텍스트입니다.
+
+**굵은 텍스트 (Bold)**
+
+*기울임 텍스트 (Italic)*
+
+~~취소선 텍스트~~
+
+> 인용문(blockquote)은 이렇게 표시돼요.
+
+---
+
+## 제목
+
+# h1 제목
+
+## h2 제목
+
+### h3 제목
+
+#### h4 제목
+
+---
+
+## 목록
+
+순서 없는 목록:
+- 항목 1
+- 항목 2
+  - 중첩 항목
+  - 중첩 항목
+- 항목 3
+
+순서 있는 목록:
+1. 첫 번째
+2. 두 번째
+3. 세 번째
+
+---
+
+## 표 (Table)
+
+| 컴포넌트 | import 경로 | 설명 |
+|---|---|---|
+| Accordion | `fumadocs-ui/components/accordion` | 접고 펼치는 아코디언 |
+| Callout | 자동 제공 | 참고/주의/오류 박스 |
+| Card | 자동 제공 | 링크 카드 |
+| Steps | `fumadocs-ui/components/steps` | 단계별 가이드 |
+| Tabs | `fumadocs-ui/components/tabs` | 탭 전환 |
+| Files | `fumadocs-ui/components/files` | 파일 트리 |
+| TypeTable | `fumadocs-ui/components/type-table` | API 타입 문서 |
