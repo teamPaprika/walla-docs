@@ -33,6 +33,10 @@ next-env.d.ts
 # Claude Code
 .claude/*
 !.claude/skills/
+!.claude/agents/
+
+# walla-docs harness intermediate artifacts
+_workspace/
 
 **/.obsidian
 .open-next/
