@@ -441,6 +441,181 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 - **404 Not Found**: Form or field description not found
 - **500 Internal Server Error**: Server error
 
+### Get Hidden Fields
+
+Retrieve the list of hidden fields for a specific form.
+
+```http
+GET /open-api/v1/forms/{formId}/hidden-fields
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "hiddenFields": ["utm_source", "utm_medium"]
+  }
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.hiddenFields` | array | List of hidden field labels |
+
+**Error Responses**
+
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form not found
+- **500 Internal Server Error**: Server error
+
+---
+
+### Add Hidden Fields
+
+Add hidden fields to a specific form. Labels that already exist are ignored.
+
+```http
+POST /open-api/v1/forms/{formId}/hidden-fields
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+#### Request
+
+**Request Body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `hiddenFields` | string[] | Yes | List of hidden field labels to add |
+
+Hidden field label rules:
+- 1–30 characters
+- Only alphanumeric characters, `_`, and `-` allowed (`^[a-zA-Z0-9_-]+$`)
+
+**Example Request**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"hiddenFields": ["utm_source", "utm_medium"]}'
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "hiddenFields": ["utm_source", "utm_medium", "utm_campaign"]
+  }
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.hiddenFields` | array | Full list of hidden field labels |
+
+**Error Responses**
+
+- **400 Bad Request**: Invalid request body (validation failed)
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form not found
+- **500 Internal Server Error**: Server error
+
+---
+
+### Delete Hidden Field
+
+Delete a hidden field from a specific form.
+
+```http
+DELETE /open-api/v1/forms/{formId}/hidden-fields/{hiddenFieldId}
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+| `hiddenFieldId` | string | Yes | The hidden field label to delete (e.g., `utm_source`) |
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X DELETE "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields/utm_source" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "hiddenFields": ["utm_medium"]
+  }
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.hiddenFields` | array | Remaining hidden field labels after deletion |
+
+**Error Responses**
+
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form or hidden field not found
+- **500 Internal Server Error**: Server error
+
+---
+
 ## Form Properties Explained
 
 ### Form Status

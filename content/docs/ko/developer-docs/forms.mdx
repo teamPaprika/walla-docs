@@ -443,6 +443,181 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 - **404 Not Found**: 폼 또는 필드 설명을 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 
+### 히든 필드 조회
+
+특정 폼의 히든 필드 목록을 반환합니다.
+
+```http
+GET /open-api/v1/forms/{formId}/hidden-fields
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `formId` | string | 예 | 고유 폼 식별자 |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "hiddenFields": ["utm_source", "utm_medium"]
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data.hiddenFields` | array | 히든 필드 라벨 목록 |
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 폼을 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### 히든 필드 추가
+
+특정 폼에 히든 필드를 추가합니다. 이미 존재하는 라벨은 무시됩니다.
+
+```http
+POST /open-api/v1/forms/{formId}/hidden-fields
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `formId` | string | 예 | 고유 폼 식별자 |
+
+#### 요청
+
+**요청 본문**
+
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| `hiddenFields` | string[] | 예 | 추가할 히든 필드 라벨 목록 |
+
+히든 필드 라벨 규칙:
+- 1~30자
+- 영문, 숫자, `_`, `-`만 허용 (`^[a-zA-Z0-9_-]+$`)
+
+**요청 예시**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"hiddenFields": ["utm_source", "utm_medium"]}'
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "hiddenFields": ["utm_source", "utm_medium", "utm_campaign"]
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data.hiddenFields` | array | 전체 히든 필드 라벨 목록 |
+
+**오류 응답**
+
+- **400 Bad Request**: 잘못된 요청 본문 (유효성 검증 실패)
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 폼을 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
+### 히든 필드 삭제
+
+특정 폼의 히든 필드를 삭제합니다.
+
+```http
+DELETE /open-api/v1/forms/{formId}/hidden-fields/{hiddenFieldId}
+```
+
+#### 파라미터
+
+**경로 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `formId` | string | 예 | 고유 폼 식별자 |
+| `hiddenFieldId` | string | 예 | 삭제할 히든 필드 라벨 (예: `utm_source`) |
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X DELETE "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields/utm_source" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "hiddenFields": ["utm_medium"]
+  }
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data.hiddenFields` | array | 삭제 후 남은 히든 필드 라벨 목록 |
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **404 Not Found**: 폼 또는 히든 필드를 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+---
+
 ## 폼 속성 설명
 
 ### 폼 상태
