@@ -80,11 +80,30 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
   "success": true,
   "data": {
     "totalRecipients": 2,
-    "successfulDeliveries": 2,
+    "successfulDeliveries": [
+      {
+        "customerKey": "customer_001",
+        "email": "john@example.com",
+        "phoneNumber": "+821012345678",
+        "aliasId": "8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
+        "formUrl": "https://walla.my/a/8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f"
+      },
+      {
+        "customerKey": "customer_002",
+        "email": "jane@example.com",
+        "phoneNumber": null,
+        "aliasId": "2f5d6e1c-9a4b-4c3d-8e7f-0a1b2c3d4e5f",
+        "formUrl": "https://walla.my/a/2f5d6e1c-9a4b-4c3d-8e7f-0a1b2c3d4e5f"
+      }
+    ],
     "failedDeliveries": []
   }
 }
 ```
+
+<Callout type="warning" title="alias id 보안 주의">
+`aliasId` 는 인증 없이 폼에 접근할 수 있는 토큰이므로, 외부 시스템 등록·로그·분석 도구 등 비공개 채널 외부로 노출되지 않도록 주의합니다. `formUrl` 도 동일한 토큰을 포함하므로 수신자 본인에게만 전달합니다.
+</Callout>
 
 **부분 성공 응답 (200 OK)**
 
@@ -95,7 +114,22 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
   "success": true,
   "data": {
     "totalRecipients": 3,
-    "successfulDeliveries": 2,
+    "successfulDeliveries": [
+      {
+        "customerKey": "customer_001",
+        "email": "john@example.com",
+        "phoneNumber": "+821012345678",
+        "aliasId": "8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
+        "formUrl": "https://walla.my/a/8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f"
+      },
+      {
+        "customerKey": "customer_002",
+        "email": "jane@example.com",
+        "phoneNumber": null,
+        "aliasId": "2f5d6e1c-9a4b-4c3d-8e7f-0a1b2c3d4e5f",
+        "formUrl": "https://walla.my/a/2f5d6e1c-9a4b-4c3d-8e7f-0a1b2c3d4e5f"
+      }
+    ],
     "failedDeliveries": [
       {
         "customerKey": "customer_003",
@@ -114,7 +148,12 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
 |-------|------|-------------|
 | `success` | boolean | 요청 성공 여부 |
 | `data.totalRecipients` | number | 전체 수신자 수 |
-| `data.successfulDeliveries` | number | 성공적으로 전송된 수 |
+| `data.successfulDeliveries` | array | 성공적으로 전송된 수신자 객체 배열 |
+| `data.successfulDeliveries[].customerKey` | string | 요청에 사용한 고객 식별자 |
+| `data.successfulDeliveries[].email` | string \| null | 수신자 이메일 (요청에 포함되지 않은 경우 `null`) |
+| `data.successfulDeliveries[].phoneNumber` | string \| null | 수신자 전화번호 (요청에 포함되지 않은 경우 `null`) |
+| `data.successfulDeliveries[].aliasId` | string (UUID) | 발급된 alias 식별자. 폼 접근 토큰 역할을 합니다 |
+| `data.successfulDeliveries[].formUrl` | string | alias 단축 URL (`https://walla.my/a/<aliasId>` 형태) |
 | `data.failedDeliveries` | array | 오류 세부 정보가 포함된 실패한 전송 목록 |
 
 **오류 응답**
@@ -184,6 +223,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
       "customerKey": "customer_001",
       "email": "john@example.com",
       "phone": "+821012345678",
+      "aliasId": "8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
+      "formUrl": "https://walla.my/a/8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
       "createdAt": "2024-01-15T10:30:00Z",
       "updatedAt": "2024-01-15T11:45:00Z"
     },
@@ -193,12 +234,32 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
       "customerKey": "customer_002",
       "email": "jane@example.com",
       "phone": null,
+      "aliasId": null,
+      "formUrl": null,
       "createdAt": "2024-01-15T10:30:00Z",
       "updatedAt": "2024-01-15T10:30:00Z"
     }
   ]
 }
 ```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|-------|------|-------------|
+| `success` | boolean | 요청 성공 여부 |
+| `data` | array | 전송 객체 배열 |
+| `data[].id` | string | 전송 식별자 |
+| `data[].formId` | string | 폼 식별자 |
+| `data[].customerKey` | string | 고객 식별자 |
+| `data[].email` | string \| null | 수신자 이메일 |
+| `data[].phone` | string \| null | 수신자 전화번호 |
+| `data[].aliasId` | string (UUID) \| null | 발급된 alias 식별자. alias 가 없는 legacy 행은 `null` |
+| `data[].formUrl` | string \| null | alias 단축 URL (`https://walla.my/a/<aliasId>` 형태). `aliasId` 가 `null` 이면 `formUrl` 도 `null` |
+| `data[].createdAt` | string (date-time) | 최초 전송 생성 타임스탬프 |
+| `data[].updatedAt` | string (date-time) | 마지막 업데이트 타임스탬프 |
+
+> **참고**: `aliasId` 와 `formUrl` 은 alias 단축 URL 도입 이전에 생성된 legacy 전송 행에서는 `null` 로 반환됩니다.
 
 **오류 응답**
 
@@ -401,7 +462,7 @@ const result = await sendForm('form_abc', [
   message: 'Please help us improve our services.'
 });
 
-console.log(`Successfully sent to ${result.data.successfulDeliveries} recipients`);
+console.log(`Successfully sent to ${result.data.successfulDeliveries.length} recipients`);
 
 // Check status
 const statuses = await getDeliveryStatus('form_abc', ['customer_001', 'customer_002']);
@@ -491,7 +552,7 @@ result = api.send_form(
     message="Please take 2 minutes to complete our survey."
 )
 
-print(f"Sent to {result['data']['successfulDeliveries']} recipients")
+print(f"Sent to {len(result['data']['successfulDeliveries'])} recipients")
 
 # Check response rate
 response_rate = api.get_response_rate("form_abc")
