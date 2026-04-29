@@ -1,0 +1,224 @@
+---
+title: Parquet Export
+description: Advanced API for streaming form responses and field definitions as Apache Parquet files
+---
+
+# Parquet Export
+
+<Callout type="info" title="For advanced use cases">
+  This is an advanced feature aimed at data analysis and warehouse integrations. For single-response lookups, use the [Forms Response API](/en/docs/developer-docs/responses).
+</Callout>
+
+Download form responses and field definitions as [Apache Parquet](https://parquet.apache.org/) files. Large volumes of response data can be streamed in a single request, making it well suited for loading into data analysis tools or data warehouses.
+
+This API is composed of two export routes:
+
+- **Response data export**: Download response rows as a Parquet file. You can filter by date range, `customerKey`, hidden field values, and response field values.
+- **Field definitions export**: Download the form's field definitions as a Parquet file. Use it to map response data column names to their labels and types.
+
+> **Note**: A [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key applies.
+
+<Callout type="info" title="Streaming Parquet response">
+Responses are streamed as a single Parquet file with the `application/vnd.apache.parquet` Content-Type. There is no separate presigned URL or asynchronous job ID — simply save the response body directly to a file.
+</Callout>
+
+## Endpoints
+
+### Export response data
+
+Download form responses as a Parquet file.
+
+```http
+POST /open-api/v1/forms/{formId}/exports/responses
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+**Request Body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `customerKey` | string | No | Filter to responses from a specific customer |
+| `startDate` | string (date-time) | No | Start of the submission time range (ISO 8601) |
+| `endDate` | string (date-time) | No | End of the submission time range (ISO 8601) |
+| `hiddenFields` | object | No | Mapping of hidden field label to value (or array of values) |
+| `responseFields` | object | No | Mapping of response field ID to value (or array of values) |
+
+> **Note**: All filters are optional. If you omit every filter, the form's entire response set is exported. Filters within the same object are combined with AND.
+
+#### Response field filter semantics
+
+Each entry in `responseFields` is interpreted based on the field type and the value shape (single value vs. array value):
+
+| Field type | Single value | Array value |
+|---|---|---|
+| Text/number/date-time family (`NUMBER`, `DATE`, `TIME`, `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`) | Equality match | Equals one of the given values |
+| Choice family (`RADIO`, `DROPDOWN`, `CHECKBOX`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`) | Response array contains the given value | Response array contains any one of the given values |
+
+For example, passing `30` to a `NUMBER` field `field_age` returns only responses where `age = 30`, while passing `[30, 40]` returns responses where `age` is either 30 or 40. Passing `"Feature A"` to a `CHECKBOX` field `field_features` returns only responses whose `features` array contains `"Feature A"`.
+
+<Callout type="warn" title="Unsupported filter behavior">
+- AND (all-of) semantics across multiple values for a single field is not supported.
+- The following field types cannot be used in the `responseFields` filter: `HIDDEN`, file uploads, grids, structured objects, custom fields, and fields without input. Passing a field ID of one of these types returns a `400 unsupportedResponseField` error.
+- To filter by hidden field values, use `hiddenFields` rather than `responseFields`.
+</Callout>
+
+#### Request
+
+**Example Request**
+
+```bash
+# Export all responses
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/responses" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{}' \
+  --output responses.parquet
+
+# Filter by date range, hidden fields, and response fields
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/responses" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startDate": "2024-01-01T00:00:00Z",
+    "endDate": "2024-01-31T23:59:59Z",
+    "hiddenFields": {
+      "utm_source": ["google", "naver"]
+    },
+    "responseFields": {
+      "field_age": [30, 40],
+      "field_features": "Feature A"
+    }
+  }' \
+  --output responses.parquet
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+- **Content-Type**: `application/vnd.apache.parquet`
+- **Body**: A Parquet file containing the response rows (streamed)
+
+The response body is a binary Parquet file rather than JSON, so save it to a file with `--output` (or an equivalent option) and read it with a [Parquet tool](#working-with-parquet-files).
+
+**Error Responses**
+
+- **400 Bad Request**: Invalid request body or unsupported response field
+  ```json
+  {
+    "error": "unsupportedResponseField",
+    "message": "Field 'field_xyz' of type 'FILE_UPLOAD' is not supported in responseFields filter"
+  }
+  ```
+
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form not found
+- **500 Internal Server Error**: Server error
+
+<Callout type="info" title="Activity log and PII protection">
+Response data export requests are recorded in the activity log, but the raw values you pass as filters (such as email addresses or phone numbers) are not retained in the log. Only the field label, `fieldId`, the count of values applied, and whether each filter was used (boolean) are recorded.
+</Callout>
+
+---
+
+### Export field definitions
+
+Download the form's field definitions as a Parquet file. Use it to map response data column names to labels and types.
+
+```http
+POST /open-api/v1/forms/{formId}/exports/field-definitions
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+The request body must be empty.
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/field-definitions" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  --output field-definitions.parquet
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+- **Content-Type**: `application/vnd.apache.parquet`
+- **Body**: A Parquet file containing the form's field IDs, labels, types, and so on
+
+The response data export uses field IDs as column names, so when you need human-readable labels, join the field definitions export on `fieldId` to map them.
+
+**Error Responses**
+
+- **403 Forbidden**: Authentication failed or insufficient permissions
+- **404 Not Found**: Form not found
+- **500 Internal Server Error**: Server error
+
+## Working with Parquet files
+
+The Parquet files you download can be read with a variety of tools. Two common examples are shown below.
+
+### pyarrow
+
+```python
+import pyarrow.parquet as pq
+
+table = pq.read_table("responses.parquet")
+df = table.to_pandas()
+print(df.head())
+```
+
+### DuckDB
+
+```sql
+SELECT * FROM read_parquet('responses.parquet') LIMIT 10;
+```
+
+To read response data alongside the field definitions and resolve column labels, join on `fieldId`:
+
+```sql
+SELECT r.*, f.label, f.fieldType
+FROM read_parquet('responses.parquet') r
+JOIN read_parquet('field-definitions.parquet') f
+  ON f.fieldId = 'field_features';
+```
+
+## Best Practices
+
+### Combine response and field definition exports
+
+Response data columns are keyed by `fieldId`. In analysis pipelines that need labels or field types, fetch both exports together and join them on `fieldId`.
+
+### Split large forms by date range
+
+For forms with a large number of responses, narrow the window with `startDate` / `endDate` and download in multiple batches to reduce memory and network pressure.
+
+### Rate limits
+
+A [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key applies. Export calls share this same quota, so pace your call frequency in automated pipelines.
+
+## Next Steps
+
+<Cards>
+  <Card title="Form Responses API" href="/en/docs/developer-docs/responses" />
+  <Card title="Form Delivery API" href="/en/docs/developer-docs/delivery" />
+  <Card title="Authentication" href="/en/docs/developer-docs/authentication" />
+</Cards>

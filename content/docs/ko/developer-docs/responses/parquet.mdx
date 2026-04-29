@@ -1,0 +1,224 @@
+---
+title: Parquet 내보내기
+description: 폼 응답과 필드 정의를 Apache Parquet 파일로 스트리밍 내보내기 위한 고급 API
+---
+
+# Parquet 내보내기
+
+<Callout type="info" title="고급 사용자 대상">
+  데이터 분석·웨어하우스 연동을 염두에 둔 고급 기능입니다. 단일 응답 조회는 [폼 응답 API](/ko/docs/developer-docs/responses)를 사용하세요.
+</Callout>
+
+폼 응답과 필드 정의를 [Apache Parquet](https://parquet.apache.org/) 파일 형식으로 내려받을 수 있습니다. 대량의 응답 데이터를 한 번의 요청으로 스트리밍 형태로 받을 수 있어, 데이터 분석 도구나 데이터 웨어하우스에 적재하기에 적합합니다.
+
+이 API는 두 종류의 export 라우트로 구성됩니다.
+
+- **응답 데이터 export**: 응답 행을 Parquet 파일로 내려받습니다. 기간, `customerKey`, 히든 필드 값, 응답 필드 값으로 필터링할 수 있습니다.
+- **필드 정의 export**: 폼의 필드 정의를 Parquet 파일로 내려받습니다. 응답 데이터의 컬럼명과 라벨/타입을 매핑할 때 사용합니다.
+
+> **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다.
+
+<Callout type="info" title="Parquet 스트리밍 응답">
+응답은 `application/vnd.apache.parquet` Content-Type 의 단일 Parquet 파일로 스트리밍됩니다. 별도의 presigned URL 이나 비동기 작업 ID 없이 응답 본문을 그대로 파일로 저장하면 됩니다.
+</Callout>
+
+## 엔드포인트
+
+### 응답 데이터 export
+
+폼 응답을 Parquet 파일로 내려받습니다.
+
+```http
+POST /open-api/v1/forms/{formId}/exports/responses
+```
+
+#### 매개변수
+
+**경로 매개변수**
+
+| 매개변수 | 타입 | 필수 여부 | 설명 |
+|----------|------|----------|------|
+| `formId` | string | 예 | 고유한 폼 식별자 |
+
+**요청 본문**
+
+| 필드 | 타입 | 필수 여부 | 설명 |
+|------|------|----------|------|
+| `customerKey` | string | 아니오 | 특정 고객의 응답만 필터링 |
+| `startDate` | string (date-time) | 아니오 | 제출 시각의 시작 범위 (ISO 8601) |
+| `endDate` | string (date-time) | 아니오 | 제출 시각의 종료 범위 (ISO 8601) |
+| `hiddenFields` | object | 아니오 | 히든 필드 라벨 → 값(또는 값 배열) 매핑 |
+| `responseFields` | object | 아니오 | 응답 필드 ID → 값(또는 값 배열) 매핑 |
+
+> **참고**: 모든 필터는 선택입니다. 모든 필터를 생략하면 폼의 전체 응답이 export 됩니다. 동일한 객체 안의 필터는 AND 로 결합됩니다.
+
+#### 응답 필드 필터 의미론
+
+`responseFields` 의 각 항목은 필드 타입과 값 형태(단일 값 / 배열 값)에 따라 다음과 같이 해석됩니다.
+
+| 필드 타입 | 단일 값일 때 | 배열 값일 때 |
+|---|---|---|
+| 텍스트/숫자/일시 계열 (`NUMBER`, `DATE`, `TIME`, `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`) | 같음 비교 | 주어진 값 중 하나와 같음 |
+| 선택형 (`RADIO`, `DROPDOWN`, `CHECKBOX`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`) | 응답 배열에 해당 값이 포함됨 | 응답 배열이 주어진 값 중 하나라도 포함함 |
+
+예를 들어 `NUMBER` 필드 `field_age` 에 `30` 을 전달하면 `age = 30` 인 응답만, `[30, 40]` 을 전달하면 `age` 가 30 또는 40 인 응답이 반환됩니다. `CHECKBOX` 필드 `field_features` 에 `"Feature A"` 를 전달하면 `features` 배열에 `"Feature A"` 가 포함된 응답만 반환됩니다.
+
+<Callout type="warn" title="미지원 필터 동작">
+- 단일 필드 안에서 여러 값을 모두 만족시키는 AND(all-of) 의미는 지원하지 않습니다.
+- 다음 필드 타입은 `responseFields` 필터에서 사용할 수 없습니다: `HIDDEN`, 파일 업로드, 그리드, 구조화 객체, 커스텀 필드, 입력이 없는 필드. 이 타입의 필드 ID 를 전달하면 `400 unsupportedResponseField` 오류가 반환됩니다.
+- 히든 필드 값으로 필터링하려면 `responseFields` 가 아니라 `hiddenFields` 를 사용하세요.
+</Callout>
+
+#### 요청
+
+**요청 예시**
+
+```bash
+# 전체 응답 export
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/responses" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{}' \
+  --output responses.parquet
+
+# 기간 + 히든 필드 + 응답 필드 필터
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/responses" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "startDate": "2024-01-01T00:00:00Z",
+    "endDate": "2024-01-31T23:59:59Z",
+    "hiddenFields": {
+      "utm_source": ["google", "naver"]
+    },
+    "responseFields": {
+      "field_age": [30, 40],
+      "field_features": "Feature A"
+    }
+  }' \
+  --output responses.parquet
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+- **Content-Type**: `application/vnd.apache.parquet`
+- **본문**: 응답 행이 담긴 Parquet 파일 (스트리밍 전송)
+
+응답 본문은 JSON 이 아닌 바이너리 Parquet 파일이므로, `--output` 또는 동등한 옵션으로 파일에 저장한 뒤 [Parquet 도구](#parquet-파일-사용-안내)로 읽어야 합니다.
+
+**오류 응답**
+
+- **400 Bad Request**: 잘못된 요청 본문 또는 미지원 응답 필드
+  ```json
+  {
+    "error": "unsupportedResponseField",
+    "message": "Field 'field_xyz' of type 'FILE_UPLOAD' is not supported in responseFields filter"
+  }
+  ```
+
+- **403 Forbidden**: 인증 실패 또는 권한 부족
+- **404 Not Found**: 폼을 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+<Callout type="info" title="활동 로그와 PII 보호">
+응답 데이터 export 요청은 활동 로그에 기록되지만, 필터로 전달한 raw 값(예: 이메일 주소, 전화번호)은 로그에 남지 않습니다. 필드 라벨, `fieldId`, 적용된 값의 개수, 필터 사용 여부(boolean) 만 기록됩니다.
+</Callout>
+
+---
+
+### 필드 정의 export
+
+폼의 필드 정의를 Parquet 파일로 내려받습니다. 응답 데이터의 컬럼명을 라벨과 타입으로 매핑하는 데 사용합니다.
+
+```http
+POST /open-api/v1/forms/{formId}/exports/field-definitions
+```
+
+#### 매개변수
+
+**경로 매개변수**
+
+| 매개변수 | 타입 | 필수 여부 | 설명 |
+|----------|------|----------|------|
+| `formId` | string | 예 | 고유한 폼 식별자 |
+
+요청 본문은 비어 있어야 합니다.
+
+#### 요청
+
+**요청 예시**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/field-definitions" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  --output field-definitions.parquet
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+- **Content-Type**: `application/vnd.apache.parquet`
+- **본문**: 폼의 필드 ID, 라벨, 타입 등이 담긴 Parquet 파일
+
+응답 데이터 export 의 컬럼은 필드 ID 로 표기되므로, 사람이 읽을 수 있는 라벨이 필요할 때는 필드 정의 export 의 결과와 `fieldId` 기준으로 join 하여 매핑하세요.
+
+**오류 응답**
+
+- **403 Forbidden**: 인증 실패 또는 권한 부족
+- **404 Not Found**: 폼을 찾을 수 없음
+- **500 Internal Server Error**: 서버 오류
+
+## Parquet 파일 사용 안내
+
+내려받은 Parquet 파일은 다양한 도구로 읽을 수 있습니다. 아래는 자주 쓰는 두 가지 예시입니다.
+
+### pyarrow
+
+```python
+import pyarrow.parquet as pq
+
+table = pq.read_table("responses.parquet")
+df = table.to_pandas()
+print(df.head())
+```
+
+### DuckDB
+
+```sql
+SELECT * FROM read_parquet('responses.parquet') LIMIT 10;
+```
+
+응답 데이터와 필드 정의를 함께 읽어 컬럼 라벨을 확인하려면 `fieldId` 로 조인합니다.
+
+```sql
+SELECT r.*, f.label, f.fieldType
+FROM read_parquet('responses.parquet') r
+JOIN read_parquet('field-definitions.parquet') f
+  ON f.fieldId = 'field_features';
+```
+
+## 모범 사례
+
+### 응답 + 필드 정의 함께 사용하기
+
+응답 데이터의 컬럼은 `fieldId` 로 표기됩니다. 라벨이나 필드 타입이 필요한 분석 파이프라인에서는 두 export 결과를 함께 받아 `fieldId` 로 조인하세요.
+
+### 큰 폼은 기간 필터로 분할
+
+응답 수가 많은 폼은 `startDate` / `endDate` 로 기간을 좁혀 여러 번에 걸쳐 다운로드하면 메모리와 네트워크 부담을 줄일 수 있습니다.
+
+### 속도 제한
+
+API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다. export 호출도 동일한 한도를 공유하므로, 자동화 파이프라인에서는 호출 빈도를 조정하세요.
+
+## 다음 단계
+
+<Cards>
+  <Card title="폼 응답 API" href="/ko/docs/developer-docs/responses" />
+  <Card title="폼 발송 API" href="/ko/docs/developer-docs/delivery" />
+  <Card title="인증" href="/ko/docs/developer-docs/authentication" />
+</Cards>
