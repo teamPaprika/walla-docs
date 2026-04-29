@@ -108,12 +108,14 @@
   color: var(--sidebar-foreground);
 }
 
-#nd-sidebar a[data-active] {
+#nd-sidebar a,
+#nd-sidebar button[aria-expanded] {
   padding-block: 0.4rem;
   font-size: 0.8125rem;
 }
 
-#nd-sidebar-mobile a[data-active] {
+#nd-sidebar-mobile a,
+#nd-sidebar-mobile button[aria-expanded] {
   padding-block: 0.4rem;
   font-size: 0.875rem;
 }
