@@ -1,18 +1,27 @@
-name: PR Preview Build
+name: PR Preview Build (local runner)
 
 on:
-  # pull_request 자동 트리거 비활성화: chuncom self-hosted runner 의 preview_local_runner.yml 로 이전.
-  # 부활하려면 아래 pull_request 블록 주석 해제 + _local_runner 쪽 pull_request 트리거 제거.
-  # pull_request:
-  #   types:
-  #     - opened
-  #     - synchronize
-  #     - reopened
-  workflow_dispatch:  # 수동 실행 가능 (긴급 fallback)
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  workflow_dispatch:
+
+# 별도 group — 기존 preview.yml 과 충돌 안 함
+concurrency:
+  group: preview-local-runner-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+# Windows self-hosted runner: Git Bash 8.3 short path 명시 (WSL bash 회피)
+defaults:
+  run:
+    shell: 'C:\PROGRA~1\Git\bin\bash.exe --noprofile --norc -eo pipefail {0}'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4

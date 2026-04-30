@@ -1,26 +1,30 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages (local runner)
 
 on:
-  # push 자동 트리거 비활성화: chuncom self-hosted runner 의 deploy_local_runner.yml 로 이전.
-  # 부활하려면 아래 push 블록 주석 해제 + _local_runner 쪽 push 트리거 제거.
-  # (branches: [] 만으로는 phantom run 이 생성되어 concurrency 충돌 발생함을 walla-next #946 에서 확인)
-  # push:
-  #   branches:
-  #     - main
-  workflow_dispatch:  # 수동 실행 가능 (긴급 fallback)
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 검증 브랜치는 main push 가 GitHub Pages 와 묶여 있어 별도 push 트리거를 두지 않는다. preview_local_runner.yml(PR 트리거) 로 chuncom runner 동작을 먼저 검증.
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 별도 group — 기존 deploy.yml 과 충돌 안 함
 concurrency:
-  group: pages
+  group: pages-local-runner
   cancel-in-progress: false
+
+# Windows self-hosted runner: Git Bash 8.3 short path 명시 (WSL bash 회피)
+defaults:
+  run:
+    shell: 'C:\PROGRA~1\Git\bin\bash.exe --noprofile --norc -eo pipefail {0}'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,7 +51,8 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
