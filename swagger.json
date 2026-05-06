@@ -228,6 +228,18 @@
                         "phoneNumber": {
                           "type": "string",
                           "description": "전화번호"
+                        },
+                        "hiddenFieldValues": {
+                          "type": "object",
+                          "nullable": true,
+                          "additionalProperties": {
+                            "type": "string"
+                          },
+                          "description": "수신자별 히든 필드 초기값. 키는 폼의 hidden field 라벨이어야 하며, 선언되지 않은 라벨은 저장되지만 응답에 반영되지 않을 수 있습니다.",
+                          "example": {
+                            "utm_source": "newsletter",
+                            "utm_campaign": "spring_2026"
+                          }
                         }
                       }
                     }
@@ -266,8 +278,38 @@
                           "description": "전체 수신자 수"
                         },
                         "successfulDeliveries": {
-                          "type": "number",
-                          "description": "성공한 발송 수"
+                          "type": "array",
+                          "description": "발송 성공한 수신자 목록. 각 항목에는 발송 후 수신자가 응답할 수 있는 단축 URL(`formUrl`)과 alias 식별자(`aliasId`)가 포함됩니다. 동일 `customerKey`로 재요청 시 기존 alias가 그대로 반환됩니다(idempotent).",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "customerKey": {
+                                "type": "string",
+                                "description": "수신자의 고객 식별 키"
+                              },
+                              "email": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "발송 이메일 (요청 시 전달된 값)"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "발송 전화번호 (요청 시 전달된 값)"
+                              },
+                              "aliasId": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "응답 폼 단축 링크의 식별자. `formUrl`의 마지막 경로 세그먼트와 동일합니다. alias가 아직 생성되지 않은 비정상 케이스에서는 null."
+                              },
+                              "formUrl": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "수신자에게 노출되는 단축 응답 URL. 형태는 `${WALLA_DOMAIN}/a/<aliasId>`. 외부 메시지/문서에 직접 삽입하거나 자체 채널로 재발송할 때 사용하세요. alias가 없으면 null.",
+                                "example": "https://wallaform.com/a/8a8c6f44-1c2a-4c7b-9b0c-f0e0a3b3c1d2"
+                              }
+                            }
+                          }
                         },
                         "failedDeliveries": {
                           "type": "array",
@@ -278,10 +320,12 @@
                                 "type": "string"
                               },
                               "email": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "phoneNumber": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                               },
                               "error": {
                                 "type": "string"
@@ -298,7 +342,41 @@
             }
           },
           "400": {
-            "description": "잘못된 요청",
+            "description": "잘못된 요청 (본문 스키마 위반 또는 hiddenFieldValues 키가 폼에 선언되지 않은 라벨인 경우)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "detailsType": {
+                      "type": "string",
+                      "enum": [
+                        "schema",
+                        "unknownHiddenFieldLabel"
+                      ],
+                      "description": "details 필드의 스키마 디스크리미네이터. schema일 때 details 항목은 {path, message}, unknownHiddenFieldLabel일 때 {recipientIndex, customerKey, label}."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "사람이 읽을 수 있는 추가 설명 (선언된 라벨 목록 안내 등). unknownHiddenFieldLabel 경우에만 존재."
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      },
+                      "description": "위반 항목 목록. detailsType에 따라 형태가 달라짐"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (API 키 누락 또는 유효하지 않음)",
             "content": {
               "application/json": {
                 "schema": {
@@ -313,7 +391,7 @@
             }
           },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음 (다른 팀/워크스페이스의 리소스 접근)",
             "content": {
               "application/json": {
                 "schema": {
@@ -414,6 +492,28 @@
                             "type": "string",
                             "description": "전화번호"
                           },
+                          "hiddenFieldValues": {
+                            "type": "object",
+                            "nullable": true,
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "description": "수신자별 히든 필드 초기값. 발송 시 주입된 값을 그대로 돌려줍니다.",
+                            "example": {
+                              "utm_source": "newsletter"
+                            }
+                          },
+                          "aliasId": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "응답 폼 단축 링크의 식별자. `formUrl`의 마지막 경로 세그먼트와 동일합니다."
+                          },
+                          "formUrl": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "수신자에게 노출되는 단축 응답 URL. 형태는 `${WALLA_DOMAIN}/a/<aliasId>`. alias가 없는 legacy 데이터는 null.",
+                            "example": "https://wallaform.com/a/8a8c6f44-1c2a-4c7b-9b0c-f0e0a3b3c1d2"
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time",
@@ -432,8 +532,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (API 키 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음 (다른 팀/워크스페이스의 리소스 접근)",
             "content": {
               "application/json": {
                 "schema": {
@@ -601,8 +716,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (API 키 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음 (다른 팀/워크스페이스의 리소스 접근)",
             "content": {
               "application/json": {
                 "schema": {
@@ -645,6 +775,238 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/open-api/v1/forms/{formId}/exports/field-definitions": {
+      "post": {
+        "description": "폼의 필드 정의를 Parquet 파일로 내보냅니다. 응답 본문은 단일 Parquet 바이트 스트림이며 JSON 래핑이 없습니다.\n\n각 행은 하나의 필드를 나타내며 다음 컬럼을 포함합니다.\n- `fieldId`: 폼 필드 ID\n- `fieldType`: 필드 타입 (예: `SHORT_TEXT`, `RADIO`)\n- `label`: 사람이 읽을 수 있는 필드 라벨\n- `columnName`: 응답 Parquet에서 사용하는 컬럼명 (`f_<fieldId>` 형태)\n\n응답 export(`POST /open-api/v1/forms/{formId}/exports/responses`)와 함께 받아 `columnName ↔ label/fieldType`을 매핑하는 데 사용합니다.\n\n요청 본문은 사용하지 않습니다 (있어도 무시).\n",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "폼 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "필드 정의 Parquet 스트림. 응답 본문은 단일 Parquet 바이트 스트림입니다.",
+            "headers": {
+              "X-Walla-Exported-At": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "description": "Parquet 생성 시각 (ISO 8601)"
+              }
+            },
+            "content": {
+              "application/vnd.apache.parquet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)"
+          },
+          "403": {
+            "description": "권한 없음 (다른 팀/워크스페이스의 폼 또는 워크스페이스 멤버 아님)"
+          },
+          "404": {
+            "description": "폼이 없거나 게시되지 않음"
+          },
+          "502": {
+            "description": "Export 서비스 일시적으로 불가. 잠시 후 재시도해주세요."
+          }
+        }
+      }
+    },
+    "/open-api/v1/forms/{formId}/exports/responses": {
+      "post": {
+        "description": "제출된 응답 데이터를 Parquet 파일로 내보냅니다. 응답 본문은 단일 Parquet 바이트 스트림이며 JSON 래핑이 없습니다. 데이터 파이프라인에서 그대로 받아 처리할 수 있습니다.\n\nParquet 컬럼명은 내부 식별자(`f_<fieldId>` 형태)로 들어 있습니다. 사람이 읽을 수 있는 라벨/타입과 매핑하려면 동반 엔드포인트인 `POST /open-api/v1/forms/{formId}/exports/field-definitions`로 필드 정의 Parquet을 함께 받아 join하세요.\n\n모든 필터는 선택입니다. 본문이 비어 있으면 폼의 전체 제출 응답을 반환합니다. 둘 이상의 필터를 함께 보내면 모두 만족하는(AND) 응답만 포함됩니다.\n",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "폼 ID"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerKeys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "지정한 customerKey를 가진 응답만 포함합니다. 빈 배열이거나 생략하면 모든 응답이 포함됩니다.",
+                    "example": [
+                      "cust_abc",
+                      "cust_def"
+                    ]
+                  },
+                  "submittedFrom": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "이 시각 이후(이 시각 포함)에 제출된 응답만 포함합니다. ISO 8601 / RFC 3339.",
+                    "example": "2026-04-01T00:00:00Z"
+                  },
+                  "submittedTo": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "이 시각 이전(이 시각 포함)에 제출된 응답만 포함합니다. ISO 8601 / RFC 3339.",
+                    "example": "2026-04-30T23:59:59Z"
+                  },
+                  "hiddenFields": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "description": "주어진 hidden field 값과 정확히 일치하는 응답만 포함합니다. 키는 hidden field의 라벨(`POST /open-api/v1/forms/{formId}/hidden-fields`로 등록한 그 라벨)입니다. 둘 이상의 라벨을 보내면 모두 일치(AND)해야 합니다. 등록되지 않은 라벨을 보내면 400을 반환합니다.\n",
+                    "example": {
+                      "utm_source": "newsletter",
+                      "utm_campaign": "spring_2026"
+                    }
+                  },
+                  "responseFields": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "minItems": 1
+                        }
+                      ]
+                    },
+                    "description": "폼 필드의 제출 값으로 응답을 필터링합니다. 키는 fieldId입니다(폼의 fieldId와 타입 목록은 `GET /open-api/v1/forms/{formId}/fields`로 조회).\n\n값은 단일 문자열 또는 문자열 배열로 보낼 수 있고, 필드 타입에 따라 의미가 달라집니다.\n\n**텍스트/숫자/일시 계열 필드** — `NUMBER`, `DATE`, `TIME`, `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`:\n- 단일 값: 응답 값이 해당 값과 정확히 일치\n- 배열 값: 응답 값이 배열 중 하나와 일치 (OR)\n\n**선택형 필드** — `RADIO`, `DROPDOWN`, `CHECKBOX`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`:\n- 단일 값: 응답 선택지에 해당 값이 포함됨\n- 배열 값: 응답 선택지가 배열 중 하나라도 포함 (OR)\n\n서로 다른 fieldId끼리는 AND로 묶입니다. 한 필드 안에서 \"여러 값을 모두 선택\"(AND) 의미는 현재 지원하지 않습니다.\n\n필터링이 지원되지 않는 타입(HIDDEN, 파일 업로드, 그리드, 구조화 객체, 커스텀, 입력 없음 필드)을 키로 보내면 400 + `detailsType: \"unsupportedResponseField\"`를 반환합니다. HIDDEN 필드는 위의 `hiddenFields` 필터를 사용하세요.\n",
+                    "example": {
+                      "field_score": "5",
+                      "field_email": [
+                        "a@example.com",
+                        "b@example.com"
+                      ],
+                      "field_choice": "Yes",
+                      "field_options": [
+                        "식품",
+                        "여행"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "응답 데이터 Parquet 스트림. 응답 본문은 단일 Parquet 바이트 스트림입니다.",
+            "headers": {
+              "X-Walla-Row-Count": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Parquet에 포함된 응답(row) 개수"
+              },
+              "X-Walla-Exported-At": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "description": "Parquet 생성 시각 (ISO 8601)"
+              }
+            },
+            "content": {
+              "application/vnd.apache.parquet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청 (요청 본문 형식 위반, 등록되지 않은 hidden field 라벨, 지원되지 않는 응답 필드, 또는 submittedFrom > submittedTo)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "오류 코드"
+                    },
+                    "detailsType": {
+                      "type": "string",
+                      "enum": [
+                        "schema",
+                        "unknownHiddenFieldLabel",
+                        "unsupportedResponseField"
+                      ],
+                      "description": "`details` 배열의 스키마를 구분합니다.\n- `schema`: 요청 본문이 기대 형식과 다름. `details[i] = { path, message }`\n- `unknownHiddenFieldLabel`: `hiddenFields`의 키가 폼에 등록되지 않음. `details[i] = { label }`\n- `unsupportedResponseField`: `responseFields`의 키가 폼에 없거나 필터 불가 타입. `details[i] = { fieldId, reason: \"not_found\" | \"unsupported_type\", fieldType? }`\n"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "사람이 읽을 수 있는 추가 설명 (라벨/타입 목록 등)"
+                    },
+                    "details": {
+                      "type": "array",
+                      "description": "위반 항목 목록. detailsType에 따라 형태가 달라집니다.",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "supportedFieldIds": {
+                      "type": "object",
+                      "description": "detailsType=unsupportedResponseField일 때만 존재. 폼에서 필터링 가능한 fieldId를 그룹별로 안내합니다."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)"
+          },
+          "403": {
+            "description": "권한 없음 (다른 팀/워크스페이스의 폼 또는 워크스페이스 멤버 아님)"
+          },
+          "404": {
+            "description": "폼이 없거나 게시되지 않음"
+          },
+          "502": {
+            "description": "Export 서비스 일시적으로 불가. 잠시 후 재시도해주세요."
           }
         }
       }
@@ -1080,6 +1442,397 @@
         }
       }
     },
+    "/open-api/v1/forms/{formId}/hidden-fields/{hiddenFieldLabel}": {
+      "delete": {
+        "description": "본인이 권한을 가진 특정 폼(프로젝트)의 히든 필드를 삭제합니다. 경로 세그먼트는 삭제할 히든 필드의 라벨입니다.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "폼 ID"
+          },
+          {
+            "in": "path",
+            "name": "hiddenFieldLabel",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "삭제할 히든 필드 라벨 (예: utm_source)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "히든 필드 삭제 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "hiddenFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "남은 히든 필드 라벨 목록"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (API 키 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음 (다른 팀/워크스페이스의 리소스 접근)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "폼 또는 히든 필드를 찾을 수 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "서버 에러",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/open-api/v1/forms/{formId}/hidden-fields": {
+      "get": {
+        "description": "본인이 권한을 가진 특정 폼(프로젝트)의 히든 필드 목록을 조회합니다",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "폼 ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "히든 필드 목록 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "hiddenFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "히든 필드 라벨 목록",
+                          "example": [
+                            "utm_source",
+                            "utm_medium"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (API 키 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음 (다른 팀/워크스페이스의 리소스 접근)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "폼을 찾을 수 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "서버 에러",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "본인이 권한을 가진 특정 폼(프로젝트)에 히든 필드를 추가합니다. 라벨 기준으로 중복되는 항목은 무시되며(멱등 추가), 요청 본문 내부의 중복 라벨도 한 번만 추가됩니다. 기존 필드의 라벨을 변경하려면 삭제 후 재추가하세요.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "폼 ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "hiddenFields"
+                ],
+                "properties": {
+                  "hiddenFields": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 30,
+                      "pattern": "^[a-zA-Z0-9_-]+$"
+                    },
+                    "description": "추가할 히든 필드 라벨 목록 (영문, 숫자, _, - 만 허용)",
+                    "example": [
+                      "utm_source",
+                      "utm_medium"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "히든 필드 추가 성공 (기존 라벨 및 본문 내 중복은 무시되어 멱등 동작)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "hiddenFields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "전체 히든 필드 라벨 목록",
+                          "example": [
+                            "utm_source",
+                            "utm_medium",
+                            "utm_campaign"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (API 키 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음 (다른 팀/워크스페이스의 리소스 접근)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "폼을 찾을 수 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "서버 에러",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/open-api/v1/forms/{formId}/responses/{responseId}": {
       "get": {
         "description": "본인이 권한을 가진 특정 폼의 특정 응답 상세 정보를 조회합니다.\n\n**응답 데이터 구조**: response 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다.\n\n필드 타입별 응답 값 형식을 이해하려면 다음 엔드포인트를 참조하세요:\n- `GET /open-api/v1/field-output-schemas` - 필드 타입별 출력 스키마 매핑\n- `GET /open-api/v1/forms/{formId}/fields` - 해당 폼의 필드 목록 및 출력 타입\n",
@@ -1231,7 +1984,7 @@
     },
     "/open-api/v1/forms/{formId}/responses": {
       "get": {
-        "description": "본인이 권한을 가진 특정 폼(프로젝트)의 응답 목록을 페이지네이션하여 조회합니다.\n\n**응답 데이터 구조**: 각 응답 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다.\n\n필드 타입별 응답 값 형식을 이해하려면 다음 엔드포인트를 참조하세요:\n- `GET /open-api/v1/field-output-schemas` - 필드 타입별 출력 스키마 매핑\n- `GET /open-api/v1/forms/{formId}/fields` - 해당 폼의 필드 목록 및 출력 타입\n",
+        "description": "본인이 권한을 가진 특정 폼(프로젝트)의 응답 목록을 페이지네이션하여 조회합니다.\n\n**customerKey 필터링**: `customerKey` 파라미터를 사용하여 특정 고객의 응답만 조회할 수 있습니다.\n\n**응답 데이터 구조**: 각 응답 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다.\n\n필드 타입별 응답 값 형식을 이해하려면 다음 엔드포인트를 참조하세요:\n- `GET /open-api/v1/field-output-schemas` - 필드 타입별 출력 스키마 매핑\n- `GET /open-api/v1/forms/{formId}/fields` - 해당 폼의 필드 목록 및 출력 타입\n",
         "security": [
           {
             "ApiKeyAuth": []
@@ -1246,6 +1999,14 @@
               "type": "string"
             },
             "description": "폼 ID"
+          },
+          {
+            "in": "query",
+            "name": "customerKey",
+            "schema": {
+              "type": "string"
+            },
+            "description": "고객 키로 필터링 (해당 customerKey를 가진 응답만 조회)"
           },
           {
             "in": "query",
