@@ -68,6 +68,93 @@ The `defaultProperties` object provides initial values when a form builder adds 
 }
 ```
 
+### Cross-field references (`_observedFields`)
+
+Some custom fields need values from other fields in the same form — a calculator that sums quantities, a price preview that reflects user choices, a summary that quotes earlier answers. Use the system-reserved `_observedFields` property to let the form author select which fields to observe.
+
+The `_` prefix marks the key as system-managed. Don't redefine it in your own properties — Walla validates each ref, then hoists the array to the typed `payload.observedFields` field on `FieldInitPayload` so your iframe doesn't need to know the storage key.
+
+Declare the property as a tagged-union array. The two `oneOf` branches correspond to regular form fields (referenced by id) and hidden fields (referenced by their author-defined label):
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "operator": {
+      "type": "string",
+      "enum": ["sum", "product", "diff", "min", "max", "avg"],
+      "default": "sum"
+    },
+    "_observedFields": {
+      "type": "array",
+      "title": "Observed fields",
+      "description": "Fields whose values this calculator combines.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "title": "Regular field reference",
+            "properties": {
+              "kind": { "const": "field" },
+              "id":   { "type": "string", "title": "Field id" }
+            },
+            "required": ["kind", "id"]
+          },
+          {
+            "type": "object",
+            "title": "Hidden field reference",
+            "properties": {
+              "kind":  { "const": "hidden" },
+              "label": { "type": "string", "title": "Hidden field label" }
+            },
+            "required": ["kind", "label"]
+          }
+        ]
+      },
+      "default": []
+    }
+  },
+  "required": ["operator"]
+}
+```
+
+#### Picker UI
+
+When the dashboard detects this exact shape (an array whose `items.oneOf` has the `kind: 'field' | 'hidden'` discriminator), it replaces the generic JSON editor with an interactive picker. The picker shows two grouped sections in a single dropdown:
+
+- **Form responses** — regular fields the author has added (in form order, with type badges)
+- **Query parameters** — hidden fields configured on the share / distribute page
+
+The author selects refs from the dropdown; selected items are listed in a draggable rail above the picker, and order is preserved on save (semantic for ordered consumers like the `diff` operator). Refs to fields that have since been removed are shown as "(deleted)" so the author can prune them.
+
+The picker reads from the **draft** form (the in-edit YJS document), so newly-added or renamed fields appear immediately — the form does not need to be published before the author can reference them.
+
+#### What your iframe receives
+
+Set the version's `observeFields.mode` to `'configured'`. After the author picks refs, your iframe receives them via `payload.observedFields` and the resolved values via `payload.formContext`:
+
+```typescript
+field.onInit(({ observedFields, formContext, properties }) => {
+  // observedFields: [
+  //   { kind: 'field',  id: 'fld_qty'   },
+  //   { kind: 'field',  id: 'fld_price' },
+  //   { kind: 'hidden', label: 'utm_discount' },
+  // ]
+  // formContext.fields: typed FieldSummary[] for each granted field
+  // formContext.values: { [id]: value } — granted subset only
+
+  const operands = observedFields.map(ref => {
+    if (ref.kind === 'field') return Number(formContext.values[ref.id] ?? 0);
+    const f = formContext.fields.find(field => field.label === ref.label);
+    return Number(formContext.values[f?.id ?? ''] ?? 0);
+  });
+
+  field.setValue(operands.reduce((a, b) => a + b, 0));
+});
+```
+
+> Sensitive field types (`SECRETS`, `PHONE_NUMBER`, `EMAIL`) are stripped from `formContext` even when explicitly listed in `observedFields`. The granted set is always a strict subset of the requested set.
+
 ## Output Schema
 
 The `outputSchema` is a JSON Schema that defines the shape of values your field produces when submitted. Walla uses this schema to:
