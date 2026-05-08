@@ -72,7 +72,7 @@ field.onInit(({ properties }) => {
 
 수량을 합산하는 계산기, 사용자 선택을 반영하는 가격 미리보기, 이전 답변을 인용하는 요약 — 이런 커스텀 필드는 같은 폼 내 다른 필드의 값이 필요합니다. 시스템 예약 키 `_observedFields`를 properties 스키마에 선언하면, 폼 작성자가 어떤 필드를 관찰할지 직접 선택할 수 있습니다.
 
-`_` 접두사는 시스템 관리 키임을 표시합니다 — 작성자가 직접 정의한 다른 properties와 겹치지 않게 별도 네임스페이스를 차지합니다. Walla가 각 참조를 검증한 뒤 `FieldInitPayload`의 타입 안전한 `observedFields` 필드로 hoist해서 전달하므로, iframe 코드는 storage 키를 알 필요가 없습니다.
+`_` 접두사는 시스템이 관리하는 키임을 표시합니다 — 작성자가 직접 정의한 다른 properties와 겹치지 않도록 별도 네임스페이스를 사용합니다. Walla가 각 참조를 검증한 뒤 `FieldInitPayload`의 타입이 지정된 `observedFields` 필드로 끌어올려 전달하므로, iframe 코드는 저장 키를 알 필요가 없습니다.
 
 스키마는 tagged-union 배열로 선언합니다. `oneOf` 두 분기는 각각 일반 폼 필드(id로 참조)와 hidden 필드(작성자가 정의한 label로 참조)에 해당합니다:
 
@@ -88,12 +88,12 @@ field.onInit(({ properties }) => {
     "_observedFields": {
       "type": "array",
       "title": "관찰할 필드",
-      "description": "이 계산기가 값을 합칠 필드들",
+      "description": "이 계산기가 값을 합칠 필드들.",
       "items": {
         "oneOf": [
           {
             "type": "object",
-            "title": "Regular field reference",
+            "title": "일반 필드 참조",
             "properties": {
               "kind": { "const": "field" },
               "id":   { "type": "string", "title": "필드 id" }
@@ -102,7 +102,7 @@ field.onInit(({ properties }) => {
           },
           {
             "type": "object",
-            "title": "Hidden field reference",
+            "title": "Hidden 필드 참조",
             "properties": {
               "kind":  { "const": "hidden" },
               "label": { "type": "string", "title": "Hidden 필드 라벨" }
@@ -120,13 +120,13 @@ field.onInit(({ properties }) => {
 
 #### 선택 모델
 
-폼 작성자는 authoring 시점에 참조를 선택합니다 — 새로 추가한 필드를 참조하기 위해 먼저 폼을 게시할 필요는 없습니다. 선택된 항목은 작성자가 고른 순서대로 저장되며, `diff`나 list 기반 연산자처럼 순서가 의미 있는 소비자에게 중요합니다.
+폼 작성자는 작성 시점에 참조를 선택합니다 — 새로 추가한 필드를 참조하기 위해 먼저 폼을 게시할 필요는 없습니다. 선택된 항목은 작성자가 고른 순서대로 저장되며, `diff`나 리스트 기반 연산자처럼 순서를 사용하는 곳에서 의미가 있습니다.
 
-이미 사라진 필드(이름이 바뀌어 식별이 깨졌거나, hidden 필드가 제거된 경우)를 가리키는 참조는 런타임에 `formContext`에서 해석되지 않습니다. iframe 코드가 `observedFields`를 순회할 때 모든 ref가 값으로 매핑된다고 가정하지 말고 방어적으로 작성하세요.
+이미 사라진 필드(hidden 필드의 label이 바뀌었거나 일반 필드가 삭제된 경우)를 가리키는 참조는 런타임에 `formContext`에서 해석되지 않습니다. iframe 코드가 `observedFields`를 순회할 때 모든 ref가 값으로 매핑된다고 가정하지 말고 방어적으로 작성하세요.
 
-호스트의 authoring UI는 두 `oneOf` 분기를 그룹으로 나눠 작성자가 JSON을 직접 편집하지 않아도 참조를 선택할 수 있게 해줍니다. 정확한 UI는 host-specific이며, SDK가 의존할 수 있는 계약은 on-the-wire 형태 — 작성자가 고른 순서대로 저장된 `ObservedFieldRef[]` — 입니다.
+호스트의 작성 UI는 두 `oneOf` 분기를 그룹으로 나눠 작성자가 JSON을 직접 편집하지 않아도 참조를 선택할 수 있게 해줍니다. 정확한 UI는 호스트마다 다르며, 보장되는 계약은 전송 형태 — 작성자가 고른 순서대로 저장된 `ObservedFieldRef[]` — 입니다.
 
-#### iframe이 받는 것
+#### iframe이 받는 데이터
 
 버전의 `observeFields.mode`를 `'configured'`로 설정하세요. 작성자가 참조를 선택하면, iframe은 `payload.observedFields`로 참조 목록을, `payload.formContext`로 해석된 값을 받습니다:
 
@@ -137,8 +137,8 @@ field.onInit(({ observedFields, formContext, properties }) => {
   //   { kind: 'field',  id: 'fld_price' },
   //   { kind: 'hidden', label: 'utm_discount' },
   // ]
-  // formContext.fields: 권한 통과한 필드들의 FieldSummary[] (타입 안전)
-  // formContext.values: { [id]: value } — 권한 통과한 부분집합
+  // formContext.fields: 허용된 필드들의 FieldSummary[]
+  // formContext.values: { [id]: value } — 허용된 부분집합
 
   const operands = observedFields.map(ref => {
     if (ref.kind === 'field') return Number(formContext.values[ref.id] ?? 0);
@@ -150,7 +150,7 @@ field.onInit(({ observedFields, formContext, properties }) => {
 });
 ```
 
-> 민감 필드 타입(`SECRETS`, `PHONE_NUMBER`, `EMAIL`)은 `observedFields`에 명시 노출 의도가 있어도 `formContext`에서 항상 제외됩니다. granted 집합은 requested의 strict subset입니다.
+> 민감 필드 타입(`SECRETS`, `PHONE_NUMBER`, `EMAIL`)은 `observedFields`에 명시적으로 포함되어 있어도 `formContext`에서 항상 제외됩니다. 허용된 집합은 항상 요청한 집합의 부분집합입니다.
 
 ## 출력 스키마
 

@@ -253,7 +253,7 @@ field.onFocus(() => {
 
 ### Configured 모드 — 관찰할 필드 선언
 
-커스텀 필드 버전의 `observeFields.mode`를 `'configured'`로 설정하고, properties 스키마에 `_observedFields` 배열을 선언하세요 ([속성 스키마 → 다른 필드 참조](./custom-fields-properties-schema) 참조). authoring 시점에 폼 작성자가 어떤 필드를 관찰할지 선택하면, runtime에 iframe은 그 결과를 타입 안전한 `ObservedFieldRef[]`로 받습니다:
+커스텀 필드 버전의 `observeFields.mode`를 `'configured'`로 설정하고, properties 스키마에 `_observedFields` 배열을 선언하세요 ([속성 스키마 → 다른 필드 참조](./custom-fields-properties-schema) 참조). 폼 작성 시점에 작성자가 어떤 필드를 관찰할지 선택하면, 런타임에 iframe은 그 결과를 타입이 지정된 `ObservedFieldRef[]`로 받습니다:
 
 ```typescript
 type ObservedFieldRef =
@@ -261,7 +261,7 @@ type ObservedFieldRef =
   | { kind: 'hidden'; label: string }; // Hidden 필드, formContext.fields.find(f => f.label === label)로 해석
 ```
 
-init 시점에 활용 예시:
+초기화 시점 활용 예시:
 
 ```typescript
 field.onInit(({ observedFields, formContext }) => {
@@ -277,7 +277,7 @@ field.onInit(({ observedFields, formContext }) => {
 });
 ```
 
-`formContext`로 받는 granted 집합은 `observedFields`보다 작을 수 있습니다 — 민감 타입은 자동으로 제외되고, 이미 삭제된 필드를 가리키는 참조는 해석에 실패합니다. 방어적으로 코딩하세요.
+`formContext`로 받는 허용 집합은 `observedFields`보다 작을 수 있습니다 — 민감 타입은 자동으로 제외되고, 이미 삭제된 필드를 가리키는 참조는 해석되지 않습니다. 방어적으로 코딩하세요.
 
 ### 초기 컨텍스트 수신
 
