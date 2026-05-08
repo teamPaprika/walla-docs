@@ -118,20 +118,17 @@ Declare the property as a tagged-union array. The two `oneOf` branches correspon
 }
 ```
 
-#### Picker UI
+#### Selection model
 
-When the dashboard detects this exact shape (an array whose `items.oneOf` has the `kind: 'field' | 'hidden'` discriminator), it replaces the generic JSON editor with an interactive picker. The picker shows two grouped sections in a single dropdown:
+Form authors choose refs at authoring time — they don't need to publish the form first to reference newly-added fields. Selections are persisted in the order chosen, which matters for ordered consumers like a `diff` or list-based operator.
 
-- **Form responses** — regular fields the author has added (in form order, with type badges)
-- **Query parameters** — hidden fields configured on the share / distribute page
+Refs may point to fields that no longer exist (a hidden field renamed, a regular field deleted). Those refs simply do not resolve in `formContext` at runtime — your iframe should iterate `observedFields` defensively rather than assume every ref maps to a value.
 
-The author selects refs from the dropdown; selected items are listed in a draggable rail above the picker, and order is preserved on save (semantic for ordered consumers like the `diff` operator). Refs to fields that have since been removed are shown as "(deleted)" so the author can prune them.
-
-The picker reads from the **draft** form (the in-edit YJS document), so newly-added or renamed fields appear immediately — the form does not need to be published before the author can reference them.
+The host's authoring UI groups the two `oneOf` branches so authors can select refs without editing JSON. The exact UI is host-specific; the contract you can rely on is the on-the-wire shape — `ObservedFieldRef[]` in the order the author chose.
 
 #### What your iframe receives
 
-Set the version's `observeFields.mode` to `'configured'`. After the author picks refs, your iframe receives them via `payload.observedFields` and the resolved values via `payload.formContext`:
+Set the version's `observeFields.mode` to `'configured'`. Once an author has selected refs, your iframe receives them via `payload.observedFields`, with resolved values in `payload.formContext`:
 
 ```typescript
 field.onInit(({ observedFields, formContext, properties }) => {

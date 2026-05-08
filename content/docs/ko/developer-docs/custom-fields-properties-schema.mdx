@@ -118,20 +118,17 @@ field.onInit(({ properties }) => {
 }
 ```
 
-#### Picker UI
+#### 선택 모델
 
-대시보드는 이 정확한 모양(items.oneOf의 분기들이 `kind: 'field' | 'hidden'` discriminator를 가지는 array)을 감지하면, 일반 JSON 에디터 대신 인터랙티브 picker로 swap합니다. picker는 하나의 dropdown 안에서 두 그룹을 보여줍니다:
+폼 작성자는 authoring 시점에 참조를 선택합니다 — 새로 추가한 필드를 참조하기 위해 먼저 폼을 게시할 필요는 없습니다. 선택된 항목은 작성자가 고른 순서대로 저장되며, `diff`나 list 기반 연산자처럼 순서가 의미 있는 소비자에게 중요합니다.
 
-- **Form responses** — 작성자가 추가한 일반 필드들 (폼 순서대로, 타입 배지와 함께)
-- **Query parameters** — 공유/배포 페이지에서 설정한 hidden 필드들
+이미 사라진 필드(이름이 바뀌어 식별이 깨졌거나, hidden 필드가 제거된 경우)를 가리키는 참조는 런타임에 `formContext`에서 해석되지 않습니다. iframe 코드가 `observedFields`를 순회할 때 모든 ref가 값으로 매핑된다고 가정하지 말고 방어적으로 작성하세요.
 
-작성자가 dropdown에서 선택하면 picker 위의 드래그 가능한 레일에 항목이 쌓이며, 저장 시 순서가 보존됩니다 (`diff` 같은 순서-의존 연산자에 의미). 이미 삭제된 필드를 가리키는 참조는 "(deleted)" 표시가 붙어 작성자가 정리할 수 있게 합니다.
-
-picker는 **draft** 폼(편집 중인 YJS 문서)을 읽으므로, 새로 추가하거나 이름을 바꾼 필드도 즉시 dropdown에 나타납니다 — 폼을 게시(publish)하지 않아도 작성자가 바로 참조할 수 있습니다.
+호스트의 authoring UI는 두 `oneOf` 분기를 그룹으로 나눠 작성자가 JSON을 직접 편집하지 않아도 참조를 선택할 수 있게 해줍니다. 정확한 UI는 host-specific이며, SDK가 의존할 수 있는 계약은 on-the-wire 형태 — 작성자가 고른 순서대로 저장된 `ObservedFieldRef[]` — 입니다.
 
 #### iframe이 받는 것
 
-버전의 `observeFields.mode`를 `'configured'`로 설정하세요. 작성자가 picker로 참조를 선택하면, iframe은 `payload.observedFields`로 참조 목록을, `payload.formContext`로 해석된 값을 받습니다:
+버전의 `observeFields.mode`를 `'configured'`로 설정하세요. 작성자가 참조를 선택하면, iframe은 `payload.observedFields`로 참조 목록을, `payload.formContext`로 해석된 값을 받습니다:
 
 ```typescript
 field.onInit(({ observedFields, formContext, properties }) => {
