@@ -251,9 +251,9 @@ field.onFocus(() => {
 
 > 민감 필드 타입(`SECRETS`, `PHONE_NUMBER`, `EMAIL`)은 `all` 모드에서도 항상 폼 컨텍스트에서 제외됩니다.
 
-### Configured 모드 — 관찰할 필드 선택
+### Configured 모드 — 관찰할 필드 선언
 
-`observeFields.mode === 'configured'`일 때, 폼 작성자가 대시보드에 렌더링되는 picker로 특정 필드를 직접 선택합니다. properties 스키마에 `_observedFields` 키를 정의하면 ([속성 스키마 → 다른 필드 참조](./custom-fields-properties-schema) 참조), 대시보드가 그 자리에 dropdown picker를 swap해 보여줍니다. 선택된 참조는 picker 순서대로 저장되어 iframe에 타입 안전한 `ObservedFieldRef[]`로 전달됩니다:
+커스텀 필드 버전의 `observeFields.mode`를 `'configured'`로 설정하고, properties 스키마에 `_observedFields` 배열을 선언하세요 ([속성 스키마 → 다른 필드 참조](./custom-fields-properties-schema) 참조). authoring 시점에 폼 작성자가 어떤 필드를 관찰할지 선택하면, runtime에 iframe은 그 결과를 타입 안전한 `ObservedFieldRef[]`로 받습니다:
 
 ```typescript
 type ObservedFieldRef =

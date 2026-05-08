@@ -251,9 +251,9 @@ Custom fields can observe other fields' metadata and values. The available data 
 
 > Sensitive field types (`SECRETS`, `PHONE_NUMBER`, `EMAIL`) are always excluded from form context, even in `all` mode.
 
-### Configured mode — selecting which fields to observe
+### Configured mode — declaring observed fields
 
-When `observeFields.mode === 'configured'`, the form author picks specific fields via a picker rendered in the dashboard. Define an `_observedFields` property in your properties schema (see [Properties Schema → Cross-field references](./custom-fields-properties-schema)) and the dashboard will swap a dropdown picker in for that property. Refs are stored in the picker order and delivered to your iframe as a typed `ObservedFieldRef[]`:
+Set `observeFields.mode` to `'configured'` on your custom field version and declare an `_observedFields` array in your properties schema (see [Properties Schema → Cross-field references](./custom-fields-properties-schema)). The form author selects which fields to observe at authoring time; at runtime your iframe receives the resolved selection as a typed `ObservedFieldRef[]`:
 
 ```typescript
 type ObservedFieldRef =

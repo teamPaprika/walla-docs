@@ -277,7 +277,7 @@ Returns the current form context (other fields' metadata and values). The conten
 field.getObservedFields(): ObservedFieldRef[]
 ```
 
-Returns the references the form author selected for this custom field instance via the dashboard picker. Empty when the version's `observeFields` mode is not `'configured'` or no refs are configured. Order matches the picker order — meaningful for ordered consumers like a `diff` operator.
+Returns the references the form author has selected for this custom field instance. Empty when the version's `observeFields` mode is not `'configured'` or when no refs are configured. Order is preserved — meaningful for ordered consumers like a `diff` operator.
 
 ```typescript
 field.onInit(({ observedFields, formContext }) => {

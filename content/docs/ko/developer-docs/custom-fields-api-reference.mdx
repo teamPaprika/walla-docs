@@ -277,7 +277,7 @@ field.getFormContext(): { fields: FieldSummary[]; values: Record<string, unknown
 field.getObservedFields(): ObservedFieldRef[]
 ```
 
-대시보드 picker에서 폼 작성자가 이 커스텀 필드 인스턴스에 대해 선택한 참조 목록을 반환합니다. 버전의 `observeFields` 모드가 `'configured'`가 아니거나 선택된 참조가 없으면 빈 배열을 반환합니다. 순서는 picker 순서를 그대로 유지하며, `diff` 같은 순서-의존 연산자에 의미가 있습니다.
+폼 작성자가 이 커스텀 필드 인스턴스에 대해 선택한 참조 목록을 반환합니다. 버전의 `observeFields` 모드가 `'configured'`가 아니거나 선택된 참조가 없으면 빈 배열을 반환합니다. 순서는 작성자가 고른 그대로 유지되며, `diff` 같은 순서-의존 연산자에 의미가 있습니다.
 
 ```typescript
 field.onInit(({ observedFields, formContext }) => {
