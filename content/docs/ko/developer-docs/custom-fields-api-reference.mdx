@@ -277,7 +277,7 @@ field.getFormContext(): { fields: FieldSummary[]; values: Record<string, unknown
 field.getObservedFields(): ObservedFieldRef[]
 ```
 
-폼 작성자가 이 커스텀 필드 인스턴스에 대해 선택한 참조 목록을 반환합니다. 버전의 `observeFields` 모드가 `'configured'`가 아니거나 선택된 참조가 없으면 빈 배열을 반환합니다. 순서는 작성자가 고른 그대로 유지되며, `diff` 같은 순서-의존 연산자에 의미가 있습니다.
+폼 작성자가 이 커스텀 필드 인스턴스에 대해 선택한 참조 목록을 반환합니다. 버전의 `observeFields` 모드가 `'configured'`가 아니거나 선택된 참조가 없으면 빈 배열을 반환합니다. 순서는 작성자가 고른 그대로 유지되며, `diff`처럼 순서에 의존하는 연산자에서 의미가 있습니다.
 
 ```typescript
 field.onInit(({ observedFields, formContext }) => {
@@ -408,7 +408,7 @@ interface FieldSummary {
 
 ### ObservedFieldRef
 
-버전의 `observeFields` 모드가 `'configured'`일 때 폼 작성자가 선택한 다른 필드에 대한 타입 안전한 참조입니다. `payload.observedFields`로 전달되며 `field.getObservedFields()`로도 조회할 수 있습니다.
+버전의 `observeFields` 모드가 `'configured'`일 때 폼 작성자가 선택한 다른 필드에 대한, 타입이 지정된 참조입니다. `payload.observedFields`로 전달되며 `field.getObservedFields()`로도 조회할 수 있습니다.
 
 ```typescript
 type ObservedFieldRef =
@@ -421,7 +421,7 @@ type ObservedFieldRef =
 | `field` | `id` (uuid) | `formContext.values[id]` |
 | `hidden` | `label` (예: `utm_discount`) | `formContext.fields.find(f => f.label === label)` |
 
-저장 시 순서가 보존됩니다 — `diff` 연산자처럼 순서가 의미 있는 소비자에게 중요합니다.
+저장 시 순서가 보존됩니다 — `diff` 연산자처럼 순서를 사용하는 곳에서 의미가 있습니다.
 
 ### ValidateCallback
 
