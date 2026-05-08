@@ -271,6 +271,28 @@ field.getFormContext(): { fields: FieldSummary[]; values: Record<string, unknown
 
 Returns the current form context (other fields' metadata and values). The content depends on the `observeFields` policy.
 
+### getObservedFields
+
+```typescript
+field.getObservedFields(): ObservedFieldRef[]
+```
+
+Returns the references the form author selected for this custom field instance via the dashboard picker. Empty when the version's `observeFields` mode is not `'configured'` or no refs are configured. Order matches the picker order — meaningful for ordered consumers like a `diff` operator.
+
+```typescript
+field.onInit(({ observedFields, formContext }) => {
+  for (const ref of observedFields) {
+    if (ref.kind === 'field') {
+      const value = formContext.values[ref.id];
+      // ...
+    } else {
+      const summary = formContext.fields.find(f => f.label === ref.label);
+      // ...
+    }
+  }
+});
+```
+
 ### isConnected
 
 ```typescript
@@ -305,6 +327,7 @@ interface FieldInitPayload {
   mode: 'live' | 'preview';
   fieldInfo: WallaFieldInfo;
   properties: Record<string, unknown>;
+  observedFields: ObservedFieldRef[];
   value: unknown | null;
   theme: WallaFieldTheme;
   locale: string;
@@ -382,6 +405,23 @@ interface FieldSummary {
 ```
 
 The `customField` property is present only when `fieldType` is `'CUSTOM'`.
+
+### ObservedFieldRef
+
+A typed reference to another field in the form, configured by the form author when the version's `observeFields` mode is `'configured'`. Delivered as `payload.observedFields` and via `field.getObservedFields()`.
+
+```typescript
+type ObservedFieldRef =
+  | { kind: 'field';  id: string }     // Regular form field, resolved by id
+  | { kind: 'hidden'; label: string }; // Hidden field (URL query parameter), resolved by author-defined label
+```
+
+| Variant | Identity | Resolution |
+|---------|----------|------------|
+| `field` | `id` (uuid) | `formContext.values[id]` |
+| `hidden` | `label` (e.g., `utm_discount`) | `formContext.fields.find(f => f.label === label)` |
+
+Order is preserved across saves — meaningful for ordered consumers (e.g., a calculator's `diff` operator).
 
 ### ValidateCallback
 
