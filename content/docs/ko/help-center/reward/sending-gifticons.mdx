@@ -11,14 +11,20 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### 리워드 관리 페이지로 이동
     `리워드 관리` 페이지로 이동합니다.
+
+    <img src="/images/guides/reward/send-step-01-reward-management.png" alt="리워드 관리 페이지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 리워드 발송 클릭
     '보유 리워드'의 `리워드 발송` 버튼을 클릭합니다.
+
+    <img src="/images/guides/reward/send-step-02-send-button.png" alt="리워드 발송 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 응답자 선택
     리워드를 보낼 응답자 정보를 포함한 문항(전화번호 필드)을 선택합니다. 발송할 응답자를 직접 선택하거나, `랜덤 선택` 버튼을 눌러 무작위로 추첨할 수도 있습니다.
+
+    <img src="/images/guides/reward/send-step-03-respondent-select.png" alt="응답자 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
 
     <Callout type="warning" title="주의사항">
     전화번호 형식이 올바르지 않은 응답자에게는 리워드를 보낼 수 없습니다.
@@ -29,6 +35,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     선택된 응답자 목록을 확인하고, 이미 리워드를 수신한 적이 있는 응답자를 제외할 수 있습니다.
     - 누가 어떤 리워드를 몇 번 받았는지도 한눈에 확인할 수 있습니다.
     - 이전 단계로 돌아가 다시 응답자를 선택할 수도 있습니다.
+
+    <img src="/images/guides/reward/send-step-04-availability-check.png" alt="발송 가능 여부 확인" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 메시지 작성
@@ -38,10 +46,22 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
     메시지는 응답자가 리워드를 수신할 때 함께 표시됩니다.
 
+    <img src="/images/guides/reward/send-step-05-message.png" alt="메시지 작성" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+
     <Callout type="warning" title="주의사항">
     - 리워드는 전화번호 문항에 입력된 휴대폰 번호로 발송됩니다.
     - 발송 완료 후에는 취소나 회수가 불가능합니다.
     - 리워드 발송 버튼 클릭 시, 모든 내용에 동의한 것으로 간주됩니다.
     </Callout>
+  </Step>
+  <Step>
+    ### 리워드 발송 완료
+    하단의 `리워드 발송` 버튼을 클릭하면 선택한 응답자에게 리워드가 즉시 발송되고, 발송이 완료됩니다.
+
+    <img src="/images/guides/reward/send-step-06-send-complete.png" alt="리워드 발송 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+
+    응답자는 아래와 같은 메시지로 리워드를 수신합니다.
+
+    <img src="/images/guides/reward/send-step-06-recipient-message.png" alt="응답자가 수신한 메시지" style={{ width: "300px", maxWidth: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
 </Steps>
