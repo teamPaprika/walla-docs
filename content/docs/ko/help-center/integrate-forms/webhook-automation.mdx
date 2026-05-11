@@ -11,48 +11,67 @@ description: "자동화는 사용자가 만든 폼에 응답이 제출되는 순
   <Step>
     ### 연동하기 페이지 진입
     프로젝트 편집 화면 상단의 `연동하기`를 클릭합니다.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="자동화 연동 페이지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 새로운 자동화 추가
     '내 자동화' 섹션에서 `새로운 자동화` 버튼을 클릭하여 시작합니다.
+
+    <img src="/images/guides/integrate/automation-new-custom.png" alt="새로운 자동화 추가" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 생성하기
     팝업창에서 자동화의 이름 등의 정보를 입력하고, 트리거 유형을 선택한 뒤 `만들기`를 클릭합니다.
 	    - **자동화 이름**: 자동화를 구분할 수 있는 이름입니다.
 	    - **트리거 유형**: 폼 제출 시 / 응답자 탈락 등 자동화를 작동할 조건을 의미하며, 트리거 유형은 생성 후 변경할 수 없습니다.
+
+    <img src="/images/guides/integrate/automation-create-custom.png" alt="새로운 자동화 만들기" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 경로 설정(로직)
     특정 조건(객관식 답변이 A일 때, 단답형 응답에 B가 포함될 때 등)에 따라 알림이 가도록 필터를 걸 수 있습니다.
 	    - 우측 상단의 `+`를 눌러 통해 여러 경로를 생성할 수 있습니다. 이때, 각각의 경로에 별도로 자동화 모듈을 연결하지 않으면 기본 경로(모든 응답 제출에 대한 알림)로 작동합니다.
 	    - 각 경로 하단의 `+ 조건 추가`를 눌러 복합적인 조건을 설정할 수 있습니다.
+
+    <img src="/images/guides/integrate/automation-route-custom.png" alt="경로 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 웹훅 주소 입력
     **웹훅 주소**: 데이터를 받을 서버 주소입니다.
+
+    <img src="/images/guides/integrate/automation-webhook-url.png" alt="웹훅 주소 입력" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 웹훅 전송 포맷 지정
 	    자동(기본 웹훅 Body)으로 전송할지, 커스텀 Body를 지정할지 선택합니다. 자동을 선택한 경우에는 저장 후 바로 활성화하여 이용할 수 있고, 커스텀 Body를 선택한 경우에는 다음의 단계로 넘어갑니다.
-    
+
+    <img src="/images/guides/integrate/automation-webhook-format.png" alt="웹훅 전송 포맷 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 요청 종류와 Headers 설정
 	    - **요청 종류**: POST / GET / PUT 등
 	    - **Headers 설정**: `Content-Type`, 인증 토큰 등 필요 시 추가
+
+    <img src="/images/guides/integrate/automation-headers.png" alt="요청 종류와 Headers 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
     <Step>
     ### Body 편집
 	    전송될 메시지 문구를 자유롭게 수정하거나, 응답 값(`{{responseKey}}`)을 변수로 삽입할 수 있습니다.
+
+    <img src="/images/guides/integrate/automation-body.png" alt="Body 편집" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### 인증 방식 설정 (선택)
     웹훅 사용 시 `Bearer Token`, `Basic Auth`, `API Key` 등 보안 인증 방식을 선택할 수 있습니다.
+
+    <img src="/images/guides/integrate/automation-auth.png" alt="인증 방식 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### 변경사항 저장 및 활성화
     변경사항을 저장하고, 활성화를 눌러야 웹훅이 실제로 작동합니다.
+
+    <img src="/images/guides/integrate/automation-save-activate.png" alt="변경사항 저장 및 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 ## Slack 연동- 응답 제출 시 Slack 알림
@@ -61,34 +80,50 @@ description: "자동화는 사용자가 만든 폼에 응답이 제출되는 순
  <Step>
     ### Create New App 클릭
     [https://api.slack.com/apps](https://api.slack.com/apps)에서 'Create New App'을 클릭합니다.
+
+    <img src="/images/guides/integrate/slack-01-create-app.png" alt="Create an App" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### From scratch 선택
     'From scratch'를 선택합니다.
+
+    <img src="/images/guides/integrate/slack-02-from-scratch.png" alt="From scratch 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### App 이름 및 워크스페이스 설정
     'App Name'에 App의 이름을 입력하고, 어떤 워크스페이스에서 작동할지 선택합니다.
+
+    <img src="/images/guides/integrate/slack-03-name-workspace.png" alt="App 이름 및 워크스페이스 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Incoming Webhooks 활성화
     'Incoming Webhooks'를 활성화한 후 'Add New Webhook'을 클릭합니다.
+
+    <img src="/images/guides/integrate/slack-04-incoming-webhooks.png" alt="Incoming Webhooks 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 채널 선택
     워크스페이스 내에서 웹훅을 적용할 채널을 선택합니다.
+
+    <img src="/images/guides/integrate/slack-05-select-channel.png" alt="채널 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Webhook URL 복사
     'Install App'에서 Webhook URL을 복사합니다.
+
+    <img src="/images/guides/integrate/slack-06-copy-webhook-url.png" alt="Webhook URL 복사" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 <Step>
     ### 연동하기 페이지 진입
     프로젝트 편집 화면 상단의 `연동하기`를 클릭합니다.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="자동화 연동 페이지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 새로운 Slack 자동화 추가
     '내 자동화' 섹션에서 `Slack` 버튼을 클릭하여 시작합니다.
+
+    <img src="/images/guides/integrate/slack-07-automation-page.png" alt="새로운 Slack 자동화 추가" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 생성하기
@@ -97,16 +132,22 @@ description: "자동화는 사용자가 만든 폼에 응답이 제출되는 순
 	    - **트리거 유형**: 폼 제출 시 / 응답자 탈락 등 자동화를 작동할 조건을 의미하며, 트리거 유형은 생성 후 변경할 수 없습니다.
 	    - **웹훅 URL**: 데이터를 받을 Slack 서버 주소입니다. Slack Webhook URL 설정 방법은 [여기](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/)에서 확인할 수 있습니다.
 	    - **Body Preset**: Slack에서 웹훅 알림이 어떤 형태로 도착할지 지정합니다.
+
+    <img src="/images/guides/integrate/slack-09-create.png" alt="Slack 알림 자동화 생성" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 경로 설정(로직)
     특정 조건(객관식 답변이 A일 때, 단답형 응답에 B가 포함될 때 등)에 따라 알림이 가도록 필터를 걸 수 있습니다.
 	    - 우측 상단의 `+`를 눌러 통해 여러 경로를 생성할 수 있습니다. 이때, 각각의 경로에 별도로 자동화 모듈을 연결하지 않으면 기본 경로(모든 응답 제출에 대한 알림)로 작동합니다.
 	    - 각 경로 하단의 `+ 조건 추가`를 눌러 복합적인 조건을 설정할 수 있습니다.
+
+    <img src="/images/guides/integrate/slack-10-route.png" alt="경로 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 변경사항 저장 및 활성화
     변경사항을 저장하고, 활성화를 눌러야 웹훅이 실제로 작동합니다.
+
+    <img src="/images/guides/integrate/slack-11-save-activate.png" alt="변경사항 저장 및 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -118,36 +159,50 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
  <Step>
     ### 디스코드 채널의 편집 화면 진입
     채널명 우측의 톱니바퀴 아이콘을 클릭합니다.
+
+    <img src="/images/guides/integrate/discord-01-edit-channel.png" alt="디스코드 채널 편집" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 새 '웹후크' 생성 및 URL 복사
     연동 탭에서 `새 웹후크` 버튼을 클릭하여 새로운 웹훅을 생상하고, `웹후크 URL 복사` 클릭
+
+    <img src="/images/guides/integrate/discord-02-new-webhook.png" alt="새 웹후크 생성 및 URL 복사" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 <Step>
     ### 연동하기 페이지 진입
     프로젝트 편집 화면 상단의 `연동하기`를 클릭합니다.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="자동화 연동 페이지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
-    ### 새로운 Slack 자동화 추가
-    '내 자동화' 섹션에서 `Slack` 버튼을 클릭하여 시작합니다.
+    ### 새로운 Discord 자동화 추가
+    '내 자동화' 섹션에서 `Discord` 버튼을 클릭하여 시작합니다.
+
+    <img src="/images/guides/integrate/discord-04-automation-page.png" alt="새로운 Discord 자동화 추가" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 생성하기
     팝업창에서 자동화의 이름 등의 정보를 입력하고, 트리거 유형을 선택한 뒤 `만들기`를 클릭합니다.
 	    - **자동화 이름**: 자동화를 구분할 수 있는 이름입니다.
 	    - **트리거 유형**: 폼 제출 시 / 응답자 탈락 등 자동화를 작동할 조건을 의미하며, 트리거 유형은 생성 후 변경할 수 없습니다.
-	    - **웹훅 URL**: 데이터를 받을 Discord 서버 주소입니다. 
-	    - **Body Preset**: Slack에서 웹훅 알림이 어떤 형태로 도착할지 지정합니다.
+	    - **웹훅 URL**: 데이터를 받을 Discord 서버 주소입니다.
+	    - **Body Preset**: Discord에서 웹훅 알림이 어떤 형태로 도착할지 지정합니다.
+
+    <img src="/images/guides/integrate/discord-05-create.png" alt="Discord 알림 자동화 생성" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 경로 설정(로직)
     특정 조건(객관식 답변이 A일 때, 단답형 응답에 B가 포함될 때 등)에 따라 알림이 가도록 필터를 걸 수 있습니다.
 	    - 우측 상단의 `+`를 눌러 통해 여러 경로를 생성할 수 있습니다. 이때, 각각의 경로에 별도로 자동화 모듈을 연결하지 않으면 기본 경로(모든 응답 제출에 대한 알림)로 작동합니다.
 	    - 각 경로 하단의 `+ 조건 추가`를 눌러 복합적인 조건을 설정할 수 있습니다.
+
+    <img src="/images/guides/integrate/discord-06-route.png" alt="경로 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 변경사항 저장 및 활성화
     변경사항을 저장하고, 활성화를 눌러야 웹훅이 실제로 작동합니다.
+
+    <img src="/images/guides/integrate/discord-07-save-activate.png" alt="변경사항 저장 및 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -157,28 +212,37 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### 연동하기 페이지 진입
     프로젝트 편집 화면 상단의 `연동하기`를 클릭합니다.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="자동화 연동 페이지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### 새로운 자동화 추가
     '내 자동화' 섹션에서 `Gmail` 버튼을 클릭하여 시작합니다.
+
+    <img src="/images/guides/integrate/gmail-02-automation-page.png" alt="새로운 Gmail 자동화 추가" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 생성하기
     팝업창에서 자동화의 이름 등의 정보를 입력하고, 트리거 유형을 선택한 뒤 `만들기`를 클릭합니다.
 	    - **자동화 이름**: 자동화를 구분할 수 있는 이름입니다.
 	    - **트리거 유형**: 폼 제출 시 / 응답자 탈락 등 자동화를 작동할 조건을 의미하며, 트리거 유형은 생성 후 변경할 수 없습니다.
-	    - 발신자: Gmail을 발신할 구글 계정입니다. 기존에 워크스페이스에 연동된 계정을 선택하거나, 새로운 구글 계정에 로그인합니다.
+	    - **발신자**: Gmail을 발신할 구글 계정입니다. 기존에 워크스페이스에 연동된 계정을 선택하거나, 새로운 구글 계정에 로그인합니다.
+
+    <img src="/images/guides/integrate/gmail-03-create.png" alt="Gmail 발송 자동화 생성" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 경로 설정(로직)
     특정 조건(객관식 답변이 A일 때, 단답형 응답에 B가 포함될 때 등)에 따라 알림이 가도록 필터를 걸 수 있습니다.
 	    - 우측 상단의 `+`를 눌러 통해 여러 경로를 생성할 수 있습니다. 이때, 각각의 경로에 별도로 자동화 모듈을 연결하지 않으면 기본 경로(모든 응답 제출에 대한 알림)로 작동합니다.
 	    - 각 경로 하단의 `+ 조건 추가`를 눌러 복합적인 조건을 설정할 수 있습니다.
+
+    <img src="/images/guides/integrate/gmail-04-route.png" alt="경로 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 발신자 지정
 	    Gmail을 발신할 구글 계정을 선택하고 발신자 이름을 입력합니다.
-    
+
+    <img src="/images/guides/integrate/gmail-05-sender.png" alt="발신자 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 수신자 지정
@@ -187,6 +251,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - 여러 개의 이메일 주소를 추가하려면 쉼표(,), 공백 또는 엔터 키로 구분하세요.
 	    - responseKey, timestamp 와 같은 일부 사전 정의된 참조값은 이메일 주소로 사용할 수 없습니다.
 	    - 이메일 필드를 참조값으로 사용하는것을 권장합니다. 이메일 형식이 맞지 않을경우 전송에 실패할 수 있습니다.
+
+    <img src="/images/guides/integrate/gmail-06-recipient.png" alt="수신자 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### 참조, 숨은참조, 회신 이메일 지정
@@ -194,9 +260,42 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - 이메일 주소를 직접 입력하거나, 값 참조(@)를 사용하여 동적으로 설정할 수 있습니다.
 	    - 여러 개의 이메일 주소를 추가하려면 쉼표(,), 공백 또는 엔터 키로 구분하세요.
 	    - responseKey, timestamp 와 같은 일부 사전 정의된 참조값은 이메일 주소로 사용할 수 없습니다.
+
+    <img src="/images/guides/integrate/gmail-07-cc-bcc.png" alt="참조, 숨은참조, 회신 이메일 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### 변경사항 저장 및 활성화
     변경사항을 저장하고, 활성화를 눌러야 웹훅이 실제로 작동합니다.
+
+    <img src="/images/guides/integrate/gmail-08-save-activate.png" alt="변경사항 저장 및 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
+
+## 웹훅 테스트하기
+
+웹훅을 활성화하기 전, 테스트 발송으로 웹훅이 정상 작동하는지 확인할 수 있습니다.
+
+### 1. 기존 응답으로 테스트하기
+<img src="/images/guides/integrate/test-01-dropdown.png" alt="테스트 드롭다운 열기" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+- `테스트` 버튼 옆의 `아래 화살표` 아이콘을 누르면 이미 제출된 응답값으로 웹훅을 테스트할 수 있습니다. 테스트를 진행할 응답을 선택한 후, `테스트 실행`을 클릭해주세요.
+<img src="/images/guides/integrate/test-02-existing-response.png" alt="기존 응답으로 테스트 실행" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+<Callout type="warning" title="주의사항">
+Gmail 자동화의 수신인에 이메일 필드를 입력한 경우, 정확한 수신 확인을 위해 기존 응답으로 테스트하는 것을 권장드립니다.
+</Callout>
+
+
+### 2. 임의의 값으로 테스트하기
+<img src="/images/guides/integrate/test-03-random-value.png" alt="임의의 값으로 테스트" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+- 아직 제출한 응답이 없다면, `테스트` 버튼을 눌러 임의의 값으로 웹훅을 테스트할 수 있습니다.
+
+## 웹훅 재발송하기 (웹훅 발송에 실패한 경우)
+
+<img src="/images/guides/integrate/webhook-resend.png" alt="웹훅 재발송" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+- 웹훅 발송에 실패했다면, 재발송할 수 있습니다.
+- 오류 요약에서 어떤 이유로 발송에 실패했는지 확인할 수 있습니다.
+	- 예를 들어, Gmail 자동화에서 'At least one 'to' recipient is required'라고 표시된다면, 수신자를 입력하지 않아 발송이 불가능한 상황을 의미합니다.
+	- 'Webhook failed with status: 400'라고 표시된다면, 웹훅 서버가 요청을 받았지만 “잘못된 요청(Bad Request)”이라 거절했다는 뜻으로, 보낸 데이터 형식이 올바르지 않아서 오류가 발생했음을 의미합니다.
+### 재발송 방법
+- **원본 설정으로 재시도**: 실행 당시 저장된 원본 설정으로 재발송합니다. 설정 변경 없이 동일 조건으로 다시 시도할 때 유용합니다. 일시적인 서버 오류로 인한 발송 실패라면 원본 설정으로 재시도해보세요.
+- **현재 설정으로 재발송**: 현재 저장된 자동화 설정으로 재발송합니다. 설정을 저장한 후 다시 시도할 때 유용합니다. 수신인을 입력하지 않았거나 데이터 형식을 올바르게 입력하지 않아 오류가 발생했다면, 해당 내용을 수정한 후 현재 설정으로 재발송을 클릭해주세요.
