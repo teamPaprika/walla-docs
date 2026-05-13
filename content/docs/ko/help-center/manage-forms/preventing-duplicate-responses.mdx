@@ -3,12 +3,26 @@ title: "중복 응답 제한하기"
 description: "같은 사람이 같은 설문에 여러 번 응답하는 것을 막고 싶을 때 중복 응답 방지 기능을 사용하면 돼요."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 <video src="/videos/prevent-duplicate.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
 
 ## 설정 방법
 
-1. 프로젝트 편집 화면 → 우측 상단 `⚙️` 버튼을 눌러 설정 탭으로 이동합니다.
-2. '중복 응답 방지' 스위치를 활성화해주세요.
+<Steps>
+  <Step>
+    ### 설정 탭으로 이동
+    프로젝트 편집 화면에서 우측 상단 `⚙️` 버튼을 눌러 설정 탭으로 이동합니다.
+
+    <img src="/images/guides/manage-forms/settings-button.png" alt="설정 탭으로 이동" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 중복 응답 방지 활성화
+    '중복 응답 방지' 스위치를 활성화해주세요.
+
+    <img src="/images/guides/manage-forms/prevent-duplicate.png" alt="중복 응답 방지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
 
 ## 동작 방식
 

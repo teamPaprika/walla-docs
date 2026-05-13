@@ -3,6 +3,8 @@ title: "교차분석"
 description: "교차분석은 하나의 기준에 따라 응답 결과를 비교하여 집단 간 차이를 확인하는 기능입니다. 예를 들어, 직업별 만족도 차이, 연령대별 추천 의향 차이 등을 분석할 수 있습니다."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 <video src="/videos/cross-analysis.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
 
 ## 교차분석 기본 구조
@@ -15,18 +17,20 @@ description: "교차분석은 하나의 기준에 따라 응답 결과를 비교
 기준 변수에 따라 비교할 문항입니다.(예: 가격 만족도, 이용 목적, 추천 의향)→ “무엇을 비교할 것인가?”를 설정합니다.
 ## 설정 방법
 
-### 1단계. 기준 변수 설정
+<img src="/images/guides/result-analysis/cross-tabulation.png" alt="교차분석 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
-- 왼쪽 문항 목록에서 비교 기준이 될 문항을 ‘기준 변수’ 영역으로 드래그하여 추가합니다.
-- 예: 직업
-
-### 2단계. 분석 변수 추가
-
-- 비교하고 싶은 문항을 ‘분석 변수’ 영역에 추가합니다.
-- 예:
-- 서비스 이용 목적
-- 가격에 대한 만족도
-- 타인에게 추천 의향
+<Steps>
+  <Step>
+    ### 기준 변수 설정
+    왼쪽 문항 목록에서 비교 기준이 될 문항을 ‘기준 변수’ 영역으로 드래그하여 추가합니다.
+    - 예: 직업
+  </Step>
+  <Step>
+    ### 분석 변수 추가
+    비교하고 싶은 문항을 ‘분석 변수’ 영역에 추가합니다.
+    - 예: 서비스 이용 목적, 가격에 대한 만족도, 타인에게 추천 의향
+  </Step>
+</Steps>
 
 ## 결과 해석 방법
 

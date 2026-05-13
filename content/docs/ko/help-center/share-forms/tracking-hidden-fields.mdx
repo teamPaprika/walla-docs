@@ -3,36 +3,70 @@ title: "트래킹 (히든필드)"
 description: "트래킹은 설문 응답이 어떤 경로를 통해 유입되었는지 파악할 수 있게 해주는 기능이에요. 광고 채널, 고객 그룹 등 다양한 기준으로 응답을 구분하고 싶을 때 유용합니다."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 <video src="/videos/tracking.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
 
 ## 트래킹 항목(히든 필드) 추가하기
 
-1. 공유하기 페이지 → `관리` 버튼 클릭 → 를 클릭합니다.
-2. 트래킹 이름(히든 필드명)을 입력한 뒤 엔터 키를 눌러 등록해야 항목이 생성됩니다.
-3. `저장` 버튼을 눌러 저장합니다.
-4. 등록된 히든 필드는 “유입 경로를 구분하기 위한 카테고리” 역할을 합니다.
-- 예시
-  - ① SNS별 유입 확인 → 히든 필드 이름을 `SNS` 로 설정 (예: 인스타그램, 유튜브 등)
-  - ② 고객 그룹별 구분→ 히든 필드 이름을 `customer` 로 설정
+<Steps>
+  <Step>
+    ### 트래킹 관리 페이지 열기
+    공유하기 페이지에서 `관리` 버튼을 클릭합니다.
+
+    <img src="/images/guides/share-forms/tracking-01-manage.png" alt="트래킹 관리 페이지 열기" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 트래킹 항목 입력
+    트래킹 이름(히든 필드명)을 입력한 뒤 엔터 키를 눌러 등록해야 항목이 생성됩니다.
+
+    <img src="/images/guides/share-forms/tracking-02-input.png" alt="트래킹 항목 입력" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 저장
+    `저장` 버튼을 눌러 저장합니다.
+
+    <img src="/images/guides/share-forms/tracking-03-save.png" alt="저장" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 활용
+    등록된 히든 필드는 “유입 경로를 구분하기 위한 카테고리” 역할을 합니다.
+    - ① SNS별 유입 확인 → 히든 필드 이름을 `SNS` 로 설정 (예: 인스타그램, 유튜브 등)
+    - ② 고객 그룹별 구분 → 히든 필드 이름을 `customer` 로 설정
+
+    <img src="/images/guides/share-forms/tracking-04-fields.png" alt="등록된 히든 필드" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
 ## 히든 필드 URL 만들기
 
-- 히든 필드를 설정했다면, 설문 링크(URL)에 해당 필드를 직접 추가해야 해요.
-1. 기본 설문 URL 준비
-```
-https://walla.my/v/QA9S0i0UfZn5rZTfSbd4
-```
+히든 필드를 설정했다면, 설문 링크(URL)에 해당 필드를 직접 추가해야 해요.
 
-2. 히든 필드 이름 추가 (`?필드명=` 형식)
-```
-https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=
-```
-
-3. 필드 값 입력 (예: 유튜브에서 유입된 경우)
-```
-https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=youtube
-```
-
-4. 이제 각 링크를 채널별로 공유하면, 응답 시트에서 유입 경로(예: YouTube, Instagram 등)를 확인할 수 있습니다.
+<Steps>
+  <Step>
+    ### 기본 설문 URL 준비
+    ```
+    https://walla.my/v/QA9S0i0UfZn5rZTfSbd4
+    ```
+  </Step>
+  <Step>
+    ### 히든 필드 이름 추가
+    `?필드명=` 형식으로 추가합니다.
+    ```
+    https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=
+    ```
+  </Step>
+  <Step>
+    ### 필드 값 입력
+    예: 유튜브에서 유입된 경우
+    ```
+    https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=youtube
+    ```
+  </Step>
+  <Step>
+    ### 채널별 링크 공유
+    각 링크를 채널별로 공유하면, 응답 시트에서 유입 경로(예: YouTube, Instagram 등)를 확인할 수 있습니다.
+  </Step>
+</Steps>
 ## 여러 히든 필드 사용하기
 
 - URL에 여러 히든 필드를 추가하려면 ‘?’ 대신 ‘&’로 이어붙이면 돼요.
