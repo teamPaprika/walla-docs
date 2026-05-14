@@ -3,46 +3,63 @@ title: "로직 설정하기"
 description: "로직은 응답자의 답변에 따라 다음에 보여질 문항의 흐름을 제어하는 기능이에요. 설문을 단순히 순서대로 진행하는 게 아니라, 응답 조건에 따라 다른 경로로 이어지게 만들 수 있습니다."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 ## 로직의 개념
 
 - 로직은 "응답에 따라 다음 문항이 어디로 이어질지"를 정합니다.
 - 기본 이동은 모든 응답자가 반드시 지나게 되는 흐름을 의미합니다. ('필수 응답'과는 다른 개념이에요.)
 
+<img src="/images/guides/create-forms/logic-concept.png" alt="로직 없는 일반 설문조사와 로직 설정된 왈라 설문조사 비교" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 ## 로직 추가하기
 
-- 프로젝트 편집 화면에서 `+ 새로운 로직` 버튼을 눌러 로직을 추가할 수 있습니다.
-- 로직은 '조건'과 '이동하기' 두 부분으로 구성돼요.
-### 조건
-    1. 기준 문항 선택 – 어떤 문항의 응답을 기준으로 삼을지 선택합니다.
-    2. 조건 선택 – 조건의 종류를 선택합니다.
-       - 같음
-       - 같지 않음
-       - 시작이 일치
-       - 끝이 일치
-       - 문자 포함
-       - 문자 미포함
-       - 모두 포함
-       - 모두 누락
-       - 하나 이상 포함
-       - 하나 이상 누락
-       - 보다 작음
-       - 이하
-       - 보다 큼
-       - 이상
-       - 이전
-       - 이전 또는 같음
-       - 이후
-       - 이후 또는 같음
-    1. 옵션/응답 선택 – 해당 조건이 어떤 응답에서 작동할지 선택합니다.
+<Steps>
+  <Step>
+    ### 로직 설정 화면으로 이동
+    프로젝트 편집 화면에서 `로직` 버튼을 눌러 로직 설정 화면으로 이동할 수 있습니다.
+
+    <img src="/images/guides/create-forms/logic-button.png" alt="프로젝트 편집 화면 우측 상단의 로직 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 조건과 이동하기 구성 이해
+    로직은 '조건'과 '이동하기' 두 부분으로 구성돼요.
+
+    <img src="/images/guides/create-forms/logic-condition-action.png" alt="로직의 조건 영역과 이동하기 영역" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 조건
+    1. **기준 문항 선택** – 어떤 문항의 응답을 기준으로 삼을지 선택합니다.
+    2. **조건 선택** – 조건의 종류를 선택합니다.
+       - 같음 /같지 않음
+       - 시작이 일치 / 끝이 일치
+       - 문자 포함 / 문자 미포함
+       - 모두 포함 / 모두 누락
+       - 하나 이상 포함 / 하나 이상 누락
+       - 보다 작음 / 이하 / 보다 큼 / 이상 / 이전
+       - 이전 또는 같음 / 이후 / 이후 또는 같음
+    1. **옵션/응답 선택** – 해당 조건이 어떤 응답에서 작동할지 선택합니다.
        - 여러 응답을 동시에 선택할 수도 있어요.
-    #### 조건 여러개 추가하기
-      - '+ 새로운 조건 추가'를 눌러 여러 조건을 조합할 수 있습니다.
-      - 조건을 결합할 때는 아래 두 가지 중 하나를 선택하세요.
-        - AND: 앞 조건과 뒤 조건을 모두 만족해야 로직이 작동
-        - OR: 앞 조건 또는 뒤 조건 중 하나만 만족해도 로직이 작동
-### 이동하기
-- 조건을 모두 설정했다면, 응답자가 이동할 필드를 선택합니다.
-- 설정이 완료되면 해당 조건을 만족한 응답자는 지정한 문항으로 바로 이동합니다.
+
+    <img src="/images/guides/create-forms/logic-condition.png" alt="로직의 조건 영역 - 기준 문항, 조건, 옵션 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 조건 여러개 추가하기
+    - `+ 새로운 조건 추가`를 눌러 여러 조건을 조합할 수 있습니다.
+    - 조건을 결합할 때는 아래 두 가지 중 하나를 선택하세요.
+      - **AND**: 앞 조건과 뒤 조건을 모두 만족해야 로직이 작동
+      - **OR**: 앞 조건 또는 뒤 조건 중 하나만 만족해도 로직이 작동
+
+    <img src="/images/guides/create-forms/logic-condition-multiple.png" alt="새로운 조건 추가와 AND/OR 결합 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 이동하기
+    - 조건을 모두 설정했다면, 응답자가 이동할 필드를 선택합니다.
+    - 설정이 완료되면 해당 조건을 만족한 응답자는 지정한 문항으로 바로 이동합니다.
+
+    <img src="/images/guides/create-forms/logic-action.png" alt="로직의 이동하기 영역에서 이동할 필드 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
 
 ## 로직 활용 예시
 
@@ -58,8 +75,9 @@ description: "로직은 응답자의 답변에 따라 다음에 보여질 문항
 
 ## 기타 설정 및 주의사항
 
-- 로직이 중간에서 끊어지면,
-  - 탈락 필드가 중간에 있거나
-  - 앞선 문항의 로직이 잘못 설정된 경우일 가능성이 높아요.
+- 로직이 중간에서 끊어지면, **탈락 필드가 중간에 있거나 앞선 문항의 로직이 잘못 설정된 경우**일 가능성이 높아요.
+
+  <img src="/images/guides/create-forms/logic-broken-conflict.png" alt="로직이 찾을 수 없는 옵션으로 이동하도록 설정되어 충돌한 경우" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 - 필드 그룹 내부의 문항도 각각 로직 설정 가능하며, 특정 문항으로 이동하도록 설정하면 그 문항이 포함된 그룹부터 표시됩니다.
 - `초기화` 버튼을 누르면 해당 문항의 로직이 모두 삭제됩니다.
