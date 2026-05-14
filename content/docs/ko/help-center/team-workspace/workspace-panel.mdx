@@ -10,10 +10,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 패널은 설문을 발송할 대상자 목록이에요. 워크스페이스의 **패널** 탭에서 패널 명단을 CSV 또는 Excel 파일로 업로드하고, 그룹으로 분류해 체계적으로 관리할 수 있습니다.
 
-## 패널 탭으로 이동하기
-
-워크스페이스 화면에서 상단의 **패널** 탭을 클릭하면 패널 관리 화면으로 이동해요.
-패널 목록에는 다음 정보가 표시됩니다.
+<img src="/images/guides/workspace-panel/panel-overview.png" alt="워크스페이스 패널 탭의 명단과 그룹 관리 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 | 항목   | 설명                  |
 | ---- | ------------------- |
@@ -35,18 +32,31 @@ CSV 또는 Excel 파일로 패널 명단을 한 번에 등록할 수 있어요.
   <Step>
     ### 패널 업로드 버튼 클릭
     패널 탭에서 **패널 업로드** 버튼을 클릭합니다.
+
+    <img src="/images/guides/workspace-panel/panel-upload-button.png" alt="패널 탭 우측 상단의 패널 업로드 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 그룹 선택
     업로드할 패널의 **그룹을 선택**합니다. (선택 사항)
+
+    <img src="/images/guides/workspace-panel/panel-upload-group.png" alt="패널 업로드 팝업의 그룹 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 파일 선택
     **파일 선택** 버튼을 클릭해 CSV 또는 Excel 파일을 선택합니다.
+    이름, 이메일 혹은 전화번호 등에 오류가 있는 행은 제외하고 업로드됩니다.
+
+    <img src="/images/guides/workspace-panel/panel-upload-valid.png" alt="패널 업로드 팝업에서 적합 데이터 미리보기" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/workspace-panel/panel-upload-invalid.png" alt="패널 업로드 팝업에서 부적합 데이터 오류 확인" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 업로드 완료
     적합 데이터를 확인한 후 **패널 업로드** 버튼을 클릭합니다.
+
+    <img src="/images/guides/workspace-panel/panel-upload-submit.png" alt="패널 업로드 팝업 우측 하단의 패널 업로드 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/workspace-panel/panel-upload-complete.png" alt="패널 업로드 완료 후 목록에 표시된 6개 패널" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -69,18 +79,26 @@ CSV 또는 Excel 파일로 패널 명단을 한 번에 등록할 수 있어요.
   <Step>
     ### 그룹 관리 버튼 클릭
     패널 탭에서 `그룹 관리` 버튼을 클릭합니다.
+
+    <img src="/images/guides/workspace-panel/panel-group-manage-button.png" alt="패널 탭 우측 상단의 그룹 관리 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 그룹 목록 확인
     기존 그룹 목록과 각 그룹의 패널 수를 확인할 수 있어요.
+
+    <img src="/images/guides/workspace-panel/panel-group-list.png" alt="그룹 관리 팝업의 그룹 목록과 패널 수" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 그룹 생성 또는 편집
     `그룹 생성` 버튼을 눌러 새 그룹을 만들거나, 그룹 우측의 편집 버튼으로 이름을 변경할 수 있습니다.
+
+    <img src="/images/guides/workspace-panel/panel-group-create.png" alt="그룹 관리 팝업에서 새 그룹 이름 입력" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 그룹 삭제
     삭제할 그룹을 선택한 후 `선택 삭제` 버튼으로 그룹을 삭제할 수 있어요.
+
+    <img src="/images/guides/workspace-panel/panel-group-delete.png" alt="그룹 관리 팝업에서 그룹 선택 후 선택 삭제 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -92,21 +110,27 @@ CSV 또는 Excel 파일로 패널 명단을 한 번에 등록할 수 있어요.
   <Step>
     ### 마스킹 해제 버튼 클릭
     패널 탭 상단의 `마스킹 해제` 버튼을 클릭합니다.
+
+    <img src="/images/guides/workspace-panel/panel-unmask-button.png" alt="패널 탭 상단의 마스킹 해제 버튼(눈 아이콘)" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 해제 사유 입력
     해제 사유를 입력합니다.
+
+    <img src="/images/guides/workspace-panel/panel-unmask-reason.png" alt="마스킹 해제 팝업의 해제 사유 입력 영역" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 마스킹 해제 완료
     `마스킹 해제` 버튼을 클릭합니다.
+
+    <img src="/images/guides/workspace-panel/panel-unmask-submit.png" alt="해제 사유 입력 후 마스킹 해제 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
 마스킹이 해제되면 검색 기능도 활성화돼요.
 
 <Callout type="warn" title="마스킹 해제 주의사항">
-마스킹 해제 시 해제 사유가 기록됩니다. 불필요한 개인정보 열람을 삼가주세요.
+마스킹 해제 시 해제 사유가 로그 기록에 기록됩니다. 불필요한 개인정보 열람을 삼가주세요.
 </Callout>
 
 ### 필터 및 보기 설정
@@ -115,3 +139,14 @@ CSV 또는 Excel 파일로 패널 명단을 한 번에 등록할 수 있어요.
 - **보기**: 패널 목록의 정렬 기준과 표시할 항목을 설정할 수 있어요.
 - **정렬 기준**: 생성일 (오름차순/내림차순)
 - **표시 항목**: 고객 키, 이름, 이메일, 전화번호, 그룹 각각 on/off 가능
+
+## 패널에게 설문 보내기
+
+<a href="/ko/docs/help-center/share-forms/sending-to-panel" className="not-prose group block rounded-2xl border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-6 no-underline hover:border-[hsl(193,100%,50%)]/40 transition-colors">
+  <div className="flex items-center justify-between gap-4">
+    <div>
+      <div className="text-lg font-bold text-[#1A2C5C] mb-1">패널에게 설문 발송하기 →</div>
+      <div className="text-[#76809D] text-sm">등록한 패널에게 설문을 이메일로 발송하는 방법을 확인해보세요.</div>
+    </div>
+  </div>
+</a>
