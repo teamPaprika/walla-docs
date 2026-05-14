@@ -18,9 +18,14 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### 결제 필드 추가
     프로젝트 편집 화면에서 결제 필드를 추가해주세요.
+
+    <img src="/images/guides/manage-forms/toss-payment-add-field.png" alt="프로젝트 편집 화면에 추가된 결제 필드" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 결제 정보 입력
+
+    <img src="/images/guides/manage-forms/toss-payment-info.avif" alt="결제 필드 결제 정보 입력 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
     결제에 필요한 정보를 입력해주세요.
 
     #### 배리언트 키
@@ -29,12 +34,18 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     - 처음 시작하신다면 `UI 추가` 버튼을 눌러 다양한 결제 UI를 설정할 수 있어요.
     - `UI 추가` 버튼을 누른 후 `국내 일반 결제`를 선택해주세요.
 
+    <img src="/images/guides/manage-forms/toss-payment-variant-key.avif" alt="토스페이먼츠 결제 UI 배리언트 키 확인 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
     <Callout type="warning" title="가상 계좌 사용 불가">
     가상 계좌는 이용할 수 없어요. 결제 UI 편집의 [기능]-[결제수단 목록]에서 가상 계좌를 반드시 **체크 해제**해주세요. 왈라는 결제 요청 후 응답이 제출되면 결제가 이루어진 것으로 기록되는데, 가상 계좌는 즉시 결제가 이루어지지 않아 응답 시트에는 결제 완료로 기록되지만 실제로는 입금이 되지 않는 상황이 발생할 수 있어요.
+
+    <img src="/images/guides/manage-forms/toss-payment-virtual-account.avif" alt="토스페이먼츠 결제 UI 편집에서 가상 계좌 체크 해제" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
     </Callout>
 
     #### 클라이언트 키 / 시크릿 키
     - [토스페이먼츠 개발자센터](https://developers.tosspayments.com/)의 '내 개발정보'에서 확인할 수 있어요. 좌측에서 상점을 선택한 후 해당 상점의 클라이언트 키와 시크릿 키를 복사해주세요.
+
+    <img src="/images/guides/manage-forms/toss-payment-client-secret-key.avif" alt="토스페이먼츠 개발자센터의 내 개발정보에서 클라이언트 키와 시크릿 키 확인" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
     #### 주문 ID
     - 주문한 결제를 식별하기 위한 고유한 값으로, '주문ID\_랜덤키\_시간' 형식으로 표시돼요. 예) 팥 붕어빵 → `redbean`, 슈크림 붕어빵 → `chouxcream`
@@ -46,7 +57,12 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     ### 주문서 제작 완료
     이제 결제 필드를 이용해 주문서를 제작할 수 있어요.
 
-    - 결제 필드를 복제할 경우, 시크릿 키는 복제되지 않아요. 복제된 필드에서 다시 한 번 입력해주세요.
+    <img src="/images/guides/manage-forms/toss-payment-settings-dialog.png" alt="결제 설정 팝업의 결제 UI, 결제위젯 연동, 주문 설정 영역" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/toss-payment-widget-add.png" alt="결제 위젯 추가 팝업에서 클라이언트 키와 시크릿 키 입력" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    - 결제 UI에 배리언트 키를 입력하고, 결제위젯에 클라이언트 키와 시크릿 키를 입력합니다.
+    - 주문ID와 상품명, 상품 가격 등을 입력한 후 저장하면 완료됩니다.
     - 테스트 UI를 사용하면 실제 결제가 이루어지지 않으니, 라이브 UI와 잘 구분해서 입력해주세요.
     - 로직을 통해 선택지에 따라 서로 다른 결제 필드가 노출되도록 설정할 수 있어요.
   </Step>

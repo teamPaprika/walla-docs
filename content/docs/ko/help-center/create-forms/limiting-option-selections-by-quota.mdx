@@ -11,14 +11,20 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### 기능 활성화
     해당 문항을 선택하고 '옵션별 응답 수 제한' 기능을 활성화해주세요.
+
+    <img src="/images/guides/manage-forms/quota-enable-toggle.png" alt="문항 우측 패널의 옵션별 응답 수 제한 토글" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 최대 응답 수 입력
     '설정하기' 버튼을 눌러 각 옵션별 최대 응답 수를 입력합니다.
+
+    <img src="/images/guides/manage-forms/quota-set-max-responses.png" alt="옵션별 응답 수 제한 팝업에서 각 옵션의 최대 응답 수 입력" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### 저장
-    저장하면, 전체 응답 중 해당 옵션이 선택된 횟수가 설정한 숫자를 초과하지 않게 됩니다.
+    ### 게시하기
+    게시하면, 전체 응답 중 해당 옵션이 선택된 횟수가 설정한 숫자를 초과하지 않게 됩니다.
+
+    <img src="/images/guides/manage-forms/quota-publish.png" alt="우측 상단의 게시하기 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -29,8 +35,12 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## 적용 시 표시 방식
 
-1. 이미 선택지가 모두 마감된 경우 → 해당 옵션은 비활성화되어 선택할 수 없습니다.
-2. 응답 중에 선택지가 마감된 경우 → `제출하기` 버튼을 누르면 "문제가 발생했습니다. 다시 시도하세요." 라는 오류 메시지가 표시됩니다.
+1. **이미 선택지가 모두 마감된 경우** → 해당 옵션은 비활성화되어 선택할 수 없습니다.
+
+   <img src="/images/guides/manage-forms/quota-option-disabled.png" alt="마감된 옵션이 비활성화되어 선택할 수 없는 응답 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+2. **응답 중에 선택지가 마감된 경우** → `응답 제출` 버튼을 누르면 "특정 문항의 제출 횟수가 초과되었습니다." 라는 오류 메시지가 표시됩니다.
+
+   <img src="/images/guides/manage-forms/quota-error-message.png" alt="응답 화면 우측 상단에 표시되는 제출 횟수 초과 오류 메시지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 <Callout title="참고">
 옵션별 응답 수 제한 기능을 활용하면 선착순 모집이나 좌석 예약 같은 상황에서 중복 응답을 방지하고 공정하게 응답을 받을 수 있어요.
