@@ -3,15 +3,33 @@ title: "설문 테마 변경하기"
 description: "설문 폼의 배경색, 테마색, 글자색 등을 변경해 브랜드 톤이나 분위기에 맞는 디자인으로 꾸밀 수 있어요."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 ## 테마 변경 방법
 
-1. 편집 화면 상단의 `브랜딩` 버튼을 클릭합니다.
-2. 배경색과 테마색을 선택해 설문 디자인을 바꿀 수 있어요.
-3. 배경색이 너무 어두우면, 자동으로 글자색이 흰색(#FFFFFF)으로 전환되어 가독성을 유지합니다.
+<img src="/images/guides/custom-design/branding-button-panel.png" alt="편집 화면 상단의 브랜딩 버튼과 펼쳐진 브랜딩 패널" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
-<Callout type="warning" title="주의사항">
+<Steps>
+  <Step>
+    ### `브랜딩` 버튼 클릭
+    편집 화면 상단의 `브랜딩` 버튼을 클릭합니다.
+  </Step>
+  <Step>
+    ### 배경색·버튼색 선택
+    다양한 테마색을 선택해 설문 디자인을 바꿀 수 있어요.
+    <Callout type="warning" title="주의사항">
 버튼 색이 배경색과 너무 비슷하면, 필수입력 표시나 버튼 텍스트가 잘 보이지 않을 수 있습니다.
 </Callout>
+    
+  </Step>
+  <Step>
+    ### 글자색·버튼 글자색 선택
+    글자색, 버튼 글자색을 별도로 지정하지 않으면 현재 설정된 배경색에 맞게 자동으로 변경돼요.
+    옵션이나 입력창의 색상은 설정한 **글자색**과 자연스럽게 어울리도록 자동으로 색이 변경돼요.
+  </Step>
+</Steps>
+
+
 <Callout title="팁">
 색상 조합이 어렵다면 색상 조합 사이트(예: [2 Color Combinations](https://2colors.colorion.co/), [Color Hunt](https://colorhunt.co/) 등)을 참고하면 자연스럽고 조화로운 테마를 손쉽게 만들 수 있어요.
 </Callout>
