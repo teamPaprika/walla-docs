@@ -4,14 +4,36 @@ description: 팀의 사용 목적이나 규모가 달라졌다면 '팀 설정 �
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## 플랜 구독 시작하기
 
-1. 팀 설정 → \[팀 관리\] 탭으로 이동합니다.
-2. 상단의 \[플랜 변경\] 버튼을 클릭합니다.
-3. 가격정책 페이지를 참고해 원하는 플랜을 선택하세요.
-4. \[플랜 적용\] 버튼을 누르면 결제 페이지로 이동합니다.
-5. 이메일, 카드 정보 등 결제 정보를 입력하면 구독이 시작됩니다.
+<Steps>
+  <Step>
+    ### 팀 관리 탭 열기
+    팀 설정 → `팀 관리` 탭으로 이동합니다.
+
+    <img src="/images/guides/getting-started/team-management-tab.png" alt="팀 설정 사이드바의 팀 관리 → 팀 정보 메뉴" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 플랜 변경 클릭
+    상단의 `플랜 변경` 버튼을 클릭합니다.
+
+    <img src="/images/guides/getting-started/plan-change-button.png" alt="팀 정보 화면 플랜 영역의 플랜 변경 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 원하는 플랜 선택 및 적용
+    가격정책 페이지를 참고해 원하는 플랜을 선택한 뒤, `플랜 적용` 버튼을 누르면 결제 페이지로 이동합니다.
+
+    <img src="/images/guides/getting-started/plan-selection-modal.png" alt="Free / Pro / Enterprise 플랜을 비교해 선택할 수 있는 플랜 선택 모달" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 결제 정보 입력
+    이메일, 카드 정보 등 결제 정보를 입력하면 구독이 시작됩니다. 프로모션 코드가 있는 경우 `프로모션 코드 추가`에 코드를 입력하면 할인된 가격으로 결제됩니다.
+
+    <img src="/images/guides/getting-started/payment-checkout.png" alt="카드 정보를 입력하고 구독하기 버튼을 누르는 결제 페이지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
 
 <Callout type="info" title="참고">
 왈라는 해외 PG사를 사용하고 있습니다. 
@@ -20,7 +42,9 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 ## 플랜 취소/변경하기
 
-구독 중인 플랜을 변경하려면 \[플랜 관리\] 버튼을 눌러 팝업창에서 원하는 작업을 선택할 수 있습니다.
+<img src="/images/guides/getting-started/subscription-management-buttons.png" alt="유료 플랜 구독 중인 팀 정보 화면의 구독 관리 / 플랜 변경 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+구독 중인 플랜을 변경하려면 `플랜 관리` 버튼을 눌러 팝업창에서 원하는 작업을 선택할 수 있습니다.
 
 - 결제 정보 페이지에서는 다음 정보를 확인할 수 있습니다.
   - 현재 구독 중인 플랜 정보

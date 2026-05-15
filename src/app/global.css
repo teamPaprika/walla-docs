@@ -120,6 +120,23 @@
   font-size: 0.875rem;
 }
 
+/* Tighten spacing in nested lists */
+#nd-page li ul,
+#nd-page li ol {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+#nd-page li {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+#nd-page li > p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 [role="tablist"] {
   border-radius: 0;
   background-color: var(--muted);
