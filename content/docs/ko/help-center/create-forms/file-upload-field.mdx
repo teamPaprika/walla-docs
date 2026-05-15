@@ -3,11 +3,26 @@ title: "파일 업로드 필드"
 description: "응답자가 기기에 있는 파일을 직접 업로드할 수 있는 필드예요. 사진, 문서, 영상 등 다양한 형태의 파일을 제출받을 때 유용합니다."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<img src="/images/guides/manage-forms/file-upload-field-example.png" alt="파일 업로드 필드가 포함된 입사 지원 폼 편집 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 ## 파일 업로드 필드 사용 방법
 
-1. 응답자는 `파일 선택` 버튼을 눌러 업로드할 파일을 선택합니다.
-2. 선택 후 `이 파일 업로드` 버튼을 눌러 업로드를 완료해야 합니다.
-3. 업로드한 파일은 응답을 제출해야 최종 저장되므로, 반드시 업로드 완료 후 설문 제출까지 마무리해야 합니다.
+<Steps>
+  <Step>
+    ### 파일 선택
+    응답자는 `파일 선택` 버튼을 눌러 업로드할 파일을 선택합니다.
+  </Step>
+  <Step>
+    ### 업로드 완료
+    선택 후 `이 파일 업로드` 버튼을 눌러 업로드를 완료해야 합니다.
+  </Step>
+  <Step>
+    ### 응답 제출
+    업로드한 파일은 응답을 제출해야 최종 저장되므로, 반드시 업로드 완료 후 설문 제출까지 마무리해야 합니다.
+  </Step>
+</Steps>
 
 ## 업로드 용량 제한
 
