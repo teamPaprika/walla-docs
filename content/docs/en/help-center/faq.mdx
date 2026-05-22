@@ -39,7 +39,7 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
   </Accordion>
 
   <Accordion title="Can I cancel my subscription and get a refund?">
-    Whether a refund is available depends on when you paid and which plan you're on. For monthly subscriptions, the service is considered used 24 hours after payment, so refunds are not available after that point. For annual subscriptions, you can get a full refund if you cancel within 14 days of payment; after that, a partial amount will be deducted before the refund. For details, please see our [Refund Policy](https://home.walla.my/ko/policy/refund-latest).
+    Whether a refund is available depends on when you paid and which plan you're on. For monthly subscriptions, the service is considered used 24 hours after payment, so refunds are not available after that point. For annual subscriptions, you can get a full refund if you cancel within 14 days of payment; after that, a partial amount will be deducted before the refund. If you'd like a refund, please reach out to [cs@walla.my](cs@walla.my). For details, please see our [Refund Policy](https://home.walla.my/ko/policy/refund-latest).
   </Accordion>
 
   <Accordion title="The amount I was charged is different from what's listed on the pricing page.">
@@ -53,11 +53,11 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 <Accordions>
 
   <Accordion title="I accidentally deleted a form or responses — can I recover them?">
-    In line with our policy of prioritizing personal data protection and data security, deleted surveys and response data are immediately and permanently deleted and cannot be recovered. To prevent accidental data deletion, please configure permissions for each workspace role. Starting from the Enterprise plan, you can view logs including deletion timestamps and account information.
+      In line with our policy of prioritizing personal data protection and data security, deleted surveys and response data are immediately and permanently deleted and cannot be recovered. To prevent accidental data deletion, please configure permissions for each workspace role. Starting from the Enterprise plan, you can view logs including deletion timestamps and account information.
   </Accordion>
 
   <Accordion title="Can I add images to a form?">
-    In any field, type a forward slash (/) in the question title or description box to insert an image. You can write the description first and then insert an image with `/`, or insert the image first and drag it to reposition it.
+    In any field, type a slash (/) in the question title or description box to insert an image. You can write the description first and then insert an image with the slash (/) command, or insert the image first and drag it to reposition it. [Learn more about slash (/) commands →](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#using-slash-commands-to-add-features)
   </Accordion>
 
   <Accordion title="Can I translate text like the submit button?">
@@ -65,7 +65,7 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
   </Accordion>
 
   <Accordion title="How is a rejection field different from an ending field?">
-    A rejection field is used to stop respondents who don't qualify for the survey from continuing — responses routed to a rejection field are not saved. If you want to show a message after submission, we recommend using an ending field instead. We also recommend deleting any rejection field, or using logic settings so that it isn't connected to preceding questions.
+      A rejection field is used to stop respondents who don't qualify for the survey from continuing — responses routed to a rejection field are not saved. If you want to show a message after submission, we recommend using an ending field instead. We also recommend deleting any rejection field, or using logic settings so that it isn't connected to preceding questions.
   </Accordion>
 
   <Accordion title="What's the difference between horizontal view and vertical view?">
@@ -74,6 +74,18 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
   <Accordion title="I'd like multiple questions to appear on one page.">
     In horizontal view, you can use field groups to display multiple questions together on a single screen. In vertical view, you can add `Page Break` between questions to split the page however you like.
+  </Accordion>
+
+  <Accordion title="I opened the form, but it won't move to the next question.">
+    This happens because the question's logic references a field that can't be found. Update the logic settings and try again. Fix any parts shown as 'Field/option not found' and then publish.
+  </Accordion>
+
+  <Accordion title="I added an ending field, but only the default ending screen shows up.">
+    If you only add an ending field without configuring logic, the default ending page ("Your response has been submitted successfully.") is shown automatically. To route to a different ending field after submission:
+1. On the Logic page, click the 'Submit' button.
+2. Specify which ending field to navigate to based on your conditions.
+
+If you want to always go to a specific ending field with no extra logic, change the default destination to that ending field.
   </Accordion>
 
 </Accordions>
@@ -112,12 +124,24 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
 </Accordions>
 
+## Viewing Responses
+<Accordions>
+
+  <Accordion title="Can I recover deleted responses?">
+    Responses are deleted immediately upon request, and deleted responses cannot be recovered under any circumstances — please keep this in mind. You can check which account and IP deleted a response in the 'Activity log'.
+</Accordion>
+  <Accordion title="Can I assign predefined values to a response's customerKey?">
+    Upload a respondent list with predefined customerKey values as a CSV or XLSX file and register it as a panel, then send surveys to that panel from each project. The predefined values will be set as the customerKey in the response sheet.
+</Accordion>
+
+</Accordions>
+
 ## Sending Rewards
 
 <Accordions>
 
   <Accordion title="How do I send rewards?">
-    First, add a phone number field (recommended) to your form to collect respondents' phone numbers. Then purchase rewards, select the recipients, and send.
+    First, add a phone number field (recommended) to your form to collect respondents' phone numbers. Then purchase rewards, select the recipients, and send. For details, see [Sending Rewards](/en/docs/help-center/reward/sending-gifticons).
   </Accordion>
    <Accordion title="I didn't collect respondents' phone numbers in my form — can I still send rewards?">
     Unfortunately, if you didn't collect phone numbers, sending rewards isn't possible. To send rewards, please make sure to collect the necessary information (such as phone numbers) when respondents complete the survey.

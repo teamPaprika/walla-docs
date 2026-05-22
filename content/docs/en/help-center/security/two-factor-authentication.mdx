@@ -1,27 +1,60 @@
 ---
 title: "Two-Factor Authentication"
-description: "Two-factor authentication adds an extra verification step at login to protect team members' accounts. We strongly recommend enabling it to reduce the risk of password leaks and unauthorized access."
+description: "Two-Factor Authentication adds an extra verification step at login to protect team members' accounts. We strongly recommend enabling it to reduce the risk of password leaks and unauthorized external access."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 ## Team-Level 2FA Setup
-1. Go to Team Settings → [Security] tab.
-2. Enable 'Two-Factor Authentication (MFA)' to require team members to complete 2FA every time they access the team.
-3. This enforces 2FA across your entire team.
-  - By default, each user can register 2FA on their own via profile icon → personal 2FA setup. Enforcing it at the team level ensures every member goes through the verification.
+
+<Steps>
+  <Step>
+    ### Go to the Security tab
+    Open Team Settings and navigate to the [Security] tab.
+  </Step>
+  <Step>
+    ### Enable Two-Factor Authentication (MFA)
+    Once you turn on the 'Two-Factor Authentication (MFA)' option, every team member must complete 2FA each time they access the team.
+  </Step>
+  <Step>
+    ### Enforce 2FA across the entire team
+    This setting lets you require 2FA for everyone on the team.
+    - By default, each user can register 2FA themselves via profile icon → personal 2FA settings. Enforcing it at the team level guarantees that every member goes through the verification process.
+  </Step>
+</Steps>
 
 ## Setting a Password (for Social Login Users)
-- You'll need to set a 2FA password before you can use two-factor authentication.
-- Accounts that signed up via a social login (e.g., Google, Naver) can also register a password and use email + password login in addition.
-- You can set a password on the My Page screen via the profile icon. If you haven't set one yet, you can also register a password from the 2FA page.
+- You need to set a 2FA password before you can use Two-Factor Authentication.
+- Accounts created via social login (such as Google or Naver) can register a password to also log in with email + password.
+- You can set a password from My Page via the profile icon. If you haven't set one yet, you can also register it directly from the 2FA page.
+
 ## Completing 2FA
-1. Install a TOTP-based authenticator app, such as Google Authenticator, Microsoft Authenticator, or Authy.
-2. Scan the QR code in the app, or manually enter the provided secret key if scanning isn't possible.
-3. Enter the 6-digit code shown in your authenticator app to finish verification.
-4. If you check the "Trust this device for 60 days" option, the same device will not be asked to verify again for 60 days.
-5. Then save your backup codes.
-  - Keep backup codes in a safe place in case you lose your phone or can't access your authenticator app.
-  - Each backup code can only be used once, and can be used to log in without the authenticator app in an emergency.
-  - We recommend clicking 'Download backup codes' to save them as a text file.
+
+<Steps>
+  <Step>
+    ### Install an authenticator app
+    Install a TOTP-based authenticator app such as Google Authenticator, Microsoft Authenticator, or Authy.
+  </Step>
+  <Step>
+    ### Scan the QR code or enter the secret key
+    Scan the QR code in the app, or manually enter the provided secret key if scanning isn't possible.
+  </Step>
+  <Step>
+    ### Enter the 6-digit code
+    Enter the 6-digit code shown in your authenticator app to finish verification.
+  </Step>
+  <Step>
+    ### Trust this device
+    If you select "Trust this device for 60 days," you won't be asked to verify again on the same device for 60 days.
+  </Step>
+  <Step>
+    ### Save your backup codes
+    Keep your backup codes in a safe place.
+    - Store them somewhere secure in case you lose your phone or can't access your authenticator app.
+    - Each backup code can be used only once, and serves as an emergency way to log in without the authenticator app.
+    - We recommend clicking 'Download backup codes' to save them as a text file.
+  </Step>
+</Steps>
 
 <Callout title="Tip">
 Enforcing 2FA at the team level requires every team member to go through verification, drastically reducing the risk of unauthorized account access or data leaks.

@@ -85,6 +85,9 @@
   color: #48567D !important;
   background-color: #F4F4F7 !important;
   border-color: #E8EAEF !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  font-size: 0.875em !important;
 }
 
 #nd-page th {

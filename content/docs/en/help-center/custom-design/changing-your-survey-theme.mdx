@@ -3,17 +3,33 @@ title: "Changing Your Survey Theme"
 description: "Customize your survey's background color, theme color, and text color to match your brand or the tone you're going for."
 ---
 
-<video src="/videos/theme.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## How to Change the Theme
 
-1. Click the `Branding` button at the top of the editor.
-2. Choose your background color and theme color to restyle the survey.
-3. If the background color is very dark, text color automatically switches to white (#FFFFFF) to keep things readable.
+<video src="/videos/theme.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px" }} />
 
-<Callout type="warning" title="Warning">
+<Steps>
+  <Step>
+    ### Click the Branding button
+    Click the `Branding` button at the top of the editor.
+  </Step>
+  <Step>
+    ### Choose background and button colors
+    Pick from a range of theme colors to restyle your survey.
+    <Callout type="warning" title="Warning">
 If your button color is too close to your background color, the required marker or button text may be hard to see.
 </Callout>
+    
+  </Step>
+  <Step>
+    ### Choose text and button text colors
+    If you don't set the text color or button text color separately, they'll automatically adjust to fit the background color you chose.
+    The colors of options and input fields will also automatically adapt to blend naturally with your chosen **text color**.
+  </Step>
+</Steps>
+
+
 <Callout title="Tip">
 If you're struggling with color combinations, try a color palette site (e.g., [2 Color Combinations](https://2colors.colorion.co/), [Color Hunt](https://colorhunt.co/)) to quickly build a balanced and natural-looking theme.
 </Callout>

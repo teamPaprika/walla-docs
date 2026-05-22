@@ -3,13 +3,33 @@ title: "Managing Projects"
 description: "You can manage projects in many ways — move, delete, restore, duplicate, or edit their details. Organizing projects to match your workspace structure makes everything easier to run."
 ---
 
-<video src="/videos/move.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## Renaming a Project
+### Changing the title shown in the workspace
 
-1. Go to the Share page for the project.
-2. Find the 'Share preview settings' section.
-3. Enter the title you want in the title input field — that's it.
+1. In the workspace, click the `...` (more) menu on the project card to rename it.
+
+2. In the workspace, click the `✏️` icon on the project card to rename it.
+
+3. Inside the project, click the project name in the top-left corner to rename it.
+
+### Changing the title shown when sharing
+
+<Steps>
+  <Step>
+    ### Go to the project Share page
+    Open the Share page for the project.
+  </Step>
+  <Step>
+    ### Find the share preview settings
+    Locate the 'Share preview settings' section.
+  </Step>
+  <Step>
+    ### Enter the title
+    Type the title you want in the title field, and you're done.
+  </Step>
+</Steps>
 
 <Callout type="warning" title="Warning">
 If you don't enter a title, the default "Walla Form" title will be shown when the project is shared.
@@ -21,11 +41,13 @@ If you don't enter a title, the default "Walla Form" title will be shown when th
 - You cannot move a project to a workspace in a different team.
 - To move a project, click `...` (more) on the project card → 'Move to Workspace', then choose the destination.
 
+<video src="/videos/move.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+
 ## Deleting and Restoring a Project
 
-- In the workspace, click '... (more)' on the project card.
-  - 'Move to Archive': Moves the project to the archive, where you can restore it later.
-  - 'Delete': Permanently deletes the project.
+- In the workspace, click `...` (more) on the project card.
+  - **Move to Archive**: Moves the project to the archive, where you can restore it later.
+  - **Delete**: Permanently deletes the project.
     <Callout type="warning" title="Warning">Projects moved to the archive can be restored to a workspace, but once you delete a project it cannot be recovered — please proceed carefully.</Callout>
 
 ## Duplicating a Project

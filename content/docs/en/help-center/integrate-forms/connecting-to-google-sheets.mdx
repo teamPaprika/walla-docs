@@ -20,9 +20,13 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
   <Step>
     ### Sign in with Google
-    Click `Sign in with Google` and log in with your Google account.
+    Click the `Sign in with Google` button and log in with your Google account.
     - All Google accounts available in this workspace will be shown.
     - You can pick an existing account or sign in with a new one.
+  </Step>
+  <Step>
+    ### Choose a spreadsheet
+    Choose whether to connect to an existing sheet or create a new one.
   </Step>
   <Step>
     ### Sheet created
@@ -30,12 +34,16 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
   <Step>
     ### Disconnect (if needed)
-    To disconnect, click the `Disconnect` button.
+    To disconnect, simply click the `Disconnect` button.
   </Step>
 </Steps>
 ## How It Works
 - When a new response is submitted, each response field is automatically mapped to a column in the sheet.
 - Data syncs in real time, so you can see responses immediately without any manual export.
+
 <Callout type="warning" title="Warning">
 The connected Google account must have edit access to the sheet. If the sheet is shared, make sure it has edit access as well.
+</Callout>
+<Callout type="warning" title="Warning">
+Columns with data masking enabled remain encrypted in the connected Google Sheet as well. (See columns E and F in the example image.)
 </Callout>

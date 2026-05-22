@@ -4,21 +4,116 @@ description: Welcome to the Walla Help Center
 icon: House
 ---
 
-# Walla Help Center
+import { Rocket, Users, PenTool, FolderOpen, Share2, Palette, Plug, Shield, BarChart2, Gift, Home, Zap, BookOpen, MessageCircle, CreditCard, ExternalLink } from 'lucide-react';
 
-Welcome to the Walla Help Center. Learn how to make the most of Walla's features.
+<div className="not-prose mb-10 rounded-2xl overflow-hidden border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-8">
+  <div className="flex flex-col gap-3">
+    <div className="flex items-center gap-2">
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/15">
+        <Zap className="h-5 w-5 text-[hsl(193,100%,40%)]" />
+      </div>
+      <span className="text-sm font-semibold text-[hsl(193,100%,38%)] uppercase tracking-wider">Walla Help Center</span>
+    </div>
+    <h1 className="text-3xl font-bold text-fd-foreground">Walla Help Center</h1>
+    <p className="text-fd-muted-foreground text-base leading-relaxed max-w-xl">Learn every Walla feature quickly and easily. From building surveys to analyzing results, find every guide you need in one place.</p>
+  </div>
+</div>
 
 ## Categories
 
 <Cards>
-  <Card title="Get Started" href="/en/docs/help-center/getting-started/creating-account" />
-  <Card title="Team/Workspace" href="/en/docs/help-center/team-workspace/managing-your-team" />
-  <Card title="Create Forms" href="/en/docs/help-center/create-forms/creating-project-ai" />
-  <Card title="Manage Forms" href="/en/docs/help-center/manage-forms/managing-projects" />
-  <Card title="Share Forms" href="/en/docs/help-center/share-forms/sharing-your-survey" />
-  <Card title="Custom Design" href="/en/docs/help-center/custom-design/changing-your-survey-theme" />
-  <Card title="Integrate Forms" href="/en/docs/help-center/integrate-forms/connecting-to-google-sheets" />
-  <Card title="Security" href="/en/docs/help-center/security/auto-delete-responses" />
-  <Card title="Result Analysis" href="/en/docs/help-center/result-analysis/cross-tabulation" />
-  <Card title="Reward" href="/en/docs/help-center/reward/managing-gifticons" />
+  <Card title="Get Started" description="Account creation, profile setup, and pricing plans" href="/en/docs/help-center/getting-started/creating-account" icon={<Rocket />} />
+  <Card title="Team & Workspace" description="How to set up your team and manage workspaces" href="/en/docs/help-center/team-workspace/managing-your-team" icon={<Users />} />
+  <Card title="Create Forms" description="Build surveys with diverse fields and branching logic" href="/en/docs/help-center/create-forms/creating-project-ai" icon={<PenTool />} />
+  <Card title="Manage Forms" description="Handle schedules, deadlines, and tags for your surveys" href="/en/docs/help-center/manage-forms/managing-projects" icon={<FolderOpen />} />
+  <Card title="Share Forms" description="Configure URLs, hidden fields, and page branching" href="/en/docs/help-center/share-forms/sharing-your-survey" icon={<Share2 />} />
+  <Card title="Custom Design" description="Apply themes and logos that match your brand" href="/en/docs/help-center/custom-design/changing-your-survey-theme" icon={<Palette />} />
+  <Card title="Integrate Forms" description="Connect with Google Sheets, Zapier, and Webhooks" href="/en/docs/help-center/integrate-forms/connecting-to-google-sheets" icon={<Plug />} />
+  <Card title="Security" description="Set up 2FA, IP authentication, and data masking" href="/en/docs/help-center/security/auto-delete-responses" icon={<Shield />} />
+  <Card title="Result Analysis" description="Review statistics, cross tabulations, and individual responses" href="/en/docs/help-center/result-analysis/cross-tabulation" icon={<BarChart2 />} />
+  <Card title="Reward" description="Purchase, send, and manage gifticons" href="/en/docs/help-center/reward/managing-gifticons" icon={<Gift />} />
 </Cards>
+
+## Walla Quick Links
+
+<div className="not-prose mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+  <a
+    href="https://home.walla.my/en/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Home className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Home</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Walla homepage</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://app.walla.my"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Zap className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Walla</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Open the app</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/blog"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <BookOpen className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Walla Blog</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Latest news and tips</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://discord.gg/vSkQbCwPYV"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <MessageCircle className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Community</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Join us on Discord</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/pricing/main"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <CreditCard className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Pricing</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Explore plans</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+</div>

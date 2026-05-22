@@ -3,65 +3,69 @@ title: "Setting Up Logic"
 description: "Logic controls the flow of a survey based on the respondent's answers. Instead of always running in the same order, the survey can branch down different paths depending on how respondents reply."
 ---
 
-<video src="/videos/logic.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## The Concept of Logic
 
-- Logic determines "where the respondent goes next based on their answer."
-- The default path is the flow every respondent follows when no logic applies. (This is different from 'Required'.)
+- Logic determines "where the next question leads based on the response."
+- The default path is the flow every respondent goes through. (This is a different concept from 'Required'.)
+
+<video src="/videos/logic.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px" }} />
 
 ## Adding Logic
 
-- In the project editor, click the `+ New Logic` button to add a new rule.
-- A logic rule consists of a 'Condition' and a 'Go to' action.
-### Condition
-    1. Select the reference question – choose which question's answer the logic is based on.
-    2. Select a condition – pick the comparison operator.
-       - Equals
-       - Does not equal
-       - Starts with
-       - Ends with
-       - Contains text
-       - Does not contain text
-       - Contains all
-       - Missing all
-       - Contains at least one
-       - Missing at least one
-       - Less than
-       - Less than or equal to
-       - Greater than
-       - Greater than or equal to
-       - Before
-       - Before or equal
-       - After
-       - After or equal
-    1. Select the option/response – choose which answers trigger the logic.
-       - You can select multiple responses at once.
-    #### Combining Multiple Conditions
-      - Click '+ Add new condition' to combine multiple conditions.
-      - When combining, choose one of the following:
-        - AND: the logic runs only if both conditions are met
-        - OR: the logic runs if either condition is met
-### Go to
-- Once the conditions are set, choose which field the respondent should be sent to.
-- When configured, any respondent who meets the conditions jumps straight to that question.
+<Steps>
+  <Step>
+    ### Open the Logic Settings
+    In the project editor, click the `Logic` button to open the logic settings screen.
+  </Step>
+  <Step>
+    ### Understand Condition and Go to
+    Logic is made up of two parts: a 'Condition' and a 'Go to' action.
+  </Step>
+  <Step>
+    ### Condition
+    1. **Select the reference field** – Choose which field's response the logic should be based on.
+    2. **Select a condition** – Pick the type of condition.
+       - Equals / Does not equal
+       - Starts with / Ends with
+       - Contains text / Does not contain text
+       - Contains all / Missing all
+       - Contains at least one / Missing at least one
+       - Less than / Less than or equal to / Greater than / Greater than or equal to / Before
+       - Before or equal / After / After or equal
+    1. **Select the option/response** – Choose which response triggers the condition.
+       - You can select multiple responses at the same time.
+  </Step>
+  <Step>
+    ### Adding Multiple Conditions
+    - Click `+ Add new condition` to combine multiple conditions.
+    - When combining conditions, choose one of the following:
+      - **AND**: The logic runs only when both the previous and following conditions are satisfied.
+      - **OR**: The logic runs when either the previous or the following condition is satisfied.
+  </Step>
+  <Step>
+    ### Go to
+    - Once all conditions are set, choose which field the respondent should move to.
+    - When configured, any respondent who meets the condition jumps straight to the specified question.
+  </Step>
+</Steps>
 
 ## Logic Examples
 
 - #### Example 1. Branching based on privacy consent
-  - Condition: `Privacy policy field` = "I agree"
+  - Condition: `Privacy consent field` = "I agree"
   - Go to: The question that follows the personal information fields (e.g., phone number field)
 - #### Example 2. Rejecting respondents by age
   - Condition: `Age question (multiple choice / dropdown field)`, does not equal, "Teens"
   - Go to: `Rejection field`
-- #### Example 3. Routing based on a keyword
+- #### Example 3. Routing to a specific question when a keyword is included
   - Condition: `Short text / long text field`, contains text, "apple"
   - Go to: `Apple juice payment field`
 
-## Additional Notes
+## Additional Settings and Notes
 
-- If your logic seems to break midway, it's usually because:
-  - A rejection field is sitting in the middle of the flow, or
-  - An earlier question's logic is misconfigured.
-- Questions inside a field group can each have their own logic. If you point logic to a question inside a group, the view starts from that group.
+- If logic breaks midway, it's most likely because **a rejection field sits in the middle of the flow, or an earlier question's logic is misconfigured**.
+
+- Questions inside a field group can each have their own logic. If logic points to a specific question, the view starts from the group that contains it.
 - Clicking the `Reset` button removes all logic from the current question.

@@ -1,6 +1,6 @@
 ---
 title: "Payment Field: Toss Payments"
-description: "The payment field lets respondents pay directly from within your form."
+description: "The Payment Field lets respondents pay directly from within your form."
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
@@ -16,38 +16,40 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     - If you're already signed up, skip to the next step.
   </Step>
   <Step>
-    ### Add a payment field
-    Add a payment field in the project editor.
+    ### Add a Payment Field
+    Add a Payment Field in the project editor.
   </Step>
   <Step>
     ### Enter payment details
+
     Enter the information required for the payment.
 
     #### Variant key
-    - A unique value that identifies a payment UI. You can find it in the payment field under `Check Payment UI variant key`.
+    - A unique value that identifies a payment UI. You can find it in the Payment Field via `Check Payment UI variant key`.
     - Be careful to distinguish between live and test UIs — live UIs process real payments, while test UIs do not.
-    - If you're new, click `Add UI` to configure a payment UI.
+    - If you're just getting started, click the `Add UI` button to configure various payment UIs.
     - After clicking `Add UI`, select `Domestic general payment`.
 
     <Callout type="warning" title="Virtual accounts are not supported">
-    Virtual accounts cannot be used. In the payment UI editor, go to [Features] → [Payment Method List] and make sure to **uncheck** virtual account. Walla records a payment as complete once a response is submitted, but virtual accounts don't settle immediately — which can lead to responses marked as paid even though no deposit has actually been made.
+    Virtual accounts cannot be used. In the payment UI editor, go to [Features] → [Payment Method List] and make sure to **uncheck** virtual account. Walla records a payment as complete once a response is submitted after the payment request, but virtual accounts don't settle immediately — this can lead to responses marked as paid in the response sheet even though no deposit has actually been made.
     </Callout>
 
     #### Client key / secret key
-    - You can find these under 'My Developer Info' in the [Toss Payments Developer Center](https://developers.tosspayments.com/). Select your store on the left, then copy the client key and secret key.
+    - You can find these under 'My Developer Info' in the [Toss Payments Developer Center](https://developers.tosspayments.com/). Select your store on the left, then copy the client key and secret key for that store.
 
     #### Order ID
-    - A unique identifier for each order, formatted as 'orderID\_randomKey\_time'. e.g., red bean bungeoppang → `redbean`, custard bungeoppang → `chouxcream`
+    - A unique value used to identify each order payment, formatted as 'orderID\_randomKey\_time'. e.g., red bean bungeoppang → `redbean`, custard bungeoppang → `chouxcream`
 
     #### Product name / price
-    - Enter the name and price of the item the respondent is ordering.
+    - Enter the name and price of the item the respondent will order.
   </Step>
   <Step>
     ### Order form complete
-    You can now use the payment field to build your order form.
+    You can now build your order form using the Payment Field.
 
-    - When you duplicate a payment field, the secret key is not copied. Enter it again in the duplicated field.
+    - Enter the variant key in the payment UI, and enter the client key and secret key in the payment widget.
+    - Enter the order ID, product name, price, and other details, then save to finish.
     - Test UIs do not process real payments, so be careful to distinguish them from live UIs.
-    - You can use logic to show different payment fields based on the respondent's selections.
+    - You can use logic to show different Payment Fields depending on the respondent's selections.
   </Step>
 </Steps>

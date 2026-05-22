@@ -35,7 +35,6 @@ After creating an automation, open the detail editor for more granular configura
   <Step>
     ### Choose the webhook payload format
 	    Decide whether to use the default webhook body (automatic) or a custom body. If you choose automatic, you can save and activate right away. If you choose custom, continue to the next step.
-    
   </Step>
   <Step>
     ### Configure request type and headers
@@ -167,7 +166,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     In the popup, enter the automation's details, choose a trigger type, and click `Create`.
 	    - **Automation name**: A name to identify this automation.
 	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
-	    - Sender: The Google account that will send the Gmail. Pick an account already linked to the workspace, or sign in with a new Google account.
+	    - **Sender**: The Google account that will send the Gmail. Pick an account already linked to the workspace, or sign in with a new Google account.
   </Step>
   <Step>
     ### Configure paths (logic)
@@ -178,7 +177,6 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### Specify the sender
 	    Pick the Google account to send from and enter the sender name.
-    
   </Step>
   <Step>
     ### Specify recipients
@@ -200,3 +198,27 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     Save your changes and click activate — the webhook only runs once it's turned on.
   </Step>
 </Steps>
+
+## Testing the Webhook
+
+Before activating a webhook, you can send a test to make sure it works as expected.
+
+### 1. Test with an existing response
+- Click the `down arrow` icon next to the `Test` button to test the webhook with a response that has already been submitted. Pick a response to test with, then click `Run test`.
+<Callout type="warning" title="Note">
+If you've entered an email field as the recipient of a Gmail automation, we recommend testing with an existing response so the delivery address is resolved accurately.
+</Callout>
+
+
+### 2. Test with random values
+- If no responses have been submitted yet, click the `Test` button to test the webhook with random values.
+
+## Resending a Webhook (When Delivery Fails)
+
+- If a webhook delivery fails, you can resend it.
+- The error summary tells you why the delivery failed.
+	- For example, if a Gmail automation shows 'At least one 'to' recipient is required', it means no recipient was provided, so the message couldn't be sent.
+	- If you see 'Webhook failed with status: 400', the webhook server received the request but rejected it as a "Bad Request" — meaning the payload format was invalid.
+### How to resend
+- **Retry with original settings**: Resends using the original settings saved at the time the webhook ran. Useful when you want to retry under the exact same conditions without changing anything. If the failure was caused by a temporary server error, try retrying with the original settings first.
+- **Resend with current settings**: Resends using the currently saved automation settings. Useful when you want to retry after fixing the configuration. If the failure was caused by a missing recipient or invalid payload format, fix the issue and then click Resend with current settings.
