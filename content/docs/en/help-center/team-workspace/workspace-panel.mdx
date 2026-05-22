@@ -4,21 +4,14 @@ description: In the Panel tab of your workspace, you can register survey recipie
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## What is a Panel?
 
 A panel is a list of recipients to send surveys to. In the **Panel** tab of your workspace, you can upload panel lists via CSV or Excel files and organize them into groups for structured management.
 
-## Navigating to the Panel Tab
-
-Click the **Panel** tab at the top of the workspace screen to access panel management.
-
-- Tab order: Projects → Archive → **Panel**
-
-The panel list displays the following information:
-
 | Field | Description |
-|-------|-------------|
+| ---- | ------------------- |
 | Customer Key | Unique identifier for the panel member |
 | Name | Panel member's name (masked by default) |
 | Email | Panel member's email address (masked by default) |
@@ -31,51 +24,101 @@ Names, emails, and phone numbers are masked by default to protect personal infor
 
 ## Uploading Panels
 
-You can register panel members all at once using a CSV or Excel file.
+You can register an entire panel list at once using a CSV or Excel file.
 
-1. Click the **Panel Upload** button in the Panel tab.
-2. Select a **group** to assign to the uploaded panels. (Optional)
-3. Click **Select File** and choose your CSV or Excel file.
-4. Review the valid data, then click **Upload Panel**.
+<Steps>
+  <Step>
+    ### Click the Panel Upload button
+    In the Panel tab, click the **Panel Upload** button.
+  </Step>
+  <Step>
+    ### Select a group
+    Choose a **group** to assign the uploaded panels to. (Optional)
+  </Step>
+  <Step>
+    ### Select a file
+    Click the **Select File** button and choose your CSV or Excel file.
+    Any rows with errors in the name, email, or phone number fields will be excluded from the upload.
+  </Step>
+  <Step>
+    ### Complete the upload
+    Review the valid data, then click the **Upload Panel** button.
+  </Step>
+</Steps>
 
 <Callout type="warn" title="File Format Requirements">
-- Name is required. Either email or phone number must also be provided.
-- If leading zeros in phone numbers are missing, set the cell format of the phone number column to **Text**, or add a `'` before the phone number.
+- Name is required, and either email or phone number must also be provided.
+- If leading zeros in phone numbers are missing, set the phone number column's cell format to **Text**, or add a `'` before each phone number.
 - If your file has formatting issues, check the **Invalid Data** tab for error details.
-- Click **Download Template** to get a file template.
+- Click the **Download Template** button if you need a file template.
 </Callout>
 
 <Callout type="info" title="Currently Supported Delivery Method">
-Currently, only **email delivery** is supported for sending surveys to panels.
+Currently, only email delivery is supported when sending surveys to panels.
 </Callout>
 
 ## Managing Groups
 
 You can categorize panels into groups to organize them by purpose.
 
-1. Click the **Manage Groups** button in the Panel tab.
-2. View the existing group list and the number of panel members in each group.
-3. Click **Create Group** to add a new group, or use the edit button next to a group to rename it.
-4. Select groups to delete and click **Delete Selected** to remove them.
+<Steps>
+  <Step>
+    ### Click the Manage Groups button
+    In the Panel tab, click the `Manage Groups` button.
+  </Step>
+  <Step>
+    ### Review the group list
+    You can see the existing groups along with the number of panel members in each group.
+  </Step>
+  <Step>
+    ### Create or edit a group
+    Click `Create Group` to add a new group, or click the edit button next to a group to rename it.
+  </Step>
+  <Step>
+    ### Delete a group
+    Select the groups you want to remove, then click `Delete Selected` to delete them.
+  </Step>
+</Steps>
 
 ## Unmasking Personal Data
 
 To view panel members' personal information (name, email, phone number), you need to unmask the data.
 
-1. Click the **Unmask** button (lock icon) at the top of the Panel tab.
-2. Enter the **reason for unmasking**.
-3. Click **Unmask**.
+<Steps>
+  <Step>
+    ### Click the Unmask button
+    Click the `Unmask` button at the top of the Panel tab.
+  </Step>
+  <Step>
+    ### Enter a reason
+    Provide a reason for unmasking.
+  </Step>
+  <Step>
+    ### Complete unmasking
+    Click the `Unmask` button.
+  </Step>
+</Steps>
 
 Once unmasked, the search function becomes available as well.
 
 <Callout type="warn" title="Unmasking Notice">
-The reason for unmasking is recorded. Please avoid unnecessary access to personal information.
+When data is unmasked, the reason is recorded in the access log. Please avoid unnecessary access to personal information.
 </Callout>
 
-## Filter and View Settings
+### Filter and View Settings
 
-**Filter**: Filter the panel list to show only members from a specific group.
+- **Filter**: Filter the panel list to show only members from a specific group.
+- **View**: Configure the sort order and which columns to display.
+- **Sort by**: Creation date (ascending/descending)
+- **Display columns**: Customer Key, Name, Email, Phone Number, and Group can each be toggled on/off.
 
-**View**: Configure sorting and which columns to display.
-- Sort by: Creation date (ascending/descending)
-- Toggle columns: Customer Key, Name, Email, Phone Number, Group can each be turned on/off
+## Sending Surveys to Panels
+
+<a href="/en/docs/help-center/share-forms/sending-to-panel" className="not-prose group block rounded-2xl border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-6 no-underline hover:border-[hsl(193,100%,50%)]/40 transition-colors">
+  <div className="flex items-center justify-between gap-4">
+    <div>
+      <div className="text-lg font-bold text-[#1A2C5C] mb-1">Send Surveys to Panels →</div>
+      <div className="text-[#76809D] text-sm">Learn how to send surveys via email to your registered panels.</div>
+    </div>
+  </div>
+</a>

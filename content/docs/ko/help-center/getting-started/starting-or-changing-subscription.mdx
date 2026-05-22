@@ -40,18 +40,104 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 결제 전, 카드사 앱에서 '해외 원화 결제 차단' 설정을 반드시 해제해야 하며, 일부 카드사는 해외 결제 수수료가 부과될 수 있습니다.
 </Callout>
 
-## 플랜 취소/변경하기
+## 플랜 취소하기
 
-<img src="/images/guides/getting-started/subscription-management-buttons.png" alt="유료 플랜 구독 중인 팀 정보 화면의 구독 관리 / 플랜 변경 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+현재 구독 중인 플랜을 취소하려면 `플랜 취소`를 클릭해주세요.
 
-구독 중인 플랜을 변경하려면 `플랜 관리` 버튼을 눌러 팝업창에서 원하는 작업을 선택할 수 있습니다.
+<Steps>
+  <Step>
+    ### 팀 정보 페이지에서 구독 관리 버튼 클릭
 
-- 결제 정보 페이지에서는 다음 정보를 확인할 수 있습니다.
-  - 현재 구독 중인 플랜 정보
-  - 지불 수단(카드 정보 등)
-  - 다음 결제 예정일
-  - `구독 업데이트 버튼` → **플랜 업그레이드/다운그레이드**
-  - `구독 취소 버튼` → **구독 해지**
+    <img src="/images/guides/getting-started/subscription-management-buttons.png" alt="유료 플랜 구독 중인 팀 정보 화면의 구독 관리 / 플랜 변경 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 활성 플랜 클릭
+
+    <img src="/images/guides/getting-started/stripe-billing-portal.png" alt="Stripe 결제 관리 페이지에서 활성 플랜, 결제 방식, 청구 정보, 청구서 내역을 확인하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 플랜 취소 클릭
+
+    <img src="/images/guides/getting-started/stripe-plan-cancel-button.png" alt="Pro 플랜 상세 화면에서 플랜 업데이트와 플랜 취소 버튼이 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 취소 사유 입력 후 취소 확인 클릭
+
+    <img src="/images/guides/getting-started/stripe-cancel-reason-form.png" alt="취소 사유와 추가 세부사항을 입력하고 취소 확인 버튼을 누르는 취소 확인 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+
+## 플랜 변경하기
+
+현재 구독 중인 플랜의 구독 주기(월간/연간)을 변경하려면 '플랜 업데이트'를 클릭해주세요.
+
+<Steps>
+  <Step>
+    ### 팀 정보 페이지에서 구독 관리 버튼 클릭
+
+    <img src="/images/guides/getting-started/subscription-management-buttons.png" alt="유료 플랜 구독 중인 팀 정보 화면의 구독 관리 / 플랜 변경 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 활성 플랜 클릭
+
+    <img src="/images/guides/getting-started/stripe-billing-portal.png" alt="Stripe 결제 관리 페이지에서 활성 플랜, 결제 방식, 청구 정보, 청구서 내역을 확인하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 플랜 업데이트 클릭
+
+    <img src="/images/guides/getting-started/stripe-plan-update-button.png" alt="Pro 플랜 상세 화면에서 플랜 업데이트 버튼이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 원하는 플랜 선택
+
+    <img src="/images/guides/getting-started/stripe-plan-selection.png" alt="Free 와 Pro 플랜을 비교하고 1개월/1년 결제 주기를 선택할 수 있는 플랜 선택 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## 결제 방법 변경하기
+
+현재 결제 중인 결제 방법(카드)를 다른 결제 방법(카드)으로 변경하고 싶다면, `결제 방식 추가`를 클릭해주세요.
+
+<Steps>
+  <Step>
+    ### 팀 정보 페이지에서 구독 관리 버튼 클릭
+
+    <img src="/images/guides/getting-started/subscription-management-buttons.png" alt="유료 플랜 구독 중인 팀 정보 화면의 구독 관리 / 플랜 변경 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 결제 방식 추가 클릭
+
+    <img src="/images/guides/getting-started/stripe-payment-method-add-button.png" alt="Stripe 결제 관리 페이지의 결제 방식 영역에서 결제 방식 추가 버튼이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 카드 정보 입력 후 추가 클릭
+
+    <img src="/images/guides/getting-started/stripe-payment-method-form.png" alt="카드 번호·만료 날짜·보안 코드·국가를 입력하는 결제 방식 추가 폼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+
+## 결제 영수증 확인하기
+
+<Steps>
+  <Step>
+    ### 팀 정보 페이지에서 구독 관리 버튼 클릭
+
+    <img src="/images/guides/getting-started/subscription-management-buttons.png" alt="유료 플랜 구독 중인 팀 정보 화면의 구독 관리 / 플랜 변경 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 청구서 내역에서 결제일 선택
+
+    <img src="/images/guides/getting-started/stripe-invoice-history.png" alt="Stripe 결제 관리 페이지 하단의 청구서 내역 섹션에서 결제일·금액·상태·플랜이 표시된 영수증 행이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 인보이스/결제 영수증 다운로드
+왈라는 해외 PG사를 통해 결제가 진행되므로, 인보이스/영수증에 표시된 금액과 실제 결제된 금액이 다르다면, 카드사의 해외 결제 수수료가 더해진 금액일 수 있습니다.
+    <img src="/images/guides/getting-started/stripe-invoice-receipt-download.png" alt="청구서 결제됨 화면에서 청구서 다운로드와 영수증 다운로드 버튼이 제공되는 결제 영수증 페이지" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  </Step>
+</Steps>
 
 <Callout type="warn" title="주의사항">
 - 결제 시점에 해외 원화 결제 차단이 설정되어 있으면 결제가 실패할 수 있습니다.

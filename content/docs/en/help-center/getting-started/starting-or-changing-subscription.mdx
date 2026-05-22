@@ -4,34 +4,96 @@ description: If your team's needs or size change, you can update or manage your 
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 <video src="/videos/subscription.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
 
-## Starting a Subscription
+## Starting a Plan Subscription
 
-1. Go to Team Settings → \[Team Management\] tab.
-2. Click the \[Change Plan\] button at the top.
-3. Review the pricing page and choose the plan you want.
-4. Click \[Apply Plan\] to go to the payment page.
-5. Enter your email, card info, and other billing details to start your subscription.
+<Steps>
+  <Step>
+    ### Open the Team Management tab
+    Go to Team Settings → `Team Management` tab.
+  </Step>
+  <Step>
+    ### Click Change Plan
+    Click the `Change Plan` button at the top.
+  </Step>
+  <Step>
+    ### Choose and apply your plan
+    Review the pricing page, select the plan you want, and click `Apply Plan` to go to the payment page.
+  </Step>
+  <Step>
+    ### Enter your payment information
+    Enter your email, card details, and other billing information to start your subscription. If you have a promotion code, enter it in `Add promotion code` to apply a discount at checkout.
+  </Step>
+</Steps>
 
 <Callout type="info" title="Note">
-Walla uses an overseas payment gateway. Before paying, make sure to disable any "block overseas KRW payments" setting in your card issuer's app. Some card issuers may also charge international payment fees.
+Walla uses an overseas payment gateway.
+Before paying, make sure to disable the "block overseas KRW payments" setting in your card issuer's app. Some card issuers may also charge international payment fees.
 </Callout>
 
-## Cancelling or Changing Your Plan
+## Cancelling a Plan
 
-To change your current plan, click the \[Manage Plan\] button and choose the action you want from the popup.
+To cancel your current subscription, click `Cancel Plan`.
 
-- On the billing info page, you can review:
-  - Your current plan
-  - Payment method (card info, etc.)
-  - Next billing date
-  - `\[Update Subscription\] button` → **upgrade/downgrade plan**
-  - `\[Cancel Subscription\] button` → **cancel subscription**
+<Steps>
+  <Step>
+    ### Click the Manage Subscription button on the Team Info page
+  </Step>
+  <Step>
+    ### Click your active plan
+  </Step>
+  <Step>
+    ### Click Cancel Plan
+  </Step>
+  <Step>
+    ### Enter your cancellation reason and click Confirm Cancellation
+  </Step>
+</Steps>
+
+
+## Changing a Plan
+
+To change the billing cycle (monthly/annual) of your current subscription, click `Update Plan`.
+
+<Steps>
+  <Step>
+    ### Click the Manage Subscription button on the Team Info page
+  </Step>
+  <Step>
+    ### Click your active plan
+  </Step>
+  <Step>
+    ### Click Update Plan
+  </Step>
+  <Step>
+    ### Choose the plan you want
+  </Step>
+</Steps>
+
+## Changing Your Payment Method
+
+If you want to switch your current payment method (card) to a different one, click `Add payment method`.
+
+<Steps>
+  <Step>
+    ### Click the Manage Subscription button on the Team Info page
+  </Step>
+  <Step>
+    ### Click Add payment method
+  </Step>
+  <Step>
+    ### Enter your card details and click Add
+  </Step>
+</Steps>
+
+
+##  
 
 <Callout type="warn" title="Warning">
 - If overseas KRW payments are blocked at the time of billing, your payment may fail.
-- Downgrading affects team members and response data, so back up your data and clean up storage before making changes.
-- Before changing plans, please review each plan's details on the [pricing page](https://home.walla.my/ko/pricing/main).
+- Downgrading affects team members and response data, so make sure to back up your data and clean up storage before making changes.
+- Before changing plans, please review each plan's details on the [pricing page](https://home.walla.my/en/pricing/main).
 </Callout>

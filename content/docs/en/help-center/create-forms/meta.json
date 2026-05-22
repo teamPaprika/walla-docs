@@ -28,6 +28,7 @@
     "limiting-option-selections-by-quota",
     "template",
     "team-template",
+    "field-template",
     "setting-up-logic"
   ]
 }

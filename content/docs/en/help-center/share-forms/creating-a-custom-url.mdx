@@ -3,25 +3,44 @@ title: "Creating a Custom URL"
 description: "On the Share page, you can customize your survey link and set the title, description, and thumbnail image that appear in the share preview."
 ---
 
-<video src="/videos/linkcustom.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## Creating a Custom URL
-- Share links are created in the format `walla.my/a/customPart` by default.
-- The URL must follow the naming rules.
-- How to set it up:
-  1. Go to the Share page → Customize Link.
-  2. Enter the custom URL you want and save.
-  3. Pick either horizontal or vertical view first, then save — your setting takes effect immediately without clicking Publish again.
 
-- Custom URL rules
-  - Must be between 0 and 30 characters
-  - Cannot include a slash (`/`)
-  - Cannot consist only of a single dot (`.`) or two dots (`..`)
-  - Cannot match the regex `__.*__`
+- Share links are generated in the format `walla.my/a/customPart` by default.
+- You need to enter a URL that follows the naming rules.
+
+### How to set it up
+
+<video src="/videos/linkcustom.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px" }} />
+
+<Steps>
+  <Step>
+    ### Go to Customize Link
+    On the Share page, navigate to the `Customize Link` section.
+  </Step>
+  <Step>
+    ### Enter and save the custom URL
+    Type in the custom URL you want and save it.
+  </Step>
+  <Step>
+    ### Choose a view mode
+    Select either horizontal or vertical view first and save — the setting is applied immediately without needing to click Publish again.
+  </Step>
+</Steps>
+
+### Custom URL rules
+
+- Must be between 0 and 30 characters
+- Cannot include a slash (`/`)
+- Cannot consist solely of a single dot (`.`) or two dots (`..`)
+- Cannot match the regex `__.*__`
 
 ## Share Preview Settings
+
 - Below the custom URL, you can set the project title, description, and thumbnail image.
-- Saving takes effect immediately — no separate publish step required.
+- Changes take effect as soon as you save — no separate publish step is needed.
+- If you don't upload a thumbnail image, a default thumbnail reflecting the project title and theme is shown.
 <Callout type="warning" title="Warning">
-If the title or thumbnail you changed still shows the old image or text in messengers like KakaoTalk or Slack, that's because of the messenger app or browser cache from earlier previews. Anyone receiving the link for the first time will see the correctly updated preview, so you don't need to worry.
+If the title or thumbnail you changed still shows the old image or text in messengers like KakaoTalk or Slack, that's because of the messenger app or browser cache saved during earlier previews. Anyone receiving the link for the first time will see the correctly updated preview, so there's no need to worry.
 </Callout>

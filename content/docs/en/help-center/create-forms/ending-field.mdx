@@ -1,6 +1,6 @@
 ---
 title: "Ending Field"
-description: "The ending field is the final screen shown after a respondent submits their answers. You can freely design the screen displayed at the end of the survey, or redirect respondents to a specific website."
+description: "The ending field is the final screen shown after a response is submitted. You can freely design the page displayed at the end of the survey, or set it to redirect respondents to a specific website."
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
@@ -8,19 +8,21 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 ## Types of Ending Fields
 
 ### End Page
-   - A custom end screen displayed after the response is submitted.
+   - A custom end screen displayed after a response is submitted.
    - Like a description field, you can include various content such as text, images, and tables.
+	   - Use the [text editor](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%8A%A4%ED%83%80%EC%9D%BC-%EC%A7%80%EC%A0%95%ED%95%98%EA%B8%B0) to apply various styles such as text color, size, and weight.
+	   - You can also easily insert images, tables, headings, and more with the [slash (/) command](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#%EC%8A%AC%EB%9E%98%EC%8B%9C-%EB%AA%85%EB%A0%B9%EC%9C%BC%EB%A1%9C-%EC%B6%94%EA%B0%80-%EA%B8%B0%EB%8A%A5-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0).
    - Examples:
-     - "Your response has been submitted. For questions, contact [cs@walla.my](mailto:cs@walla.my)."
+     - "Your response has been submitted. If you have any questions, please contact [cs@walla.my](mailto:cs@walla.my)."
      - "Exclusive promo code for respondents: WALLA10"
+
 ### Redirect to URL
    - Redirect respondents to a specific web page after they submit.
    - In the ending field settings on the project edit screen, enter the URL you want to redirect to.
 
 ## Using It with Logic
 
-- If you only add an ending field without configuring logic, the default end page ("Your response has been successfully submitted.") will be displayed automatically.
-- To redirect to a different ending field after submission:
+To redirect to an ending field after submission, you must configure logic.
 
 <Steps>
   <Step>
@@ -29,10 +31,17 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
   <Step>
     ### Specify the ending field
-    Set which ending field to navigate to based on your conditions.
+    Choose which ending field to navigate to based on your conditions.
+  </Step>
+  <Step>
+    ### Publish
+    Logic settings only take effect on the live survey after you click `Publish`.
   </Step>
 </Steps>
-- If you want to always redirect to a specific ending field without any logic, simply change the default destination to that ending field.
+
+<Callout type="warning" title="Note">
+If you only add an ending field without configuring logic, the default end page ("Your response has been successfully submitted.") will be displayed automatically.
+</Callout>
 
 <Callout title="Tip">
 - Ending fields are great for wrapping up your survey with a thank-you message, additional guidance, or promotional information.

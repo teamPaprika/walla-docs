@@ -3,45 +3,71 @@ title: "Tracking (Hidden Fields)"
 description: "Tracking lets you see how respondents found your survey. It's useful when you want to separate responses by ad channel, customer group, or any other criteria."
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 <video src="/videos/tracking.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
 
 ## Adding a Tracking Item (Hidden Field)
 
-1. Go to the Share page → click `Manage`.
-2. Enter a tracking name (hidden field name) and press Enter to register it.
-3. Click `Save`.
-4. The hidden field you register acts as a "category for distinguishing where traffic came from."
-- Examples
-  - ① To track traffic by SNS → name the hidden field `SNS` (e.g., Instagram, YouTube, etc.)
-  - ② To separate customer groups → name the hidden field `customer`
+<Steps>
+  <Step>
+    ### Open the tracking management page
+    On the Share page, click the `Manage` button.
+  </Step>
+  <Step>
+    ### Enter a tracking item
+    Type a tracking name (hidden field name), then press Enter to register it.
+  </Step>
+  <Step>
+    ### Save
+    Click the `Save` button to save your changes.
+  </Step>
+  <Step>
+    ### Put it to use
+    A registered hidden field works as a "category for distinguishing where traffic came from."
+    - ① To track traffic by SNS → set the hidden field name to `SNS` (e.g., Instagram, YouTube, etc.)
+    - ② To separate customer groups → set the hidden field name to `customer`
+  </Step>
+</Steps>
 ## Creating a Hidden Field URL
 
-- Once you've added a hidden field, you need to attach it to the survey URL.
-1. Start with the base survey URL
-```
-https://walla.my/v/QA9S0i0UfZn5rZTfSbd4
-```
+Once you've added a hidden field, you need to attach it directly to your survey link (URL).
 
-2. Add the hidden field name (in the format `?fieldName=`)
-```
-https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=
-```
-
-3. Add the value (e.g., traffic coming from YouTube)
-```
-https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=youtube
-```
-
-4. Share a different link per channel, and you'll be able to see the traffic source (YouTube, Instagram, etc.) in the response sheet.
+<Steps>
+  <Step>
+    ### Prepare the base survey URL
+    ```
+    https://walla.my/v/QA9S0i0UfZn5rZTfSbd4
+    ```
+  </Step>
+  <Step>
+    ### Add the hidden field name
+    Append it in the format `?fieldName=`.
+    ```
+    https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=
+    ```
+  </Step>
+  <Step>
+    ### Add the field value
+    Example: traffic coming from YouTube
+    ```
+    https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=youtube
+    ```
+  </Step>
+  <Step>
+    ### Share a link per channel
+    Share each link on its own channel, and you'll be able to see the traffic source (e.g., YouTube, Instagram) in the response sheet.
+  </Step>
+</Steps>
 ## Using Multiple Hidden Fields
 
-- To add more than one hidden field, join them with `&` instead of another `?`.
+- To add more than one hidden field to a URL, join them with `&` instead of another `?`.
 ```
 https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=instagram&media=video
 ```
-→ Traffic from an Instagram video ad.
+→ This means the traffic came from an Instagram video ad.
 <Callout type="warning" title="Warning">
-- You must press Enter when registering a tracking item.
+- You must press Enter when registering a tracking item for it to be saved.
 - We recommend using only letters, numbers, and underscores (_) for hidden field names.
 </Callout>
 <Callout title="Tip">
