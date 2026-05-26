@@ -73,7 +73,7 @@
 
 /* Spacing above prev/next navigation */
 #nd-page .grid.grid-cols-2:has(a.rounded-lg.border) {
-  margin-top: 2.5rem;
+  margin-top: 8rem;
 }
 
 #nd-page a:not(.rounded-lg):not(.rounded-full):not([class*="peer"]) {
