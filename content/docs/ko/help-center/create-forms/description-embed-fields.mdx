@@ -15,12 +15,101 @@ description: 설문에 안내문, 이미지, 표, 웹페이지 등을 함께 보
 설명 필드를 적절히 활용하면 설문 구조를 구분하거나 안내를 추가하면 참여자가 내용을 더 쉽게 이해할 수 있습니다.
 </Callout>
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 ## 임베드 필드
 
 <img src="/images/guides/manage-forms/embed-field-example.png" alt="설문 안에 YouTube 영상이 임베드되어 재생 화면이 표시된 임베드 필드 예시" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - 웹사이트 URL을 붙여넣어, 왈라 폼 안에 해당 웹페이지를 직접 표시할 수 있습니다.
 
+### 유튜브 영상 임베드하기
+
+유튜브 영상의 공유 URL이나 퍼가기 코드를 임베드 필드에 붙여넣으면 설문 안에서 바로 영상을 재생할 수 있어요.
+
+<Steps>
+  <Step>
+    ### 유튜브에서 공유 버튼 클릭
+    임베드할 영상을 유튜브에서 열고 영상 아래의 공유 버튼을 클릭합니다.
+
+    <img src="/images/guides/manage-forms/yt-embed-1-share-button.png" alt="유튜브 영상 페이지 하단에서 공유 버튼이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 공유 모달에서 퍼가기 선택
+    게시물로 공유 모달이 열리면 가장 왼쪽의 퍼가기 옵션을 클릭합니다.
+
+    <img src="/images/guides/manage-forms/yt-embed-2-embed-option.png" alt="유튜브 게시물로 공유 모달에서 퍼가기 옵션이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 동영상 퍼가기 코드에서 URL만 복사
+    iframe 태그 전체가 아니라, src 속성 안의 https://www.youtube.com/embed/... 로 시작하는 URL만 드래그해 복사합니다.
+
+    <img src="/images/guides/manage-forms/yt-embed-3-copy-url.png" alt="동영상 퍼가기 다이얼로그의 iframe 코드에서 src 속성 안 URL 부분이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 왈라 임베드 필드에서 URL 임베딩 클릭
+    왈라 프로젝트 편집 화면에서 임베드 필드를 추가하고, 필드 안의 URL 임베딩 버튼을 클릭합니다.
+
+    <img src="/images/guides/manage-forms/yt-embed-4-walla-url-embed.png" alt="왈라 편집 화면의 임베드 필드에서 URL 임베딩 버튼이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### URL 붙여넣고 임베드 클릭
+    복사한 유튜브 임베드 URL을 입력란에 붙여넣은 뒤 임베드 버튼을 누릅니다.
+
+    <img src="/images/guides/manage-forms/yt-embed-5-paste-url.png" alt="임베드 필드 입력란에 유튜브 URL을 붙여넣고 임베드 버튼이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 임베드 결과 확인
+    설문 안에서 유튜브 영상이 바로 재생 가능한 형태로 표시되는 걸 확인할 수 있어요.
+
+    <img src="/images/guides/manage-forms/yt-embed-6-result.png" alt="왈라 임베드 필드에 유튜브 영상이 임베드되어 재생 화면이 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+### 구글 캘린더 임베드하기
+
+구글 캘린더 공유 URL을 임베드 필드에 붙여넣으면 일정·예약 정보를 설문 안에서 바로 보여줄 수 있어요.
+
+<Steps>
+  <Step>
+    ### 구글 캘린더에서 공유 옵션 열기
+    임베드할 일정/약속을 클릭한 뒤, 팝업의 `⋮`(더보기) 메뉴에서 `공유 옵션 더보기`를 선택합니다.
+
+    <img src="/images/guides/manage-forms/gcal-embed-1-share-options.png" alt="구글 캘린더 일정 팝업에서 더보기 메뉴를 열고 공유 옵션 더보기 항목이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 웹사이트 삽입 → 인라인 예약 페이지 펼치기
+    공유 모달 상단의 `웹사이트 삽입` 탭을 선택하고, 하단의 `인라인 예약 페이지` 항목을 클릭해 펼칩니다.
+
+    <img src="/images/guides/manage-forms/gcal-embed-2-inline-page.png" alt="예약 페이지 공유 모달에서 웹사이트 삽입 탭과 인라인 예약 페이지 항목이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 삽입 코드에서 URL만 복사
+    `삽입 코드` 영역의 iframe 태그 전체가 아니라, `src="..."` 안의 `https://calendar.google.com/...`로 시작하는 URL만 드래그해 복사합니다.
+
+    <img src="/images/guides/manage-forms/gcal-embed-3-copy-url.png" alt="삽입 코드 iframe 태그에서 src 속성 안의 URL 부분만 파랗게 드래그되어 있는 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 왈라 임베드 필드에서 URL 임베딩 클릭
+    왈라 프로젝트 편집 화면에서 임베드 필드를 추가하고, 필드 안의 `URL 임베딩` 버튼을 클릭합니다.
+
+    <img src="/images/guides/manage-forms/gcal-embed-4-walla-url-embed.png" alt="왈라 편집 화면의 임베드 필드에서 URL 임베딩 버튼이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### URL 붙여넣고 임베드 클릭
+    복사한 구글 캘린더 URL을 입력란에 붙여넣은 뒤 `임베드` 버튼을 누릅니다.
+
+    <img src="/images/guides/manage-forms/gcal-embed-5-paste-url.png" alt="임베드 필드 입력란에 구글 캘린더 URL을 붙여넣고 임베드 버튼이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 임베드 결과 확인
+    설문 안에서 캘린더의 예약 시간 선택 화면이 그대로 표시되는 걸 확인할 수 있어요.
+
+    <img src="/images/guides/manage-forms/gcal-embed-6-result.png" alt="왈라 임베드 필드에 구글 캘린더 예약 페이지가 임베드되어 약속 시간 선택 화면이 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
 <Callout type="warning" title="주의사항">
-외부 사이트의 보안 정책이나 HTTPS 설정에 따라 임베드가 표시되지 않을 수도 있습니다.
+- 외부 사이트의 보안 정책이나 HTTPS 설정에 따라 임베드가 표시되지 않을 수도 있습니다.
+- 일반 URL을 넣었을 때 "~~에서 연결을 거부했습니다"라는 문구가 뜬다면, 해당 사이트가 제공하는 임베드 전용 링크로 다시 시도해보세요.
 </Callout>
