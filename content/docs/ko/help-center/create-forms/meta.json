@@ -1,8 +1,12 @@
 {
   "title": "설문 만들기",
   "pages": [
-    "creating-project-ai",
     "creating-new-project",
+    "template",
+    "creating-project-ai",
+    "importing-from-google-forms",
+    "importing-from-qualtrics",
+    "adding-or-deleting-fields",
     "editing-field-text",
     "grouping-fields",
     "multiple-choice-checkbox-fields",
@@ -22,11 +26,9 @@
     "rejection-field",
     "ending-field",
     "response-validation",
-    "adding-or-deleting-fields",
     "customize-button-labels",
     "creating-personalized-questions",
     "limiting-option-selections-by-quota",
-    "template",
     "team-template",
     "field-template",
     "setting-up-logic"

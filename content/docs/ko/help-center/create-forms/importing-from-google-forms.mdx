@@ -1,0 +1,51 @@
+---
+title: Google Forms에서 가져오기
+description: Google Forms에서 만든 설문을 왈라로 가져와 그대로 사용할 수 있어요.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Google Forms 설문 가져오기
+
+<Steps>
+  <Step>
+    ### 프로젝트 만들기 버튼 클릭
+    워크스페이스 화면에서 `프로젝트 만들기` 버튼을 클릭합니다.
+
+    <img src="/images/guides/manage-forms/team-template-create-project.png" alt="워크스페이스 우측 상단의 프로젝트 만들기 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Google Forms에서 가져오기 선택
+    `Google Forms에서 가져오기`를 선택합니다.
+
+    <img src="/images/guides/manage-forms/import-google-forms-select.png" alt="새로운 프로젝트 만들기 팝업에서 Google Forms에서 가져오기 카드 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Google Forms 응답자 링크 입력 후 가져오기
+    Google Forms의 응답자 링크(`https://docs.google.com/forms/d/...`)를 입력란에 붙여넣고 `가져오기` 버튼을 클릭합니다.
+
+    <img src="/images/guides/manage-forms/import-google-forms-dialog.png" alt="Google Forms에서 가져오기 다이얼로그에서 응답자 링크 입력란과 가져오기 버튼이 강조되고 주의사항·가져올 수 없는 항목·Google Forms로 응답 받기 설정이 표시된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <Callout type="warning" title="주의사항">
+    Google Forms → 설정 → 응답 섹션에서 로그인이 필요한 하위 기능을 해제해야 합니다.
+    섹션 헤더는 왈라의 설명 필드로 변환되어 가져옵니다.
+    </Callout>
+
+    <Callout type="warning" title="가져올 수 없는 항목">
+    - Google Forms에서 지정한 배경 이미지 및 질문 이미지
+    - Google Forms에서 설정된 파일 업로드 질문
+    </Callout>
+  </Step>
+  <Step>
+    ### 완료
+    입력한 Google Forms 링크를 기반으로 새 프로젝트가 생성됩니다.
+
+    <img src="/images/guides/manage-forms/import-google-forms-result.png" alt="Google Forms 에서 가져와 생성된 왈라 프로젝트 편집 화면에 필드 목록과 설문 본문이 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+### Google Forms로 응답 받기
+
+- `Google Forms로 응답 받기` 선택 시 커스텀 자동화가 생성됩니다.
+- 왈라로 응답을 받을 때 Google Forms에도 함께 제출되며, 이 자동화는 일회성으로만 제공됩니다. Google Forms나 왈라에서 설문을 수정 후 다시 게시하면 그 시점부터 자동화는 **중단**되며, **더이상 Google Forms에 응답을 받을 수 없습니다.**
+- Google Forms에서 설문 편집을 모두 마친 후 왈라로 가져오는 것을 권장합니다.
+- 객관식이나 체크박스의 '기타(직접 입력)'가 포함된 응답은 받을 수 없습니다.
