@@ -5,6 +5,7 @@
     "two-factor-authentication",
     "ip-address-verification",
     "activity-logs",
-    "data-masking"
+    "data-masking",
+    "blocking-external-ai"
   ]
 }
