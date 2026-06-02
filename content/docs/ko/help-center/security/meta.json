@@ -6,6 +6,7 @@
     "ip-address-verification",
     "activity-logs",
     "data-masking",
-    "blocking-external-ai"
+    "blocking-external-ai",
+    "managing-permissions"
   ]
 }
