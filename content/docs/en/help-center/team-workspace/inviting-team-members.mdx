@@ -1,0 +1,86 @@
+---
+title: "Inviting Team Members"
+description: "Invite new members by email and manage pending invitations from your team settings."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Before You Start
+
+- Team member invitations are available starting from the **Pro plan**.
+- You need **Owner** or **Admin** permissions to send invitations.
+
+## Sending Invitations by Email
+
+<Steps>
+  <Step>
+    ### Open Team Settings
+    Click the team name in the top menu, go to `Team Settings`, and open the `Team Members` tab.
+  </Step>
+  <Step>
+    ### Enter Email Addresses
+    In the invite area at the top of the screen, enter the new member's email address. You can enter multiple emails at once to invite several people in a single batch.
+  </Step>
+  <Step>
+    ### Choose a Role and Send
+    Select the role (Admin, Member, etc.) for the invitee and click `Send Invitation`. An invitation email is sent to each address you entered.
+  </Step>
+</Steps>
+
+<Callout type="info" title="You can change roles later">
+The role chosen at invitation time can be updated anytime from the `Team Members` tab once the person joins. For a full breakdown of roles and permissions, see the [Managing Your Team](/help-center/team-workspace/managing-your-team) page.
+</Callout>
+
+## Inviting via Invite Link
+
+<Steps>
+  <Step>
+    ### Create an Invite Link
+    In the `Invite Link` area, click the **Create Invite Link** button to generate a new link.
+  </Step>
+  <Step>
+    ### Copy and Share the Link
+    Click the copy icon next to the generated link, then send it to anyone you want to add. By default, the link is valid for 7 days.
+  </Step>
+  <Step>
+    ### Change the Expiry
+    Click the **Change Expiry** button to the right of the link to set a new remaining lifetime in hours.
+  </Step>
+  <Step>
+    ### Confirm the Updated Expiry
+    The expiry updates immediately based on the value you set, and the new expiration time is shown below the link.
+  </Step>
+  <Step>
+    ### Delete the Invite Link
+    When the link is no longer needed, click the trash icon to delete it. The link becomes invalid right away, but members who already joined remain on the team.
+  </Step>
+</Steps>
+
+## Checking and Managing Invitations
+
+- Invitations that haven't been accepted yet appear in the member list of the `Team Members` tab with a **Pending** status.
+- The menu next to each pending invitation lets you:
+  - **Resend invitation**: Send the email again if it was missed or has expired.
+  - **Cancel invitation**: Immediately expire an invitation that was sent by mistake or is no longer needed.
+
+<Callout type="warning" title="Note">
+Cancelling an invitation does not recall the email itself, but the cancelled link will no longer work.
+</Callout>
+
+## How the Invitee Accepts
+
+<Steps>
+  <Step>
+    ### Check the Invitation Email
+    The invitation email includes the team name, the inviter, and an accept button.
+  </Step>
+  <Step>
+    ### Click the Accept Link
+    Clicking `Accept Invitation` opens the Walla sign-up/sign-in screen. If they already have an account, signing in is enough.
+  </Step>
+  <Step>
+    ### Join the Team
+    After signing in, the invitee is automatically added to the team with the role chosen at invitation time.
+  </Step>
+</Steps>

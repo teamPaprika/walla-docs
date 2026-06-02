@@ -2,7 +2,9 @@
   "title": "팀/워크스페이스",
   "pages": [
     "managing-your-team",
+    "inviting-team-members",
     "managing-workspaces",
+    "inviting-workspace-members",
     "workspace-panel"
   ]
 }

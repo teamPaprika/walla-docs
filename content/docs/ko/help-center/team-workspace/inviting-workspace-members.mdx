@@ -1,0 +1,53 @@
+---
+title: "워크스페이스 멤버 초대하기"
+description: "워크스페이스 설정에서 팀 멤버를 워크스페이스로 초대하고, 역할을 부여할 수 있어요."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## 워크스페이스에 멤버 추가하기
+
+<Steps>
+  <Step>
+    ### 워크스페이스 설정 진입
+    워크스페이스 우측 상단의 `톱니바퀴 아이콘`을 클릭합니다.
+
+    <img src="/images/guides/team-workspace/workspace-settings-button.png" alt="워크스페이스 페이지 우측 상단의 톱니바퀴(설정) 아이콘" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 팀 멤버 선택 후 추가하기
+    워크스페이스에 추가할 팀 멤버를 선택 혹은 팀/워크스페이스에 새로 초대할 계정을 입력한 뒤 `추가하기` 버튼을 클릭합니다.
+
+    <img src="/images/guides/team-workspace/workspace-member-added.png" alt="새 멤버가 워크스페이스 멤버 목록에 추가되고 초대 완료 토스트가 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 초대 완료
+    팀 멤버는 바로 초대가 완료되고, 팀 멤버가 아닌 계경은 메일에서 `초대장 바로가기` 버튼을 클릭하면 자동으로 해당 팀 및 워크스페이스에 초대됩니다.
+
+    <img src="/images/guides/team-workspace/workspace-add-member-select.png" alt="팀 멤버 선택 드롭다운과 추가하기 버튼이 강조된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## 초대 링크로 초대하기
+
+### 초대 링크 만들기
+`초대 링크` 영역의 `초대 링크 만들기` 버튼을 클릭하면 새 초대 링크가 생성됩니다.
+
+<img src="/images/guides/team-workspace/workspace-invite-link-create-button.png" alt="초대 링크가 없는 초기 상태에서 표시되는 초대 링크 만들기 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### 유효 기간 설정
+생성된 링크는 기본 7일 동안 유효합니다. 링크 우측의 `유효 기간 변경` 버튼을 누르면, 잔여 유효 기간을 시간 단위로 다시 설정할 수 있어요.
+
+<img src="/images/guides/team-workspace/workspace-invite-link-created.png" alt="초대 링크가 생성되어 표시되고 7일 후 만료 안내와 생성 토스트가 노출된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/team-workspace/workspace-invite-link-change-expiry.png" alt="유효 기간 변경 버튼을 누르면 펼쳐지는 잔여 유효 기간 선택 패널" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### 초대 링크 삭제
+더 이상 링크가 필요 없다면 링크 우측의 휴지통 아이콘을 클릭합니다. 삭제 확인 다이얼로그에서 `확인`을 누르면 링크가 즉시 무효화됩니다. 이미 합류한 멤버는 그대로 유지돼요.
+
+<img src="/images/guides/team-workspace/workspace-invite-link-delete-button.png" alt="초대 링크 우측의 휴지통 아이콘이 강조된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/team-workspace/workspace-invite-link-delete-confirm.png" alt="초대 링크 삭제 시 표시되는 삭제 확인 다이얼로그" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/team-workspace/workspace-invite-link-deleted.png" alt="초대 링크가 삭제되어 초기 상태로 돌아가고 삭제 완료 토스트가 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
