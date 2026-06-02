@@ -1,0 +1,95 @@
+---
+title: "팀 멤버 초대하기"
+description: "팀 설정에서 이메일로 새 멤버를 초대하고, 초대 상태를 관리할 수 있어요."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## 이메일로 초대하기
+
+<img src="/images/guides/team-workspace/team-member-management.png" alt="팀 설정 → 팀원 관리 화면의 이메일 초대 영역과 팀 멤버 목록" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Steps>
+  <Step>
+    ### 팀 설정 진입
+    상단 메뉴에서 팀 이름을 클릭한 뒤 `팀 설정`으로 들어가, `팀원 관리` 탭을 엽니다.
+  </Step>
+  <Step>
+    ### 이메일 주소 입력
+    화면 상단의 초대 영역에 새 멤버의 이메일 주소를 입력합니다. 한 번에 여러 이메일을 입력해 한꺼번에 보낼 수 있어요.
+  </Step>
+  <Step>
+    ### 초대하기 버튼 클릭
+    `초대하기`를 클릭하면, 입력한 이메일로 초대 메일이 전송됩니다.
+  </Step>
+</Steps>
+
+<Callout type="info" title="역할은 나중에도 바꿀 수 있어요">
+초대 시 정한 역할은 멤버가 합류한 뒤 `팀원 관리` 탭에서 언제든 변경할 수 있습니다. 자세한 역할/권한 설명은 [팀 관리하기](/ko/help-center/team-workspace/managing-your-team) 페이지를 참고하세요.
+</Callout>
+
+## 초대 링크로 초대하기
+
+<Steps>
+  <Step>
+    ### 초대 링크 만들기
+    팀원 관리 페이지에서`초대 링크 만들기` 버튼을 클릭하면 새 초대 링크가 생성됩니다.
+
+    <img src="/images/guides/team-workspace/invite-link-create-button.png" alt="초대 링크가 없는 초기 상태에서 표시되는 초대 링크 만들기 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 링크 복사해서 공유
+    생성된 링크 옆의 복사 아이콘으로 링크를 복사한 뒤, 합류시킬 사람에게 전달하세요. 링크는 기본 7일 동안 유효합니다.
+
+    <img src="/images/guides/team-workspace/invite-link-created.png" alt="초대 링크가 생성되어 표시되고 7일 후 만료 안내가 노출된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 유효 기간 변경
+    링크 우측의 `유효 기간 변경` 버튼을 누르면, 잔여 유효 기간을 시간 단위로 다시 설정할 수 있어요.
+
+    <img src="/images/guides/team-workspace/invite-link-change-expiry.png" alt="유효 기간 변경 버튼을 누르면 펼쳐지는 잔여 유효 기간 선택 패널" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 변경된 만료 시간 확인
+    설정한 값에 따라 만료 시간이 즉시 갱신되고, 링크 아래에 새로운 만료 시각이 표시됩니다.
+
+    <img src="/images/guides/team-workspace/invite-link-expiry-updated.png" alt="유효 기간 변경 후 11시간 후 만료로 표시가 바뀐 초대 링크" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 초대 링크 삭제
+    더 이상 링크가 필요 없다면 휴지통 아이콘을 눌러 삭제합니다. 삭제하면 링크는 즉시 무효화되지만, 이미 합류한 멤버는 그대로 유지돼요.
+
+    <img src="/images/guides/team-workspace/invite-link-delete-confirm.png" alt="초대 링크 삭제 시 표시되는 삭제 확인 다이얼로그" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## 초대 상태 확인 및 관리
+
+- `팀원 관리` 탭의 멤버 목록에서 아직 수락되지 않은 초대는 **대기 중** 상태로 표시됩니다.
+- 대기 중인 초대 옆의 메뉴에서 다음 작업이 가능합니다.
+  - **초대 재발송**: 메일이 누락되었거나 만료된 경우 다시 보낼 수 있어요.
+  - **초대 취소**: 잘못 보냈거나 더 이상 필요 없는 초대를 즉시 만료시킬 수 있어요.
+
+<Callout type="warning" title="주의사항">
+초대를 취소해도 이미 전송된 메일 자체는 회수되지 않아요. 다만 취소된 초대 링크는 더 이상 동작하지 않습니다.
+</Callout>
+
+## 초대받은 사람의 수락 흐름
+
+<Steps>
+  <Step>
+    ### 초대 메일 확인 및 수락
+    초대 메일에는 팀 이름과 초대한 사람, 수락 버튼이 포함되어 있습니다. 메일의 `팀 초대장 바로가기` 버튼을 누르면 왈라 가입/로그인 화면으로 이동합니다.
+
+    <img src="/images/guides/team-workspace/invitation-email.png" alt="초대받은 팀 이름과 초대한 사람, 팀 초대장 바로가기 버튼이 포함된 초대 메일 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 팀 초대 완료
+    왈라 로그인 후 팀 초대가 완료됩니다.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="주의사항">
+팀원과 함께 프로젝트를 수정하고 싶다면, 팀원을 초대한 후 워크스페이스 초대까지 마쳐야 합니다. 만약 '팀 초대 - 워크스페이스 초대'가 번거롭다면, 워크스페이스에서 바로 초대할 수도 있습니다.
+</Callout>
