@@ -13,7 +13,7 @@ Download form responses and field definitions as [Apache Parquet](https://parque
 
 This API is composed of two export routes:
 
-- **Response data export**: Download response rows as a Parquet file. You can filter by date range, `customerKey`, hidden field values, and response field values.
+- **Response data export**: Download response rows as a Parquet file. You can filter by date range, `customerKeys`, hidden field values, and response field values.
 - **Field definitions export**: Download the form's field definitions as a Parquet file. Use it to map response data column names to their labels and types.
 
 > **Note**: A [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key applies.
@@ -44,11 +44,11 @@ POST /open-api/v1/forms/{formId}/exports/responses
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `customerKey` | string | No | Filter to responses from a specific customer |
-| `startDate` | string (date-time) | No | Start of the submission time range (ISO 8601) |
-| `endDate` | string (date-time) | No | End of the submission time range (ISO 8601) |
-| `hiddenFields` | object | No | Mapping of hidden field label to value (or array of values) |
-| `responseFields` | object | No | Mapping of response field ID to value (or array of values) |
+| `customerKeys` | string[] | No | Return only responses with one of these customerKeys (empty/omitted = all) |
+| `submittedFrom` | string (date-time) | No | Start of the submission time range, inclusive (ISO 8601) |
+| `submittedTo` | string (date-time) | No | End of the submission time range, inclusive (ISO 8601) |
+| `hiddenFields` | object | No | Mapping of hidden field label to value |
+| `responseFields` | object | No | Mapping of response field ID to value (string) or array of values |
 
 > **Note**: All filters are optional. If you omit every filter, the form's entire response set is exported. Filters within the same object are combined with AND.
 
@@ -61,7 +61,7 @@ Each entry in `responseFields` is interpreted based on the field type and the va
 | Text/number/date-time family (`NUMBER`, `DATE`, `TIME`, `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`) | Equality match | Equals one of the given values |
 | Choice family (`RADIO`, `DROPDOWN`, `CHECKBOX`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`) | Response array contains the given value | Response array contains any one of the given values |
 
-For example, passing `30` to a `NUMBER` field `field_age` returns only responses where `age = 30`, while passing `[30, 40]` returns responses where `age` is either 30 or 40. Passing `"Feature A"` to a `CHECKBOX` field `field_features` returns only responses whose `features` array contains `"Feature A"`.
+All filter values are passed as strings. For example, passing `"30"` to a `NUMBER` field `field_age` returns only responses where `age = 30`, while passing `["30", "40"]` returns responses where `age` is either 30 or 40. Passing `"Feature A"` to a `CHECKBOX` field `field_features` returns only responses whose `features` array contains `"Feature A"`.
 
 <Callout type="warn" title="Unsupported filter behavior">
 - AND (all-of) semantics across multiple values for a single field is not supported.
@@ -86,13 +86,14 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/responses"
   -H "X-WALLA-API-KEY: your_api_key_here" \
   -H "Content-Type: application/json" \
   -d '{
-    "startDate": "2024-01-01T00:00:00Z",
-    "endDate": "2024-01-31T23:59:59Z",
+    "submittedFrom": "2024-01-01T00:00:00Z",
+    "submittedTo": "2024-01-31T23:59:59Z",
+    "customerKeys": ["customer_001", "customer_002"],
     "hiddenFields": {
-      "utm_source": ["google", "naver"]
+      "utm_source": "newsletter"
     },
     "responseFields": {
-      "field_age": [30, 40],
+      "field_age": ["30", "40"],
       "field_features": "Feature A"
     }
   }' \

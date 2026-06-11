@@ -5,7 +5,7 @@ description: API reference for retrieving form responses and submissions
 
 # Form Responses API
 
-The Form Responses API allows you to retrieve and analyze form submissions. You can list all responses with pagination, get detailed response data, and access individual submission information.
+The Form Responses API allows you to retrieve and analyze form submissions. You can list all responses with pagination, search responses with rich filters, get detailed response data, and access individual submission information.
 
 ## Endpoints
 
@@ -31,6 +31,9 @@ GET /open-api/v1/forms/{formId}/responses
 |-----------|------|----------|---------|-------------|
 | `page` | integer | No | 1 | Page number (starts from 1) |
 | `limit` | integer | No | 20 | Number of responses per page (max 100) |
+| `customerKey` | string | No | — | Return only responses with this customerKey |
+
+> **Note**: This endpoint supports a single `customerKey` filter only. For richer filtering — date range, hidden fields, response field values — use the [Search Responses](#search-responses-filtered) endpoint below.
 
 #### Request
 
@@ -100,7 +103,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
 | `data.pagination` | object | Pagination metadata |
 | `data.pagination.page` | integer | Current page number |
 | `data.pagination.limit` | integer | Responses per page |
-| `data.pagination.totalCount` | integer | Total number of responses |
+| `data.pagination.totalCount` | integer | Exact total number of responses matching the filter |
 | `data.pagination.totalPages` | integer | Total number of pages |
 
 > **Note**: Response objects include dynamic fields based on the form structure. Each form field appears as a property in the response object.
@@ -117,6 +120,118 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
 - **403 Forbidden**: Authentication failed or insufficient permissions
 - **404 Not Found**: Form not found
 - **500 Internal Server Error**: Server error
+
+---
+
+### Search Responses (Filtered)
+
+Retrieve a paginated list of responses with rich filters. The response envelope is identical to the paginated list above, but the request takes the **same filter contract** as [Parquet Export](/en/docs/developer-docs/responses/parquet) (customerKeys, submission time range, hidden fields, response fields) in a JSON body. Use this endpoint when the single `customerKey` query filter is not enough and you need nested filters that are awkward to express in a query string.
+
+```http
+POST /open-api/v1/forms/{formId}/responses/search
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+**Request Body** (all fields optional)
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `page` | integer | 1 | Page number (starts from 1) |
+| `limit` | integer | 20 | Number of responses per page (max 100) |
+| `customerKeys` | string[] | — | Return only responses with one of these customerKeys (empty/omitted = all) |
+| `submittedFrom` | string (date-time) | — | Only responses submitted at or after this time. ISO 8601 |
+| `submittedTo` | string (date-time) | — | Only responses submitted at or before this time. ISO 8601 |
+| `hiddenFields` | object | — | Hidden field label → value. Exact match only. Unregistered labels return 400 |
+| `responseFields` | object | — | Response field ID → value (string) or array of values |
+
+> **Note**: If the body is empty, the form's entire response set is returned page by page. Different filters are combined with AND. The per-value-shape interpretation of `responseFields` (single vs. array meaning by field type, unsupported types) is identical to the [response field filter semantics in Parquet Export](/en/docs/developer-docs/responses/parquet#response-field-filter-semantics).
+
+#### Request
+
+**Example Request**
+
+```bash
+# First page of all responses
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/responses/search" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{ "page": 1, "limit": 50 }'
+
+# Filter by date range, customer keys, hidden fields, and response fields
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/responses/search" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "page": 1,
+    "limit": 50,
+    "submittedFrom": "2024-01-01T00:00:00Z",
+    "submittedTo": "2024-01-31T23:59:59Z",
+    "customerKeys": ["customer_001", "customer_002"],
+    "hiddenFields": { "utm_source": "newsletter" },
+    "responseFields": {
+      "field_score": "5",
+      "field_features": ["Feature A", "Feature B"]
+    }
+  }'
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+The response envelope is identical to [Get Form Responses](#get-form-responses-paginated). `pagination.totalCount` is the **exact count of all responses matching the filter** (regardless of whether the current page is the last one).
+
+```json
+{
+  "success": true,
+  "data": {
+    "responses": [
+      {
+        "responseId": "response_123",
+        "customerKey": "customer_001",
+        "submittedAt": "2024-01-15T14:30:00Z",
+        "field_score": "5",
+        "field_features": ["Feature A", "Feature B"]
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 50,
+      "totalCount": 27,
+      "totalPages": 1
+    }
+  }
+}
+```
+
+> **Note**: Fields configured for masking are returned with their values redacted by a regex pattern (e.g. `Jo**`). This matches the behavior of the standard response list, and differs from [Parquet Export](/en/docs/developer-docs/responses/parquet), which omits masked fields entirely.
+
+**Error Responses**
+
+- **400 Bad Request**: Malformed request body, an unregistered hidden field label, or an unsupported response field. Use `detailsType` to tell the cause apart (`schema` / `unknownHiddenFieldLabel` / `unsupportedResponseField`).
+  ```json
+  {
+    "error": "Unsupported response field",
+    "detailsType": "unsupportedResponseField",
+    "details": [
+      { "fieldId": "field_file", "reason": "unsupported_type", "fieldType": "FILE_UPLOAD" }
+    ]
+  }
+  ```
+- **401 Unauthorized**: Missing or invalid API key
+- **403 Forbidden**: Insufficient permissions (form in another team/workspace)
+- **404 Not Found**: Form not found
+
+<Callout type="info" title="Activity log and PII protection">
+Search requests are recorded in the activity log, but the raw values you pass as filters (such as email addresses or phone numbers) are not retained. Only the field label, `fieldId`, the count of values applied, and whether each filter was used (boolean) are recorded.
+</Callout>
 
 ---
 
