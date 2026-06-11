@@ -160,8 +160,8 @@
               }
             }
           },
-          "403": {
-            "description": "인증 실패",
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1098,8 +1098,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -1266,8 +1281,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -1394,8 +1424,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -1934,8 +1979,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -2111,8 +2171,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -2155,6 +2230,235 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/open-api/v1/forms/{formId}/responses/search": {
+      "post": {
+        "description": "제출된 응답 목록을 풍부한 필터와 함께 페이지네이션하여 조회합니다. `GET /open-api/v1/forms/{formId}/responses`와 동일한 응답 envelope을 반환하지만, parquet export(`POST .../exports/responses`)와 동일한 필터 계약(customerKeys, 제출일시 범위, hidden field, response field Tier A/B)을 본문으로 받습니다.\n\n**응답 데이터 구조**: 각 응답 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다. 필드 타입별 출력 형식은 `GET /open-api/v1/forms/{formId}/fields`로 조회하세요.\n\n**모든 필터는 선택**입니다. 본문이 비어 있으면 폼의 전체 제출 응답을 페이지 단위로 반환합니다. 둘 이상의 필터를 함께 보내면 모두 만족하는(AND) 응답만 포함됩니다.\n\n**pagination.totalCount는 필터를 적용한 전체 응답의 정확한 개수**입니다(현재 페이지가 마지막인지와 무관하게 COUNT(*) 기반 정확값).\n",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "formId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "폼 ID"
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 1,
+                    "description": "페이지 번호 (1부터 시작)"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 20,
+                    "description": "페이지당 응답 개수 (최대 100)"
+                  },
+                  "customerKeys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "지정한 customerKey를 가진 응답만 포함합니다. 빈 배열이거나 생략하면 모든 응답이 포함됩니다.",
+                    "example": [
+                      "cust_abc",
+                      "cust_def"
+                    ]
+                  },
+                  "submittedFrom": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "이 시각 이후(이 시각 포함)에 제출된 응답만 포함합니다. ISO 8601 / RFC 3339.",
+                    "example": "2026-04-01T00:00:00Z"
+                  },
+                  "submittedTo": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "이 시각 이전(이 시각 포함)에 제출된 응답만 포함합니다. ISO 8601 / RFC 3339.",
+                    "example": "2026-04-30T23:59:59Z"
+                  },
+                  "hiddenFields": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "description": "주어진 hidden field 값과 정확히 일치하는 응답만 포함합니다. 키는 hidden field의 라벨(`POST /open-api/v1/forms/{formId}/hidden-fields`로 등록한 그 라벨)입니다. 둘 이상의 라벨을 보내면 모두 일치(AND)해야 합니다. 등록되지 않은 라벨을 보내면 400을 반환합니다.\n",
+                    "example": {
+                      "utm_source": "newsletter",
+                      "utm_campaign": "spring_2026"
+                    }
+                  },
+                  "responseFields": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "minItems": 1
+                        }
+                      ]
+                    },
+                    "description": "폼 필드의 제출 값으로 응답을 필터링합니다. 키는 fieldId입니다(폼의 fieldId와 타입 목록은 `GET /open-api/v1/forms/{formId}/fields`로 조회).\n\n값은 단일 문자열 또는 문자열 배열로 보낼 수 있고, 필드 타입에 따라 의미가 달라집니다.\n\n**텍스트/숫자/일시 계열 필드** — `NUMBER`, `DATE`, `TIME`, `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`:\n- 단일 값: 응답 값이 해당 값과 정확히 일치\n- 배열 값: 응답 값이 배열 중 하나와 일치 (OR)\n\n**선택형 필드** — `RADIO`, `DROPDOWN`, `CHECKBOX`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`:\n- 단일 값: 응답 선택지에 해당 값이 포함됨\n- 배열 값: 응답 선택지가 배열 중 하나라도 포함 (OR)\n\n서로 다른 fieldId끼리는 AND로 묶입니다. 한 필드 안에서 \"여러 값을 모두 선택\"(AND) 의미는 현재 지원하지 않습니다.\n\n필터링이 지원되지 않는 타입(HIDDEN, 파일 업로드, 그리드, 구조화 객체, 커스텀, 입력 없음 필드)을 키로 보내면 400 + `detailsType: \"unsupportedResponseField\"`를 반환합니다. HIDDEN 필드는 위의 `hiddenFields` 필터를 사용하세요.\n",
+                    "example": {
+                      "field_score": "5",
+                      "field_email": [
+                        "a@example.com",
+                        "b@example.com"
+                      ],
+                      "field_choice": "Yes",
+                      "field_options": [
+                        "식품",
+                        "여행"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "응답 목록 조회 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "responses": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "responseId": {
+                                "type": "string",
+                                "description": "응답 ID"
+                              },
+                              "customerKey": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "고객 키"
+                              },
+                              "submittedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "제출일시"
+                              }
+                            },
+                            "additionalProperties": true,
+                            "description": "응답 데이터 (폼 필드값들이 동적으로 포함됨)"
+                          }
+                        },
+                        "pagination": {
+                          "type": "object",
+                          "properties": {
+                            "page": {
+                              "type": "integer",
+                              "description": "현재 페이지 번호"
+                            },
+                            "limit": {
+                              "type": "integer",
+                              "description": "페이지당 응답 개수"
+                            },
+                            "totalCount": {
+                              "type": "integer",
+                              "description": "필터를 적용한 전체 응답 개수 (정확값)"
+                            },
+                            "totalPages": {
+                              "type": "integer",
+                              "description": "전체 페이지 수"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "잘못된 요청 (요청 본문 형식 위반, 등록되지 않은 hidden field 라벨, 지원되지 않는 응답 필드, 또는 submittedFrom > submittedTo)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "오류 코드"
+                    },
+                    "detailsType": {
+                      "type": "string",
+                      "enum": [
+                        "schema",
+                        "unknownHiddenFieldLabel",
+                        "unsupportedResponseField"
+                      ],
+                      "description": "`details` 배열의 스키마를 구분합니다.\n- `schema`: 요청 본문이 기대 형식과 다름. `details[i] = { path, message }`\n- `unknownHiddenFieldLabel`: `hiddenFields`의 키가 폼에 등록되지 않음. `details[i] = { label }`\n- `unsupportedResponseField`: `responseFields`의 키가 폼에 없거나 필터 불가 타입. `details[i] = { fieldId, reason: \"not_found\" | \"unsupported_type\", fieldType? }`\n"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "사람이 읽을 수 있는 추가 설명 (라벨/타입 목록 등)"
+                    },
+                    "details": {
+                      "type": "array",
+                      "description": "위반 항목 목록. detailsType에 따라 형태가 달라집니다.",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "supportedFieldIds": {
+                      "type": "object",
+                      "description": "detailsType=unsupportedResponseField일 때만 존재. 폼에서 필터링 가능한 fieldId를 그룹별로 안내합니다."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)"
+          },
+          "403": {
+            "description": "권한 없음 (다른 팀/워크스페이스의 폼 또는 워크스페이스 멤버 아님)"
+          },
+          "404": {
+            "description": "폼이 없거나 게시되지 않음"
+          },
+          "502": {
+            "description": "응답 조회 서비스 일시적으로 불가. 잠시 후 재시도해주세요."
           }
         }
       }
@@ -2245,8 +2549,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -2405,8 +2724,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -2545,8 +2879,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -2655,8 +3004,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
@@ -2757,8 +3121,23 @@
               }
             }
           },
+          "401": {
+            "description": "인증 실패 (X-WALLA-API-KEY 헤더 누락 또는 유효하지 않음)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "403": {
-            "description": "인증 실패 또는 권한 없음",
+            "description": "권한 없음",
             "content": {
               "application/json": {
                 "schema": {
