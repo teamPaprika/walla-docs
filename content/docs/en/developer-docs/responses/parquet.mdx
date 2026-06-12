@@ -109,6 +109,10 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/responses"
 
 The response body is a binary Parquet file rather than JSON, so save it to a file with `--output` (or an equivalent option) and read it with a [Parquet tool](#working-with-parquet-files).
 
+<Callout type="info" title="Hidden field values included">
+Submitted values for the form's hidden fields are also included in the response Parquet as `f_hidden-<fieldId>` columns. To resolve their human-readable labels, map them to the `HIDDEN` rows (`fieldId: hidden-<fieldId>`) in the field definitions export.
+</Callout>
+
 **Error Responses**
 
 - **400 Bad Request**: Invalid request body or unsupported response field
@@ -166,6 +170,8 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/field-defi
 - **Body**: A Parquet file containing the form's field IDs, labels, types, and so on
 
 The response data export uses field IDs as column names, so when you need human-readable labels, join the field definitions export on `fieldId` to map them.
+
+The form's hidden fields are included as rows with `fieldType` set to `HIDDEN`, where `fieldId` is `hidden-<id>` and `columnName` is `f_hidden-<id>`. These map to the hidden field value columns in the response export.
 
 **Error Responses**
 
