@@ -167,7 +167,14 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/field-defi
 **Success Response (200 OK)**
 
 - **Content-Type**: `application/vnd.apache.parquet`
-- **Body**: A Parquet file containing the form's field IDs, labels, types, and so on
+- **Body**: A Parquet file containing the form's field definitions. Each row is one field, with the following columns:
+
+| Column | Description |
+|--------|-------------|
+| `fieldId` | The form field ID |
+| `fieldType` | The field type (e.g., `SHORT_TEXT`, `RADIO`) |
+| `label` | The human-readable field label |
+| `columnName` | The column name used in the response export (`f_<fieldId>` form) |
 
 The response data export uses field IDs as column names, so when you need human-readable labels, join the field definitions export on `fieldId` to map them.
 

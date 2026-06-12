@@ -167,7 +167,14 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/field-defi
 **성공 응답 (200 OK)**
 
 - **Content-Type**: `application/vnd.apache.parquet`
-- **본문**: 폼의 필드 ID, 라벨, 타입 등이 담긴 Parquet 파일
+- **본문**: 폼의 필드 정의가 담긴 Parquet 파일. 각 행이 하나의 필드이며 다음 컬럼을 포함합니다.
+
+| 컬럼 | 설명 |
+|------|------|
+| `fieldId` | 폼 필드 ID |
+| `fieldType` | 필드 타입 (예: `SHORT_TEXT`, `RADIO`) |
+| `label` | 사람이 읽을 수 있는 필드 라벨 |
+| `columnName` | 응답 export 에서 사용하는 컬럼명 (`f_<fieldId>` 형태) |
 
 응답 데이터 export 의 컬럼은 필드 ID 로 표기되므로, 사람이 읽을 수 있는 라벨이 필요할 때는 필드 정의 export 의 결과와 `fieldId` 기준으로 join 하여 매핑하세요.
 
