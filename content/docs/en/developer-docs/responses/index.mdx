@@ -211,7 +211,7 @@ The response envelope is identical to [Get Form Responses](#get-form-responses-p
 }
 ```
 
-> **Note**: Fields configured for masking are returned with their keys intact and their values replaced with the string `REDACTED`. The Open API never reveals masked values (the dashboard can, after recording a disclosure reason), and masked fields are not supported as filter values (they always match zero responses). This differs from [Parquet Export](/en/docs/developer-docs/responses/parquet), which omits masked fields entirely.
+> **Note**: Fields configured for masking are returned with their keys intact and their values replaced with the string `REDACTED`. The Open API never reveals masked values (the dashboard can, after recording a disclosure reason), and masked fields are not supported as `responseFields` filter keys. This differs from [Parquet Export](/en/docs/developer-docs/responses/parquet), which omits masked fields entirely.
 
 **Error Responses**
 

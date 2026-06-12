@@ -211,7 +211,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/responses/search" 
 }
 ```
 
-> **참고**: 마스킹이 설정된 필드는 키는 유지되고 값이 문자열 `REDACTED`로 대체되어 반환됩니다. Open API에서는 마스킹 해제를 제공하지 않으며(대시보드는 다운로드 사유 기록 후 마스킹 값 열람 가능), 마스킹 필드를 필터 값으로 사용하는 것도 지원하지 않습니다(항상 0건 매칭). 마스킹 필드를 통째로 제외하는 [Parquet 내보내기](/ko/docs/developer-docs/responses/parquet)와는 처리 방식이 다릅니다.
+> **참고**: 마스킹이 설정된 필드는 키는 유지되고 값이 문자열 `REDACTED`로 대체되어 반환됩니다. Open API에서는 마스킹 해제를 제공하지 않으며(대시보드는 다운로드 사유 기록 후 마스킹 값 열람 가능), 마스킹 필드를 `responseFields` 필터로 사용하는 것은 지원되지 않습니다. 마스킹 필드를 통째로 제외하는 [Parquet 내보내기](/ko/docs/developer-docs/responses/parquet)와는 처리 방식이 다릅니다.
 
 **오류 응답**
 
