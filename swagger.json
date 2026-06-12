@@ -2044,7 +2044,7 @@
     },
     "/open-api/v1/forms/{formId}/responses": {
       "get": {
-        "description": "본인이 권한을 가진 특정 폼(프로젝트)의 응답 목록을 페이지네이션하여 조회합니다.\n\n**customerKey 필터링**: `customerKey` 파라미터를 사용하여 특정 고객의 응답만 조회할 수 있습니다.\n\n**응답 데이터 구조**: 각 응답 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다.\n\n필드 타입별 응답 값 형식을 이해하려면 다음 엔드포인트를 참조하세요:\n- `GET /open-api/v1/field-output-schemas` - 필드 타입별 출력 스키마 매핑\n- `GET /open-api/v1/forms/{formId}/fields` - 해당 폼의 필드 목록 및 출력 타입\n",
+        "description": "본인이 권한을 가진 특정 폼(프로젝트)의 응답 목록을 페이지네이션하여 조회합니다.\n\n**customerKey 필터링**: `customerKey` 파라미터를 사용하여 특정 고객의 응답만 조회할 수 있습니다.\n\n**응답 데이터 구조**: 각 응답 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다.\n\n**마스킹 필드**: 응답 마스킹이 설정된 필드는 키는 유지되고 값이 문자열 `REDACTED`로 대체되어 반환됩니다. Open API에서는 마스킹 해제를 제공하지 않습니다.\n\n필드 타입별 응답 값 형식을 이해하려면 다음 엔드포인트를 참조하세요:\n- `GET /open-api/v1/field-output-schemas` - 필드 타입별 출력 스키마 매핑\n- `GET /open-api/v1/forms/{formId}/fields` - 해당 폼의 필드 목록 및 출력 타입\n",
         "security": [
           {
             "ApiKeyAuth": []
@@ -2236,7 +2236,7 @@
     },
     "/open-api/v1/forms/{formId}/responses/search": {
       "post": {
-        "description": "제출된 응답 목록을 풍부한 필터와 함께 페이지네이션하여 조회합니다. `GET /open-api/v1/forms/{formId}/responses`와 동일한 응답 envelope을 반환하지만, parquet export(`POST .../exports/responses`)와 동일한 필터 계약(customerKeys, 제출일시 범위, hidden field, response field Tier A/B)을 본문으로 받습니다.\n\n**응답 데이터 구조**: 각 응답 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다. 필드 타입별 출력 형식은 `GET /open-api/v1/forms/{formId}/fields`로 조회하세요.\n\n**모든 필터는 선택**입니다. 본문이 비어 있으면 폼의 전체 제출 응답을 페이지 단위로 반환합니다. 둘 이상의 필터를 함께 보내면 모두 만족하는(AND) 응답만 포함됩니다.\n\n**pagination.totalCount는 필터를 적용한 전체 응답의 정확한 개수**입니다(현재 페이지가 마지막인지와 무관하게 COUNT(*) 기반 정확값).\n",
+        "description": "제출된 응답 목록을 풍부한 필터와 함께 페이지네이션하여 조회합니다. `GET /open-api/v1/forms/{formId}/responses`와 동일한 응답 envelope을 반환하지만, parquet export(`POST .../exports/responses`)와 동일한 필터 계약(customerKeys, 제출일시 범위, hidden field, response field Tier A/B)을 본문으로 받습니다.\n\n**응답 데이터 구조**: 각 응답 객체는 폼 필드들의 값을 동적 속성으로 포함합니다. 필드 ID가 키이고, 값의 타입은 필드 타입에 따라 다릅니다. 필드 타입별 출력 형식은 `GET /open-api/v1/forms/{formId}/fields`로 조회하세요.\n\n**모든 필터는 선택**입니다. 본문이 비어 있으면 폼의 전체 제출 응답을 페이지 단위로 반환합니다. 둘 이상의 필터를 함께 보내면 모두 만족하는(AND) 응답만 포함됩니다.\n\n**마스킹 필드**: 응답 마스킹이 설정된 필드는 키는 유지되고 값이 문자열 `REDACTED`로 대체되어 반환됩니다. Open API에서는 마스킹 해제를 제공하지 않으며, 마스킹 필드를 필터 값으로 사용하는 것도 지원하지 않습니다(항상 0건 매칭).\n\n**pagination.totalCount는 필터를 적용한 전체 응답의 정확한 개수**입니다(현재 페이지가 마지막인지와 무관하게 COUNT(*) 기반 정확값).\n",
         "security": [
           {
             "ApiKeyAuth": []
