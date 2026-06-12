@@ -109,6 +109,10 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/responses"
 
 응답 본문은 JSON 이 아닌 바이너리 Parquet 파일이므로, `--output` 또는 동등한 옵션으로 파일에 저장한 뒤 [Parquet 도구](#parquet-파일-사용-안내)로 읽어야 합니다.
 
+<Callout type="info" title="히든 필드 값 포함">
+폼에 설정된 히든 필드의 제출 값도 응답 Parquet 에 `f_hidden-<fieldId>` 컬럼으로 함께 포함됩니다. 사람이 읽을 수 있는 라벨은 필드 정의 export 의 `HIDDEN` 행(`fieldId: hidden-<fieldId>`)과 매핑해 확인하세요.
+</Callout>
+
 **오류 응답**
 
 - **400 Bad Request**: 잘못된 요청 본문 또는 미지원 응답 필드
@@ -166,6 +170,8 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/exports/field-defi
 - **본문**: 폼의 필드 ID, 라벨, 타입 등이 담긴 Parquet 파일
 
 응답 데이터 export 의 컬럼은 필드 ID 로 표기되므로, 사람이 읽을 수 있는 라벨이 필요할 때는 필드 정의 export 의 결과와 `fieldId` 기준으로 join 하여 매핑하세요.
+
+폼에 설정된 히든 필드도 행으로 포함되며, `fieldType` 은 `HIDDEN`, `fieldId` 는 `hidden-<id>`, `columnName` 은 `f_hidden-<id>` 입니다. 응답 export 의 히든 필드 값 컬럼과 매핑됩니다.
 
 **오류 응답**
 

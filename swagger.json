@@ -781,7 +781,7 @@
     },
     "/open-api/v1/forms/{formId}/exports/field-definitions": {
       "post": {
-        "description": "폼의 필드 정의를 Parquet 파일로 내보냅니다. 응답 본문은 단일 Parquet 바이트 스트림이며 JSON 래핑이 없습니다.\n\n각 행은 하나의 필드를 나타내며 다음 컬럼을 포함합니다.\n- `fieldId`: 폼 필드 ID\n- `fieldType`: 필드 타입 (예: `SHORT_TEXT`, `RADIO`)\n- `label`: 사람이 읽을 수 있는 필드 라벨\n- `columnName`: 응답 Parquet에서 사용하는 컬럼명 (`f_<fieldId>` 형태)\n\n응답 export(`POST /open-api/v1/forms/{formId}/exports/responses`)와 함께 받아 `columnName ↔ label/fieldType`을 매핑하는 데 사용합니다.\n\n요청 본문은 사용하지 않습니다 (있어도 무시).\n",
+        "description": "폼의 필드 정의를 Parquet 파일로 내보냅니다. 응답 본문은 단일 Parquet 바이트 스트림이며 JSON 래핑이 없습니다.\n\n각 행은 하나의 필드를 나타내며 다음 컬럼을 포함합니다.\n- `fieldId`: 폼 필드 ID\n- `fieldType`: 필드 타입 (예: `SHORT_TEXT`, `RADIO`)\n- `label`: 사람이 읽을 수 있는 필드 라벨\n- `columnName`: 응답 Parquet에서 사용하는 컬럼명 (`f_<fieldId>` 형태)\n\n응답 export(`POST /open-api/v1/forms/{formId}/exports/responses`)와 함께 받아 `columnName ↔ label/fieldType`을 매핑하는 데 사용합니다.\n\n폼에 설정된 히든 필드도 행으로 포함됩니다 (`fieldType: HIDDEN`, `fieldId: hidden-<id>`, `columnName: f_hidden-<id>`). 응답 export의 히든 필드 값 컬럼과 매핑됩니다.\n\n요청 본문은 사용하지 않습니다 (있어도 무시).\n",
         "security": [
           {
             "ApiKeyAuth": []
@@ -836,7 +836,7 @@
     },
     "/open-api/v1/forms/{formId}/exports/responses": {
       "post": {
-        "description": "제출된 응답 데이터를 Parquet 파일로 내보냅니다. 응답 본문은 단일 Parquet 바이트 스트림이며 JSON 래핑이 없습니다. 데이터 파이프라인에서 그대로 받아 처리할 수 있습니다.\n\nParquet 컬럼명은 내부 식별자(`f_<fieldId>` 형태)로 들어 있습니다. 사람이 읽을 수 있는 라벨/타입과 매핑하려면 동반 엔드포인트인 `POST /open-api/v1/forms/{formId}/exports/field-definitions`로 필드 정의 Parquet을 함께 받아 join하세요.\n\n모든 필터는 선택입니다. 본문이 비어 있으면 폼의 전체 제출 응답을 반환합니다. 둘 이상의 필터를 함께 보내면 모두 만족하는(AND) 응답만 포함됩니다.\n",
+        "description": "제출된 응답 데이터를 Parquet 파일로 내보냅니다. 응답 본문은 단일 Parquet 바이트 스트림이며 JSON 래핑이 없습니다. 데이터 파이프라인에서 그대로 받아 처리할 수 있습니다.\n\nParquet 컬럼명은 내부 식별자(`f_<fieldId>` 형태)로 들어 있습니다. 사람이 읽을 수 있는 라벨/타입과 매핑하려면 동반 엔드포인트인 `POST /open-api/v1/forms/{formId}/exports/field-definitions`로 필드 정의 Parquet을 함께 받아 join하세요.\n\n폼에 설정된 히든 필드의 제출 값도 `f_hidden-<fieldId>` 컬럼으로 함께 내보냅니다. 라벨 매핑은 필드 정의 export에 포함된 `HIDDEN` 행으로 확인하세요.\n\n모든 필터는 선택입니다. 본문이 비어 있으면 폼의 전체 제출 응답을 반환합니다. 둘 이상의 필터를 함께 보내면 모두 만족하는(AND) 응답만 포함됩니다.\n",
         "security": [
           {
             "ApiKeyAuth": []
