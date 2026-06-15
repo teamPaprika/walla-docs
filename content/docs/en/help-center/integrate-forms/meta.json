@@ -4,6 +4,7 @@
     "connecting-to-google-sheets",
     "connecting-with-zapier",
     "webhook-automation",
-    "response-api"
+    "response-api",
+    "ga4-meta-pixel"
   ]
 }
