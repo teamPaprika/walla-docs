@@ -61,6 +61,41 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
 </Steps>
 
+## 노드 활용하여 로직 설정하기
+
+<Steps>
+  <Step>
+    ### 노드와 연결선 살펴보기
+    로직 화면에서는 각 문항이 노드로 표시되고, 노드 사이의 연결선으로 이동 흐름을 확인할 수 있습니다. `기본 이동`은 모든 응답자가 지나는 기본 흐름을, `로직 #1`, `로직 #2`처럼 번호가 붙은 분기는 조건에 따라 갈라지는 경로를 나타냅니다.
+
+    <img src="/images/guides/create-forms/logic-node-overview.png" alt="로직 노드 화면에서 기본 이동과 로직 #1, #2, #3 분기 연결선이 강조된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 기본 이동 설정하기
+    노드 위의 `기본 이동` 라벨을 누르면 `다음 필드`를 선택하는 드롭다운이 열립니다. 필드를 검색하거나 목록에서 골라, 조건에 해당하지 않는 응답자가 이동할 기본 문항을 지정할 수 있습니다.
+
+    <img src="/images/guides/create-forms/logic-node-default-move.png" alt="기본 이동 노드를 눌러 다음 필드를 선택하는 드롭다운과 필드 검색 목록" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 로직 노드에서 조건 편집하기
+    `로직 #1`, `로직 #2`처럼 번호가 붙은 분기 라벨을 누르면 조건 영역이 바로 펼쳐집니다. 기준 문항과 포함 조건, 옵션을 노드 위에서 직접 수정하거나 `새로운 조건`을 추가할 수 있습니다.
+
+    <img src="/images/guides/create-forms/logic-node-condition.png" alt="로직 #3 노드를 눌러 펼쳐진 조건 영역에서 기준 문항과 옵션을 편집하는 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 연결선을 눌러 바로 수정하기
+    필드를 선택한 뒤 노드 위의 `로직`이나 `기본 이동` 라벨을 누르지 않고, 노드 사이의 연결선만 바로 눌러도 해당 흐름을 수정할 수 있습니다.
+
+    <img src="/images/guides/create-forms/logic-node-line-edit.png" alt="노드 사이의 연결선을 눌러 로직 #1 라벨이 강조되며 흐름을 바로 수정하는 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 노드를 드래그해 연결하기
+    노드 하단의 연결점을 끌어 다른 문항 노드에 놓으면 두 문항을 직접 이어 이동 흐름을 만들 수 있습니다. 연결선을 새로 그리면 응답자가 해당 경로로 이동합니다.
+
+    <img src="/images/guides/create-forms/logic-node-connect.png" alt="노드의 연결점을 드래그해 다른 문항 노드로 연결선을 그리는 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
 ## 로직 활용 예시
 
 - #### 예시 1. 개인정보 동의에 따른 분기
