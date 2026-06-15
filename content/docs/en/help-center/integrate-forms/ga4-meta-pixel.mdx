@@ -1,0 +1,34 @@
+---
+title: "Connecting GA4 & Meta Pixel"
+description: "Connect Google Analytics 4 (GA4) and Meta Pixel to track form views and response submissions as conversion events. Use it to measure ad performance and power retargeting."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## How to Connect
+
+<Steps>
+  <Step>
+    ### Open form settings
+    Click the settings (gear) button in the top right of the form editor to open form settings.
+  </Step>
+  <Step>
+    ### Go to the External Tracking tab
+    In the form settings window, select the 'External Tracking' tab from the left menu.
+  </Step>
+  <Step>
+    ### Enter your measurement IDs
+    Enter the ID for the platform you want to track. Your entries are saved automatically.
+    - Meta Pixel ID: e.g., 123456789012345
+    - GA4 Measurement ID: e.g., G-XXXXXXXXXX
+  </Step>
+</Steps>
+
+## Events Sent
+
+Once connected, the following standard events are sent to each platform based on respondent activity.
+
+- On form view: PageView (Meta) / page_view (GA4)
+- On submission: Lead (Meta) / generate_lead (GA4)
+
+Conversion events include the walla_response_id and walla_customer_key parameters. When setting up an ad conversion goal, select these standard event names.
