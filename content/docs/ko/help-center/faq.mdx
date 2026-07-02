@@ -23,6 +23,10 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
     ※ 해당 기능은 Enterprise 플랜에서만 제공됩니다.
   </Accordion>
+
+  <Accordion title="팀의 소유권을 다른 계정에게 넘겨주고 싶어요">
+    현재 팀 이관은 원칙적으로 지원되지 않으며, 팀 소유자가 직접 Pro 플랜 결제 후 ‘소유주 이전’을 신청한 뒤 고객센터에 환불을 요청하시는 방식으로만 처리가 가능합니다. 다만, 이전 소유자와의 연락이 불가능한 부득이한 경우, 데이터 보호 및 보안 절차에 따라 동일 조직(회사/도메인)의 공식 요청임을 확인한 뒤에만 예외적으로 이관을 도와드리고 있습니다. 구체적인 사항은 [cs@walla.my](mailto:cs@walla.my)로 문의 부탁드립니다.
+  </Accordion>
   
 </Accordions>
 
@@ -56,6 +60,28 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
 <Accordions>
 
+  <Accordion title="만들어둔 프로젝트가 보이지 않아요">
+      프로젝트를 삭제한 것이 아니라면, 다른 계정/팀/워크스페이스에 접속하여 찾지 못하는 경우일 수 있습니다.우선 현재 접속 중인 계정/팀/워크스페이스가 프로젝트를 생성했던 환경과 일치하는지 확인 부탁드립니다.
+
+#### 1. 현재 접속 계정 확인 방법
+
+우측 상단의 프로필 아이콘을 눌러 현재 접속한 계정을 확인하실 수 있습니다. 만약 다른 계정으로 다시 접속하고 싶다면, '로그아웃'을 클릭합니다.
+
+<img src="/images/guides/faq/check-account.png" alt="현재 접속 계정 확인" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+#### 2. 현재 접속 팀 확인 방법
+
+좌측 상단의 팀 목록에서 현재 접속한 팀을 확인할 수 있습니다.
+
+<img src="/images/guides/faq/check-team.png" alt="현재 접속 팀 확인" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+#### 3. 현재 접속 워크스페이스 확인 방법
+
+팀 목록 하단의 워크스페이스 목록에서 현재 접속한 워크스페이스를 확인할 수 있습니다.
+
+<img src="/images/guides/faq/check-workspace.png" alt="현재 접속 워크스페이스 확인" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Accordion>
+  
   <Accordion title="실수로 폼/응답을 삭제해 버렸는데, 복구할 수 있을까요?">
       개인정보 보호 및 데이터 보안을 최우선으로 하는 정책에 따라, 삭제된 설문 및 응답 데이터는 즉시 영구 삭제되어 복구가 불가능합니다. 실수로 데이터를 삭제하지 않도록 워크스페이스 역할별 권한을 설정해주세요. Enterprise 플랜부터는 삭제 시점, 계정 등의 로그 기록을 확인할 수 있습니다.
   </Accordion>
@@ -150,7 +176,10 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
    <Accordion title="폼에서 응답자의 전화번호를 수집하지 않았는데, 리워드를 발송할 수 있나요?">
     네, 응답자의 전화번호를 수집하지 않은 경우에는 리워드 발송이 어렵습니다. 리워드 발송을 위해서는 설문 응답 시 전화번호 등의 발송에 필요한 정보를 반드시 수집해 주세요.
   </Accordion>
-     <Accordion title="우리 브랜드의 자체 리워드(자사몰 포인트 등)을 리워드로 지급할 수 있나요?">
+     <Accordion title="왈라에 없는 브랜드의 기프티콘도 발송할 수 있나요?">
+    네, 가능합니다. cs@walla.my로 선호하시는 브랜드 혹은 희망 가격대 및 수량 말씀주시면 검토 후 왈라 리워드 샵에서 구매하실 수 있도록 도와드리겠습니다.
+  </Accordion>
+       <Accordion title="우리 브랜드의 자체 리워드(자사몰 포인트 등)을 리워드로 지급할 수 있나요?">
     네, 가능합니다. 다만 해당 기능은 커스텀 플랜 이상에서만 제공되며, 자세한 사항은 cs@walla.my로 문의해 주세요.
   </Accordion>
 
