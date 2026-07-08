@@ -1,0 +1,44 @@
+---
+title: 커스텀 필드 만들기
+description: 왈라 MCP를 이용해 커스텀 필드를 만들 수 있습니다.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 커스텀 필드란?
+커스텀 필드는 왈라에서 기본으로 제공하는 필드 타입(객관식, 단답형, 드롭다운 등)만으로는 표현할 수 없는 입력 방식을, 자연어 설명을 통해 새로 만들어 쓰는 필드입니다.
+기존 폼 빌더에서는 필드 목록에 없는 방식은 아예 만들 수 없었지만, 커스텀 필드는 이런 한계를 없앱니다. "서명 받는 패드 필드 만들어줘"처럼 원하는 걸 설명하면 그 설명을 바탕으로 실제 동작하는 필드가 만들어집니다.
+
+
+<Steps>
+  <Step>
+    ### [왈라 MCP](https://docs.walla.my/ko/docs/help-center/getting-started/installing-walla-mcp) 설치
+    [claude.ai](https://claude.ai/) 접속 후 왈라 MCP를 설치합니다.
+
+    <img src="/images/guides/getting-started/mcp-06-connected.png" alt="연결 완료 후 Walla Form 커넥터의 도구 목록과 권한" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Claude에게 명령 내리기
+    Claude에게 만들고 싶은 필드에 대해 이야기합니다.
+
+    <img src="/images/guides/create-forms/custom-field-star-rating.png" alt="Claude에게 요청해 생성된 별점 입력기 커스텀 필드" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ###  프리뷰 확인 후 승인
+    프리뷰를 확인 후, 수정하고 싶은 부분을 수정합니다. 의도한대로 커스텀 필드가 생성되었다면 빌드를 승인합니다.
+
+    <img src="/images/guides/create-forms/custom-field-approve.png" alt="프리뷰 확인 후 승인하면 팀에 커스텀 필드 타입으로 등록됨" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 폼에 커스텀 필드 추가
+    편집하기 화면에서 필드를 추가할 때 `커스텀 필드` 탭을 선택하면, 만들어 둔 커스텀 필드를배 목록에서 고를 수 있습니다.
+
+    <img src="/images/guides/create-forms/custom-field-add-to-form.png" alt="폼 편집 화면의 커스텀 필드 탭에서 만든 커스텀 필드 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 커스텀 필드 사용하기
+    선택한 커스텀 필드가 폼에 추가됩니다. 일반 필드처럼 질문과 설명을 편집하고 게시해 응답을 받을 수 있습니다.
+
+    <img src="/images/guides/create-forms/custom-field-in-form.png" alt="폼에 추가된 별점 입력기 커스텀 필드" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
