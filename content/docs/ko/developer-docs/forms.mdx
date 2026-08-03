@@ -87,7 +87,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms" \
 
 **오류 응답**
 
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **500 Internal Server Error**: 서버 오류
 
 ---
@@ -161,7 +162,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc" \
 
 **오류 응답**
 
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
   ```json
   {
     "error": "인증 실패 또는 권한 없음"
@@ -254,16 +256,18 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields" \
 | `data.fields[].outputType` | string | 출력 스키마 타입 (string, array, object, null) |
 
 **일반적인 필드 타입:**
-- `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE`, `NUMBER`, `DATE`, `TIME`, `URL`, `RADIO`, `DROPDOWN` → 출력 타입: `string`
-- `CHECKBOX`, `MULTI_SELECT`, `FILE_UPLOAD` → 출력 타입: `array`
-- `ADDRESS`, `NAME`, `PHONE_DETAILED`, `DATE_RANGE` → 출력 타입: `object`
-- `GRID` → 출력 타입: `grid`
-- `HEADING`, `DESCRIPTION`, `DIVIDER`, `IMAGE` → 출력 타입: `null`
+- `SHORT_TEXT`, `LONG_TEXT`, `NUMBER`, `DATE`, `TIME`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`, `SECRETS`, `FILE_UPLOAD`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD` → 출력 타입: `string`
+- `RADIO`, `DROPDOWN`, `DROPDOWN_MULTI`, `CHECKBOX`, `PICTURE_CHOICE`, `PRIVACY_POLICY_INFORMATION`, `LINEAR` → 출력 타입: `array`
+- `GEOLOCATION`, `TABLE`, `TOSS_PAYMENTS` → 출력 타입: `object`
+- `RADIO_GRID`, `CHECKBOX_GRID` → 출력 타입: `grid`
+- `CUSTOM` → 출력 타입: 커스텀 필드 버전의 `outputSchema`에 따름
+- `DESCRIPTION`, `WEBSITE_LINK`, `SUBMIT`, `REJECT`, `ENDING_REDIRECT`, `ENDING_DESCRIPTION` → 출력 타입: `null`
 
 **오류 응답**
 
 - **400 Bad Request**: 잘못된 요청
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 폼을 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 
@@ -366,7 +370,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 
 - **SHORT_TEXT/LONG_TEXT**: `placeholder`, `minLength`, `maxLength`, `required`
 - **EMAIL**: `placeholder`, `required`
-- **PHONE**: `defaultCountryCode`, `required`
+- **PHONE_NUMBER**: `defaultCountryCode`, `required`
 - **NUMBER**: `min`, `max`, `step`, `required`
 - **RADIO/CHECKBOX/DROPDOWN**: `options` (선택 항목 배열)
 - **DATE**: `minDate`, `maxDate`, `format`
@@ -375,7 +379,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 **오류 응답**
 
 - **400 Bad Request**: 잘못된 요청
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 폼 또는 필드를 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 
@@ -439,7 +444,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 **오류 응답**
 
 - **400 Bad Request**: 잘못된 요청
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 폼 또는 필드 설명을 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 
@@ -491,7 +497,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
 
 **오류 응답**
 
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 폼을 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 
@@ -557,7 +564,8 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
 **오류 응답**
 
 - **400 Bad Request**: 잘못된 요청 본문 (유효성 검증 실패)
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 폼을 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 
@@ -612,7 +620,8 @@ curl -X DELETE "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields/ut
 
 **오류 응답**
 
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 폼 또는 히든 필드를 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 

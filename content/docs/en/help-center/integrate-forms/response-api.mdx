@@ -292,11 +292,15 @@ The format of each field's value depends on its field type.
 | Field type | Output format | Example |
 | --- | --- | --- |
 | SHORT_TEXT, LONG_TEXT | string | `"John Doe"` |
-| RADIO, DROPDOWN | string | `"Option 1"` |
-| CHECKBOX | string[] | `["Option 1", "Option 2"]` |
-| FILE_UPLOAD | string[] | `["https://...file1.pdf"]` |
-| DATE | string | `"2024-01-20"` |
-| NUMBER | string | `"42"` |
+| DATE, NUMBER | string | `"2024-01-20"`, `"42"` |
+| EMAIL, PHONE_NUMBER, ADDRESS | string | `"user@example.com"` |
+| FILE_UPLOAD, IMAGE_UPLOAD, VIDEO_UPLOAD | string | `"https://...file1.pdf"` |
+| RADIO, DROPDOWN | string[] | `["Option 1"]` |
+| CHECKBOX, DROPDOWN_MULTI, PICTURE_CHOICE, LINEAR | string[] | `["Option 1", "Option 2"]` |
+| RADIO_GRID, CHECKBOX_GRID | Record&lt;string, string[]&gt; | `{ "Row 1": ["Column 1"] }` |
+| GEOLOCATION | object | `{ "latitude": "37.5665", "longitude": "126.9780" }` |
+| TABLE | object | `{ "Row 1": { "Column 1": "Value 1" } }` |
+| CUSTOM | defined by the custom field version's `outputSchema` | `{ "score": 85 }` |
 
 For detailed output schemas, see `GET /open-api/v1/field-output-schemas`.
 
@@ -329,7 +333,8 @@ When an API request fails, an HTTP status code and error message are returned.
 | Status code | Description |
 | --- | --- |
 | 400 | Bad request (invalid parameters, etc.) |
-| 403 | Authentication failed or insufficient permissions |
+| 401 | Authentication failed (API key missing or invalid) |
+| 403 | No permission for this resource |
 | 404 | Resource not found |
 | 500 | Server error |
 
@@ -377,6 +382,7 @@ curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X
 | CHECKBOX | Multiple Choice (Multi-select) |
 | PICTURE_CHOICE | Picture Choice |
 | DROPDOWN | Dropdown |
+| DROPDOWN_MULTI | Dropdown (Multi-select) |
 | LINEAR | Linear Scale |
 | RADIO_GRID | Multiple Choice Grid |
 | CHECKBOX_GRID | Multiple Choice Grid (Multi-select) |
@@ -398,6 +404,7 @@ curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X
 | VIDEO_UPLOAD | Video Capture |
 | GEOLOCATION | Geolocation |
 | TOSS_PAYMENTS | Toss Payments |
+| CUSTOM | Custom Field |
 | REJECT | Rejection |
 | ENDING_DESCRIPTION | Ending Field (End Page) |
 | ENDING_REDIRECT | Ending Field (Redirect to URL) |
