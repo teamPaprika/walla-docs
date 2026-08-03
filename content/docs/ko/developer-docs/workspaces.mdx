@@ -75,7 +75,8 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
 
 **오류 응답**
 
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
   ```json
   {
     "error": "인증 실패 또는 권한 없음"
@@ -148,7 +149,8 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123" \
 
 **오류 응답**
 
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 워크스페이스를 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 
@@ -237,7 +239,8 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123/forms" \
 
 **오류 응답**
 
-- **403 Forbidden**: 인증 실패 또는 권한 없음
+- **401 Unauthorized**: API 키 누락 또는 유효하지 않음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음
 - **404 Not Found**: 워크스페이스를 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 

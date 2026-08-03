@@ -85,7 +85,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms" \
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **500 Internal Server Error**: Server error
 
 ---
@@ -159,7 +160,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc" \
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
   ```json
   {
     "error": "Authentication failed or insufficient permissions"
@@ -252,16 +254,18 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields" \
 | `data.fields[].outputType` | string | Output schema type (string, array, object, null) |
 
 **Common Field Types:**
-- `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE`, `NUMBER`, `DATE`, `TIME`, `URL`, `RADIO`, `DROPDOWN` → output type: `string`
-- `CHECKBOX`, `MULTI_SELECT`, `FILE_UPLOAD` → output type: `array`
-- `ADDRESS`, `NAME`, `PHONE_DETAILED`, `DATE_RANGE` → output type: `object`
-- `GRID` → output type: `grid`
-- `HEADING`, `DESCRIPTION`, `DIVIDER`, `IMAGE` → output type: `null`
+- `SHORT_TEXT`, `LONG_TEXT`, `NUMBER`, `DATE`, `TIME`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`, `SECRETS`, `FILE_UPLOAD`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD` → output type: `string`
+- `RADIO`, `DROPDOWN`, `DROPDOWN_MULTI`, `CHECKBOX`, `PICTURE_CHOICE`, `PRIVACY_POLICY_INFORMATION`, `LINEAR` → output type: `array`
+- `GEOLOCATION`, `TABLE`, `TOSS_PAYMENTS` → output type: `object`
+- `RADIO_GRID`, `CHECKBOX_GRID` → output type: `grid`
+- `CUSTOM` → output type: defined by the custom field version's `outputSchema`
+- `DESCRIPTION`, `WEBSITE_LINK`, `SUBMIT`, `REJECT`, `ENDING_REDIRECT`, `ENDING_DESCRIPTION` → output type: `null`
 
 **Error Responses**
 
 - **400 Bad Request**: Invalid request
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form not found
 - **500 Internal Server Error**: Server error
 
@@ -364,7 +368,7 @@ Different field types have different properties:
 
 - **SHORT_TEXT/LONG_TEXT**: `placeholder`, `minLength`, `maxLength`, `required`
 - **EMAIL**: `placeholder`, `required`
-- **PHONE**: `defaultCountryCode`, `required`
+- **PHONE_NUMBER**: `defaultCountryCode`, `required`
 - **NUMBER**: `min`, `max`, `step`, `required`
 - **RADIO/CHECKBOX/DROPDOWN**: `options` (array of choices)
 - **DATE**: `minDate`, `maxDate`, `format`
@@ -373,7 +377,8 @@ Different field types have different properties:
 **Error Responses**
 
 - **400 Bad Request**: Invalid request
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form or field not found
 - **500 Internal Server Error**: Server error
 
@@ -437,7 +442,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/fields/field_abc123
 **Error Responses**
 
 - **400 Bad Request**: Invalid request
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form or field description not found
 - **500 Internal Server Error**: Server error
 
@@ -489,7 +495,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form not found
 - **500 Internal Server Error**: Server error
 
@@ -555,7 +562,8 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
 **Error Responses**
 
 - **400 Bad Request**: Invalid request body (validation failed)
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form not found
 - **500 Internal Server Error**: Server error
 
@@ -610,7 +618,8 @@ curl -X DELETE "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields/ut
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form or hidden field not found
 - **500 Internal Server Error**: Server error
 

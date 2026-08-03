@@ -71,7 +71,8 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
   ```json
   {
     "error": "Authentication failed or insufficient permissions"
@@ -144,7 +145,8 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123" \
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
   ```json
   {
     "error": "Authentication failed or insufficient permissions"
@@ -250,7 +252,8 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123/forms" \
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Workspace not found
 - **500 Internal Server Error**: Server error
 

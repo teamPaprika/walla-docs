@@ -98,18 +98,29 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
 
 인증에 실패하면 아래와 같은 오류가 반환됩니다.
 
-### 403 Forbidden
+### 401 Unauthorized
 
 다음 경우에 발생합니다.
-- API 키가 유효하지 않거나 만료된 경우
-- 해당 리소스에 접근 권한이 없는 경우
 - 요청에 API 키가 빠져 있는 경우
+- API 키가 유효하지 않거나 만료·취소된 경우
 
 **응답 예시:**
 
 ```json
 {
-  "error": "인증 실패 또는 권한 없음"
+  "error": "Unauthorized"
+}
+```
+
+### 403 Forbidden
+
+인증은 통과했지만 해당 리소스에 접근할 권한이 없는 경우 발생합니다.
+
+**응답 예시:**
+
+```json
+{
+  "error": "Forbidden"
 }
 ```
 
@@ -163,7 +174,7 @@ Walla Open API에는 시스템 안정성을 위한 속도 제한이 적용됩니
 
 ### 자주 발생하는 문제
 
-**문제**: API 키를 넣었는데도 403 오류가 발생함
+**문제**: API 키를 넣었는데도 401 오류가 발생함
 
 **해결 방법**:
 - API 키가 올바르고 만료되지 않았는지 확인하세요
@@ -223,7 +234,7 @@ async function makeAuthenticatedRequest(url) {
       }
     });
 
-    if (response.status === 403) {
+    if (response.status === 401) {
       console.error('인증 실패: API 키를 확인하세요');
       // 사용자에게 알리거나 재인증 프로세스 시작
       return null;
@@ -254,7 +265,7 @@ def make_authenticated_request(url):
     try:
         response = requests.get(url, headers=headers)
 
-        if response.status_code == 403:
+        if response.status_code == 401:
             print('인증 실패: API 키를 확인하세요')
             return None
 

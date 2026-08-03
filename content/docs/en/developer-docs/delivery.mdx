@@ -161,7 +161,8 @@ When some deliveries fail:
   }
   ```
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
   ```json
   {
     "error": "Authentication failed or insufficient permissions"
@@ -259,7 +260,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form not found or not published
 - **500 Internal Server Error**: Server error
 
@@ -373,7 +375,8 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
 **Error Responses**
 
 - **400 Bad Request**: Invalid request (e.g., empty customerKeys array)
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
 - **404 Not Found**: Form not found or not published
 - **500 Internal Server Error**: Server error
 

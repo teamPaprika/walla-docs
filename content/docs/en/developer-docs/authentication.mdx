@@ -101,18 +101,29 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
 
 If authentication fails, the API will return one of the following error responses:
 
-### 403 Forbidden
+### 401 Unauthorized
 
 This error occurs when:
-- The API key is invalid or expired
-- You don't have permission to access the requested resource
 - The API key is missing from the request
+- The API key is invalid, expired, or revoked
 
 **Response Example:**
 
 ```json
 {
-  "error": "Authentication failed or insufficient permissions"
+  "error": "Unauthorized"
+}
+```
+
+### 403 Forbidden
+
+Authentication succeeded, but you don't have permission to access the requested resource.
+
+**Response Example:**
+
+```json
+{
+  "error": "Forbidden"
 }
 ```
 
@@ -166,7 +177,7 @@ If you exceed the rate limit, the API will return a `429 Too Many Requests` resp
 
 ### Common Issues
 
-**Problem**: Getting 403 errors despite using the API key
+**Problem**: Getting 401 errors despite using the API key
 
 **Solutions**:
 - Verify the API key is correct and hasn't expired

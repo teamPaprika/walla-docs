@@ -22,7 +22,8 @@ The Walla API uses standard HTTP status codes to indicate the success or failure
 | Code | Status | Description |
 |------|--------|-------------|
 | 400 | Bad Request | Invalid request parameters or malformed request |
-| 403 | Forbidden | Authentication failed or insufficient permissions |
+| 401 | Unauthorized | Authentication failed (API key missing or invalid) |
+| 403 | Forbidden | Insufficient permissions for the requested resource |
 | 404 | Not Found | Resource not found |
 | 429 | Too Many Requests | Rate limit exceeded |
 | 500 | Internal Server Error | Server error occurred |
@@ -114,39 +115,27 @@ await fetch(`${API_BASE}/forms/form_abc/delivery`, {
 
 ---
 
-### 403 Forbidden
+### 401 Unauthorized
 
-Indicates authentication failure or insufficient permissions to access the requested resource.
+Authentication failed because the API key is missing or invalid. The response also carries a `WWW-Authenticate: ApiKey realm="walla-open-api"` header.
 
 **Common Causes:**
 
 1. **Missing API Key**
    ```json
    {
-     "error": "Authentication failed or insufficient permissions"
+     "error": "Unauthorized"
    }
    ```
    **Solution**: Include the `X-WALLA-API-KEY` header in your request.
 
-2. **Invalid API Key**
+2. **Invalid or Expired API Key**
    ```json
    {
-     "error": "Authentication failed or insufficient permissions"
+     "error": "Unauthorized"
    }
    ```
-   **Solution**: Verify your API key is correct and hasn't expired.
-
-3. **Insufficient Permissions**
-   ```json
-   {
-     "error": "Authentication failed or insufficient permissions"
-   }
-   ```
-   **Solution**: Ensure you have access to the requested workspace or form.
-
-4. **Workspace Access Denied**
-   - You're trying to access a workspace you don't have permissions for
-   - **Solution**: Contact your workspace administrator to grant access.
+   **Solution**: Verify your API key is correct and hasn't expired or been revoked.
 
 **Example Scenarios:**
 
@@ -159,7 +148,7 @@ await fetch(`${API_BASE}/workspaces`, {
     // Missing X-WALLA-API-KEY
   }
 });
-// Returns 403
+// Returns 401
 
 // ✅ Good
 await fetch(`${API_BASE}/workspaces`, {
@@ -170,6 +159,22 @@ await fetch(`${API_BASE}/workspaces`, {
   }
 });
 ```
+
+---
+
+### 403 Forbidden
+
+Authentication succeeded, but you don't have permission to access the requested resource.
+
+**Common Causes:**
+
+1. **Workspace or Form Access Denied**
+   ```json
+   {
+     "error": "Forbidden"
+   }
+   ```
+   **Solution**: Make sure the workspace or form belongs to your team, and contact your workspace administrator to grant access if needed.
 
 **Troubleshooting Steps:**
 
@@ -418,8 +423,11 @@ try {
   if (error.status === 400) {
     console.error('Invalid request:', error.message);
     // Handle validation errors
-  } else if (error.status === 403) {
+  } else if (error.status === 401) {
     console.error('Authentication failed');
+    // Check API key
+  } else if (error.status === 403) {
+    console.error('Permission denied');
     // Check API key
   } else if (error.status === 404) {
     console.error('Resource not found');
@@ -463,6 +471,7 @@ try {
 function getUserFriendlyError(error) {
   const messages = {
     400: 'Please check your input and try again.',
+    401: 'Authentication failed. Please check your API key.',
     403: 'You do not have permission to perform this action.',
     404: 'The requested resource was not found.',
     429: 'Too many requests. Please wait a moment and try again.',
@@ -500,7 +509,7 @@ if (result.data.failedDeliveries.length > 0) {
 
 ### Scenario 1: "Authentication failed"
 
-**Problem**: Getting 403 errors despite having an API key
+**Problem**: Getting 401 errors despite having an API key
 
 **Checklist:**
 - [ ] API key is included in the `X-WALLA-API-KEY` header

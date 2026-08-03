@@ -38,76 +38,98 @@ curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
   "success": true,
   "data": {
     "arrayTypes": {
-      "description": "Field types that return string arrays",
-      "outputType": "array",
-      "fieldTypes": ["CHECKBOX", "MULTI_SELECT", "FILE_UPLOAD"],
-      "example": ["option1", "option2", "option3"]
+      "description": "Field types stored as arrays. The respondent can pick one or more options.",
+      "outputType": "Array<string>",
+      "fieldTypes": ["RADIO", "DROPDOWN", "CHECKBOX", "PRIVACY_POLICY_INFORMATION", "LINEAR"],
+      "example": ["Option 1", "Option 2", "Option 3"]
     },
     "gridTypes": {
-      "description": "Field types that return nested arrays (grid/table format)",
-      "outputType": "grid",
-      "fieldTypes": ["GRID"],
+      "description": "Field types stored as grids: choice questions laid out in rows and columns.",
+      "outputType": "Record<string, Array<string>>",
+      "fieldTypes": ["CHECKBOX_GRID", "RADIO_GRID"],
       "example": {
-        "rows": [
-          ["value1", "value2"],
-          ["value3", "value4"]
-        ]
+        "Row 1": ["Column 1", "Column 2"],
+        "Row 2": ["Column 2"]
       }
     },
     "objectTypes": {
-      "description": "Field types that return structured objects",
+      "description": "Field types stored as structured objects.",
       "fields": [
         {
-          "fieldType": "ADDRESS",
-          "outputType": "object",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "street": { "type": "string" },
-              "city": { "type": "string" },
-              "state": { "type": "string" },
-              "zipCode": { "type": "string" }
-            }
+          "fieldType": "GEOLOCATION",
+          "outputType": "Object",
+          "schema": { "latitude": "string", "longitude": "string" },
+          "example": { "latitude": "37.5665", "longitude": "126.9780" }
+        },
+        {
+          "fieldType": "TABLE",
+          "outputType": "Record<string, Record<string, string>>",
+          "schema": { "[rowKey]": { "[columnKey]": "string" } },
+          "example": {
+            "Row 1": { "Column 1": "Value 1", "Column 2": "Value 2" }
           }
         },
         {
-          "fieldType": "NAME",
-          "outputType": "object",
+          "fieldType": "TOSS_PAYMENTS",
+          "outputType": "Object",
           "schema": {
-            "type": "object",
-            "properties": {
-              "firstName": { "type": "string" },
-              "lastName": { "type": "string" }
-            }
+            "status": "request_success | request_fail | confirm_fail | confirm_cancel | confirm_cancel_fail",
+            "orderId": "string",
+            "amount": "string",
+            "message": "string (optional, on error)",
+            "code": "string (optional, on error)"
+          },
+          "example": {
+            "status": "request_success",
+            "orderId": "ORDER_12345",
+            "amount": "10000"
           }
         }
       ]
     },
     "stringTypes": {
-      "description": "Field types that return simple strings",
+      "description": "Field types stored as plain strings.",
       "outputType": "string",
       "fieldTypes": [
-        "SHORT_TEXT",
-        "LONG_TEXT",
-        "EMAIL",
-        "PHONE",
         "NUMBER",
         "DATE",
         "TIME",
-        "URL",
-        "RADIO",
-        "DROPDOWN"
+        "SHORT_TEXT",
+        "VIDEO_UPLOAD",
+        "PHONE_NUMBER",
+        "IMAGE_UPLOAD",
+        "EMAIL",
+        "FILE_UPLOAD",
+        "LONG_TEXT",
+        "ADDRESS",
+        "HIDDEN"
       ],
-      "example": "sample text value"
+      "example": "user input text"
+    },
+    "customTypes": {
+      "description": "Custom field type. Its output schema is defined per custom field version.",
+      "outputType": "unknown (defined per custom field version)",
+      "fieldTypes": ["CUSTOM"],
+      "example": { "score": 85, "comment": "Good performance" }
     },
     "nullTypes": {
-      "description": "Field types that don't require input (display-only)",
+      "description": "Field types that take no input. They are omitted from the response or hold null.",
       "outputType": "null",
-      "fieldTypes": ["HEADING", "DESCRIPTION", "DIVIDER", "IMAGE"]
+      "fieldTypes": [
+        "DESCRIPTION",
+        "ENDING_REDIRECT",
+        "ENDING_DESCRIPTION",
+        "WEBSITE_LINK",
+        "REJECT",
+        "SUBMIT"
+      ],
+      "example": null
     }
   }
 }
 ```
+
+> **Note**: The `description` strings are returned in Korean. The `fieldTypes` lists are a summary and omit a few types (`DROPDOWN_MULTI`, `PICTURE_CHOICE`, `SECRETS`) — see [Field Type Categories](#field-type-categories) below for the full list, and treat the `outputSchema` from [the field detail endpoint](/en/docs/developer-docs/forms) as the source of truth for a specific form.
 
 **Response Fields**
 
@@ -125,15 +147,22 @@ curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
 | `data.stringTypes` | object | Information about field types that return strings |
 | `data.stringTypes.fieldTypes` | array | List of field type names that return simple strings |
 | `data.stringTypes.example` | string | Example of string output format |
+| `data.customTypes` | object | Information about custom field types (output schema defined per version) |
 | `data.nullTypes` | object | Information about display-only field types |
 | `data.nullTypes.fieldTypes` | array | List of field type names that don't return values |
 
 **Error Responses**
 
-- **403 Forbidden**: Authentication failed
+- **401 Unauthorized**: API key missing or invalid
   ```json
   {
-    "error": "Authentication failed"
+    "error": "Unauthorized"
+  }
+  ```
+- **429 Too Many Requests**: Rate limit exceeded
+  ```json
+  {
+    "error": "Rate limit exceeded"
   }
   ```
 
@@ -145,14 +174,16 @@ These field types return a single string value:
 
 - **SHORT_TEXT**: Single-line text input
 - **LONG_TEXT**: Multi-line text input
-- **EMAIL**: Email address
-- **PHONE**: Phone number
 - **NUMBER**: Numeric input
 - **DATE**: Date value
 - **TIME**: Time value
-- **URL**: Website URL
-- **RADIO**: Single choice from radio buttons
-- **DROPDOWN**: Single choice from dropdown menu
+- **EMAIL**: Email address
+- **PHONE_NUMBER**: Phone number
+- **ADDRESS**: Address (single string)
+- **SECRETS**: Secret value input
+- **FILE_UPLOAD**: Uploaded file URL
+- **IMAGE_UPLOAD**: Captured image URL
+- **VIDEO_UPLOAD**: Captured video URL
 
 **Example Response:**
 ```json
@@ -163,11 +194,15 @@ These field types return a single string value:
 
 ### Array Types (Multiple Values)
 
-These field types return an array of strings:
+These field types return an array of strings — even when only one option can be selected:
 
+- **RADIO**: Single choice from radio buttons
+- **DROPDOWN**: Single choice from dropdown menu
+- **DROPDOWN_MULTI**: Multiple selection dropdown
 - **CHECKBOX**: Multiple selection checkboxes
-- **MULTI_SELECT**: Multiple selection dropdown
-- **FILE_UPLOAD**: List of uploaded file URLs
+- **PICTURE_CHOICE**: Choice from images
+- **PRIVACY_POLICY_INFORMATION**: Privacy policy consent
+- **LINEAR**: Linear scale
 
 **Example Response:**
 ```json
@@ -180,58 +215,67 @@ These field types return an array of strings:
 
 These field types return structured objects with multiple properties:
 
-- **ADDRESS**: Address with street, city, state, zipCode
-- **NAME**: Name with firstName, lastName
-- **PHONE_DETAILED**: Detailed phone with countryCode, number
-- **DATE_RANGE**: Date range with startDate, endDate
+- **GEOLOCATION**: Location with latitude, longitude
+- **TABLE**: Nested object of row → column → value
+- **TOSS_PAYMENTS**: Payment result with status, orderId, amount (plus message, code on error)
 
 **Example Response:**
 ```json
 {
   "field_def456": {
-    "firstName": "John",
-    "lastName": "Doe"
+    "latitude": "37.5665",
+    "longitude": "126.9780"
   },
   "field_ghi789": {
-    "street": "123 Main St",
-    "city": "San Francisco",
-    "state": "CA",
-    "zipCode": "94102"
+    "Row 1": { "Column 1": "Value 1", "Column 2": "Value 2" },
+    "Row 2": { "Column 1": "Value 3", "Column 2": "Value 4" }
   }
 }
 ```
 
-### Grid Types (Table Data)
+### Grid Types (Choice Tables)
 
-These field types return nested arrays representing table/grid data:
+These field types return an object keyed by row name, where each value is the array of selected column names:
 
-- **GRID**: Table with rows and columns
+- **RADIO_GRID**: Single-choice grid
+- **CHECKBOX_GRID**: Multiple-choice grid
 
 **Example Response:**
 ```json
 {
   "field_grid001": {
-    "rows": [
-      ["Row 1 Col 1", "Row 1 Col 2", "Row 1 Col 3"],
-      ["Row 2 Col 1", "Row 2 Col 2", "Row 2 Col 3"]
-    ]
+    "Row 1": ["Column 1", "Column 2"],
+    "Row 2": ["Column 2"]
   }
+}
+```
+
+### Custom Types
+
+- **CUSTOM**: Custom field. Its output format differs per field version — read that field's `outputSchema` before parsing.
+
+**Example Response:**
+```json
+{
+  "field_custom001": { "score": 85, "comment": "Good performance" }
 }
 ```
 
 ### Null Types (Display-Only)
 
-These field types don't collect input and return null:
+These field types don't collect input; they are omitted from the response or return null:
 
-- **HEADING**: Section heading
 - **DESCRIPTION**: Descriptive text
-- **DIVIDER**: Visual separator
-- **IMAGE**: Displayed image
+- **WEBSITE_LINK**: Embedded link
+- **SUBMIT**: Submit button
+- **REJECT**: Response rejection
+- **ENDING_REDIRECT**: Redirect after submission
+- **ENDING_DESCRIPTION**: Ending screen text
 
 **Example Response:**
 ```json
 {
-  "field_heading001": null
+  "field_description001": null
 }
 ```
 
