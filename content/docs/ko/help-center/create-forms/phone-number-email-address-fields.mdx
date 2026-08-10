@@ -3,6 +3,8 @@ title: 전화번호, 이메일, 주소 필드
 description: 설문에 연락처 정보를 입력받고 싶을 때 사용할 수 있는 필드입니다. 각 필드별 특징과 설정 가능한 옵션을 확인해보세요 👇
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 ## 전화번호 필드
 
 <img src="/images/guides/manage-forms/phone-number-field-example.png" alt="국가 선택 드롭다운과 010-2000-0000 자리표시자가 표시된 전화번호 필드" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
@@ -17,8 +19,38 @@ description: 설문에 연락처 정보를 입력받고 싶을 때 사용할 수
   - 응답 길이 제한
   - 응답 포함 / 불포함
   - 정규표현식(Regex)
+  - 전화번호 인증 필수
   - 데이터 마스킹
   - 응답 자동 삭제
+
+### 전화번호 인증 필수
+
+- '전화번호 인증 필수' 옵션을 활성화하면 실제로 존재하는 전화번호만 수집 가능합니다.
+- 응답자는 제출 전에 SMS 코드로 전화번호를 인증해야 합니다.
+- 인증을 위해 전화번호가 문자 발송 업체(Twilio Inc., 미국)에 전달됩니다.
+
+<Steps>
+  <Step>
+    #### 전화번호 인증 필수 활성화
+
+    <img src="/images/guides/create-forms/phone-verification-enable.png" alt="전화번호 필드 설정 패널에서 전화번호 인증 필수 토글 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 응답 시 전화번호 입력 후 인증하기 버튼 클릭
+
+    <img src="/images/guides/create-forms/phone-verification-start.png" alt="전화번호를 입력한 뒤 인증하기 버튼을 선택하는 응답 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 인증 코드 전송
+
+    <img src="/images/guides/create-forms/phone-verification-send-code.png" alt="전화번호 인증 팝업에서 코드 보내기 버튼 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 인증 완료 확인
+
+    <img src="/images/guides/create-forms/phone-verification-complete.png" alt="전화번호 필드 아래에 인증 완료가 표시된 응답 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
 
 ## 이메일 필드
 
