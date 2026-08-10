@@ -3,28 +3,27 @@ title: "응답 임시 저장하기"
 description: "응답자가 설문을 다 작성하지 못했을 때, 중간까지 작성한 내용을 임시로 저장해 나중에 이어서 응답할 수 있는 기능이에요. 임시저장은 두 가지 방식으로 사용할 수 있습니다."
 ---
 
-<img src="/images/guides/manage-forms/temporary-save-settings.png" alt="설문 설정 모달의 응답 탭에서 임시 저장 설정의 자동 저장과 로그인하여 저장 토글이 켜진 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+## 브라우저에 임시 저장
+<img src="/images/guides/manage-forms/temporary-save-browser.png" alt="설문 설정 응답 탭에서 브라우저에 저장을 활성화한 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
-## 자동 임시 저장
-
-- 우측 상단 `⚙️` 버튼을 눌러 '응답' 탭에 진입합니다.
+- 우측 상단 `⚙️` 버튼을 눌러 '응답' 탭에 진입합니다
 - 응답자의 입력 내용이 브라우저에 자동으로 저장됩니다.
 - 저장된 응답은 15일 동안 유지되며, 이후에는 자동으로 삭제됩니다.
 - 단, 시크릿 모드(비공개 창)에서는 저장되지 않습니다.
 - 응답자가 설문을 닫았다가 다시 열면 이전 입력 내용을 이어서 볼 수 있습니다.
 
 ## 로그인하여 응답 저장하기
+<img src="/images/guides/manage-forms/temporary-save-login.png" alt="설문 설정 응답 탭에서 로그인하여 저장을 활성화한 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - 우측 상단 `⚙️` 버튼을 눌러 '응답' 탭에 진입합니다.
-- 응답자가 Google 계정으로 로그인한 상태에서 응답을 저장할 수 있습니다.
-- 설정 방법:
-  1. '로그인하여 응답 방지' 활성화
-  1. '중복 응답 방지' 활성화
-  1. '이메일 로그인 요구' 활성화
-- 이렇게 설정하면 로그인한 사용자는 응답을 중단했다가 나중에 동일 계정으로 다시 접속해 이어서 작성할 수 있습니다.
+- `로그인하여 저장`을 켜면 로그인(메일 인증)한 사용자만 응답을 저장할 수 있습니다. 인증한 계정에 응답이 묶이므로 기기를 바꿔도 이어서 작성할 수 있어요.
+- 설정 방법은 다음과 같습니다.
+	1. `인증` 섹션의 `사용자 인증`을 켜고 인증 수단(이메일 또는 전화번호)을 선택합니다.
+	2. `임시 저장` 섹션의 `로그인하여 저장`을 켭니다.
 
-<img src="/images/guides/manage-forms/email-verification.png" alt="응답자 화면에서 이메일 인증하기 모달이 열려 이메일 주소를 입력받는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+- 이렇게 설정하면 응답자는 응답을 중단했다가 나중에 같은 이메일 주소나 전화번호로 다시 인증해 이어서 작성할 수 있습니다.
+
 
 <Callout title="팁">
-자동 임시 저장은 간편하지만 브라우저에 따라 초기화될 수 있어요. 정확한 응답 이어쓰기를 원한다면 "로그인하여 응답 저장" 방식을 사용하는 게 가장 안전합니다.
+브라우저 저장은 간편하지만 브라우저를 바꾸거나 데이터를 지우면 초기화될 수 있어요. 응답을 확실하게 이어 쓰게 하려면 `로그인하여 저장` 방식을 사용하는 게 가장 안전합니다.
 </Callout>
