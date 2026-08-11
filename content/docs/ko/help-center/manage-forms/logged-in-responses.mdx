@@ -5,7 +5,13 @@ description: 응답자가 왈라 계정을 만들 필요는 없어요. 사전에
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-## 설정 방법
+
+## 비밀번호 보호
+
+<img src="/images/guides/manage-forms/logged-in-password-protection.png" alt="설문 설정 응답자 탭에서 비밀번호 보호를 활성화한 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+- 비밀번호 보호를 활성화하고 비밀번호를 지정하면, 사전에 공유된 비밀번호(공통 단일 비밀번호만 가능)를 입력해야 폼에 접근할 수 있습니다.
+
+## 사용자 인증
 <Steps>
   <Step>
     ### 설문 설정 진입
@@ -64,16 +70,11 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 
 ## 인증된 사용자당 한 번만 받기
-- 인증을 켠 것만으로는 같은 사람이 여러 번 응답할 수 있습니다. 한 사람이 한 번만 응답하게 하려면 `중복 응답` 섹션의 `인증된 사용자당 1회`를 함께 켜세요.
-- 인증된 이메일, 전화번호 또는 외부 회원 ID를 기준으로 한 번만 응답할 수 있게 됩니다.
-- 현재 설정 상태는 `중복 응답` 섹션 상단의 요약 문장으로 언제든 확인할 수 있어요.
+- 인증을 켠 것만으로는 같은 사람이 여러 번 응답할 수 있습니다. 한 사람이 한 번만 응답하게 하려면 `중복 응답` 섹션의 `인증된 사용자당 1회`를 함께 활성화하세요.
+- 인증된 이메일과 전화번호를 기준으로 한 번만 응답할 수 있게 됩니다.
+- [중복 응답 제한하기](https://docs.walla.my/ko/docs/help-center/manage-forms/preventing-duplicate-responses)에서 더 많은 정보를 확인할 수 있습니다.
 
 <img src="/images/guides/manage-forms/logged-in-once-per-user.png" alt="사용자 인증과 인증된 사용자당 1회를 함께 활성화한 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-|설정 상태|표시되는 요약 문장|
-|---|---|
-|아무것도 켜지 않음|같은 사람이 여러 번 응답할 수 있습니다|
-|`인증된 사용자당 1회` 켜짐|인증된 이메일, 전화번호 또는 외부 회원 ID마다 한 번만 응답할 수 있습니다|
 
 <Callout title="알아두세요">
 `인증된 사용자당 1회`를 인증 수단 없이 켜면 이메일 인증이 함께 켜집니다. 반대로 `사용자 인증`을 끄면 `인증된 사용자당 1회`도 함께 꺼져요. 인증 설정을 껐다 켠 경우에는 중복 제한이 풀려 있지 않은지 다시 확인해 주세요.
