@@ -86,6 +86,9 @@ Retrieve form responses with pagination support. Access detailed response data i
 | Hidden Fields | `POST /forms/{formId}/hidden-fields` | Add hidden fields |
 | Hidden Fields | `DELETE /forms/{formId}/hidden-fields/{hiddenFieldId}` | Delete hidden field |
 | Delivery | `POST /forms/{formId}/delivery` | Send form delivery |
+| Delivery | `POST /forms/{formId}/delivery/recipients` | Register recipients |
+| Delivery | `PATCH /forms/{formId}/delivery/recipients` | Update recipients |
+| Delivery | `POST /forms/{formId}/delivery/send` | Send to registered recipients |
 | Delivery | `GET /forms/{formId}/delivery` | List delivery recipients |
 | Delivery | `POST /forms/{formId}/delivery/status` | Check delivery status |
 | Responses | `GET /forms/{formId}/responses` | List form responses (paginated) |
