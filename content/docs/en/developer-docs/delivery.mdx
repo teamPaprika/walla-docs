@@ -5,15 +5,27 @@ description: API reference for sending forms and tracking delivery status
 
 # Form Delivery API
 
-The Form Delivery API allows you to send forms to recipients and track their delivery and response status. You can send forms via email or SMS, monitor recipient engagement, and retrieve delivery statistics.
+The Form Delivery API allows you to send forms to recipients and track their delivery and response status. You can send forms via email or SMS, monitor recipient engagement, and retrieve delivery statistics. Registration and delivery can be handled in a single call, or you can separate them and send whenever you are ready.
 
 > **⚠️ Important Notice**: The Form Delivery API is available only after prior agreement with Walla. Please contact Walla support to enable this feature for your account.
+
+## Choosing a Delivery Flow
+
+The endpoints you use depend on how you want to combine recipient registration and delivery.
+
+| Scenario | Endpoint |
+|----------|----------|
+| Register recipients and send by email or SMS right away | `POST /delivery` |
+| Issue links only, without contact information, and distribute them through your own channels (app push, KakaoTalk, and so on) | `POST /delivery/recipients` |
+| Register recipients in advance and send or resend through Walla later | `POST /delivery/recipients` → `POST /delivery/send` |
+
+> **Note**: All three flows are tracked with the same status model. Even a recipient who only received a link, with no delivery through Walla, moves to `OPENED` when they open the form and `RESPONDED` when they submit it.
 
 ## Endpoints
 
 ### Send Form to Recipients
 
-Send a published form to one or more recipients.
+Send a published form to one or more recipients. Recipients are registered and delivered to in the same call. To register recipients without sending, use `POST /delivery/recipients`.
 
 ```http
 POST /open-api/v1/forms/{formId}/delivery
@@ -35,12 +47,27 @@ POST /open-api/v1/forms/{formId}/delivery
 |-------|------|----------|-------------|
 | `recipients` | array | Yes | Array of recipient objects (minimum 1) |
 | `recipients[].customerKey` | string | Yes | Unique customer identifier |
+| `recipients[].name` | string \| null | No | Recipient name |
 | `recipients[].email` | string | No | Recipient email address |
 | `recipients[].phoneNumber` | string | No | Recipient phone number |
+| `recipients[].hiddenFieldValues` | object | No | Initial hidden field values for this recipient. Keys are the hidden field labels declared on the form ([Get Hidden Fields](/en/docs/developer-docs/forms)) |
 | `subject` | string | No | Email subject (default: "설문이 도착했습니다.") |
 | `message` | string | No | Delivery message (default: "설문 링크를 확인하세요.") |
+| `deliveryChannel` | string | No | Delivery channel (default: `emailFirst`) |
 
 > **Note**: Each recipient must have at least one contact method (email or phoneNumber).
+
+**Delivery Channel**
+
+| Value | Behavior |
+|-------|----------|
+| `emailFirst` (default) | Sends by email only when an email address is available, and falls back to the phone number when it is not. Identical to the previous behavior |
+| `phoneFirst` | Sends by SMS only when the phone number can be used, and falls back to email when it cannot |
+| `both` | Sends through every available channel. A recipient counts as successful when at least one channel succeeds |
+
+> **Note**: The channel selection applies to every recipient in the request, and the fallback is based on channel availability. A failed delivery is not retried on another channel.
+
+> **Note**: The SMS channel is available only in environments where SMS delivery is enabled. In environments where it is disabled, recipients that have only a phone number are returned in `failedDeliveries`.
 
 #### Request
 
@@ -54,6 +81,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
     "recipients": [
       {
         "customerKey": "customer_001",
+        "name": "John Doe",
         "email": "john@example.com",
         "phoneNumber": "+821012345678"
       },
@@ -63,7 +91,8 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
       }
     ],
     "subject": "We value your feedback!",
-    "message": "Please take a moment to complete our survey."
+    "message": "Please take a moment to complete our survey.",
+    "deliveryChannel": "emailFirst"
   }'
 ```
 
@@ -79,6 +108,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
     "successfulDeliveries": [
       {
         "customerKey": "customer_001",
+        "name": "John Doe",
         "email": "john@example.com",
         "phoneNumber": "+821012345678",
         "aliasId": "8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
@@ -86,6 +116,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
       },
       {
         "customerKey": "customer_002",
+        "name": null,
         "email": "jane@example.com",
         "phoneNumber": null,
         "aliasId": "2f5d6e1c-9a4b-4c3d-8e7f-0a1b2c3d4e5f",
@@ -113,6 +144,7 @@ When some deliveries fail:
     "successfulDeliveries": [
       {
         "customerKey": "customer_001",
+        "name": "John Doe",
         "email": "john@example.com",
         "phoneNumber": "+821012345678",
         "aliasId": "8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
@@ -120,6 +152,7 @@ When some deliveries fail:
       },
       {
         "customerKey": "customer_002",
+        "name": null,
         "email": "jane@example.com",
         "phoneNumber": null,
         "aliasId": "2f5d6e1c-9a4b-4c3d-8e7f-0a1b2c3d4e5f",
@@ -129,6 +162,7 @@ When some deliveries fail:
     "failedDeliveries": [
       {
         "customerKey": "customer_003",
+        "name": null,
         "email": "invalid-email",
         "phoneNumber": null,
         "error": "Invalid email format"
@@ -146,11 +180,19 @@ When some deliveries fail:
 | `data.totalRecipients` | number | Total number of recipients |
 | `data.successfulDeliveries` | array | Array of recipient objects that were delivered successfully |
 | `data.successfulDeliveries[].customerKey` | string | Customer identifier provided in the request |
+| `data.successfulDeliveries[].name` | string \| null | Recipient name provided in the request (`null` if it was not provided) |
 | `data.successfulDeliveries[].email` | string \| null | Recipient email (`null` if not included in the request) |
 | `data.successfulDeliveries[].phoneNumber` | string \| null | Recipient phone number (`null` if not included in the request) |
 | `data.successfulDeliveries[].aliasId` | string (UUID) | Issued alias identifier. Acts as the form access token |
 | `data.successfulDeliveries[].formUrl` | string | Alias short URL in the form `https://walla.my/a/<aliasId>` |
 | `data.failedDeliveries` | array | List of failed deliveries with error details |
+| `data.failedDeliveries[].customerKey` | string | Customer identifier provided in the request |
+| `data.failedDeliveries[].name` | string \| null | Stored recipient name. This is the **stored value**, so it may differ from the name sent in the request when you resend |
+| `data.failedDeliveries[].email` | string \| null | Recipient email |
+| `data.failedDeliveries[].phoneNumber` | string \| null | Recipient phone number |
+| `data.failedDeliveries[].error` | string | Reason the delivery failed |
+
+> **Note**: Sending again with the same `customerKey` does not update the stored name. To change a stored name, use `PATCH /delivery/recipients`.
 
 **Error Responses**
 
@@ -160,6 +202,7 @@ When some deliveries fail:
     "error": "Invalid request: recipients array is required"
   }
   ```
+  A 400 response body contains the error message in `error`, the error category in `detailsType`, and a `details` array with per-item information. When an extra explanation is available, `description` is returned as well.
 
 - **401 Unauthorized**: API key missing or invalid
 - **403 Forbidden**: No permission for this resource
@@ -176,6 +219,332 @@ When some deliveries fail:
   }
   ```
 
+- **500 Internal Server Error**: Server error
+
+---
+
+### Register Recipients
+
+Register recipients and issue a per-recipient response link. This endpoint never sends the form.
+
+```http
+POST /open-api/v1/forms/{formId}/delivery/recipients
+```
+
+> **Important**: Recipients can only be registered on published forms. Unpublished forms will return a 404 error.
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+**Request Body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `recipients` | array | Yes | Array of recipient objects (minimum 1) |
+| `recipients[].customerKey` | string | Yes | Unique customer identifier |
+| `recipients[].name` | string | No | Recipient name |
+| `recipients[].email` | string | No | Recipient email address |
+| `recipients[].phoneNumber` | string | No | Recipient phone number |
+| `recipients[].hiddenFieldValues` | object | No | Initial hidden field values for this recipient. Keys are the hidden field labels declared on the form ([Get Hidden Fields](/en/docs/developer-docs/forms)) |
+
+> **Note**: You can register a recipient with `customerKey` alone, without any contact information. In that case, distribute the issued `formUrl` through your own channels.
+
+> **Note**: The request body does not allow undefined fields. An unknown field returns a 400 error.
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/recipients" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "recipients": [
+      {
+        "customerKey": "customer_003",
+        "name": "Sky Kim",
+        "email": "sky@example.com",
+        "hiddenFieldValues": {
+          "utm_source": "newsletter"
+        }
+      },
+      {
+        "customerKey": "customer_004"
+      }
+    ]
+  }'
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "totalRecipients": 2,
+    "recipients": [
+      {
+        "customerKey": "customer_003",
+        "created": true,
+        "aliasId": "3a7b9c0d-1e2f-4a5b-8c9d-0e1f2a3b4c5d",
+        "formUrl": "https://walla.my/a/3a7b9c0d-1e2f-4a5b-8c9d-0e1f2a3b4c5d"
+      },
+      {
+        "customerKey": "customer_004",
+        "created": false,
+        "aliasId": "6b8c0d1e-2f3a-4b5c-9d0e-1f2a3b4c5d6e",
+        "formUrl": "https://walla.my/a/6b8c0d1e-2f3a-4b5c-9d0e-1f2a3b4c5d6e"
+      }
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="Treat alias id as a form access token">
+`aliasId` grants access to the form without authentication, so treat it like a token. Avoid exposing it through external systems, logs, or analytics tools — keep it within private channels. Even when you distribute links through your own channels, deliver `formUrl` only to the intended recipient.
+</Callout>
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.totalRecipients` | number | Number of recipients included in the request |
+| `data.recipients` | array | Array of registration results. Preserves the order of the request |
+| `data.recipients[].customerKey` | string | Customer identifier provided in the request |
+| `data.recipients[].created` | boolean | `true` when this request registered the recipient, `false` when the recipient was already registered |
+| `data.recipients[].aliasId` | string (UUID) \| null | Issued alias identifier. Acts as the form access token |
+| `data.recipients[].formUrl` | string \| null | Alias short URL in the form `https://walla.my/a/<aliasId>` |
+
+> **Note**: An already registered `customerKey` is left unchanged and its existing link is returned as is. To change a stored value, use `PATCH /delivery/recipients`. Stored contact information is not included in the response.
+
+**Error Responses**
+
+- **400 Bad Request**: The request format is invalid, the same `customerKey` appears more than once in a single request, or a hidden field label that is not declared on the form was passed. Use `detailsType` in the response body to tell these causes apart
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
+- **404 Not Found**: Form not found or not published
+- **500 Internal Server Error**: Server error
+
+**400 Error Types**
+
+| Value | Cause |
+|-------|-------|
+| `schema` | The request body does not satisfy the schema |
+| `duplicateCustomerKey` | The same `customerKey` appears more than once in a single request |
+| `unknownHiddenFieldLabel` | A hidden field label that is not declared on the form was passed |
+
+A 400 response body contains the error message in `error`, the error category in `detailsType`, and a `details` array with per-item information. When an extra explanation is available, `description` is returned as well.
+
+---
+
+### Update Recipients
+
+Update information for recipients that are already registered. This endpoint never creates new recipients.
+
+```http
+PATCH /open-api/v1/forms/{formId}/delivery/recipients
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+**Request Body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `updates` | array | Yes | Array of update objects (minimum 1) |
+| `updates[].customerKey` | string | Yes | Customer identifier of the recipient to update |
+| `updates[].name` | string | No | Recipient name |
+| `updates[].email` | string | No | Recipient email address |
+| `updates[].phoneNumber` | string | No | Recipient phone number |
+| `updates[].hiddenFieldValues` | object | No | Initial hidden field values for this recipient. Keys are the hidden field labels declared on the form |
+
+> **Note**: You must provide at least one of `name`, `email`, `phoneNumber`, or `hiddenFieldValues`. Only the fields you send are updated, and the fields you omit are left unchanged. You cannot clear a value by sending `null`.
+
+> **Note**: When you send `hiddenFieldValues`, the recipient's initial hidden field values are replaced in full.
+
+> **Note**: A `customerKey` that is not registered is returned in `notFoundCustomerKeys` and is not newly registered. Use `POST /delivery/recipients` to register new recipients.
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X PATCH "https://api.walla.my/open-api/v1/forms/form_abc/delivery/recipients" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "updates": [
+      {
+        "customerKey": "customer_003",
+        "email": "sky.kim@example.com",
+        "hiddenFieldValues": {
+          "utm_source": "campaign_q3"
+        }
+      },
+      {
+        "customerKey": "customer_005",
+        "phoneNumber": "+821098765432"
+      }
+    ]
+  }'
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "totalRequested": 2,
+    "updatedCustomerKeys": ["customer_003"],
+    "notFoundCustomerKeys": ["customer_005"]
+  }
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.totalRequested` | number | Number of updates included in the request |
+| `data.updatedCustomerKeys` | array | Customer keys of the recipients that were updated |
+| `data.notFoundCustomerKeys` | array | Customer keys that could not be updated because they are not registered |
+
+The request itself returns 200 even when it includes customer keys that are not registered. Check `updatedCustomerKeys` and `notFoundCustomerKeys` for the outcome of each update.
+
+**Error Responses**
+
+- **400 Bad Request**: The request format is invalid, or the same `customerKey` appears more than once in a single request. Use `detailsType` in the response body to tell these causes apart
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
+- **404 Not Found**: Form not found or not published
+- **500 Internal Server Error**: Server error
+
+**400 Error Types**
+
+| Value | Cause |
+|-------|-------|
+| `schema` | The request body does not satisfy the schema |
+| `duplicateCustomerKey` | The same `customerKey` appears more than once in a single request |
+
+---
+
+### Send to Registered Recipients
+
+Send the form to already registered recipients using their stored contact information. The request carries no personal data.
+
+```http
+POST /open-api/v1/forms/{formId}/delivery/send
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | The unique form identifier |
+
+**Request Body**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `customerKeys` | array | Yes | Array of customer keys to send to (minimum 1) |
+| `subject` | string | No | Email subject (default: "설문이 도착했습니다.") |
+| `message` | string | No | Delivery message (default: "설문 링크를 확인하세요.") |
+| `deliveryChannel` | string | No | Delivery channel (default: `emailFirst`). For the available values and their behavior, see the delivery channel table in [Send Form to Recipients](#send-form-to-recipients) |
+
+> **Note**: Recipients must be registered beforehand. This endpoint sends to recipients registered through `POST /delivery`, `POST /delivery/recipients`, a dashboard upload, and so on.
+
+> **Note**: When the same `customerKey` appears more than once in a request, it is sent to only once. Calling again with the same key resends the form.
+
+#### Request
+
+**Example Request**
+
+```bash
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/send" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customerKeys": ["customer_001", "customer_003", "customer_004", "customer_005"],
+    "subject": "We value your feedback!",
+    "message": "Please take a moment to complete our survey.",
+    "deliveryChannel": "both"
+  }'
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": {
+    "totalRequested": 4,
+    "successfulDeliveries": [
+      {
+        "customerKey": "customer_001"
+      },
+      {
+        "customerKey": "customer_003"
+      }
+    ],
+    "failedDeliveries": [
+      {
+        "customerKey": "customer_004",
+        "error": "No contact information registered for this recipient"
+      }
+    ],
+    "notFoundCustomerKeys": ["customer_005"]
+  }
+}
+```
+
+<Callout type="info" title="Personal data protection">
+Neither the request nor the response contains email addresses or phone numbers. Delivery uses the contact information stored at registration, and the response returns only `customerKey` values.
+</Callout>
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data.totalRequested` | number | Number of requested recipients after duplicates are removed |
+| `data.successfulDeliveries` | array | Array of recipient objects that were delivered successfully |
+| `data.successfulDeliveries[].customerKey` | string | Customer identifier |
+| `data.failedDeliveries` | array | Array of recipient objects whose delivery failed |
+| `data.failedDeliveries[].customerKey` | string | Customer identifier |
+| `data.failedDeliveries[].error` | string | Reason the delivery failed |
+| `data.notFoundCustomerKeys` | array | Customer keys that could not be delivered to because they are not registered |
+
+The request itself returns 200 even when individual deliveries fail or the request includes customer keys that are not registered. A recipient with no contact information stored at registration is returned in `failedDeliveries`.
+
+**Error Responses**
+
+- **400 Bad Request**: Invalid request (e.g., empty `customerKeys` array)
+- **401 Unauthorized**: API key missing or invalid
+- **403 Forbidden**: No permission for this resource
+- **404 Not Found**: Form not found or not published
 - **500 Internal Server Error**: Server error
 
 ---
@@ -218,10 +587,14 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
       "id": "delivery_123",
       "formId": "form_abc",
       "customerKey": "customer_001",
+      "name": "John Doe",
       "email": "john@example.com",
       "phone": "+821012345678",
       "aliasId": "8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
       "formUrl": "https://walla.my/a/8c1a4e2b-7d3f-4a9b-9c2e-1a2b3c4d5e6f",
+      "hiddenFieldValues": {
+        "utm_source": "newsletter"
+      },
       "createdAt": "2024-01-15T10:30:00Z",
       "updatedAt": "2024-01-15T11:45:00Z"
     },
@@ -229,10 +602,12 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
       "id": "delivery_456",
       "formId": "form_abc",
       "customerKey": "customer_002",
+      "name": null,
       "email": "jane@example.com",
       "phone": null,
       "aliasId": null,
       "formUrl": null,
+      "hiddenFieldValues": {},
       "createdAt": "2024-01-15T10:30:00Z",
       "updatedAt": "2024-01-15T10:30:00Z"
     }
@@ -249,10 +624,12 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/delivery" \
 | `data[].id` | string | Delivery identifier |
 | `data[].formId` | string | Form identifier |
 | `data[].customerKey` | string | Customer identifier |
+| `data[].name` | string \| null | Recipient name stored at registration |
 | `data[].email` | string \| null | Recipient email |
 | `data[].phone` | string \| null | Recipient phone number |
 | `data[].aliasId` | string (UUID) \| null | Issued alias identifier. `null` for legacy rows that have no alias |
 | `data[].formUrl` | string \| null | Alias short URL in the form `https://walla.my/a/<aliasId>`. `null` whenever `aliasId` is `null` |
+| `data[].hiddenFieldValues` | object | Initial hidden field values for this recipient. Returned with the hidden field labels as keys |
 | `data[].createdAt` | string (date-time) | Initial delivery creation timestamp |
 | `data[].updatedAt` | string (date-time) | Last update timestamp |
 
@@ -314,6 +691,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
       "id": "delivery_123",
       "formId": "form_abc",
       "customerKey": "customer_001",
+      "name": "John Doe",
       "email": "john@example.com",
       "phone": "+821012345678",
       "status": "RESPONDED",
@@ -325,6 +703,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
       "id": "delivery_456",
       "formId": "form_abc",
       "customerKey": "customer_002",
+      "name": null,
       "email": "jane@example.com",
       "phone": null,
       "status": "OPENED",
@@ -336,6 +715,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
       "id": "delivery_789",
       "formId": "form_abc",
       "customerKey": "customer_003",
+      "name": null,
       "email": "bob@example.com",
       "phone": null,
       "status": "SENT",
@@ -356,6 +736,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
 | `data[].id` | string | Delivery identifier |
 | `data[].formId` | string | Form identifier |
 | `data[].customerKey` | string | Customer identifier |
+| `data[].name` | string \| null | Recipient name stored at registration |
 | `data[].email` | string | Recipient email |
 | `data[].phone` | string | Recipient phone number |
 | `data[].status` | string | Delivery status (see below) |
@@ -367,10 +748,12 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
 
 | Status | Description |
 |--------|-------------|
-| `NOT_SENT` | Delivery created but not yet sent |
+| `NOT_SENT` | The recipient is registered but has not been sent to yet (including recipients registered only through `POST /delivery/recipients`) |
 | `SENT` | Form delivered successfully |
 | `OPENED` | Recipient opened the form |
 | `RESPONDED` | Recipient completed and submitted the form |
+
+> **Note**: Even when you never send the form and only distribute `formUrl` through your own channels, the status moves to `OPENED` when the recipient opens the link and `RESPONDED` when they submit the form.
 
 **Error Responses**
 
@@ -387,13 +770,16 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/delivery/status" \
 ```typescript
 interface Recipient {
   customerKey: string;
+  name?: string;
   email?: string;
   phoneNumber?: string;
+  hiddenFieldValues?: Record<string, string>;
 }
 
 interface DeliveryOptions {
   subject?: string;
   message?: string;
+  deliveryChannel?: 'emailFirst' | 'phoneFirst' | 'both';
 }
 
 async function sendForm(
@@ -412,7 +798,57 @@ async function sendForm(
       body: JSON.stringify({
         recipients,
         subject: options?.subject || '설문이 도착했습니다.',
-        message: options?.message || '설문 링크를 확인하세요.'
+        message: options?.message || '설문 링크를 확인하세요.',
+        deliveryChannel: options?.deliveryChannel || 'emailFirst'
+      })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+async function registerRecipients(formId: string, recipients: Recipient[]) {
+  const response = await fetch(
+    `https://api.walla.my/open-api/v1/forms/${formId}/delivery/recipients`,
+    {
+      method: 'POST',
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ recipients })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+async function sendToRegistered(
+  formId: string,
+  customerKeys: string[],
+  options?: DeliveryOptions
+) {
+  const response = await fetch(
+    `https://api.walla.my/open-api/v1/forms/${formId}/delivery/send`,
+    {
+      method: 'POST',
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY!,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        customerKeys,
+        subject: options?.subject,
+        message: options?.message,
+        deliveryChannel: options?.deliveryChannel
       })
     }
   );
@@ -463,6 +899,15 @@ const result = await sendForm('form_abc', [
 
 console.log(`Successfully sent to ${result.data.successfulDeliveries.length} recipients`);
 
+// Register only, then distribute the links through your own channel
+const registered = await registerRecipients('form_abc', [
+  { customerKey: 'customer_003' }
+]);
+registered.data.recipients.forEach(r => pushToOwnChannel(r.customerKey, r.formUrl));
+
+// Send (or resend) later with customerKey only
+await sendToRegistered('form_abc', ['customer_003'], { deliveryChannel: 'both' });
+
 // Check status
 const statuses = await getDeliveryStatus('form_abc', ['customer_001', 'customer_002']);
 statuses.forEach(status => {
@@ -489,17 +934,68 @@ class WallaDeliveryAPI:
     def send_form(
         self,
         form_id: str,
-        recipients: List[Dict[str, str]],
+        recipients: List[Dict[str, Any]],
         subject: Optional[str] = None,
-        message: Optional[str] = None
+        message: Optional[str] = None,
+        delivery_channel: Optional[str] = None
     ) -> Dict[str, Any]:
         """Send form to recipients"""
         url = f"{self.base_url}/forms/{form_id}/delivery"
-        payload = {
+        payload: Dict[str, Any] = {
             "recipients": recipients,
             "subject": subject or "설문이 도착했습니다.",
             "message": message or "설문 링크를 확인하세요."
         }
+        if delivery_channel:
+            payload["deliveryChannel"] = delivery_channel
+
+        response = requests.post(url, headers=self.headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def register_recipients(
+        self,
+        form_id: str,
+        recipients: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """Register recipients without sending"""
+        url = f"{self.base_url}/forms/{form_id}/delivery/recipients"
+        payload = {"recipients": recipients}
+
+        response = requests.post(url, headers=self.headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def update_recipients(
+        self,
+        form_id: str,
+        updates: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """Update already registered recipients"""
+        url = f"{self.base_url}/forms/{form_id}/delivery/recipients"
+        payload = {"updates": updates}
+
+        response = requests.patch(url, headers=self.headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def send_to_registered(
+        self,
+        form_id: str,
+        customer_keys: List[str],
+        subject: Optional[str] = None,
+        message: Optional[str] = None,
+        delivery_channel: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Send form to already registered recipients"""
+        url = f"{self.base_url}/forms/{form_id}/delivery/send"
+        payload: Dict[str, Any] = {"customerKeys": customer_keys}
+        if subject:
+            payload["subject"] = subject
+        if message:
+            payload["message"] = message
+        if delivery_channel:
+            payload["deliveryChannel"] = delivery_channel
 
         response = requests.post(url, headers=self.headers, json=payload)
         response.raise_for_status()
@@ -553,6 +1049,21 @@ result = api.send_form(
 
 print(f"Sent to {len(result['data']['successfulDeliveries'])} recipients")
 
+# Register first, send later
+registered = api.register_recipients(
+    "form_abc",
+    [{"customerKey": "customer_003", "email": "sky@example.com"}]
+)
+for recipient in registered["data"]["recipients"]:
+    print(f"{recipient['customerKey']}: {recipient['formUrl']}")
+
+send_result = api.send_to_registered(
+    "form_abc",
+    ["customer_003"],
+    delivery_channel="both"
+)
+print(f"Sent to {len(send_result['data']['successfulDeliveries'])} recipients")
+
 # Check response rate
 response_rate = api.get_response_rate("form_abc")
 print(f"Response rate: {response_rate:.2f}%")
@@ -567,9 +1078,24 @@ print(f"Response rate: {response_rate:.2f}%")
 - Consider using your internal customer IDs as customer keys
 - Store the mapping between customer keys and your internal system
 
+### Choosing a Delivery Channel
+
+- **Keep the default**: Stay with the default `emailFirst` when email deliverability is good enough
+- **SMS first**: Use `phoneFirst` for customer segments you manage by phone number
+- **Maximize reach**: Use `both` for campaigns that need every channel. A recipient counts as successful when at least one channel succeeds
+- **Understand the fallback**: The fallback is based on channel availability. A failed delivery is not retried on another channel, so check `failedDeliveries` and resend
+
+### Minimizing Personal Data
+
+- If you distribute links through your own channels, register recipients with `customerKey` only and no contact information
+- Separating registration from delivery keeps personal data out of your delivery requests
+- Stored contact information is not included in responses. To change a stored value, use `PATCH /delivery/recipients`
+- Share `aliasId` and `formUrl` only with the recipient they belong to
+
 ### Delivery Optimization
 
 - **Batch Processing**: Send to multiple recipients in a single request
+- **Separate Registration and Delivery**: If you send to the same recipients repeatedly, register them in advance and pass only customer keys to `POST /delivery/send`
 - **Error Handling**: Always check the `failedDeliveries` array and retry failed deliveries
 - **Status Tracking**: Regularly check delivery status to monitor engagement
 
