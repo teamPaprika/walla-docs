@@ -35,6 +35,8 @@ After creating an automation, open the detail editor for more granular configura
   <Step>
     ### Choose the webhook payload format
 	    Decide whether to use the default webhook body (automatic) or a custom body. If you choose automatic, you can save and activate right away. If you choose custom, continue to the next step.
+	    - **Automatic (default)**: Form response data is included in the payload automatically. Open `Preview` to check the exact payload that will be sent.
+	    - **Custom**: Set the request type, headers, and body yourself.
   </Step>
   <Step>
     ### Configure request type and headers
@@ -48,6 +50,11 @@ After creating an automation, open the detail editor for more granular configura
     <Step>
     ### Set up authentication (optional)
     You can choose security methods like `Bearer Token`, `Basic Auth`, or `API Key` for your webhook.
+  </Step>
+    <Step>
+    ### Include hidden field values (optional)
+	    Turn on `Include hidden field values` under advanced settings to send the values collected through [tracking (hidden fields)](/en/docs/help-center/share-forms/tracking-hidden-fields) along with the webhook data. Use it when your external service needs tracking info such as traffic source or customer group.
+	    - When it's off, only response values are sent, without hidden fields.
   </Step>
     <Step>
     ### Save and activate
@@ -192,6 +199,15 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - You can enter email addresses directly, or use value references (@) to set them dynamically.
 	    - Separate multiple email addresses with commas (,), spaces, or Enter.
 	    - Certain predefined references such as responseKey and timestamp cannot be used as email addresses.
+  </Step>
+    <Step>
+    ### Include hidden field values (optional)
+	    Turn on `Include hidden field values` under advanced settings to include the values collected through [tracking (hidden fields)](/en/docs/help-center/share-forms/tracking-hidden-fields) in the email.
+	    - When it's off, only response values are used, without hidden fields.
+
+    <Callout type="warning" title="Heads up">
+    Hidden fields can hold values the respondent never typed in, such as traffic source or a customer identifier. If the email goes to an external recipient, check what will be included before turning this on.
+    </Callout>
   </Step>
     <Step>
     ### Save and activate

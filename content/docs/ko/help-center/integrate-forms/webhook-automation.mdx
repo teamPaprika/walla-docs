@@ -43,6 +43,8 @@ description: "자동화는 사용자가 만든 폼에 응답이 제출되는 순
   <Step>
     ### 웹훅 전송 포맷 지정
 	    자동(기본 웹훅 Body)으로 전송할지, 커스텀 Body를 지정할지 선택합니다. 자동을 선택한 경우에는 저장 후 바로 활성화하여 이용할 수 있고, 커스텀 Body를 선택한 경우에는 다음의 단계로 넘어갑니다.
+	    - **자동 (기본)**: 폼 응답 데이터가 자동으로 페이로드에 포함됩니다. `미리보기`를 열면 실제로 전송될 페이로드 형태를 미리 확인할 수 있습니다.
+	    - **커스텀**: 요청 종류, Headers, Body를 직접 지정합니다.
 
     <img src="/images/guides/integrate/automation-webhook-format.png" alt="웹훅 전송 포맷 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
@@ -64,6 +66,12 @@ description: "자동화는 사용자가 만든 폼에 응답이 제출되는 순
     웹훅 사용 시 `Bearer Token`, `Basic Auth`, `API Key` 등 보안 인증 방식을 선택할 수 있습니다.
 
     <img src="/images/guides/integrate/automation-auth.png" alt="인증 방식 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### 히든필드 값 포함 설정 (선택)
+	    고급 설정의 `히든필드 값 포함`을 켜면 [트래킹(히든필드)](/ko/docs/help-center/share-forms/tracking-hidden-fields)로 수집된 값도 웹훅 전송 데이터에 함께 포함됩니다. 유입 경로, 고객 그룹 등 트래킹 정보를 외부 서비스로 넘겨야 할 때 사용하세요. 끄면 히든필드를 제외한 응답 값만 전송됩니다.
+
+    <img src="/images/guides/integrate/automation-hidden-fields.png" alt="히든필드 값 포함 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### 변경사항 저장 및 활성화
@@ -260,6 +268,17 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - responseKey, timestamp 와 같은 일부 사전 정의된 참조값은 이메일 주소로 사용할 수 없습니다.
 
     <img src="/images/guides/integrate/gmail-07-cc-bcc.png" alt="참조, 숨은참조, 회신 이메일 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### 히든필드 값 포함 설정 (선택)
+	    고급 설정의 `히든필드 값 포함`을 켜면 [트래킹(히든필드)](/ko/docs/help-center/share-forms/tracking-hidden-fields)로 수집된 값도 이메일에 함께 포함됩니다. 끄면 히든필드를 제외한 응답 값만 사용됩니다.
+	    <Callout type="warning" title="주의사항">
+    히든필드에는 유입 경로, 고객 식별자처럼 응답자가 직접 입력하지 않은 값이 담길 수 있습니다. 응답자 등 외부 수신자에게 발송되는 이메일이라면 어떤 값이 함께 전달되는지 확인한 뒤 활성화 해주세요.
+    </Callout>
+    
+    <img src="/images/guides/integrate/gmail-09-hidden-fields.png" alt="히든필드 값 포함 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+    
   </Step>
     <Step>
     ### 변경사항 저장 및 활성화
