@@ -59,6 +59,12 @@ Host (Walla Form)                      Custom Field (iframe)
 
 모든 영속 상태는 `setValue()`를 통해야 하며, 호스트가 자동으로 저장하고 복원합니다.
 
+## 플랜과 개수 제한
+
+커스텀 필드 타입 생성은 팀 플랜별로 개수가 제한됩니다 (Free 1개 / Pro 5개 / Enterprise 무제한). 제한 기준은 팀이 소유한 **타입**의 수입니다. 기존 타입에 새 버전을 만드는 재빌드(`targetTypeId`)는 개수에 포함되지 않으므로, 한도에 도달한 팀도 기존 필드는 계속 수정할 수 있습니다.
+
+한도는 타입이 실제로 등록되는 시점(MCP `approve_custom_field_build`, 정의 생성 API)에 집행됩니다. 한도를 초과하는 생성 요청은 MCP에서는 `payment_required`, REST에서는 `403`과 `CUSTOM_FIELD_LIMIT_REACHED` 코드로 거절됩니다.
+
 ## 시작하기
 
 <Cards>
