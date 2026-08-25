@@ -106,7 +106,7 @@ Each entry carries:
 Notes:
 
 - The list is **team-scoped**: it returns only this team's own custom field types, not shared or platform-wide ones.
-- Discovery is offered alongside the read tools (it needs read access). It also requires the team's plan to include custom fields — a team whose plan lacks them gets `payment_required` (see Gating below).
+- Discovery is offered alongside the read tools (it needs read access). Every plan can list and attach custom field types; the plan caps only how many a team may create (see Limits below).
 - Use it before adding a custom field: if a suitable type already exists, reuse it rather than asking for a near-duplicate.
 
 ## Adding / placing a custom field (`add_field` with `fieldType: "CUSTOM"`)
@@ -125,9 +125,13 @@ You can change a placed custom field's per-instance `properties` later with an `
 
 See `walla://reference/editing-contract` for the full `add_field` op shape and the field placement options shared with built-in fields.
 
-## Gating: `payment_required`
+## Limits: `payment_required`
 
-Custom fields are a paid feature. **Both** the discovery tool (`list_custom_field_types`) **and** adding a `CUSTOM` field via `add_field` are gated by the team's plan: if the team's plan does not include custom fields, the call fails with `payment_required` and a short, user-facing upgrade message. Relay that message to the user; do not retry the same call without an upgrade. (The global error contract is in the server instructions.)
+Custom fields are available on **every** plan. What the plan limits is how many custom field types a team may **own**: Free 1, Pro 5, Enterprise unlimited.
+
+That limit binds only when a NEW type is **created** (through the build tools, where the deployment offers them). Listing types with `list_custom_field_types`, attaching one with `add_field`, and using a field already placed on a form are never blocked by it — so a team that is over its limit (after a downgrade, or from types provisioned for it) keeps full use of everything it already has.
+
+Creating a type past the limit fails with `payment_required` and a short, user-facing message carrying the current count and the cap. Relay that message to the user; do not retry the same call without an upgrade. (The global error contract is in the server instructions.)
 
 ## What you cannot do here
 

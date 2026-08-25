@@ -59,6 +59,12 @@ Custom fields run in a sandboxed iframe with `sandbox="allow-scripts"` (no `allo
 
 All persistent state must go through `setValue()` — the host saves and restores it automatically.
 
+## Plans and the Type Limit
+
+Each team plan sets how many custom field types a team can create (Free 1 / Pro 5 / Enterprise unlimited). The limit counts the **types** that the team owns. A rebuild of an existing type (`targetTypeId`) mints a new version and does not count, so a team at its limit can still revise the fields it has.
+
+The limit applies at registration time (MCP `approve_custom_field_build`, the definition create API). A create request over the limit fails with `payment_required` on MCP, and with `403` and the `CUSTOM_FIELD_LIMIT_REACHED` code on REST.
+
 ## Getting Started
 
 <Cards>

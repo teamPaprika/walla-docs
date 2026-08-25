@@ -283,11 +283,22 @@ Branches obey invariants `set_field_logic` enforces for you — the `ALWAYS` def
 
 ## Paid features
 
+> **`update_field` deep-merges, it does not replace.** `properties` and `validations` you send are merged
+> **into** the field's existing objects, recursing into nested objects and overwriting only the leaves you
+> include (arrays and primitives are overwritten whole). Two consequences: (a) you may send just the keys you
+> are changing — untouched settings survive; (b) **you cannot remove a setting by omitting it.** To clear one,
+> send its off-value explicitly (`validations.quota.config: null`,
+> `properties.isFileVolumeLimited: false`). Sending a trimmed-down `validations` object does **not** delete the
+> kinds you left out.
+
 Some field types and settings require a paid team plan. Setting one on a team whose plan lacks it rejects the **whole batch** with `payment_required` — a retryable error that carries a short upgrade message (the feature, the required plan, and an upgrade link). Relay that message to the user, then retry without the paid setting if the rest should still apply. Plan-gated surfaces:
 
 | Surface | Where in an op | Gated values |
 |---|---|---|
-| Paid field **types** | `add_field` `fieldType` | `TOSS_PAYMENTS`, `SECRETS`, `CUSTOM`, `ENDING_DESCRIPTION`, `ENDING_REDIRECT` |
+| Paid field **types** | `add_field` `fieldType` | `TOSS_PAYMENTS`, `SECRETS`, `ENDING_DESCRIPTION`, `ENDING_REDIRECT`. `CUSTOM` is **not** gated here — attaching an already-registered custom field type is open to every plan; the plan caps only how many types a team may create (see `walla://reference/custom-fields`). |
 | Response **quota** | `validations.quota.config` on `update_field` (non-empty) | per-option response caps; set after the field exists — quota on add_field is rejected (option ids are assigned on create) |
 | File **volume limit** | `properties.isFileVolumeLimited: true` | upload size cap |
 | Numeric/custom **option values** | option / grid-column `value` ≠ `label` (on `update_field`) | scored choices |
+<!-- feature:phoneVerification -->
+| **Phone verification** | `validations.phoneVerification.enabled` on `add_field` / `update_field` | `true` only (Enterprise). Sending `false` is free, so a downgraded team can still turn it off — but you must send it **explicitly**: omitting the key leaves the option ON (see the merge note above). |
+<!-- /feature:phoneVerification -->
