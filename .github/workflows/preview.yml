@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # 번역 드리프트 검사가 파일별 최종 커밋 시각을 읽으므로 얕은 클론으로는 부족하다
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -25,6 +28,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Check translation drift
+        run: pnpm i18n:check
 
       - name: Build
         run: pnpm build
