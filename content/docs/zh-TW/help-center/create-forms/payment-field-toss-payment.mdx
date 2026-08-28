@@ -1,0 +1,55 @@
+---
+title: "付款欄位：Toss Payments"
+description: "使用付款欄位，填答者就能直接在表單中完成付款。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<Steps>
+  <Step>
+    ### 在 Toss Payments 註冊新商店
+    請先在 Toss Payments 註冊一間新商店。
+
+    - 詳細內容請參考以下連結。
+      - [Toss Payments 商店註冊指南](https://tosspublic.notion.site/b99d2cb71d29401c82eecb64ae6f712c)
+      - [Toss Payments 手續費說明](https://www.tosspayments.com/about/fee)
+    - 若已經註冊過，可以直接進行下一步。
+  </Step>
+  <Step>
+    ### 新增付款欄位
+    在專案編輯畫面新增付款欄位。
+  </Step>
+  <Step>
+    ### 輸入付款資訊
+
+    請輸入付款所需的資訊。
+
+    #### Variant Key
+    - 這是用來區分付款 UI 的專屬值，可以在付款欄位透過 `查看付款 UI Variant Key` 確認。
+    - 填入正式 UI 會產生實際付款，填入測試 UI 則不會實際付款，請務必分清楚再輸入。
+    - 第一次使用時，可以點選 `新增 UI` 按鈕設定各種付款 UI。
+    - 點選 `新增 UI` 按鈕後，請選擇 `國內一般付款`。
+
+    <Callout type="warning" title="無法使用虛擬帳號">
+    虛擬帳號無法使用。請務必在付款 UI 編輯的 [功能]-[付款方式清單] 中**取消勾選**虛擬帳號。Walla 是在送出付款請求後、回覆被提交時就記錄為已完成付款；而虛擬帳號不會即時完成付款，可能出現回覆表中記錄為付款完成、實際上卻沒有入帳的情況。
+    </Callout>
+
+    #### Client Key／Secret Key
+    - 可以在 [Toss Payments 開發者中心](https://developers.tosspayments.com/)的「我的開發資訊」中查看。在左側選擇商店後，複製該商店的 Client Key 與 Secret Key。
+
+    #### 訂單 ID
+    - 這是用來識別訂單付款的專屬值，格式為「訂單ID\_隨機碼\_時間」。例）紅豆鯛魚燒 → `redbean`、卡士達鯛魚燒 → `chouxcream`
+
+    #### 商品名稱／商品價格
+    - 請輸入填答者要訂購的商品名稱與價格。
+  </Step>
+  <Step>
+    ### 完成訂購單製作
+    現在你可以用付款欄位製作訂購單了。
+
+    - 在付款 UI 輸入 Variant Key，在付款 Widget 輸入 Client Key 與 Secret Key。
+    - 輸入訂單 ID、商品名稱、商品價格等資訊後儲存即完成。
+    - 使用測試 UI 不會產生實際付款，請務必與正式 UI 分清楚再輸入。
+    - 可以透過邏輯設定，讓不同選項顯示不同的付款欄位。
+  </Step>
+</Steps>

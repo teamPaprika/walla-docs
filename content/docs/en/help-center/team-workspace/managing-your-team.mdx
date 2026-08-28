@@ -5,9 +5,9 @@ description: "'Team Settings' is where you manage team operations overall — te
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-<video src="/videos/team-settings.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
-
 ## Team Info
+
+<img src="/images/guides/team-workspace/team-info-page.png" alt="Reviewing basic team information and plan details on the Team Management → Team Info screen" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - See basic information about the team you're currently in (team profile image, team name, owner info, etc.).
 - Your subscribed plan, total/remaining storage, and member count are also displayed.
@@ -15,17 +15,29 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 ## Workspace Management
 
+<img src="/images/guides/team-workspace/workspace-management-page.png" alt="The workspace list with the transfer ownership and delete workspace menu" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 - View information about all workspaces created in the team.
 - See how many members each workspace has and who owns it, transfer workspace ownership, or delete workspaces.
 
 ## Team Member Management
 
+<img src="/images/guides/team-workspace/team-member-management.png" alt="The team member management screen showing the invite area and the owner, admin, and member lists" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 - Invitations are available starting from the Pro plan.
 - View the full list of members in your team.
 - Assign roles and manage permissions for each member.
 - Transfer team ownership or remove members from this tab.
+### Managing team permissions
+
+Team roles rank as Owner > Admin > Member.
+The team owner can toggle detailed permissions for the **Admin** and **Member** roles in the `Role permissions` section at the bottom of the page.
+
+<img src="/images/guides/team-workspace/team-roles-admin.png" alt="The Admin tab of role permissions with toggles enabled for inviting members, creating workspaces, removing members, changing roles, security settings, and downloading logs" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 ## Security Settings
+
+<img src="/images/guides/team-workspace/security-settings.png" alt="The team security settings screen with two-factor authentication, IP address verification, and require reason for response download" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - Provides features for strengthening team access security.
   - **Two-Factor Authentication (MFA)**: Force team members to complete additional verification (OTP, etc.) at login.
@@ -33,6 +45,8 @@ import { Callout } from 'fumadocs-ui/components/callout';
   - **Require reason for response download**: Require users to enter a reason when downloading response data.
 
 ## Activity Logs
+
+<img src="/images/guides/team-workspace/activity-logs.png" alt="The team activity log screen organized into timestamp, user, action, description, and metadata columns" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - Review all major team activity in chronological order.
 - Click `Download CSV` to export the activity logs.

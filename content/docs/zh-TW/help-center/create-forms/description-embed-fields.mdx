@@ -1,0 +1,87 @@
+---
+title: 說明、嵌入欄位
+description: 想在問卷中一併呈現說明文字、圖片、表格、網頁時，可以運用說明欄位與嵌入欄位。
+---
+
+## 說明欄位
+
+- 可以放入問卷封面、段落分隔、說明文字等自由的說明性內容。
+- 透過[文字編輯器](/zh-TW/docs/help-center/create-forms/editing-field-text)可以套用文字顏色、大小、粗細等各種樣式。
+- 也可以用[斜線（/）指令](/zh-TW/docs/help-center/create-forms/editing-field-text)輕鬆插入圖片、表格、標題文字等。
+
+<Callout title="小技巧">
+妥善運用說明欄位來區隔問卷結構或補充說明，可以讓參與者更容易理解內容。
+</Callout>
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 嵌入欄位
+
+- 貼上網站 URL，就能把該網頁直接顯示在 Walla 表單裡。
+
+### 嵌入 YouTube 影片
+
+把 YouTube 影片的分享 URL 或嵌入碼貼到嵌入欄位，就能在問卷中直接播放影片。
+
+<Steps>
+  <Step>
+    ### 在 YouTube 點選分享按鈕
+    在 YouTube 開啟要嵌入的影片，點選影片下方的分享按鈕。
+  </Step>
+  <Step>
+    ### 在分享視窗選擇嵌入
+    分享視窗開啟後，點選最左側的嵌入選項。
+  </Step>
+  <Step>
+    ### 只複製嵌入碼中的 URL
+    不要複製整段 iframe 標籤，只拖曳複製 src 屬性中以 https://www.youtube.com/embed/... 開頭的 URL。
+  </Step>
+  <Step>
+    ### 在 Walla 嵌入欄位點選嵌入 URL
+    在 Walla 專案編輯畫面新增嵌入欄位，然後點選欄位中的嵌入 URL 按鈕。
+  </Step>
+  <Step>
+    ### 貼上 URL 並點選嵌入
+    把複製的 YouTube 嵌入 URL 貼到輸入框，再點選嵌入按鈕。
+  </Step>
+  <Step>
+    ### 確認嵌入結果
+    你會看到 YouTube 影片已可在問卷中直接播放。
+  </Step>
+</Steps>
+
+### 嵌入 Google 日曆
+
+把 Google 日曆的分享 URL 貼到嵌入欄位，就能在問卷中直接顯示行程與預約資訊。
+
+<Steps>
+  <Step>
+    ### 在 Google 日曆開啟分享選項
+    點選要嵌入的行程／預約，然後在彈出視窗的 `⋮`（更多）選單中選擇 `更多分享選項`。
+  </Step>
+  <Step>
+    ### 嵌入網站 → 展開內嵌預約頁面
+    選擇分享視窗上方的 `嵌入網站` 分頁，再點選下方的 `內嵌預約頁面` 展開。
+  </Step>
+  <Step>
+    ### 只複製嵌入碼中的 URL
+    不要複製 `嵌入碼` 區塊中整段 iframe 標籤，只拖曳複製 `src="..."` 中以 `https://calendar.google.com/...` 開頭的 URL。
+  </Step>
+  <Step>
+    ### 在 Walla 嵌入欄位點選嵌入 URL
+    在 Walla 專案編輯畫面新增嵌入欄位，然後點選欄位中的 `嵌入 URL` 按鈕。
+  </Step>
+  <Step>
+    ### 貼上 URL 並點選嵌入
+    把複製的 Google 日曆 URL 貼到輸入框，再點選 `嵌入` 按鈕。
+  </Step>
+  <Step>
+    ### 確認嵌入結果
+    你會看到日曆的預約時段選擇畫面原封不動地顯示在問卷中。
+  </Step>
+</Steps>
+
+<Callout type="warning" title="注意事項">
+- 依外部網站的安全性政策或 HTTPS 設定，嵌入內容有可能無法顯示。
+- 若貼上一般 URL 後出現「…拒絕連線」的訊息，請改用該網站提供的嵌入專用連結再試一次。
+</Callout>

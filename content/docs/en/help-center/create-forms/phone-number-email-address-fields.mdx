@@ -3,25 +3,63 @@ title: Phone Number, Email, and Address Fields
 description: Fields for collecting contact information in your survey. Here's an overview of each field and the options you can configure 👇
 ---
 
-<video src="/videos/phone-email-address.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## Phone Number Field
 
+<img src="/images/guides/manage-forms/phone-number-field-example.png" alt="A phone number field with a country dropdown and the 010-2000-0000 placeholder" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 - Respondents can enter their phone number.
 - Click the flag icon to switch to a different country's phone format.
+- The [text editor](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#applying-text-styles) lets you apply various styles such as text color, size, and weight.
+- You can also use [slash (/) commands](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#using-slash--commands-for-more-features) to easily insert images, tables, headings, and more.
 - The default is the Korean mobile format (010-0000-0000).
 - Available options
   - Required
   - Response length
   - Response include / exclude
   - Regular expression (Regex)
+  - Require phone verification
   - Data masking
   - Auto-delete responses
 
+### Require phone verification
+
+- Turning on 'Require phone verification' means only phone numbers that actually exist can be collected.
+- Respondents must verify their phone number with an SMS code before submitting.
+- For verification, the phone number is sent to our SMS provider (Twilio Inc., United States).
+
+<Steps>
+  <Step>
+    #### Turn on require phone verification
+
+    <img src="/images/guides/create-forms/phone-verification-enable.png" alt="Turning on the require phone verification toggle in the phone number field settings panel" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### The respondent enters a number and clicks Verify
+
+    <img src="/images/guides/create-forms/phone-verification-start.png" alt="The response screen where a phone number is entered and the Verify button is selected" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Send the verification code
+
+    <img src="/images/guides/create-forms/phone-verification-send-code.png" alt="Selecting the Send code button in the phone verification popup" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Confirm verification
+
+    <img src="/images/guides/create-forms/phone-verification-complete.png" alt="The response screen showing Verified below the phone number field" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
 ## Email Field
+
+<img src="/images/guides/manage-forms/email-field-example.png" alt="An email field with the example@email.com placeholder" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - Respondents can enter their email address.
 - The input must follow the `~~~@~~~.~~~` format; otherwise the response cannot be submitted.
+- The [text editor](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#applying-text-styles) lets you apply various styles such as text color, size, and weight.
+- You can also use [slash (/) commands](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#using-slash--commands-for-more-features) to easily insert images, tables, headings, and more.
 - Click the pencil icon to edit the placeholder text.
 - Available options
   - Required
@@ -32,6 +70,8 @@ description: Fields for collecting contact information in your survey. Here's an
   - Auto-delete responses
 
 ## Address Field
+
+<img src="/images/guides/manage-forms/address-field-example.png" alt="A delivery address field showing the address search input" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - Only Korean addresses are supported. Respondents can search for an address and add detailed address information.
 - Available options

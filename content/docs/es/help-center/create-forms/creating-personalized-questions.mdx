@@ -1,0 +1,38 @@
+---
+title: "Crear preguntas personalizadas"
+description: "El encadenado de respuestas (piping) recupera la respuesta de una pregunta anterior para mostrar preguntas personalizadas. Al reflejar directamente lo que ha contestado cada persona, el formulario resulta más natural y cercano."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Ejemplos de uso del encadenado de respuestas
+
+- Si en la pregunta del nombre alguien escribe «Ana», en la siguiente pregunta puedes mostrar «¡Hola, Ana!».
+- También puedes volver a mostrar una respuesta concreta y crear preguntas de verificación del tipo «Revisa de nuevo esta información».
+
+## Cómo configurarlo
+
+<Steps>
+  <Step>
+    ### Ve al cuadro de texto
+    En la pantalla de edición del proyecto, sitúate en el cuadro del título o de la descripción del campo.
+  </Step>
+  <Step>
+    ### Escribe el símbolo «@»
+    Al escribir «@» aparecerá debajo la lista de preguntas añadidas anteriormente.
+  </Step>
+  <Step>
+    ### Elige la pregunta
+    Selecciona la pregunta que quieras recuperar y el nombre del campo se insertará como una etiqueta azul.
+  </Step>
+  <Step>
+    ### Compruébalo en el formulario real
+    Cuando el formulario se muestre de verdad, el valor de la respuesta de esa pregunta sustituirá automáticamente a la etiqueta.
+    - Ejemplo: si la pregunta es «¡Hola, `@pregunta del nombre`!» y la persona ha escrito «Susana», en el formulario real se verá «¡Hola, Susana!».
+  </Step>
+</Steps>
+
+<Callout title="Consejo">
+- El encadenado de respuestas aumenta la implicación y ofrece una experiencia más personalizada. Úsalo para enlazar de forma natural el nombre, la región o el servicio elegido con la siguiente pregunta.
+- Eso sí, el encadenado solo puede recuperar respuestas de preguntas que ya existen, así que la pregunta de origen debe ir siempre antes.
+</Callout>

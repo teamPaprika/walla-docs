@@ -1,0 +1,29 @@
+# 의도적으로 번역하지 않는 경로. check-translations.mjs 가 읽는다.
+# 형식: <로케일>/<원본 기준 상대경로>  (끝에 * 로 접두어 매칭, # 은 주석)
+#
+# 개발자 문서의 API 레퍼런스 / Custom Field SDK — 독자가 개발자이고 코드 비중이
+# 커서 영어 폴백으로 둔다. 가이드 4종(index, quick-start, authentication,
+# error-codes)은 번역 대상이므로 여기에 넣지 않는다.
+zh-TW/developer-docs/custom-fields-*
+ja/developer-docs/custom-fields-*
+es/developer-docs/custom-fields-*
+zh-TW/developer-docs/delivery.mdx
+ja/developer-docs/delivery.mdx
+es/developer-docs/delivery.mdx
+zh-TW/developer-docs/field-schemas.mdx
+ja/developer-docs/field-schemas.mdx
+es/developer-docs/field-schemas.mdx
+zh-TW/developer-docs/forms.mdx
+ja/developer-docs/forms.mdx
+es/developer-docs/forms.mdx
+zh-TW/developer-docs/workspaces.mdx
+ja/developer-docs/workspaces.mdx
+es/developer-docs/workspaces.mdx
+zh-TW/developer-docs/responses/*
+ja/developer-docs/responses/*
+es/developer-docs/responses/*
+
+# 내부용 MDX 컴포넌트 갤러리. 어느 로케일에서도 사이드바에 노출하지 않는다.
+zh-TW/help-center/style.mdx
+ja/help-center/style.mdx
+es/help-center/style.mdx

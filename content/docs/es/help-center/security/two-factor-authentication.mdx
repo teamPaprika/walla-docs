@@ -1,0 +1,61 @@
+---
+title: "Verificación en dos pasos"
+description: "La verificación en dos pasos protege las cuentas añadiendo un paso de verificación adicional cuando los miembros del equipo inician sesión. Te recomendamos configurarla para reducir el riesgo de filtración de contraseñas y de accesos externos."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Configurar la verificación en dos pasos para todo el equipo
+
+<Steps>
+  <Step>
+    ### Ve a la pestaña de seguridad
+    Configuración del equipo → pestaña [Seguridad].
+  </Step>
+  <Step>
+    ### Activa la verificación en dos pasos (MFA)
+    Al activar «Verificación en dos pasos (MFA)», los miembros del equipo deberán completar la verificación cada vez que accedan al equipo.
+  </Step>
+  <Step>
+    ### Aplícala a todo el equipo
+    Con este ajuste puedes imponer la verificación en dos pasos a todo el equipo.
+    - Por defecto, cada persona también puede configurarla por su cuenta desde el icono de perfil → ajustes personales de verificación en dos pasos. Pero si la impones a nivel de equipo, todos los miembros tendrán que pasar sí o sí por el proceso.
+  </Step>
+</Steps>
+
+## Definir una contraseña (para quienes usan inicio de sesión social)
+- Para usar la verificación en dos pasos hay que definir antes una contraseña.
+- Las cuentas creadas con inicio de sesión social (Google, etc.) pueden añadir una contraseña y usar también el acceso con correo y contraseña.
+- La contraseña se configura en tu página personal, desde el icono de perfil; si aún no la has definido, también puedes registrarla desde la página de verificación en dos pasos.
+
+## Completar la verificación en dos pasos
+
+<Steps>
+  <Step>
+    ### Instala una app de autenticación
+    Instala una app basada en TOTP como Google Authenticator, Microsoft Authenticator o Authy.
+  </Step>
+  <Step>
+    ### Escanea el código QR o introduce la clave
+    Escanea el código QR con la app; si no puedes escanearlo, introduce manualmente la clave que se te facilita.
+  </Step>
+  <Step>
+    ### Introduce el código de 6 dígitos
+    Escribe el código de 6 dígitos que muestra la app para completar la verificación.
+  </Step>
+  <Step>
+    ### Opción de confiar en el dispositivo
+    Si eliges «Confiar en este dispositivo durante 60 días», no se te pedirá verificación de nuevo en ese dispositivo durante ese periodo.
+  </Step>
+  <Step>
+    ### Guarda los códigos de respaldo
+    Guarda los códigos de respaldo en un lugar seguro.
+    - Debes conservarlos por si pierdes el móvil o no puedes acceder a la app de autenticación.
+    - Cada código de respaldo se puede usar una sola vez y sirve como recurso de emergencia para iniciar sesión sin la app.
+    - Te recomendamos pulsar «Descargar códigos de respaldo» y guardarlos como archivo de texto.
+  </Step>
+</Steps>
+
+<Callout title="Consejo">
+Imponer la verificación en dos pasos a nivel de equipo obliga a todos los miembros a pasar por el proceso, lo que reduce mucho el riesgo de accesos externos a las cuentas y de filtraciones de información.
+</Callout>

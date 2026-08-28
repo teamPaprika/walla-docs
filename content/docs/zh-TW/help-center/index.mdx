@@ -1,0 +1,119 @@
+---
+title: Walla 說明中心
+description: 歡迎來到 Walla 說明中心
+icon: House
+---
+
+import { Rocket, Users, PenTool, FolderOpen, Share2, Palette, Plug, Shield, BarChart2, Gift, Home, Zap, BookOpen, MessageCircle, CreditCard, ExternalLink, Sparkles, ArrowRight } from 'lucide-react';
+
+<a
+  href="/zh-TW/docs/help-center/create-forms/custom-field"
+  className="not-prose group mb-10 flex flex-col gap-3 rounded-2xl overflow-hidden border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-8 no-underline transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:shadow-lg hover:-translate-y-0.5"
+>
+  <div className="flex items-center gap-2">
+    <span className="inline-flex items-center rounded-full bg-[hsl(193,100%,50%)]/15 px-2.5 py-1 text-xs font-semibold text-[hsl(193,100%,38%)] uppercase tracking-normal">
+      更新
+    </span>
+  </div>
+  <h1 className="text-[1.5em] font-semibold text-fd-foreground">建立自訂欄位</h1>
+  <p className="text-fd-muted-foreground text-sm leading-6 max-w-xl">過去基本欄位做不到的輸入方式，現在只要用自然語言下指令就能自己做出來。一起看看如何用 Walla MCP 輕鬆打造需要的欄位。<ArrowRight className="inline-block ml-1 h-4 w-4 align-text-bottom text-[hsl(193,100%,45%)] transition-transform duration-200 group-hover:translate-x-1" /></p>
+</a>
+
+## 分類
+
+<Cards>
+  <Card title="開始使用" description="建立帳號、設定個人檔案、方案說明" href="/zh-TW/docs/help-center/getting-started/creating-account" icon={<Rocket />} />
+  <Card title="團隊／工作區" description="團隊組成與工作區管理方式" href="/zh-TW/docs/help-center/team-workspace/managing-your-team" icon={<Users />} />
+  <Card title="建立問卷" description="運用各種欄位與邏輯製作問卷" href="/zh-TW/docs/help-center/create-forms/creating-project-ai" icon={<PenTool />} />
+  <Card title="管理問卷" description="問卷排程、結束與標籤管理" href="/zh-TW/docs/help-center/manage-forms/managing-projects" icon={<FolderOpen />} />
+  <Card title="分享問卷" description="URL、隱藏欄位、分頁設定" href="/zh-TW/docs/help-center/share-forms/sharing-your-survey" icon={<Share2 />} />
+  <Card title="自訂設計" description="套用符合品牌的佈景主題與標誌" href="/zh-TW/docs/help-center/custom-design/changing-your-survey-theme" icon={<Palette />} />
+  <Card title="整合問卷" description="整合 Google Sheets、Zapier、Webhook" href="/zh-TW/docs/help-center/integrate-forms/connecting-to-google-sheets" icon={<Plug />} />
+  <Card title="安全性" description="2FA、IP 驗證、資料遮罩設定" href="/zh-TW/docs/help-center/security/auto-delete-responses" icon={<Shield />} />
+  <Card title="結果分析" description="統計、交叉分析、查看個別回覆" href="/zh-TW/docs/help-center/result-analysis/cross-tabulation" icon={<BarChart2 />} />
+  <Card title="獎勵" description="禮物卡的購買、發送與管理方式" href="/zh-TW/docs/help-center/reward/managing-gifticons" icon={<Gift />} />
+</Cards>
+
+## Walla 快速連結
+
+<div className="not-prose mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+  <a
+    href="https://home.walla.my/en/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Home className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">首頁</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Walla 官方網站</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://app.walla.my"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Zap className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Walla</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">前往應用程式</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/blog"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <BookOpen className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Walla 部落格</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">最新消息與使用技巧</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://discord.gg/vSkQbCwPYV"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <MessageCircle className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">社群</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">加入 Discord</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/pricing/main"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <CreditCard className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">定價方案</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">查看方案內容</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+</div>

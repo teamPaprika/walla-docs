@@ -2,7 +2,6 @@
 title: "Automation (Webhooks)"
 description: "Automation sends data to external services (webhooks, Slack, Discord, Gmail, etc.) the moment a response is submitted to your form."
 ---
-<video src="/videos/webhook.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
 
 ## Creating a Custom Webhook
 
@@ -11,54 +10,76 @@ After creating an automation, open the detail editor for more granular configura
   <Step>
     ### Open the Connect page
     In the project editor, click `Connect` at the top.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="The automation integrations page" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Add a new automation
     In the 'My Automations' section, click `New Automation` to get started.
+
+    <img src="/images/guides/integrate/automation-new-custom.png" alt="Adding a new automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Create it
     In the popup, enter details like the automation name, choose a trigger type, and click `Create`.
 	    - **Automation name**: A name to identify this automation.
 	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
+
+    <img src="/images/guides/integrate/automation-create-custom.png" alt="Creating a new automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Configure paths (logic)
     You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
 	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
 	    - Click `+ Add condition` under each path to build compound conditions.
+
+    <img src="/images/guides/integrate/automation-route-custom.png" alt="Setting the route" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Enter the webhook URL
     **Webhook URL**: The server URL that will receive the data.
+
+    <img src="/images/guides/integrate/automation-webhook-url.png" alt="Entering the webhook URL" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Choose the webhook payload format
 	    Decide whether to use the default webhook body (automatic) or a custom body. If you choose automatic, you can save and activate right away. If you choose custom, continue to the next step.
 	    - **Automatic (default)**: Form response data is included in the payload automatically. Open `Preview` to check the exact payload that will be sent.
 	    - **Custom**: Set the request type, headers, and body yourself.
+
+    <img src="/images/guides/integrate/automation-webhook-format.png" alt="Choosing the webhook payload format" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Configure request type and headers
 	    - **Request type**: POST / GET / PUT, etc.
 	    - **Headers**: Add `Content-Type`, auth tokens, and any other headers as needed.
+
+    <img src="/images/guides/integrate/automation-headers.png" alt="Setting the request type and headers" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
     <Step>
     ### Edit the body
 	    Freely edit the message content, and insert response values (`{{responseKey}}`) as variables.
+
+    <img src="/images/guides/integrate/automation-body.png" alt="Editing the body" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### Set up authentication (optional)
     You can choose security methods like `Bearer Token`, `Basic Auth`, or `API Key` for your webhook.
+
+    <img src="/images/guides/integrate/automation-auth.png" alt="Setting the authentication method" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### Include hidden field values (optional)
 	    Turn on `Include hidden field values` under advanced settings to send the values collected through [tracking (hidden fields)](/en/docs/help-center/share-forms/tracking-hidden-fields) along with the webhook data. Use it when your external service needs tracking info such as traffic source or customer group.
 	    - When it's off, only response values are sent, without hidden fields.
+
+    <img src="/images/guides/integrate/automation-hidden-fields.png" alt="Enabling hidden field values" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### Save and activate
     Save your changes and click activate — the webhook only runs once it's turned on.
+
+    <img src="/images/guides/integrate/automation-save-activate.png" alt="Saving changes and activating" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 ## Slack Integration — Slack Notifications on Submission
@@ -67,34 +88,50 @@ After creating an automation, open the detail editor for more granular configura
  <Step>
     ### Click Create New App
     Go to [https://api.slack.com/apps](https://api.slack.com/apps) and click 'Create New App'.
+
+    <img src="/images/guides/integrate/slack-01-create-app.png" alt="Create an App" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Select From scratch
     Choose 'From scratch'.
+
+    <img src="/images/guides/integrate/slack-02-from-scratch.png" alt="Choosing From scratch" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Set the app name and workspace
     Enter an 'App Name' and pick the workspace where the app will run.
+
+    <img src="/images/guides/integrate/slack-03-name-workspace.png" alt="Setting the app name and workspace" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Enable Incoming Webhooks
     Turn on 'Incoming Webhooks' and click 'Add New Webhook'.
+
+    <img src="/images/guides/integrate/slack-04-incoming-webhooks.png" alt="Enabling Incoming Webhooks" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Pick a channel
     Pick the channel in your workspace where the webhook should post.
+
+    <img src="/images/guides/integrate/slack-05-select-channel.png" alt="Selecting a channel" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Copy the Webhook URL
     Copy the Webhook URL from 'Install App'.
+
+    <img src="/images/guides/integrate/slack-06-copy-webhook-url.png" alt="Copying the webhook URL" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 <Step>
     ### Open the Connect page
     In the project editor, click `Connect` at the top.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="The automation integrations page" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Add a new Slack automation
     In the 'My Automations' section, click `Slack` to get started.
+
+    <img src="/images/guides/integrate/slack-07-automation-page.png" alt="Adding a new Slack automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Create it
@@ -103,16 +140,22 @@ After creating an automation, open the detail editor for more granular configura
 	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
 	    - **Webhook URL**: The Slack server URL that will receive the data. See how to set up a Slack Webhook URL [here](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/).
 	    - **Body Preset**: Choose how webhook notifications should look in Slack.
+
+    <img src="/images/guides/integrate/slack-09-create.png" alt="Creating the Slack notification automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Configure paths (logic)
     You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
 	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
 	    - Click `+ Add condition` under each path to build compound conditions.
+
+    <img src="/images/guides/integrate/slack-10-route.png" alt="Setting the route" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Save and activate
     Save your changes and click activate — the webhook only runs once it's turned on.
+
+    <img src="/images/guides/integrate/slack-11-save-activate.png" alt="Saving changes and activating" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -124,18 +167,26 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
  <Step>
     ### Open the Discord channel editor
     Click the gear icon next to the channel name.
+
+    <img src="/images/guides/integrate/discord-01-edit-channel.png" alt="Editing the Discord channel" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Create a new Webhook and copy the URL
     In the Integrations tab, click `New Webhook` to create a webhook, then click `Copy Webhook URL`.
+
+    <img src="/images/guides/integrate/discord-02-new-webhook.png" alt="Creating a new webhook and copying the URL" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 <Step>
     ### Open the Connect page
     In the project editor, click `Connect` at the top.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="The automation integrations page" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Add a new Discord automation
     In the 'My Automations' section, click `Discord` to get started.
+
+    <img src="/images/guides/integrate/discord-04-automation-page.png" alt="Adding a new Discord automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Create it
@@ -144,16 +195,22 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
 	    - **Webhook URL**: The Discord server URL that will receive the data.
 	    - **Body Preset**: Choose how webhook notifications should look in Discord.
+
+    <img src="/images/guides/integrate/discord-05-create.png" alt="Creating the Discord notification automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Configure paths (logic)
     You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
 	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
 	    - Click `+ Add condition` under each path to build compound conditions.
+
+    <img src="/images/guides/integrate/discord-06-route.png" alt="Setting the route" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Save and activate
     Save your changes and click activate — the webhook only runs once it's turned on.
+
+    <img src="/images/guides/integrate/discord-07-save-activate.png" alt="Saving changes and activating" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -163,10 +220,14 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### Open the Connect page
     In the project editor, click `Connect` at the top.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="The automation integrations page" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
   <Step>
     ### Add a new automation
     In the 'My Automations' section, click `Gmail` to get started.
+
+    <img src="/images/guides/integrate/gmail-02-automation-page.png" alt="Adding a new Gmail automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Create it
@@ -174,16 +235,22 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - **Automation name**: A name to identify this automation.
 	    - **Trigger type**: The condition that fires the automation (e.g., form submitted, respondent rejected). Trigger types cannot be changed after creation.
 	    - **Sender**: The Google account that will send the Gmail. Pick an account already linked to the workspace, or sign in with a new Google account.
+
+    <img src="/images/guides/integrate/gmail-03-create.png" alt="Creating the Gmail delivery automation" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Configure paths (logic)
     You can add filters so notifications only fire under specific conditions (e.g., when a multiple-choice answer is A, when a short text answer contains B).
 	    - Click the `+` in the top right to create multiple paths. If a path has no automation module attached, it runs as the default path (notifying on every submitted response).
 	    - Click `+ Add condition` under each path to build compound conditions.
+
+    <img src="/images/guides/integrate/gmail-04-route.png" alt="Setting the route" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Specify the sender
 	    Pick the Google account to send from and enter the sender name.
+
+    <img src="/images/guides/integrate/gmail-05-sender.png" alt="Specifying the sender" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Specify recipients
@@ -192,6 +259,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - Separate multiple email addresses with commas (,), spaces, or Enter.
 	    - Certain predefined references such as responseKey and timestamp cannot be used as email addresses.
 	    - We recommend using an email field as the reference. If the email format is invalid, sending may fail.
+
+    <img src="/images/guides/integrate/gmail-06-recipient.png" alt="Specifying the recipient" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### Set CC, BCC, and reply-to
@@ -199,6 +268,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - You can enter email addresses directly, or use value references (@) to set them dynamically.
 	    - Separate multiple email addresses with commas (,), spaces, or Enter.
 	    - Certain predefined references such as responseKey and timestamp cannot be used as email addresses.
+
+    <img src="/images/guides/integrate/gmail-07-cc-bcc.png" alt="Specifying CC, BCC, and reply-to addresses" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### Include hidden field values (optional)
@@ -208,10 +279,14 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     <Callout type="warning" title="Heads up">
     Hidden fields can hold values the respondent never typed in, such as traffic source or a customer identifier. If the email goes to an external recipient, check what will be included before turning this on.
     </Callout>
+
+    <img src="/images/guides/integrate/gmail-09-hidden-fields.png" alt="Enabling hidden field values" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### Save and activate
     Save your changes and click activate — the webhook only runs once it's turned on.
+
+    <img src="/images/guides/integrate/gmail-08-save-activate.png" alt="Saving changes and activating" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -220,16 +295,20 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 Before activating a webhook, you can send a test to make sure it works as expected.
 
 ### 1. Test with an existing response
+<img src="/images/guides/integrate/test-01-dropdown.png" alt="Opening the test dropdown" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
 - Click the `down arrow` icon next to the `Test` button to test the webhook with a response that has already been submitted. Pick a response to test with, then click `Run test`.
+<img src="/images/guides/integrate/test-02-existing-response.png" alt="Running a test with an existing response" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
 <Callout type="warning" title="Note">
 If you've entered an email field as the recipient of a Gmail automation, we recommend testing with an existing response so the delivery address is resolved accurately.
 </Callout>
 
 
 ### 2. Test with random values
+<img src="/images/guides/integrate/test-03-random-value.png" alt="Testing with random values" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
 - If no responses have been submitted yet, click the `Test` button to test the webhook with random values.
 
 ## Resending a Webhook (When Delivery Fails)
+<img src="/images/guides/integrate/webhook-resend.png" alt="Resending a webhook" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
 
 - If a webhook delivery fails, you can resend it.
 - The error summary tells you why the delivery failed.

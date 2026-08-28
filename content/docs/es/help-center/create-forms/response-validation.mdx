@@ -1,0 +1,30 @@
+---
+title: "Validar las respuestas"
+description: "La validación de respuestas hace que solo se pueda avanzar al siguiente paso cuando quien responde ha rellenado o seleccionado según las condiciones. Puedes definir distintas reglas según el tipo de pregunta."
+---
+
+## Validación de respuestas
+
+| Regla de validación | Descripción |
+|---|---|
+| Obligatorio | Hay que responder sin falta. |
+| Longitud de la respuesta | Puedes fijar un mínimo y un máximo de caracteres. |
+| Contenido obligatorio | Si no incluye un texto concreto, se muestra un mensaje de error. |
+| Contenido prohibido | Si incluye un texto concreto, se muestra un mensaje de error. |
+| Rango numérico | Puedes fijar el valor mínimo y máximo admitidos. |
+| Número de selecciones | Puedes fijar un mínimo, un máximo o una cantidad exacta. |
+| Incluir opciones | Debe incluirse obligatoriamente una opción concreta. |
+| Excluir opciones | No se puede elegir en ningún caso una opción concreta. |
+| Límite de respuestas por opción | Limita cuántas veces se puede elegir una opción sobre el total de respuestas. Útil para inscripciones por orden de llegada, plazas limitadas, etc. |
+| Expresión regular (Regex) | Define tú el patrón para validar el formato con todo detalle. |
+
+<Callout title="Ejemplos de expresiones regulares">
+- Solo letras latinas: `^[A-Za-z]+$`
+- Comprobar formato de URL: `^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$`
+- Formato del número de identidad coreano (con guion): `^\d{6}-\d{7}$`
+- Código postal (5 dígitos): `^\d{5}$`
+</Callout>
+
+<Callout type="warning" title="Atención al recoger números de identidad">
+La recogida de números de identidad reales está sujeta a restricciones legales, así que activa siempre el **enmascarado de datos** y el **borrado automático de respuestas**.
+</Callout>

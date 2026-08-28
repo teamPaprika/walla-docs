@@ -1,0 +1,81 @@
+---
+title: "Invitar a miembros del equipo"
+description: "Desde la configuración del equipo puedes invitar por correo a nuevos miembros y gestionar el estado de las invitaciones."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Invitar por correo electrónico
+
+<Steps>
+  <Step>
+    ### Entra en la configuración del equipo
+    Haz clic en el nombre del equipo en el menú superior, entra en `Configuración del equipo` y abre la pestaña `Gestión de miembros`.
+  </Step>
+  <Step>
+    ### Introduce las direcciones de correo
+    En la zona de invitación de la parte superior, escribe el correo del nuevo miembro. Puedes introducir varias direcciones a la vez para enviarlas juntas.
+  </Step>
+  <Step>
+    ### Pulsa el botón Invitar
+    Al pulsar `Invitar`, se envía un correo de invitación a cada dirección introducida.
+  </Step>
+</Steps>
+
+<Callout type="info" title="El rol se puede cambiar más adelante">
+El rol elegido al invitar se puede modificar en cualquier momento desde la pestaña `Gestión de miembros` una vez que la persona se une. Encontrarás la explicación detallada de roles y permisos en la página [Gestionar tu equipo](/es/docs/help-center/team-workspace/managing-your-team).
+</Callout>
+
+## Invitar con un enlace de invitación
+
+<Steps>
+  <Step>
+    ### Crea un enlace de invitación
+    En la página de gestión de miembros, pulsa el botón `Crear enlace de invitación` para generar uno nuevo.
+  </Step>
+  <Step>
+    ### Copia el enlace y compártelo
+    Copia el enlace con el icono que aparece junto a él y envíaselo a quien quieras incorporar. Por defecto, el enlace es válido durante 7 días.
+  </Step>
+  <Step>
+    ### Cambia la validez
+    Pulsa el botón `Cambiar validez` a la derecha del enlace para redefinir en horas el tiempo restante.
+  </Step>
+  <Step>
+    ### Comprueba la nueva fecha de caducidad
+    La caducidad se actualiza al instante según el valor indicado, y la nueva fecha aparece debajo del enlace.
+  </Step>
+  <Step>
+    ### Elimina el enlace de invitación
+    Cuando ya no necesites el enlace, pulsa el icono de la papelera para borrarlo. El enlace deja de funcionar de inmediato, pero quienes ya se hayan unido siguen en el equipo.
+  </Step>
+</Steps>
+
+## Consultar y gestionar el estado de las invitaciones
+
+- En la lista de miembros de la pestaña `Gestión de miembros`, las invitaciones aún no aceptadas aparecen con el estado **Pendiente**.
+- En el menú junto a cada invitación pendiente puedes:
+  - **Copiar enlace**: si el correo de invitación no ha llegado o ha caducado, copia el enlace y envíalo directamente.
+  - **Cancelar invitación**: caduca al instante una invitación enviada por error o que ya no hace falta.
+
+<Callout type="warning" title="Advertencia">
+Cancelar una invitación no retira el correo ya enviado, pero el enlace cancelado deja de funcionar.
+</Callout>
+
+## Cómo acepta la persona invitada
+
+<Steps>
+  <Step>
+    ### Revisar y aceptar el correo de invitación
+    El correo incluye el nombre del equipo, quién invita y un botón para aceptar. Al pulsar `Ir a la invitación del equipo` se abre la pantalla de registro o inicio de sesión de Walla.
+  </Step>
+  <Step>
+    ### Invitación completada
+    Una vez que inicia sesión en Walla, la invitación al equipo queda completada.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Advertencia">
+Si quieres editar proyectos junto a un compañero, después de invitarlo al equipo también debes invitarlo al espacio de trabajo. Si el flujo «invitar al equipo → invitar al espacio» te resulta engorroso, puedes invitarlo directamente desde el espacio de trabajo.
+</Callout>

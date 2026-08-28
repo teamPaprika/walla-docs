@@ -1,0 +1,61 @@
+---
+title: "Tabulación cruzada"
+description: "La tabulación cruzada compara los resultados según un criterio para detectar diferencias entre grupos. Por ejemplo, puedes analizar cómo varía la satisfacción por profesión o la intención de recomendar por franja de edad."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Estructura básica de la tabulación cruzada
+
+La tabulación cruzada se compone de dos elementos.
+
+#### Variable de referencia
+Es la pregunta que sirve de base para la comparación. (Por ejemplo: género, franja de edad, profesión) → Define «¿en función de quién comparamos?».
+#### Variable de análisis
+Es la pregunta que se compara según la variable de referencia. (Por ejemplo: satisfacción con el precio, finalidad de uso, intención de recomendar) → Define «¿qué comparamos?».
+## Cómo configurarla
+
+<Steps>
+  <Step>
+    ### Define la variable de referencia
+    Arrastra a la zona «Variable de referencia» la pregunta de la lista de la izquierda que quieras usar como base de comparación.
+    - Ejemplo: profesión
+  </Step>
+  <Step>
+    ### Añade la variable de análisis
+    Añade a la zona «Variable de análisis» las preguntas que quieras comparar.
+    - Ejemplo: finalidad de uso del servicio, satisfacción con el precio, intención de recomendarlo
+  </Step>
+</Steps>
+
+## Cómo interpretar los resultados
+
+### Ejemplo
+(Variable de referencia: profesión; variable de análisis: satisfacción con el precio)
+
+| Profesión | % de satisfacción |
+| --- | --- |
+| Personas asalariadas | 78 % |
+| Estudiantes | 60 % |
+| Autónomos | 82 % |
+
+→ Se observa que la satisfacción con el precio es comparativamente más baja entre el alumnado.
+
+Así es como la tabulación cruzada ayuda a detectar diferencias entre grupos.
+
+## Sobre la función Higher / Lower
+
+Con los botones Higher / Lower de la parte superior de los resultados
+
+puedes localizar rápidamente los grupos que están por encima o por debajo de la media global.
+
+- Higher: destaca los grupos por encima de la media global
+- Lower: destaca los grupos por debajo de la media global
+
+Te ayuda a encontrar enseguida los datos clave al redactar informes.
+
+## Advertencias
+
+- Para que la comparación sea precisa, cada grupo debe tener un número suficiente de respuestas.
+- Si un grupo tiene muy pocas respuestas, hay que interpretar los resultados con cautela.
+- La tabulación cruzada es una herramienta para mostrar diferencias; analizar sus causas requiere un estudio adicional.

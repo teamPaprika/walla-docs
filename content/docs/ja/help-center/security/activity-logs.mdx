@@ -1,0 +1,76 @@
+---
+title: "ログ記録"
+description: "チーム内で発生したすべての主要な操作は、ログ記録に自動保存されます。誰が、いつ、どんな操作をしたかを一目で確認できるため、セキュリティ管理や運用履歴の追跡に役立ちます。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## ログ記録の確認方法
+
+<Steps>
+  <Step>
+    ### ログ記録タブへ移動する
+    チーム設定ページ →「ログ記録」タブへ移動します。
+  </Step>
+  <Step>
+    ### 操作履歴を確認する
+    チーム内で行われた主要な操作の履歴を、順を追って確認できます。
+  </Step>
+  <Step>
+    ### ログの詳細情報を確認する
+    各ログには操作者、操作時刻、実行されたアクションが記録されます。チーム活動ログではアクセス元 IP も確認でき、全ドメインに監査ログが適用されます。
+  </Step>
+</Steps>
+## 主なログ項目
+
+### Team Actions（7 件）
+
+| Action | 説明 |
+| --- | --- |
+| team:leave | チームからの退出 |
+| team:member.invite | チームメンバーの招待 |
+| team:member.invite.cancel | チーム招待のキャンセル |
+| team:member.delete | チームメンバーの削除 |
+| team:member.role.assign | チームメンバーの役割変更 |
+| team:security.update | チームのセキュリティ設定の変更 |
+| team:audit.log.download | 監査ログのダウンロード |
+
+### Workspace Actions（11 件）
+
+| Action | 説明 |
+| --- | --- |
+| workspace:create | ワークスペースの作成 |
+| workspace:update | ワークスペース名の変更 |
+| workspace:delete | ワークスペースの削除 |
+| workspace:leave | ワークスペースからの退出 |
+| workspace:member.create | ワークスペースメンバーの招待 |
+| workspace:member.delete | ワークスペースメンバーの削除 |
+| workspace:member.role.assign | ワークスペースメンバーの役割変更 |
+| workspace:role.create | 役割の作成 |
+| workspace:role.update | 役割の修正 |
+| workspace:role.delete | 役割の削除 |
+| workspace:permission.update | 権限の修正 |
+
+### Project Actions（19 件）
+
+| Action | 説明 |
+| --- | --- |
+| project:read | プロジェクトの閲覧 |
+| project:create | プロジェクトの作成 |
+| project:update | プロジェクトの修正 |
+| project:delete | プロジェクトの削除 |
+| project:copy | プロジェクトの複製 |
+| project:archive | プロジェクトのアーカイブ |
+| project:move_to_workspace | ワークスペースの移動 |
+| project:publish | プロジェクトの公開 |
+| project:privacy.field_masking.update | フィールドマスキング設定の変更 |
+| project:privacy.auto_delete.update | 自動削除設定の変更 |
+| project:privacy.auto_delete.execute | 自動削除の実行 |
+| project:automation.create | 自動化の作成 |
+| project:automation.update | 自動化の修正 |
+| project:automation.delete | 自動化の削除 |
+| project:response.read | 回答の閲覧 |
+| project:response.delete | 回答の削除 |
+| project:response.download | 回答のダウンロード |
+| project:response.unmask | マスキングの解除 |
+| project:response.field_file_download | フィールドファイルのダウンロード |

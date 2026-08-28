@@ -1,0 +1,105 @@
+---
+title: 簡介
+description: Walla Open API 文件
+---
+
+# Walla Open API 文件
+
+使用 Walla Open API，就能以程式化的方式處理表單管理、工作區查詢、表單發送、回覆收集等作業。
+
+## 概觀
+
+Walla Open API 以 RESTful 方式運作，提供下列功能。
+
+- **工作區管理**：查詢工作區資訊
+- **表單管理**：查詢表單資料與設定
+- **表單發送**：以電子郵件或簡訊發送表單
+- **回覆追蹤**：查詢並監控表單回覆與送出資料
+
+## 資源階層結構
+
+Walla API 的資源由下列階層結構組成。
+
+```
+Team → Workspace → Form → Response
+```
+
+- **Team（團隊）**：最上層的組織單位。API 金鑰以團隊為單位建立，並會自動帶入團隊資訊。
+- **Workspace（工作區）**：團隊中用來歸類表單與專案的單位。
+- **Form（表單）**：在工作區中建立的問卷或表單。
+- **Response（回覆）**：送交到表單的個別回覆。
+
+**注意**：由於 API 金鑰本身已包含團隊資訊，發出 API 請求時不需要另外傳送團隊資訊。
+
+## 基本 URL
+
+所有 API 請求的基本 URL 如下。
+
+```
+https://api.walla.my/open-api/v1
+```
+
+## 開始使用
+
+<Cards>
+  <Card title="驗證" href="/zh-TW/docs/developer-docs/authentication" />
+  <Card title="快速上手指南" href="/zh-TW/docs/developer-docs/quick-start" />
+  <Card title="API 參考" href="/zh-TW/docs/developer-docs/workspaces" />
+  <Card title="錯誤代碼" href="/zh-TW/docs/developer-docs/error-codes" />
+</Cards>
+
+## 主要功能
+
+### 工作區管理
+可以查詢所有可存取的工作區清單，並確認個別工作區的詳細資訊。
+
+### 表單管理
+可以查詢表單清單、設定、送出數等表單相關資料。
+
+### 表單發送
+可以用電子郵件或簡訊把表單發送給多位收件人，並追蹤發送狀態與參與度。
+
+### 回覆收集
+透過支援分頁的回覆查詢 API，可以確認顧客金鑰與送出時間等詳細資料。
+
+## API 規格
+
+- **版本**：1.0
+- **通訊協定**：HTTPS
+- **資料格式**：JSON
+- **驗證**：API 金鑰（透過標頭驗證）
+
+## 支援
+
+若有任何疑問或功能需求，請聯繫 Walla 支援團隊。
+
+## API 端點總覽
+
+| 分類 | 端點 | 說明 |
+|---------|-----------|------|
+| 工作區 | `GET /workspaces` | 查詢所有工作區 |
+| 工作區 | `GET /workspaces/{workspaceId}` | 查詢特定工作區 |
+| 工作區 | `GET /workspaces/{workspaceId}/forms` | 查詢工作區內的表單清單 |
+| 表單 | `GET /forms` | 查詢所有表單 |
+| 表單 | `GET /forms/{formId}` | 查詢特定表單 |
+| 欄位 | `GET /field-output-schemas` | 查詢欄位輸出結構 |
+| 欄位 | `GET /forms/{formId}/fields` | 查詢表單欄位清單 |
+| 欄位 | `GET /forms/{formId}/fields/{fieldId}` | 查詢特定欄位的詳細資訊 |
+| 欄位 | `GET /forms/{formId}/fields/{fieldId}/description` | 查詢欄位說明 |
+| 隱藏欄位 | `GET /forms/{formId}/hidden-fields` | 查詢隱藏欄位清單 |
+| 隱藏欄位 | `POST /forms/{formId}/hidden-fields` | 新增隱藏欄位 |
+| 隱藏欄位 | `DELETE /forms/{formId}/hidden-fields/{hiddenFieldId}` | 刪除隱藏欄位 |
+| 發送 | `POST /forms/{formId}/delivery` | 發送表單 |
+| 發送 | `POST /forms/{formId}/delivery/recipients` | 登錄收件人 |
+| 發送 | `PATCH /forms/{formId}/delivery/recipients` | 修改收件人資訊 |
+| 發送 | `POST /forms/{formId}/delivery/send` | 寄送給已登錄的收件人 |
+| 發送 | `GET /forms/{formId}/delivery` | 查詢發送收件人清單 |
+| 發送 | `POST /forms/{formId}/delivery/status` | 查詢發送狀態 |
+| 回覆 | `GET /forms/{formId}/responses` | 查詢表單回覆清單（分頁） |
+| 回覆 | `GET /forms/{formId}/responses/{responseId}` | 查詢特定回覆 |
+| 回覆匯出 | `POST /forms/{formId}/exports/responses` | 把表單回覆匯出成 Parquet 檔 |
+| 回覆匯出 | `POST /forms/{formId}/exports/field-definitions` | 把表單欄位定義匯出成 Parquet 檔 |
+
+## 下一步
+
+瀏覽各個 API 文件，用 Walla Open API 實作你想要的功能吧。

@@ -1,0 +1,41 @@
+---
+title: "Enviar formularios al panel"
+description: "Puedes enviar formularios por correo usando la lista de panel registrada en tu espacio de trabajo. Se puede enviar a grupos enteros o solo a determinadas personas del panel."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Preparativos para enviar al panel
+
+Para enviar un formulario, las personas destinatarias deben estar registradas antes en la pestaña **Panel** del espacio de trabajo. Consulta cómo subir el panel en la página [Gestionar el panel](/es/docs/help-center/team-workspace/workspace-panel).
+
+## Cómo enviarlo
+
+<Steps>
+  <Step>
+    ### Ve a la página de compartir
+    En el editor del proyecto, abre la pestaña `Compartir` de la parte superior y baja hasta la sección `Enviar formulario`.
+  </Step>
+  <Step>
+    ### Sin panel registrado: pulsa Subir datos
+    Si no tienes un panel registrado, o quieres enviar el proyecto a personas ajenas al panel, pulsa el botón `Subir datos`. Las filas con errores o datos no válidos se excluyen de la subida.
+  </Step>
+  <Step>
+    ### Con panel registrado: pulsa Importar del panel
+    Si ya tienes un panel registrado, pulsa `Importar del panel`.
+  </Step>
+  <Step>
+    ### Redacta el mensaje
+    Tras pulsar el botón de enviar formulario, introduce la cuenta remitente y el texto que quieres enviar junto al formulario.
+  </Step>
+  <Step>
+    ### Envía
+    Cuando termine el envío, podrás ver el resultado en las columnas `Estado`, `Número de envíos` y `Último envío` de cada fila.
+
+    Cada persona del panel recibe un enlace individual distinto, y en la hoja de respuestas queda registrada con la CUSTOMER Key del panel.
+  </Step>
+  <Step>
+    ### Ejemplo del correo recibido
+    Los formularios enviados con «Enviar formulario» llegan de la siguiente manera.
+  </Step>
+</Steps>

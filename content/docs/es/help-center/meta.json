@@ -1,0 +1,22 @@
+{
+  "title": "Centro de ayuda",
+  "root": true,
+  "pages": [
+    "index",
+    "faq",
+    "---Primeros pasos---",
+    "getting-started",
+    "team-workspace",
+    "---Formularios---",
+    "create-forms",
+    "manage-forms",
+    "share-forms",
+    "custom-design",
+    "---Datos e integraciones---",
+    "result-analysis",
+    "integrate-forms",
+    "---Configuración---",
+    "security",
+    "reward"
+  ]
+}

@@ -3,6 +3,8 @@
   "pages": [
     "creating-project-ai",
     "creating-new-project",
+    "importing-from-google-forms",
+    "importing-from-qualtrics",
     "editing-field-text",
     "grouping-fields",
     "multiple-choice-checkbox-fields",
@@ -28,6 +30,7 @@
     "template",
     "team-template",
     "field-template",
-    "setting-up-logic"
+    "setting-up-logic",
+    "custom-field"
   ]
 }

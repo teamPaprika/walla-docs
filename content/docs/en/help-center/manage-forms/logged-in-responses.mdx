@@ -1,4 +1,81 @@
 ---
 title: "Responding While Logged In"
-description: "Require respondents to be signed in with a Walla account to submit responses."
+description: "Respondents don't need a Walla account. They can start responding by entering a password shared in advance, or a verification code sent to their email address or phone number."
 ---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+
+## Password protection
+
+<img src="/images/guides/manage-forms/logged-in-password-protection.png" alt="Password protection enabled on the Respondents tab of survey settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+- Turn on password protection and set a password, and respondents must enter that pre-shared password (a single shared password only) to reach the form.
+
+## User verification
+<Steps>
+  <Step>
+    ### Open survey settings
+    Click the `⚙️` icon in the top right of the editor to open survey settings.
+
+    <img src="/images/guides/manage-forms/duplicate-response-settings.png" alt="The survey settings button in the top right of the project editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+
+  <Step>
+    ### Go to the Respondents tab
+    Select `Respondents` from the tab list on the left.
+
+    <img src="/images/guides/manage-forms/logged-in-response-tab.png" alt="The Respondents tab highlighted in survey settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+
+  <Step>
+    ### Turn on user verification
+    Turn on `User verification` in the `Verification` section. Once the toggle is on, options for choosing a verification method appear.
+
+    <img src="/images/guides/manage-forms/logged-in-user-authentication.png" alt="User verification enabled on the Respondents tab of survey settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    |Verification method|What the respondent does|
+|---|---|
+|`Email`|Enter an email address → enter the verification code received by email|
+|`Phone number`|Enter a phone number → enter the verification code received by text|
+  </Step>
+
+  <Step>
+    ### Done
+    Only people who complete verification can enter the survey.
+  </Step>
+</Steps>
+
+## Allowing only specific respondents
+<img src="/images/guides/manage-forms/logged-in-specific-respondents.png" alt="Settings that allow only specific emails and domains" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+### Allowing emails and domains
+- Turn on `Allow specific emails/domains` and enter values in the input box.
+
+	- To allow an individual address: `user@example.com`
+	- To allow an entire domain: `@example.com`
+		- The domain format is convenient for surveys aimed at everyone in a company.
+
+	- Leave it empty to allow all emails.
+### Allowing phone numbers
+- Turn on `Allow specific phone numbers` and enter numbers including the country code.
+- Leave it empty to allow all numbers.
+
+## Changing the verification screen message
+- Respondents see a default message on the verification screen. To write your own, turn on `Verification screen message` at the top of the Respondents tab.
+- With the toggle off, the default message is shown.
+- The message appears in this position.
+
+<img src="/images/guides/manage-forms/logged-in-auth-screen-message.png" alt="The verification screen message enabled on the Respondents tab of survey settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/manage-forms/logged-in-email-verification-screen.png" alt="The email verification required screen shown to respondents" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+
+## Limiting to one response per verified user
+- Verification alone still lets the same person respond multiple times. To limit each person to a single response, also turn on `Once per verified user` in the `Duplicate responses` section.
+- Responses are then limited to one per verified email address and phone number.
+- See [Preventing Duplicate Responses](https://docs.walla.my/en/docs/help-center/manage-forms/preventing-duplicate-responses) for more.
+
+<img src="/images/guides/manage-forms/logged-in-once-per-user.png" alt="User verification and once per verified user enabled together" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Callout title="Good to know">
+If you turn on `Once per verified user` without a verification method, email verification is turned on with it. Conversely, turning off `User verification` also turns off `Once per verified user`. If you've toggled verification settings off and on, double-check that the duplicate limit hasn't been released.
+</Callout>

@@ -1,0 +1,47 @@
+---
+title: "Integrar Google Sheets"
+description: "Con la integración de Google Sheets puedes registrar los datos de respuesta automáticamente y en tiempo real. Cada vez que se envía una respuesta se añade una fila nueva a la hoja indicada, así que puedes gestionarlo todo sin descargar nada."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Cómo integrarlo
+
+<Steps>
+  <Step>
+    ### Ve a la pestaña de automatización
+    Abre la pestaña «Automatización» en la pantalla de edición del proyecto.
+  </Step>
+  <Step>
+    ### Pulsa Integrar
+    En el apartado «Google Sheets», haz clic en `Integrar`.
+  </Step>
+  <Step>
+    ### Inicia sesión con Google
+    Pulsa el botón `Sign in with Google` e inicia sesión con tu cuenta de Google.
+    - Se mostrarán todas las cuentas de Google que se pueden integrar en este espacio de trabajo.
+    - Puedes elegir una cuenta existente o iniciar sesión con una nueva.
+  </Step>
+  <Step>
+    ### Elige la hoja de cálculo
+    Selecciona si quieres integrarlo con una hoja existente o crear una nueva.
+  </Step>
+  <Step>
+    ### Hoja creada
+    Al completar la integración, Walla crea automáticamente una hoja de cálculo de Google (de tu propiedad y guardada en tu Drive). Puedes copiar su enlace para acceder a ella.
+  </Step>
+  <Step>
+    ### Deshacer la integración (si hace falta)
+    Para deshacerla, pulsa el botón `Deshacer integración`.
+  </Step>
+</Steps>
+## Cómo funciona
+- Cuando llega una respuesta nueva, cada elemento se asigna automáticamente a una columna de la hoja y se registra.
+- Los datos se sincronizan en tiempo real, así que puedes consultarlos al instante sin exportar nada a mano.
+
+<Callout type="warning" title="Advertencia">
+Necesitas permiso de edición (Edit access) sobre la hoja de la cuenta de Google conectada. Aunque se trate de una hoja compartida, comprueba siempre que tienes permiso de edición.
+</Callout>
+<Callout type="warning" title="Advertencia">
+Las columnas con enmascarado de datos también aparecen cifradas en la integración con Google Sheets.
+</Callout>

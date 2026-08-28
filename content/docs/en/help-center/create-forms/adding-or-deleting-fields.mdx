@@ -5,34 +5,42 @@ description: "On the project edit screen, you can add, delete, or duplicate fiel
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-<video src="/videos/add-field.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
-
 ## Adding a Field
 
 ### Click the '+' icon in the left field list
 Select the field you want and it will be added. If you add a field while another field is selected, the new one is automatically placed below it.
 
+<img src="/images/guides/manage-forms/add-field-plus-icon.png" alt="The add field panel shown after clicking the + icon at the top of the field list on the left" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 ### Add from the middle of the edit screen
 Hover the cursor between two fields and an `Add` button appears.
 Click it to insert a new field at that position.
 
+<img src="/images/guides/manage-forms/add-field-between.png" alt="The Add button that appears when hovering between fields in the editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 ### Add inside a field group
 Hover the cursor at the bottom of a field group to reveal an `Add` button. Click it to add a question inside the group.
 
-## Deleting or Duplicating a Field
+<img src="/images/guides/manage-forms/add-field-group.png" alt="The Add button that appears when hovering at the bottom of a field group" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
+## Deleting or Duplicating a Field
+### Delete or duplicate directly in the editor
+Use the icons on the right of a field to delete or duplicate the currently selected field.
+<img src="/images/guides/manage-forms/field-action-icons.png" alt="The settings, duplicate, and delete icons shown in the top right of a field in the editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Delete or duplicate from the field list
 <Steps>
   <Step>
-    ### Hover over the field
-    In the left field list, hover your mouse over the field.
-  </Step>
-  <Step>
     ### Find the more icon
-    A `...` (more) icon appears on the right side of the field.
+    In the left field list, hover over a field and a `...` (more) icon appears on its right side.
+
+    <img src="/images/guides/manage-forms/field-more-icon.png" alt="The more icon shown to the right of a field in the field list on the left" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Choose Delete or Duplicate
     Click the icon to choose either 'Delete' or 'Duplicate'.
+
+    <img src="/images/guides/manage-forms/field-more-menu.png" alt="The duplicate field, save as field template, and delete field menu shown when clicking the more icon" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 

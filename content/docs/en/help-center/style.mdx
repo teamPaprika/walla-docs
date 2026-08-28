@@ -1,0 +1,219 @@
+---
+title: STYLE
+description: A gallery of every MDX component available.
+---
+
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
+
+---
+
+## Callout
+
+### Default (info)
+
+<Callout>This is the default callout. Without a type, it renders as info.</Callout>
+
+### With a title
+
+<Callout title="Note">A callout with a title.</Callout>
+
+### Warning
+
+<Callout type="warning" title="Caution">Use this for content that needs care.</Callout>
+
+### Error
+
+<Callout type="error" title="Error">Use this to explain an error state.</Callout>
+
+### Success (idea)
+
+<Callout type="idea" title="Tip">Use this to share a helpful tip.</Callout>
+
+---
+
+## Card / Cards
+
+<Cards>
+  <Card title="Card title" description="The card description goes here." href="#" />
+  <Card title="Card without a link" description="It works without href too." />
+  <Card title="Third card" description="List multiple Card elements inside Cards." href="#" />
+</Cards>
+
+---
+
+## Accordion / Accordions
+
+<Accordions>
+  <Accordion title="First question">
+    The first answer goes here. It can be opened and closed.
+  </Accordion>
+  <Accordion title="Second question">
+    This is the second answer. You can use **bold text** and `inline code` too.
+  </Accordion>
+  <Accordion title="Third question">
+    You can include lists as well:
+    - Item 1
+    - Item 2
+    - Item 3
+  </Accordion>
+</Accordions>
+
+---
+
+## Tabs
+
+<Tabs items={['macOS', 'Windows', 'Linux']}>
+  <Tab value="macOS">Describe how to do it on macOS.</Tab>
+  <Tab value="Windows">Describe how to do it on Windows.</Tab>
+  <Tab value="Linux">Describe how to do it on Linux.</Tab>
+</Tabs>
+
+---
+
+## Steps
+
+<Steps>
+  <Step>
+    ### First step
+    Describe the first step here.
+  </Step>
+  <Step>
+    ### Second step
+    Describe the second step here.
+  </Step>
+  <Step>
+    ### Third step
+    Done! You've finished every step.
+  </Step>
+</Steps>
+
+
+
+---
+
+## Files
+
+Use this to show a file and folder structure.
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <Folder name="components">
+      <File name="button.tsx" />
+      <File name="input.tsx" />
+    </Folder>
+    <Folder name="pages">
+      <File name="index.tsx" />
+      <File name="about.tsx" />
+    </Folder>
+    <File name="app.tsx" />
+  </Folder>
+  <File name="package.json" />
+</Files>
+
+---
+
+## TypeTable
+
+Use this to document APIs or props.
+
+<TypeTable
+  type={{
+    title: {
+      type: 'string',
+      description: 'Card title',
+      required: true,
+    },
+    description: {
+      type: 'string',
+      description: 'Card description',
+    },
+    href: {
+      type: 'string',
+      description: 'URL to open on click',
+    },
+    icon: {
+      type: 'ReactNode',
+      description: 'Card icon',
+    },
+  }}
+/>
+
+---
+
+## Code Block
+
+Inline code: `const hello = "world"`
+
+```ts title="example.ts"
+const greeting = (name: string) => {
+  return `Hello, ${name}!`;
+};
+
+console.log(greeting('Walla'));
+```
+
+```bash title="Terminal"
+pnpm install
+pnpm dev
+```
+
+---
+
+## Text styles
+
+This is regular body text.
+
+**Bold text**
+
+*Italic text*
+
+~~Strikethrough text~~
+
+> This is how a blockquote is rendered.
+
+---
+
+## Headings
+
+# h1 heading
+
+## h2 heading
+
+### h3 heading
+
+#### h4 heading
+
+---
+
+## Lists
+
+Unordered list:
+- Item 1
+- Item 2
+  - Nested item
+  - Nested item
+- Item 3
+
+Ordered list:
+1. First
+2. Second
+3. Third
+
+---
+
+## Table
+
+| Component | Import path | Description |
+|---|---|---|
+| Accordion | `fumadocs-ui/components/accordion` | Collapsible accordion |
+| Callout | Built in | Note / warning / error box |
+| Card | Built in | Link card |
+| Steps | `fumadocs-ui/components/steps` | Step-by-step guide |
+| Tabs | `fumadocs-ui/components/tabs` | Tab switcher |
+| Files | `fumadocs-ui/components/files` | File tree |
+| TypeTable | `fumadocs-ui/components/type-table` | API type documentation |

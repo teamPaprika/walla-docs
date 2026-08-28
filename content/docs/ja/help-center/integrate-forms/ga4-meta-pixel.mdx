@@ -1,0 +1,34 @@
+---
+title: "GA4 と Meta Pixel を連携する"
+description: "Google Analytics 4（GA4）と Meta Pixel を連携すると、フォームページの閲覧と回答の送信をコンバージョンイベントとして計測できます。広告成果の測定やリターゲティングに活用してください。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 連携方法
+
+<Steps>
+  <Step>
+    ### フォーム設定を開く
+    フォーム編集画面の右上にある設定（歯車）ボタンをクリックしてフォーム設定を開きます。
+  </Step>
+  <Step>
+    ### 外部トラッキングタブへ移動する
+    フォーム設定のウィンドウで、左メニューの「外部トラッキング」タブを選びます。
+  </Step>
+  <Step>
+    ### 測定 ID を入力する
+    計測したいプラットフォームの ID を入力します。入力した値は自動的に保存されます。
+    - Meta ピクセル ID: 例）123456789012345
+    - GA4 測定 ID: 例）G-XXXXXXXXXX
+  </Step>
+</Steps>
+
+## 送信されるイベント
+
+連携すると、回答者の行動に応じて次の標準イベントが各プラットフォームへ送信されます。
+
+- フォーム閲覧時: PageView（Meta）／page_view（GA4）
+- 送信完了時: Lead（Meta）／generate_lead（GA4）
+
+コンバージョンイベントには walla_response_id、walla_customer_key のパラメータも含まれます。広告のコンバージョン目標を設定するときは、上記の標準イベント名を選んでください。

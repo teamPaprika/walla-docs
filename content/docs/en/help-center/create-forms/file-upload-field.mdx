@@ -3,26 +3,58 @@ title: "File Upload Field"
 description: "A field that lets respondents upload files from their device. Perfect for collecting photos, documents, videos, and other file types."
 ---
 
-<video src="/videos/file-upload.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<img src="/images/guides/manage-forms/file-upload-field-example.png" alt="A job application form editor containing a file upload field" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 ## How to Use the File Upload Field
 
-1. Respondents click the `Choose File` button to pick the file they want to upload.
-2. After selecting, they must click `Upload This File` to complete the upload.
-3. Uploaded files are only saved once the survey response is submitted, so respondents must finish uploading and then submit the survey.
+<Steps>
+  <Step>
+    ### Choose a file
+    Respondents click the `Choose File` button to pick the file they want to upload.
+  </Step>
+  <Step>
+    ### Finish the upload
+    After selecting, they must click `Upload This File` to complete the upload.
+  </Step>
+  <Step>
+    ### Submit the response
+    Uploaded files are only saved once the response is submitted, so respondents must finish uploading and then submit the survey.
+  </Step>
+</Steps>
 
 ## Upload Size Limits
 
 - Free plan: Up to 15MB per field
 - Pro plan and above: Up to 500MB per field
-- You can set a custom maximum upload size in the settings menu at the bottom right.
-  - Free plan: up to 15MB
-  - Pro plan and above: up to 500MB
-- Available options
-  - Required
-  - Data masking
-  - Auto-delete responses
+- You can also set your own maximum upload size in the settings menu at the bottom right.
+  - Free plan can be set to 15MB or less; Pro and above to 500MB or less.
 
-<Callout type="warning" title="Warning">
+## Available options
+  - Required
+  - Sensitive file access control
+  - Auto-delete data
+
+## Sensitive file access control
+
+With sensitive file access control enabled, files are stored privately and only users with the specified permissions can access them. Every file access also requires a **reason to be entered**, and all access records are saved automatically to the activity log.
+
+<img src="/images/guides/manage-forms/sensitive-file-access-control-toggle.png" alt="Enabling the sensitive file access control toggle on a file upload field" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/manage-forms/sensitive-file-access-control.png" alt="The confirmation screen for enabling sensitive file access control on a file upload field" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+
+- A reason must be entered every time a file is viewed or downloaded, and that reason is recorded in the activity log.
+- Once enabled, it cannot be turned off.
+
+<Callout type="warning" title="Caution">
+If you downgrade from the Enterprise plan to Free or Pro, viewing and downloading sensitive files is restricted.
+</Callout>
+
+- The response sheet and exports show a secure download link instead of the original link, and this field is excluded from bulk file downloads.
+- Files from responses received before you turned the toggle on are protected automatically as well. (It may take some time to apply.)
+
+<Callout type="warning" title="Caution">
 Files are not saved unless the survey is submitted after the upload is complete.
 </Callout>

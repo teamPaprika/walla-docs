@@ -1,0 +1,38 @@
+---
+title: Walla MCP をインストールする
+description: Walla MCP を Claude にカスタムコネクタとして接続すると、Claude から直接 Walla のフォームや回答データを扱えます。
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Walla は MCP（Model Context Protocol）サーバーを提供しています。Walla MCP を Claude にカスタムコネクタとして接続すると、Claude と会話しながら Walla のフォームや回答を確認したり、新しいフォームを作成したり、カスタムフィールドを作ったりできます。
+
+<Steps>
+  <Step>
+    ### コネクタ設定を開く
+    [claude.ai](https://claude.ai) にアクセスし、左サイドバーの `Customize` メニューを開いてから `Connectors` へ移動します。
+  </Step>
+  <Step>
+    ### カスタムコネクタの追加を開始する
+    Connectors 画面の右上にあるプラスボタンを押し、`Add custom connector` を選択します。
+  </Step>
+  <Step>
+    ### コネクタ情報を入力する
+    `Add custom connector` ウィンドウに以下の情報を入力し、`Add` ボタンをクリックします。OAuth の項目は空欄のままで構いません。
+
+    - 名前（Name）: Walla Form
+    - Remote MCP server URL: {"https://app.walla.my/api/mcp"}
+  </Step>
+  <Step>
+    ### Walla アカウントを接続する
+    一覧に追加された Walla Form コネクタを選び、`Connect` ボタンをクリックします。
+  </Step>
+  <Step>
+    ### アクセス権限を許可する
+    アプリのアクセス権限リクエスト画面で、Claude が要求する権限（プロジェクトの読み取り、プロジェクト回答の読み取り、プロジェクト回答のダウンロード、プロジェクトの書き込み、オフラインアクセス）を確認し、「許可」をクリックします。
+  </Step>
+  <Step>
+    ### 接続を確認する
+    接続が完了するとコネクタが Connected 状態に変わります。右側のパネルで、Claude が使えるツールの一覧と権限を確認できます。
+  </Step>
+</Steps>

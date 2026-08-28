@@ -13,14 +13,17 @@ import {
 import { useDocsSearch } from 'fumadocs-core/search/client';
 import { create } from '@orama/orama';
 import { usePathname } from 'next/navigation';
+import { i18n } from '@/lib/i18n';
+import { localeTokenizers } from '@/lib/tokenizer';
 
 function initOrama(locale?: string) {
-  if (locale === 'ko') {
+  const tokenize = locale ? localeTokenizers[locale] : undefined;
+  if (tokenize) {
     return create({
       schema: { _: 'string' },
       components: {
         tokenizer: {
-          tokenize: (text: string) => text.split(/[\s,.!?;:()[\]{}'"]+/).filter(Boolean),
+          tokenize,
           language: 'english',
           normalizationCache: new Map(),
         } as never,
@@ -35,9 +38,10 @@ function initOrama(locale?: string) {
 
 function useLocaleFromPath(): string {
   const pathname = usePathname();
-  const segments = pathname.split('/').filter(Boolean);
-  const supported = ['en', 'ko', 'ja', 'zh', 'vi', 'th'];
-  return supported.includes(segments[0]) ? segments[0] : 'en';
+  const segment = pathname.split('/').filter(Boolean)[0];
+  return (i18n.languages as readonly string[]).includes(segment)
+    ? segment
+    : i18n.defaultLanguage;
 }
 
 export default function DefaultSearchDialog(props: SharedProps) {

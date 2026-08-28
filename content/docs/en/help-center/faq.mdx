@@ -10,18 +10,26 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
 <Accordions>
 
+  <Accordion title="When I open Walla, I land on the sign-up screen instead of the login screen.">
+    This usually means you haven't signed in to that account for a long time, so the identity check and terms-of-service agreement steps are shown again to protect the account. It isn't an error or a problem with your account — sign in again and complete the steps shown, and you'll be able to use Walla as usual. All the forms you created and the data you collected on that account are kept intact.
+  </Accordion>
+
   <Accordion title="Can Free teams invite members?">
-    Yes, Walla offers a free plan. Even on the free plan, you can use core features like creating forms and collecting responses. If you need more advanced features, take a look at our paid plans.
+    Yes, Walla offers a free plan. Core features such as creating forms and collecting responses are available on the free plan too. If you need more, take a look at the paid plans.
   </Accordion>
 
   <Accordion title="I invited someone to my team, but they can't see the project.">
-    They've been invited to the team, but it looks like they haven't been added as a workspace member yet. Click the gear icon at the top of the workspace, then add the user to the workspace under [Manage Members]. Once added, they'll be able to see the workspace they were invited to.
+    They've been invited to the team but haven't been added as a workspace member yet. Click the gear icon at the top of the workspace and add the user to the workspace under [Manage Members]. Once added, they'll see the workspace they were invited to.
   </Accordion>
 
   <Accordion title="I want only specific members to be able to view response results.">
-    To restrict response viewing to specific members, adjust workspace member permissions. Click the gear icon at the top of the workspace, then go to [Roles and Permissions] to configure which features each role can access.
+    To limit who can view response results, adjust the workspace members' permissions. Click the gear icon at the top of the workspace and configure the features available to each role under [Roles & Permissions].
 
-    ※ This feature is only available on the Enterprise plan.
+    ※ This feature is available on the Enterprise plan only.
+  </Accordion>
+
+  <Accordion title="I want to transfer ownership of my team to another account.">
+    Team transfers are not supported as a rule. The only standard path is for the team owner to subscribe to the Pro plan, request 'Transfer ownership', and then ask support for a refund. That said, if the previous owner genuinely cannot be reached, we can help with a transfer as an exception — but only after confirming, under our data protection and security procedures, that the request is an official one from the same organization (company/domain). Please contact [cs@walla.my](mailto:cs@walla.my) for details.
   </Accordion>
 
 </Accordions>
@@ -31,19 +39,23 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 <Accordions>
 
   <Accordion title="Is Walla free to use?">
-    Yes, Walla lets you create unlimited forms, collect unlimited responses, and view statistics and response results — all for free.
+    Yes. With Walla you can create unlimited forms, collect unlimited responses, and view statistics and response results for free.
+  </Accordion>
+
+  <Accordion title="I paid but haven't used any paid features — can I get a refund?">
+    Beyond creating projects, Walla can be used in many ways: sharing survey links, collecting responses, viewing analytics, and keeping paid features active on existing projects. Because of how the service works, real usage can occur even when no explicit activity is recorded, so we're unable to judge usage by "not used" alone. Thank you for understanding.
   </Accordion>
 
   <Accordion title="How do I cancel my subscription?">
-    Go to 'Team Settings → Manage Team' and click the `Manage Plan` button to open the billing page. From there, click `Cancel Subscription` to cancel.
+    On the 'Team Settings → Team Management' page, click the `Manage Plan` button to open the billing page, then click `Cancel Subscription`. For details, see [Cancelling a Plan](https://docs.walla.my/en/docs/help-center/getting-started/starting-or-changing-subscription#cancelling-a-plan).
   </Accordion>
 
   <Accordion title="Can I cancel my subscription and get a refund?">
-    Whether a refund is available depends on when you paid and which plan you're on. For monthly subscriptions, the service is considered used 24 hours after payment, so refunds are not available after that point. For annual subscriptions, you can get a full refund if you cancel within 14 days of payment; after that, a partial amount will be deducted before the refund. If you'd like a refund, please reach out to [cs@walla.my](cs@walla.my). For details, please see our [Refund Policy](https://home.walla.my/ko/policy/refund-latest).
+    Whether a refund is possible depends on when you paid and which plan you're on. For monthly subscriptions, the service is considered used once 24 hours have passed since payment, so refunds aren't possible after that. For annual subscriptions, a full refund is available if you cancel within 14 days of payment; after that, a partial amount is deducted before the refund. If you'd like a refund, contact [cs@walla.my](mailto:cs@walla.my). For details, see the [refund policy](https://home.walla.my/en/policy/refund-latest).
   </Accordion>
 
   <Accordion title="The amount I was charged is different from what's listed on the pricing page.">
-    Walla uses an overseas payment provider, so depending on your card issuer's policy, an international transaction fee may apply when subscribing to a plan or purchasing gifticons.
+    Walla uses an overseas payment gateway, so your card issuer's policy may add an international payment fee when you subscribe to a plan or purchase gift vouchers.
   </Accordion>
 
 </Accordions>
@@ -52,40 +64,72 @@ import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
 <Accordions>
 
-  <Accordion title="I accidentally deleted a form or responses — can I recover them?">
-      In line with our policy of prioritizing personal data protection and data security, deleted surveys and response data are immediately and permanently deleted and cannot be recovered. To prevent accidental data deletion, please configure permissions for each workspace role. Starting from the Enterprise plan, you can view logs including deletion timestamps and account information.
-  </Accordion>
-
   <Accordion title="Can I add images to a form?">
-    In any field, type a slash (/) in the question title or description box to insert an image. You can write the description first and then insert an image with the slash (/) command, or insert the image first and drag it to reposition it. [Learn more about slash (/) commands →](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#using-slash-commands-to-add-features)
+    In any field, type a slash (/) in the question title or description box to insert an image. You can write the description first and then insert an image with the slash (/) command, or insert the image first and drag it to reposition it. [Learn more about slash (/) commands →](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#using-slash--commands-for-more-features)
   </Accordion>
 
   <Accordion title="Can I translate text like the submit button?">
-    Default form text (required field labels, submit button, error messages, completion messages, etc.) is automatically translated based on the respondent's browser language — Korean, English, Japanese, Simplified Chinese, Vietnamese, Thai, and more.
+    A form's built-in text (required, submit, error messages, completion messages, and so on) is automatically translated to match the respondent's browser language — Korean, English, Japanese, Simplified Chinese, Vietnamese, Thai, and more.
   </Accordion>
 
   <Accordion title="How is a rejection field different from an ending field?">
-      A rejection field is used to stop respondents who don't qualify for the survey from continuing — responses routed to a rejection field are not saved. If you want to show a message after submission, we recommend using an ending field instead. We also recommend deleting any rejection field, or using logic settings so that it isn't connected to preceding questions.
-  </Accordion>
-
-  <Accordion title="What's the difference between Grouped View and Standard View?">
-    Grouped View shows one question (one field group) per page, while Standard View shows all questions on a single page.
+      A rejection field stops the survey for people who aren't eligible respondents, and responses routed to a rejection field are not saved. If you want to show a message after the response is submitted, use an 'ending field' instead — and we recommend deleting the rejection field, or using logic so that it doesn't follow on from the preceding question.
   </Accordion>
 
   <Accordion title="I'd like multiple questions to appear on one page.">
-    In Grouped View, you can use field groups to display multiple questions together on a single screen. In Standard View, you can add `Page Break` between questions to split the page however you like.
+    In standard view, all questions appear on one page and respondents scroll to the next one. You can add `page breaks` between questions in standard view to split the screen wherever you like. In grouped view, use field groups to place several questions on the same screen.
   </Accordion>
 
   <Accordion title="I opened the form, but it won't move to the next question.">
-    This happens because the question's logic references a field that can't be found. Update the logic settings and try again. Fix any parts shown as 'Field/option not found' and then publish.
+    That question's logic references a field that can't be found. Change the logic setting and try again — fix whatever shows as 'field/option not found', then publish.
   </Accordion>
 
-  <Accordion title="I added an ending field, but only the default ending screen shows up.">
-    If you only add an ending field without configuring logic, the default ending page ("Your response has been submitted successfully.") is shown automatically. To route to a different ending field after submission:
-1. On the Logic page, click the 'Submit' button.
-2. Specify which ending field to navigate to based on your conditions.
+  <Accordion title="Can I send respondents to different questions based on their answers?">
+    Yes. With [logic](https://docs.walla.my/en/docs/help-center/create-forms/setting-up-logic), you can show or hide specific questions depending on what the respondent selects.
+  </Accordion>
 
-If you want to always go to a specific ending field with no extra logic, change the default destination to that ending field.
+
+  <Accordion title="I added an ending field, but only the default ending screen shows up.">
+    If you add an ending field without setting up logic, the default ending page ("Your response has been submitted successfully.") is shown automatically. To send respondents to a different ending field after submission:
+1. Click the 'Submit' button on the logic page.
+2. Specify the ending field to move to for each condition.
+
+If you always want to go to one particular ending field with no conditions, just change the default path to that ending field.
+  </Accordion>
+
+</Accordions>
+
+## Managing Projects
+<Accordions>
+
+  <Accordion title="I can't find a project I created.">
+      Unless the project was deleted, you may be signed in to a different account, team, or workspace. First check that the account, team, and workspace you're currently in match the ones where you created the project.
+
+#### 1. Checking the current account
+
+Click the profile icon in the top right to see which account you're signed in to. To sign in with a different account, click 'Log out'.
+
+<img src="/images/guides/faq/check-account.png" alt="Checking the currently signed-in account" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+#### 2. Checking the current team
+
+You can see the team you're in from the team list in the top left.
+
+<img src="/images/guides/faq/check-team.png" alt="Checking the current team" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+#### 3. Checking the current workspace
+
+You can see the workspace you're in from the workspace list below the team list.
+
+<img src="/images/guides/faq/check-workspace.png" alt="Checking the current workspace" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Accordion>
+
+  <Accordion title="I accidentally deleted a form or responses — can I recover them?">
+      Under our policy of putting privacy and data security first, deleted surveys and response data are permanently removed immediately and cannot be recovered. Set workspace role permissions to prevent accidental deletion. From the Enterprise plan up, you can review log records such as the time of deletion and the account involved.
+  </Accordion>
+
+  <Accordion title="Can I schedule when a form opens and closes?">
+      Yes, you can schedule a survey to open or close automatically at a specific time. With [scheduling](https://docs.walla.my/en/docs/help-center/manage-forms/scheduling-survey-start-end-times), the survey opens and closes on the schedule you set without you changing it manually each time.
   </Accordion>
 
 </Accordions>
@@ -95,15 +139,15 @@ If you want to always go to a specific ending field with no extra logic, change 
 <Accordions>
 
   <Accordion title="Can I get notifications when responses are submitted?">
-    Yes, you can set up notifications via Slack, Discord, Gmail, and more on the 'Integrate' page. You can also configure a webhook directly to receive notifications on any external platform you want.
+    Yes. On the 'Integrations' page you can set up notifications for Slack, Discord, Gmail, and more. You can also configure a webhook directly to receive notifications on any external platform you like.
   </Accordion>
 
   <Accordion title="Can I send a copy of the response to the respondent?">
-    To send respondents a copy of their response, use Gmail automation. In the automation settings, select Gmail and map the field that collects the respondent's email to the To field. Once set up, every time a respondent submits the survey with their email address, their response will be automatically sent to that email.
+    Use the Gmail automation to send respondents a copy of their response. Choose Gmail in the automation settings, then map the recipient (To) field to the field that collects the respondent's email. Once configured, the response content is emailed automatically whenever someone submits with their email address included.
   </Accordion>
 
   <Accordion title="Can I view responses in real time on Google Sheets?">
-    Yes — when you set up the Google Sheets integration, a new sheet is created in the Google account currently logged in. From then on, every time a response is collected from that account, a new row is automatically added to the sheet.
+    Yes. When you set up the Google Sheets integration, a new sheet is created in the Google account you're signed in to. From then on, every response collected adds a new row to that sheet automatically.
   </Accordion>
 
 </Accordions>
@@ -112,26 +156,36 @@ If you want to always go to a specific ending field with no extra logic, change 
 
 <Accordions>
 
+  <Accordion title="The thumbnail/title of a URL shared on KakaoTalk or other social apps won't update.">
+    If you share a URL on KakaoTalk and then change the thumbnail or title and share it again, the older thumbnail or title may still appear. This happens because apps like KakaoTalk cache URLs the device has already sent in order to load faster. To reduce this, clear the cache [here](https://developers.kakao.com/tool/debugger/sharing). On a device that hasn't sent the URL before, the correct thumbnail and title appear as expected.
+  </Accordion>
+
+  <Accordion title="What's the difference between standard view and grouped view?">
+    Standard view shows every question on a single page, while grouped view shows one question (or one field group) per page.
+  </Accordion>
+
   <Accordion title="Can I track where project traffic is coming from?">
-    Set up tracking (hidden fields) and add parameters to the URL when sharing it with respondents. Once responses are collected, you can see which path each respondent came from in the response sheet and statistics view.
+    Set up tracking (hidden fields), then add parameters to the URL before sharing it with respondents. Once responses come in, you can see how each respondent arrived in the response sheet and the statistics screen.
   </Accordion>
    <Accordion title="Can I use my own brand's thumbnail and URL when sharing a project?">
-    You can set a thumbnail and URL that match your brand when sharing a project. On the 'Share' page, customize the preview image and link as you like and save. Once saved, that thumbnail and URL will be applied when sharing.
+    You can set a thumbnail and URL that match your brand when sharing a project. On the 'Share' page, customize the preview image and link however you like, then save. Once set, that thumbnail and URL are applied when the project is shared.
   </Accordion>
      <Accordion title="I already have a list of respondents — can I invite them to a survey and track who has submitted?">
-    Yes. Upload your existing respondent list as a CSV or XLSX file to register it as a panel, then send the survey to that panel from each project. After sending, you can also track which panel members have responded.
+    Yes. Upload your respondent list as a CSV or XLSX file to register it as a panel, then send the survey to that panel from each project. After sending, you can also check which panel members have responded.
   </Accordion>
 
 </Accordions>
 
 ## Viewing Responses
 <Accordions>
-
+  <Accordion title="Can I download analytics?">
+    Analytics can't be downloaded — they're only viewable on each form's 'Analytics' tab.
+</Accordion>
   <Accordion title="Can I recover deleted responses?">
-    Responses are deleted immediately upon request, and deleted responses cannot be recovered under any circumstances — please keep this in mind. You can check which account and IP deleted a response in the 'Activity log'.
+    Responses are deleted as soon as deletion is requested, and deleted responses can never be recovered. You can check which account and IP deleted a response in the 'Log records'.
 </Accordion>
   <Accordion title="Can I assign predefined values to a response's customerKey?">
-    Upload a respondent list with predefined customerKey values as a CSV or XLSX file and register it as a panel, then send surveys to that panel from each project. The predefined values will be set as the customerKey in the response sheet.
+    Upload a respondent list that already contains customerKey values as a CSV or XLSX file to register it as a panel, then send the survey to that panel from each project. In that case, the predefined values are written to the customerKey column of the response sheet.
 </Accordion>
 
 </Accordions>
@@ -146,7 +200,10 @@ If you want to always go to a specific ending field with no extra logic, change 
    <Accordion title="I didn't collect respondents' phone numbers in my form — can I still send rewards?">
     Unfortunately, if you didn't collect phone numbers, sending rewards isn't possible. To send rewards, please make sure to collect the necessary information (such as phone numbers) when respondents complete the survey.
   </Accordion>
-     <Accordion title="Can I give out my brand's own rewards (like our store points) as rewards?">
+     <Accordion title="Can I send gift vouchers for brands that aren't in Walla?">
+    Yes. Email cs@walla.my with the brand you'd like, along with your target price range and quantity, and we'll review it and help make it available for purchase in the Walla reward shop.
+  </Accordion>
+       <Accordion title="Can I give out my brand's own rewards (like our store points) as rewards?">
     Yes, this is possible. However, this feature is only available on Custom plans and above. For details, please contact cs@walla.my.
   </Accordion>
 

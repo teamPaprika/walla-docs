@@ -1,0 +1,76 @@
+---
+title: "活動紀錄"
+description: "團隊內發生的所有重要活動都會自動存入活動紀錄。可以一眼看出誰在什麼時候做了什麼操作，對安全管理或營運歷程追蹤很有幫助。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 查看活動紀錄的方式
+
+<Steps>
+  <Step>
+    ### 前往活動紀錄分頁
+    團隊設定頁面 → 前往「活動紀錄」分頁。
+  </Step>
+  <Step>
+    ### 確認操作紀錄
+    可以依序查看團隊內執行過的重要操作紀錄。
+  </Step>
+  <Step>
+    ### 查看紀錄的詳細資訊
+    每筆紀錄都會記下操作者、操作時間與執行的動作。團隊活動紀錄中還能確認連線 IP，並對所有網域套用稽核記錄。
+  </Step>
+</Steps>
+## 主要紀錄項目
+
+### Team Actions（7 項）
+
+| Action | 說明 |
+| --- | --- |
+| team:leave | 退出團隊 |
+| team:member.invite | 邀請團隊成員 |
+| team:member.invite.cancel | 取消團隊邀請 |
+| team:member.delete | 刪除團隊成員 |
+| team:member.role.assign | 變更團隊成員角色 |
+| team:security.update | 變更團隊安全性設定 |
+| team:audit.log.download | 下載稽核紀錄 |
+
+### Workspace Actions（11 項）
+
+| Action | 說明 |
+| --- | --- |
+| workspace:create | 建立工作區 |
+| workspace:update | 變更工作區名稱 |
+| workspace:delete | 刪除工作區 |
+| workspace:leave | 退出工作區 |
+| workspace:member.create | 邀請工作區成員 |
+| workspace:member.delete | 刪除工作區成員 |
+| workspace:member.role.assign | 變更工作區成員角色 |
+| workspace:role.create | 建立角色 |
+| workspace:role.update | 修改角色 |
+| workspace:role.delete | 刪除角色 |
+| workspace:permission.update | 修改權限 |
+
+### Project Actions（19 項）
+
+| Action | 說明 |
+| --- | --- |
+| project:read | 查看專案 |
+| project:create | 建立專案 |
+| project:update | 修改專案 |
+| project:delete | 刪除專案 |
+| project:copy | 複製專案 |
+| project:archive | 封存專案 |
+| project:move_to_workspace | 移動工作區 |
+| project:publish | 發布專案 |
+| project:privacy.field_masking.update | 變更欄位遮罩設定 |
+| project:privacy.auto_delete.update | 變更自動刪除設定 |
+| project:privacy.auto_delete.execute | 執行自動刪除 |
+| project:automation.create | 建立自動化 |
+| project:automation.update | 修改自動化 |
+| project:automation.delete | 刪除自動化 |
+| project:response.read | 查看回覆 |
+| project:response.delete | 刪除回覆 |
+| project:response.download | 下載回覆 |
+| project:response.unmask | 解除遮罩 |
+| project:response.field_file_download | 下載欄位檔案 |

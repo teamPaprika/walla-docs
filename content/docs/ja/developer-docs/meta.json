@@ -1,0 +1,23 @@
+{
+  "title": "開発者ドキュメント",
+  "root": true,
+  "pages": [
+    "index",
+    "---ガイド---",
+    "quick-start",
+    "authentication",
+    "error-codes",
+    "---API リファレンス---",
+    "workspaces",
+    "forms",
+    "field-schemas",
+    "responses",
+    "delivery",
+    "---Custom Field SDK---",
+    "custom-fields-overview",
+    "custom-fields-quick-start",
+    "custom-fields-lifecycle",
+    "custom-fields-api-reference",
+    "custom-fields-properties-schema"
+  ]
+}

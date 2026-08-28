@@ -1,0 +1,53 @@
+---
+title: "Enviar tarjetas regalo"
+description: "En Walla puedes enviar tarjetas regalo (recompensas) a quienes responden tus formularios. Una vez compradas, ya puedes enviárselas."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Proceso de envío de recompensas
+
+<Steps>
+  <Step>
+    ### Ve a la página de gestión de recompensas
+    Accede a la página `Gestión de recompensas`.
+  </Step>
+  <Step>
+    ### Pulsa Enviar recompensa
+    Haz clic en el botón `Enviar recompensa` de «Recompensas disponibles».
+  </Step>
+  <Step>
+    ### Elige a las personas destinatarias
+    Selecciona la pregunta que contiene sus datos de contacto (el campo de teléfono). Puedes elegirlas tú mismo o pulsar el botón `Selección aleatoria` para sortearlas.
+
+    <Callout type="warning" title="Advertencia">
+    No se pueden enviar recompensas a quienes tengan un número de teléfono con formato incorrecto.
+    </Callout>
+  </Step>
+  <Step>
+    ### Comprueba si se puede enviar
+    Revisa la lista de personas seleccionadas y excluye a quienes ya hayan recibido una recompensa antes.
+    - También puedes ver de un vistazo quién ha recibido qué recompensa y cuántas veces.
+    - Puedes volver al paso anterior y cambiar la selección.
+  </Step>
+  <Step>
+    ### Redacta el mensaje
+    Escribe el mensaje que acompañará a la recompensa.
+    - Asunto: 40 bytes como máximo
+    - Contenido: 200 caracteres como máximo
+
+    El mensaje se muestra junto a la recompensa cuando la persona la recibe.
+
+    <Callout type="warning" title="Advertencia">
+    - La recompensa se envía al número de móvil indicado en la pregunta de teléfono.
+    - Una vez enviada no se puede cancelar ni recuperar.
+    - Al pulsar el botón de enviar recompensa se entiende que aceptas todo lo anterior.
+    </Callout>
+  </Step>
+  <Step>
+    ### Envío completado
+    Al pulsar el botón `Enviar recompensa` de la parte inferior, la recompensa se envía de inmediato a las personas seleccionadas y el envío queda completado.
+
+    Quien la recibe verá un mensaje como el siguiente.
+  </Step>
+</Steps>

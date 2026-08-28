@@ -1,0 +1,55 @@
+---
+title: "Campo de pago: Toss Payments"
+description: "Con el campo de pago, quien responde puede pagar directamente desde el formulario."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<Steps>
+  <Step>
+    ### Registra un comercio nuevo en Toss Payments
+    Registra un comercio nuevo en Toss Payments.
+
+    - Encontrarás los detalles en estos enlaces.
+      - [Guía de registro de comercio de Toss Payments](https://tosspublic.notion.site/b99d2cb71d29401c82eecb64ae6f712c)
+      - [Comisiones de Toss Payments](https://www.tosspayments.com/about/fee)
+    - Si ya te has registrado, puedes pasar directamente al siguiente paso.
+  </Step>
+  <Step>
+    ### Añade el campo de pago
+    Añade el campo de pago en la pantalla de edición del proyecto.
+  </Step>
+  <Step>
+    ### Introduce los datos de pago
+
+    Introduce la información necesaria para el pago.
+
+    #### Variant Key
+    - Es el valor único que identifica la interfaz de pago; puedes consultarlo en el campo de pago con `Ver Variant Key de la interfaz de pago`.
+    - Si introduces la interfaz en producción se realizan pagos reales, y con la de prueba no, así que distínguelas bien al introducirlas.
+    - Si es tu primera vez, con el botón `Añadir interfaz` puedes configurar distintas interfaces de pago.
+    - Tras pulsar `Añadir interfaz`, selecciona `Pago nacional general`.
+
+    <Callout type="warning" title="No se pueden usar cuentas virtuales">
+    Las cuentas virtuales no están disponibles. En la edición de la interfaz de pago, en [Funciones]-[Lista de métodos de pago], **desmarca** siempre la cuenta virtual. Walla registra el pago como realizado cuando se envía la respuesta después de la solicitud de pago; como las cuentas virtuales no se cobran al instante, podría registrarse el pago como completado en la hoja de respuestas sin que el ingreso se haya producido.
+    </Callout>
+
+    #### Client Key / Secret Key
+    - Puedes consultarlas en «Mi información de desarrollo» del [Centro de desarrolladores de Toss Payments](https://developers.tosspayments.com/). Selecciona el comercio en la izquierda y copia su Client Key y su Secret Key.
+
+    #### ID de pedido
+    - Es el valor único que identifica el pago del pedido y se muestra con el formato «IDpedido\_claveAleatoria\_hora». Ejemplo) Taiyaki de judía roja → `redbean`, taiyaki de crema → `chouxcream`
+
+    #### Nombre y precio del producto
+    - Introduce el nombre y el precio del producto que se va a pedir.
+  </Step>
+  <Step>
+    ### Formulario de pedido listo
+    Ya puedes crear el formulario de pedido con el campo de pago.
+
+    - Introduce la Variant Key en la interfaz de pago y la Client Key y la Secret Key en el widget de pago.
+    - Introduce el ID de pedido, el nombre y el precio del producto y guarda para terminar.
+    - Con la interfaz de prueba no se realizan pagos reales, así que distíngue bien cuál usas.
+    - Con la lógica puedes hacer que se muestren distintos campos de pago según la opción elegida.
+  </Step>
+</Steps>

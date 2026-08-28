@@ -1,0 +1,73 @@
+---
+title: "追蹤（隱藏欄位）"
+description: "追蹤功能能讓你掌握問卷回覆是透過什麼管道進來的。想依廣告管道、顧客族群等各種基準區分回覆時很好用。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 新增追蹤項目（隱藏欄位）
+
+<Steps>
+  <Step>
+    ### 開啟追蹤管理頁面
+    在分享頁面點選 `管理` 按鈕。
+  </Step>
+  <Step>
+    ### 輸入追蹤項目
+    輸入追蹤名稱（隱藏欄位名稱）後，必須按 Enter 鍵登錄，項目才會建立。
+  </Step>
+  <Step>
+    ### 儲存
+    點選 `儲存` 按鈕儲存。
+  </Step>
+  <Step>
+    ### 運用
+    登錄好的隱藏欄位會扮演「用來區分來源管道的分類」角色。
+    - ① 確認各社群來源 → 把隱藏欄位名稱設為 `SNS`（例：Instagram、YouTube 等）
+    - ② 依顧客族群區分 → 把隱藏欄位名稱設為 `customer`
+  </Step>
+</Steps>
+## 建立隱藏欄位 URL
+
+設定好隱藏欄位後，必須自行把該欄位加進問卷連結（URL）中。
+
+<Steps>
+  <Step>
+    ### 準備基本問卷 URL
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4
+    ```
+  </Step>
+  <Step>
+    ### 加上隱藏欄位名稱
+    以 `?欄位名=` 的形式加上。
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=
+    ```
+  </Step>
+  <Step>
+    ### 填入欄位值
+    例：來自 YouTube 時
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=youtube
+    ```
+  </Step>
+  <Step>
+    ### 依管道分享連結
+    把各條連結分別在不同管道分享，就能在回覆表中確認來源管道（例：YouTube、Instagram 等）。
+  </Step>
+</Steps>
+## 使用多個隱藏欄位
+
+- 要在 URL 中加上多個隱藏欄位時，用「&」取代「?」串接即可。
+```
+https://walla.my/v/QA9S0imWeo232fSbd4?source=instagram&media=video
+```
+→ 代表是透過 Instagram 影片廣告進來的。
+<Callout type="warning" title="注意事項">
+- 登錄追蹤項目時必須按 Enter 才會儲存。
+- 建議隱藏欄位名稱只用英文、數字與底線（_）組成。
+</Callout>
+<Callout title="小技巧">
+若需要大量建立隱藏欄位 URL，複製[隱藏欄位連結產生器 Google 試算表範本](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing)來用會很方便。
+</Callout>

@@ -3,22 +3,113 @@ title: "Description and Embed Fields"
 description: "When you want to display guidance text, images, tables, or web pages alongside your survey, use the description and embed fields."
 ---
 
-<video src="/videos/description-embed.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
-
 ## Description Field
 
+<img src="/images/guides/manage-forms/description-field-example.png" alt="A description field example with a title, poster image, date/venue/capacity/fee details, and a notice" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
 - Use this for cover pages, section dividers, instructional text, or any free-form descriptive content.
-- The text editor lets you apply various styles such as text color, size, and weight.
-- You can also use slash (/) commands to easily insert images, tables, headings, and more.
+- The [text editor](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#applying-text-styles) lets you apply various styles such as text color, size, and weight.
+- You can also use [slash (/) commands](https://docs.walla.my/en/docs/help-center/create-forms/editing-field-text#using-slash--commands-for-more-features) to easily insert images, tables, headings, and more.
 
 <Callout title="Tip">
 Using description fields effectively to separate sections or add guidance helps respondents understand the survey content more easily.
 </Callout>
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 ## Embed Field
+
+<img src="/images/guides/manage-forms/embed-field-example.png" alt="An embed field example showing a YouTube video playing inside the survey" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - Paste a website URL to display that web page directly inside your Walla form.
 
+### Embedding a YouTube video
+
+Paste a YouTube share URL or embed code into an embed field and the video plays right inside the survey.
+
+<Steps>
+  <Step>
+    ### Click Share on YouTube
+    Open the video you want to embed on YouTube and click the Share button below it.
+
+    <img src="/images/guides/manage-forms/yt-embed-1-share-button.png" alt="The Share button highlighted below a YouTube video" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Choose Embed in the share modal
+    When the share modal opens, click the Embed option on the far left.
+
+    <img src="/images/guides/manage-forms/yt-embed-2-embed-option.png" alt="The Embed option highlighted in the YouTube share modal" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Copy only the URL from the embed code
+    Instead of the whole iframe tag, drag and copy only the URL inside the src attribute, the one starting with https://www.youtube.com/embed/...
+
+    <img src="/images/guides/manage-forms/yt-embed-3-copy-url.png" alt="The URL inside the src attribute highlighted within the iframe code of the embed video dialog" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Click Embed URL in the Walla embed field
+    Add an embed field in the Walla project editor and click the Embed URL button inside it.
+
+    <img src="/images/guides/manage-forms/yt-embed-4-walla-url-embed.png" alt="The Embed URL button highlighted in the embed field of the Walla editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Paste the URL and click Embed
+    Paste the YouTube embed URL you copied into the input box, then click the Embed button.
+
+    <img src="/images/guides/manage-forms/yt-embed-5-paste-url.png" alt="A YouTube URL pasted into the embed field input with the Embed button highlighted" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Check the result
+    You'll see the YouTube video displayed inside the survey, ready to play.
+
+    <img src="/images/guides/manage-forms/yt-embed-6-result.png" alt="A YouTube video embedded in a Walla embed field showing the playback view" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+### Embedding Google Calendar
+
+Paste a Google Calendar share URL into an embed field to show schedule and booking information right inside the survey.
+
+<Steps>
+  <Step>
+    ### Open the share options in Google Calendar
+    Click the event or appointment you want to embed, then choose `More share options` from the `⋮` (more) menu in the popup.
+
+    <img src="/images/guides/manage-forms/gcal-embed-1-share-options.png" alt="The More share options item highlighted in the more menu of a Google Calendar event popup" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Embed on website → expand Inline booking page
+    Select the `Embed on website` tab at the top of the share modal, then click `Inline booking page` at the bottom to expand it.
+
+    <img src="/images/guides/manage-forms/gcal-embed-2-inline-page.png" alt="The Embed on website tab and Inline booking page item highlighted in the booking page share modal" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Copy only the URL from the embed code
+    Instead of the whole iframe tag in the `Embed code` area, drag and copy only the URL inside `src="..."`, the one starting with `https://calendar.google.com/...`.
+
+    <img src="/images/guides/manage-forms/gcal-embed-3-copy-url.png" alt="Only the URL inside the src attribute of the embed code iframe tag selected in blue" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Click Embed URL in the Walla embed field
+    Add an embed field in the Walla project editor and click the `Embed URL` button inside it.
+
+    <img src="/images/guides/manage-forms/gcal-embed-4-walla-url-embed.png" alt="The Embed URL button highlighted in the embed field of the Walla editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Paste the URL and click Embed
+    Paste the Google Calendar URL you copied into the input box, then click the `Embed` button.
+
+    <img src="/images/guides/manage-forms/gcal-embed-5-paste-url.png" alt="A Google Calendar URL pasted into the embed field input with the Embed button highlighted" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Check the result
+    You'll see the calendar's time-slot picker displayed as-is inside the survey.
+
+    <img src="/images/guides/manage-forms/gcal-embed-6-result.png" alt="A Google Calendar booking page embedded in a Walla embed field showing the appointment time picker" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
 <Callout type="warning" title="Caution">
-Depending on the external site's security policies or HTTPS configuration, the embed may not display properly.
+- Depending on the external site's security policies or HTTPS configuration, the embed may not display properly.
+- If you paste a regular URL and see a "… refused to connect" message, try again with the site's dedicated embed link.
 </Callout>

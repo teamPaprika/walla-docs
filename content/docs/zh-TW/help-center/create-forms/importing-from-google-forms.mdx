@@ -1,0 +1,43 @@
+---
+title: 從 Google 表單匯入
+description: 可以把在 Google 表單中製作的問卷匯入 Walla 直接使用。
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 匯入 Google 表單問卷
+
+<Steps>
+  <Step>
+    ### 點選建立專案按鈕
+    在工作區畫面點選 `建立專案` 按鈕。
+  </Step>
+  <Step>
+    ### 選擇從 Google 表單匯入
+    選擇 `從 Google 表單匯入`。
+  </Step>
+  <Step>
+    ### 輸入 Google 表單填答者連結後匯入
+    把 Google 表單的填答者連結（`https://docs.google.com/forms/d/...`）貼到輸入框，再點選 `匯入` 按鈕。
+
+    <Callout type="warning" title="注意事項">
+    請到 Google 表單 → 設定 → 回覆區塊，把需要登入的相關子功能關閉。
+    區段標題會轉換成 Walla 的說明欄位一併匯入。
+    </Callout>
+
+    <Callout type="warning" title="無法匯入的項目">
+    - 在 Google 表單中指定的背景圖片與題目圖片
+    - 在 Google 表單中設定的檔案上傳題
+    </Callout>
+  </Step>
+  <Step>
+    ### 完成
+    系統會依你輸入的 Google 表單連結建立新專案。
+  </Step>
+</Steps>
+### 同時在 Google 表單收集回覆
+
+- 選擇 `在 Google 表單收集回覆` 時會建立一個自訂自動化。
+- 用 Walla 收到回覆時也會一併送交 Google 表單，但這個自動化只提供一次性使用。在 Google 表單或 Walla 修改問卷並重新發布後，自動化會從那個時間點**停止**，**之後就無法再把回覆送到 Google 表單**。
+- 建議在 Google 表單中完成所有問卷編輯後，再匯入 Walla。
+- 含有選擇題或核取方塊「其他（自行輸入）」的回覆無法送出。

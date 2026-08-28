@@ -1,0 +1,105 @@
+---
+title: はじめに
+description: Walla Open API ドキュメント
+---
+
+# Walla Open API ドキュメント
+
+Walla Open API を使うと、フォームの管理、ワークスペースの取得、フォームの送信、回答の収集などをプログラムから処理できます。
+
+## 概要
+
+Walla Open API は RESTful 方式で動作し、以下の機能を提供します。
+
+- **ワークスペース管理**: ワークスペースの情報を取得します
+- **フォーム管理**: フォームのデータと設定を取得します
+- **フォーム送信**: メールまたは SMS でフォームを送信します
+- **回答の追跡**: フォームの回答と送信データを取得・モニタリングします
+
+## リソースの階層構造
+
+Walla API のリソースは以下の階層構造で構成されます。
+
+```
+Team → Workspace → Form → Response
+```
+
+- **Team（チーム）**: 最上位の組織単位です。API キーはチーム単位で生成され、チーム情報が自動的に含まれます。
+- **Workspace（ワークスペース）**: チーム内でフォームとプロジェクトをまとめる単位です。
+- **Form（フォーム）**: ワークスペース内で作成したフォームです。
+- **Response（回答）**: フォームに送信された個々の回答です。
+
+**注意**: API キーにチーム情報が含まれているため、API リクエスト時に別途チーム情報を渡す必要はありません。
+
+## 基本 URL
+
+すべての API リクエストの基本 URL は次のとおりです。
+
+```
+https://api.walla.my/open-api/v1
+```
+
+## はじめる
+
+<Cards>
+  <Card title="認証" href="/ja/docs/developer-docs/authentication" />
+  <Card title="クイックスタートガイド" href="/ja/docs/developer-docs/quick-start" />
+  <Card title="API リファレンス" href="/ja/docs/developer-docs/workspaces" />
+  <Card title="エラーコード" href="/ja/docs/developer-docs/error-codes" />
+</Cards>
+
+## 主な機能
+
+### ワークスペース管理
+アクセスできるすべてのワークスペースの一覧を取得し、個々のワークスペースの詳細情報を確認できます。
+
+### フォーム管理
+フォームの一覧、設定、送信数など、フォーム関連のデータを取得できます。
+
+### フォーム送信
+メールや SMS で複数の宛先にフォームを送信し、送信ステータスと参加状況を追跡できます。
+
+### 回答の収集
+ページネーションに対応した回答取得 API で、顧客キーや送信時刻などの詳細データを確認できます。
+
+## API 仕様
+
+- **バージョン**: 1.0
+- **プロトコル**: HTTPS
+- **データ形式**: JSON
+- **認証**: API キー（ヘッダーによる認証）
+
+## サポート
+
+ご質問や機能のご要望があれば、Walla サポートチームまでご連絡ください。
+
+## API エンドポイントの概要
+
+| カテゴリ | エンドポイント | 説明 |
+|---------|-----------|------|
+| ワークスペース | `GET /workspaces` | すべてのワークスペースの取得 |
+| ワークスペース | `GET /workspaces/{workspaceId}` | 特定のワークスペースの取得 |
+| ワークスペース | `GET /workspaces/{workspaceId}/forms` | ワークスペース内のフォーム一覧の取得 |
+| フォーム | `GET /forms` | すべてのフォームの取得 |
+| フォーム | `GET /forms/{formId}` | 特定のフォームの取得 |
+| フィールド | `GET /field-output-schemas` | フィールド出力スキーマの取得 |
+| フィールド | `GET /forms/{formId}/fields` | フォームのフィールド一覧の取得 |
+| フィールド | `GET /forms/{formId}/fields/{fieldId}` | 特定フィールドの詳細取得 |
+| フィールド | `GET /forms/{formId}/fields/{fieldId}/description` | フィールド説明の取得 |
+| 隠しフィールド | `GET /forms/{formId}/hidden-fields` | 隠しフィールド一覧の取得 |
+| 隠しフィールド | `POST /forms/{formId}/hidden-fields` | 隠しフィールドの追加 |
+| 隠しフィールド | `DELETE /forms/{formId}/hidden-fields/{hiddenFieldId}` | 隠しフィールドの削除 |
+| 送信 | `POST /forms/{formId}/delivery` | フォームの送信 |
+| 送信 | `POST /forms/{formId}/delivery/recipients` | 宛先の登録 |
+| 送信 | `PATCH /forms/{formId}/delivery/recipients` | 宛先情報の修正 |
+| 送信 | `POST /forms/{formId}/delivery/send` | 登録済みの宛先へ送信 |
+| 送信 | `GET /forms/{formId}/delivery` | 送信先一覧の取得 |
+| 送信 | `POST /forms/{formId}/delivery/status` | 送信ステータスの取得 |
+| 回答 | `GET /forms/{formId}/responses` | フォームの回答一覧の取得（ページネーション） |
+| 回答 | `GET /forms/{formId}/responses/{responseId}` | 特定の回答の取得 |
+| 回答のエクスポート | `POST /forms/{formId}/exports/responses` | フォームの回答を Parquet ファイルへエクスポート |
+| 回答のエクスポート | `POST /forms/{formId}/exports/field-definitions` | フォームのフィールド定義を Parquet ファイルへエクスポート |
+
+## 次のステップ
+
+各 API のドキュメントを見ながら、Walla Open API で実現したい機能を実装してみてください。

@@ -1,0 +1,47 @@
+---
+title: Importing Qualtrics Simple Format
+description: Import a .txt file that follows the Qualtrics simple format into Walla.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Importing Qualtrics simple format
+
+<Steps>
+  <Step>
+    ### Click the Create Project button
+    On the workspace screen, click the `Create Project` button.
+
+    <img src="/images/guides/manage-forms/team-template-create-project.png" alt="The Create Project button in the top right of the workspace" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Select Import Qualtrics simple format
+    Choose `Import Qualtrics simple format`.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-select.png" alt="Selecting the Import from Qualtrics card in the new project popup" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Choose a file
+    Click `Browse` and select the `.txt` or `.docx` file you exported from Qualtrics.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-file-select.png" alt="The Import from Qualtrics popup showing converted questions previewed after a file is selected" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Check the skipped fields
+    Once you select a file, the questions are converted automatically and the results are split across the `Converted`, `Approximated`, and `Skipped` tabs. The `Skipped` tab lists questions that couldn't be imported because Walla doesn't support that type. Those questions appear as placeholders only, so recreate them yourself in the builder after the form is created.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-skipped-fields.png" alt="The Skipped tab of the Import from Qualtrics popup listing unsupported question types" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Enter a project name and create the form
+    Enter a `Project name` and add tags if you need them. Review the converted form in the preview on the right, then click the `Create Form` button to finish the import.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-create-form.png" alt="Entering a project name and clicking the Create Form button" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Done
+    A new project is created from the file you uploaded.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-complete.png" alt="The converted form shown in the builder after the import completes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>

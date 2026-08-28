@@ -3,18 +3,65 @@ title: "Preventing Duplicate Responses"
 description: "Stop the same person from submitting the same survey multiple times with the duplicate response prevention feature."
 ---
 
-<video src="/videos/prevent-duplicate.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-## How to Set It Up
+## Preventing duplicate responses
+When you want to stop the same person from responding to the same survey more than once, use the duplicate response limit.
+There are two methods, and you can turn both on together.
 
-1. In the project editor, click the `⚙️` button at the top right to go to the settings tab.
-2. Turn on the 'Prevent duplicate responses' toggle.
+|Method|Basis|Notes|
+|---|---|---|
+|Browser duplicate prevention|The respondent's browser|Easy to set up, but they can respond again in a different browser or in private mode|
+|Once per verified user|A verified email, phone number, or external member ID|The limit holds even when they switch devices|
 
-## How It Works
+## How to set it up
 
-- Participants who have already submitted a response cannot respond again even if they reopen the link.
-- After submission, the survey page will not open — they'll instead see a message like "You've already submitted a response."
+<Steps>
+  <Step>
+    ### Go to the Respondents tab
+    Click the `⚙️` icon in the top right of the editor to open survey settings, then select `Respondents` from the tab list on the left.
 
-<Callout title="Tip">
-Combining duplicate response prevention with the 'Require email login' feature lets you restrict responses by Google account, giving you even more accurate duplicate prevention.
+    <img src="/images/guides/manage-forms/duplicate-response-settings.png" alt="The survey settings button in the top right of the project editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+
+  <Step>
+    ### Choose a method
+    Turn on the toggle you want in the `Duplicate responses` section. The summary sentence at the top of the section shows the current setting at a glance.
+
+
+|Setting|Summary shown|
+|---|---|
+|Nothing enabled|The same person can respond multiple times|
+|`Once per verified user` enabled|Only one response per verified email, phone number, or external member ID|
+
+
+
+### 1. Browser duplicate prevention
+
+<img src="/images/guides/manage-forms/duplicate-response-browser.png" alt="Browser duplicate prevention enabled on the Respondents tab of survey settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Someone who has already responded in the same browser cannot respond again.
+- After responding, the survey page won't open and a message explains that a response has already been submitted.
+- They can still respond again in a different browser, on another device, or in private mode.
+
+<img src="/images/guides/manage-forms/duplicate-blocked.png" alt="The duplicate response limit notice" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+### 2. Once per verified user
+
+<img src="/images/guides/manage-forms/duplicate-response-authenticated-user.png" alt="Once per verified user enabled on the Respondents tab of survey settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Responses are limited to one per verified email, phone number, or external member ID. The limit holds even if they change device or browser, so duplicates are blocked more reliably.
+
+- To turn this toggle on, you need a way to identify respondents. If you enable it without a verification method, email verification is turned on with it.
+
+- The identifying basis depends on your settings.
+	- Using email verification on the `Respondents` tab → the verified email address
+	- Using phone verification on the `Respondents` tab → the verified phone number
+	- Using host-signed token + member identification on the `Embed` tab → the external member ID carried in the token
+
+<Callout title="Good to know">
+Turning off `User verification` also turns off `Once per verified user`. If you've toggled verification settings off and on, double-check that the duplicate limit hasn't been released.
 </Callout>
+
+  </Step>
+</Steps>

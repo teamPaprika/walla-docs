@@ -1,0 +1,124 @@
+---
+title: Gestionar el panel
+description: En la pestaña Panel del espacio de trabajo puedes registrar a los destinatarios de tus formularios (el panel) y organizarlos en grupos.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## ¿Qué es el panel?
+
+El panel es la lista de personas a las que vas a enviar el formulario. En la pestaña **Panel** del espacio de trabajo puedes subir la lista en un archivo CSV o Excel y clasificarla en grupos para gestionarla de forma ordenada.
+
+| Campo | Descripción |
+| ---- | ------------------- |
+| Clave de cliente | Clave única que identifica a cada persona del panel |
+| Nombre | Nombre de la persona (enmascarado por defecto) |
+| Correo electrónico | Correo de la persona (enmascarado por defecto) |
+| Teléfono | Teléfono de la persona (enmascarado por defecto) |
+| Grupo | Grupo al que pertenece |
+
+<Callout type="info" title="Enmascarado de datos personales">
+Para proteger los datos personales, el nombre, el correo y el teléfono se enmascaran por defecto. Para ver la información real hay que desactivar el enmascarado.
+</Callout>
+
+## Subir el panel
+
+Puedes registrar toda la lista de una vez con un archivo CSV o Excel.
+
+<Steps>
+  <Step>
+    ### Pulsa el botón Subir panel
+    En la pestaña Panel, haz clic en **Subir panel**.
+  </Step>
+  <Step>
+    ### Elige un grupo
+    Selecciona el **grupo** al que quieres subir el panel. (Opcional)
+  </Step>
+  <Step>
+    ### Selecciona el archivo
+    Pulsa **Seleccionar archivo** y elige el CSV o Excel.
+    Las filas con errores en el nombre, el correo o el teléfono se excluyen de la subida.
+  </Step>
+  <Step>
+    ### Subida completada
+    Revisa los datos válidos y pulsa el botón **Subir panel**.
+  </Step>
+</Steps>
+
+<Callout type="warn" title="Sobre el formato del archivo">
+- El nombre es obligatorio, y hay que rellenar al menos el correo o el teléfono.
+- Si desaparece el 0 inicial del teléfono, configura la columna de teléfono con formato de texto o añade `'` delante del número.
+- Si el formato no es correcto, puedes revisar los errores en la pestaña de datos no válidos.
+- Si necesitas una plantilla, pulsa el botón de descarga de plantilla.
+</Callout>
+
+<Callout type="info" title="Métodos de envío disponibles">
+Por ahora, la función de envío de formularios solo admite el correo electrónico.
+</Callout>
+
+## Gestionar grupos
+
+Puedes clasificar el panel en grupos y gestionarlo según tus necesidades.
+
+<Steps>
+  <Step>
+    ### Pulsa el botón Gestión de grupos
+    En la pestaña Panel, haz clic en `Gestión de grupos`.
+  </Step>
+  <Step>
+    ### Consulta la lista de grupos
+    Verás los grupos existentes y cuántas personas hay en cada uno.
+  </Step>
+  <Step>
+    ### Crea o edita grupos
+    Pulsa `Crear grupo` para añadir uno nuevo, o usa el botón de edición a la derecha del grupo para cambiarle el nombre.
+  </Step>
+  <Step>
+    ### Elimina grupos
+    Selecciona los grupos que quieras borrar y pulsa `Eliminar selección`.
+  </Step>
+</Steps>
+
+## Desactivar el enmascarado
+
+Para ver los datos personales del panel (nombre, correo y teléfono) hay que desactivar el enmascarado.
+
+<Steps>
+  <Step>
+    ### Pulsa el botón Desenmascarar
+    Haz clic en `Desenmascarar`, en la parte superior de la pestaña Panel.
+  </Step>
+  <Step>
+    ### Indica el motivo
+    Escribe el motivo por el que desactivas el enmascarado.
+  </Step>
+  <Step>
+    ### Enmascarado desactivado
+    Pulsa el botón `Desenmascarar`.
+  </Step>
+</Steps>
+
+Al desactivar el enmascarado también se habilita la función de búsqueda.
+
+<Callout type="warn" title="Atención al desenmascarar">
+El motivo indicado queda registrado en los registros de actividad. Evita consultar datos personales sin necesidad.
+</Callout>
+
+### Filtros y ajustes de visualización
+
+- **Filtro**: muestra solo las personas de un grupo concreto.
+- **Vista**: define el criterio de ordenación y las columnas visibles de la lista.
+- **Ordenar por**: fecha de creación (ascendente/descendente).
+- **Columnas visibles**: clave de cliente, nombre, correo, teléfono y grupo, cada una activable por separado.
+
+## Enviar formularios al panel
+
+<a href="/es/docs/help-center/share-forms/sending-to-panel" className="not-prose group block rounded-2xl border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-6 no-underline hover:border-[hsl(193,100%,50%)]/40 transition-colors">
+  <div className="flex items-center justify-between gap-4">
+    <div>
+      <div className="text-lg font-bold text-[#1A2C5C] mb-1">Enviar formularios al panel →</div>
+      <div className="text-[#76809D] text-sm">Descubre cómo enviar por correo tus formularios a las personas registradas en el panel.</div>
+    </div>
+  </div>
+</a>

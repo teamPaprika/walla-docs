@@ -1,0 +1,38 @@
+---
+title: Instalar el MCP de Walla
+description: Conecta el MCP de Walla a Claude como conector personalizado y trabaja con tus formularios y respuestas de Walla directamente desde Claude.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Walla ofrece un servidor MCP (Model Context Protocol). Si conectas el MCP de Walla a Claude como conector personalizado, podrás consultar formularios y respuestas, crear formularios nuevos o construir campos personalizados mientras conversas con Claude.
+
+<Steps>
+  <Step>
+    ### Abre los ajustes de conectores
+    Entra en [claude.ai](https://claude.ai), abre el menú `Customize` de la barra lateral izquierda y ve a `Connectors`.
+  </Step>
+  <Step>
+    ### Empieza a añadir un conector personalizado
+    Pulsa el botón «+» de la esquina superior derecha de la pantalla Connectors y selecciona `Add custom connector`.
+  </Step>
+  <Step>
+    ### Introduce los datos del conector
+    Rellena la siguiente información en la ventana `Add custom connector` y pulsa `Add`. Puedes dejar vacíos los campos de OAuth.
+
+    - Nombre (Name): Walla Form
+    - Remote MCP server URL: {"https://app.walla.my/api/mcp"}
+  </Step>
+  <Step>
+    ### Conecta tu cuenta de Walla
+    Selecciona el conector Walla Form que se ha añadido a la lista y pulsa `Connect`.
+  </Step>
+  <Step>
+    ### Concede los permisos
+    En la pantalla de solicitud de permisos, revisa los que pide Claude (leer proyectos, leer respuestas de proyectos, descargar respuestas de proyectos, escribir proyectos y acceso sin conexión) y pulsa «Permitir».
+  </Step>
+  <Step>
+    ### Comprueba la conexión
+    Una vez conectado, el conector pasa al estado Connected. En el panel derecho verás la lista de herramientas que Claude puede usar y los permisos concedidos.
+  </Step>
+</Steps>

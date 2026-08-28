@@ -1,0 +1,242 @@
+---
+title: Setting Up Embed-Only Access
+description: How to block direct access through the survey link and collect responses only from the survey embedded on your website.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+## How to set it up
+
+<Steps>
+  <Step>
+    ### Go to the Embed tab
+    Click the `⚙️` icon in the top right of the editor to open survey settings, then select `Embed` from the tab list on the left.
+
+    <img src="/images/guides/manage-forms/embed-only-step-1.png" alt="The Embed tab highlighted in survey settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  </Step>
+
+  <Step>
+    ### Turn on embed-only access
+    Turning on `Embed-only access` lets you pick one of three modes.
+
+|Mode|What it blocks|What you need|Plan|
+|---|---|---|---|
+|Allowed sites only|Embeds on sites outside the allowlist, direct link access|Allowed origins|Pro|
+|Host-signed token|The above + non-browser requests|Allowed origins, signing secret, host server integration|Enterprise|
+|Host-signed token + member identification|The above + duplicate responses per member|The above + member ID in the token|Enterprise|
+
+#### 1. Allowed sites only
+
+Blocks embeds on non-allowed sites and direct access from the browser. This is the simplest setup.
+However, server-to-server requests can imitate the same headers. If you need to verify who the respondent is, use one of the signing modes below.
+
+<img src="/images/guides/manage-forms/embed-only-mode-allowed-sites.png" alt="The allowed sites only mode selected under embed-only access" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+#### 2. Host-signed token
+
+The form opens only with a token signed by your server — even for non-browser requests. Imitating headers won't get through.
+
+<img src="/images/guides/manage-forms/embed-only-mode-signed-token.png" alt="The host-signed token mode selected under embed-only access" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+#### 3. Host-signed token + member identification
+
+Uses the member ID carried in the token to block duplicate responses per member.
+In this mode, the duplicate response summary on the `Respondents` tab also shows "External member ID" as a criterion. You can limit responses to one per member without asking respondents for separate email or phone verification.
+
+<img src="/images/guides/manage-forms/embed-only-mode-member-id.png" alt="The host-signed token with member identification mode selected under embed-only access" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Enter allowed origins
+    Enter the address of the site where the survey will be embedded.
+
+<img src="/images/guides/manage-forms/embed-only-origin.png" alt="The allowed origin input in embed-only access settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Enter the scheme and host only. `https://your-site.com`
+- Do not include a trailing slash or a path. `https://your-site.com/survey` is invalid.
+
+<Callout type="warning" title="Before you continue">
+In `Allowed sites only` mode, the gate applies only once you add at least one origin. If the list is empty, no restriction is enforced — always double-check.
+</Callout>
+
+  </Step>
+  <Step>
+    ### Issue a signing secret
+    Choosing a signing mode reveals the `Signing secret` section. This is the value your host server uses to sign tokens.
+
+<img src="/images/guides/manage-forms/embed-only-secret.png" alt="The signing secret section in embed-only access settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+#### 1. Issuing it for the first time
+
+Click `Issue secret` and the secret value is shown once. Click `Copy` right away and store it somewhere safe, such as an environment variable on your host server.
+
+<Callout type="warning" title="Take care">
+This value is never shown again. If you didn't copy it, you'll have to reissue it — and reissuing immediately invalidates existing tokens.
+</Callout>
+
+#### 2. Reissuing it
+
+If a secret already exists, the button changes to `Reissue secret`. Clicking it opens a confirmation dialog.
+Reissuing behaves as follows.
+
+- Tokens signed with the current secret are rejected immediately.
+- Every host that signs embed tokens must be switched to the new secret.
+- Sessions that are already open stay valid until they expire (up to 2 hours).
+
+Reissue only after your host server deployment is ready. If the order slips, respondents won't be able to open the form in the meantime.
+  </Step>
+
+
+
+</Steps>
+
+
+## Host server integration
+
+In the signing modes, your host server must create a short-lived JWT for each visitor and pass it to the embed.
+
+|Term|Meaning|
+|---|---|
+|**Signing secret**|A value issued per form. Your host server signs tokens with it.|
+|**Token**|A short-lived JWT your host server signs for each visitor.|
+
+### Storing the signing secret
+
+Save the secret you copied in an environment variable on your host server.
+
+```bash
+WALLA_EMBED_SECRET=paste_the_copied_value_here
+```
+
+<Callout type="warning" title="Before you continue">
+Never put the signing secret in a browser bundle, frontend code, or a repository. If it leaks, anyone can forge tokens. Secrets are per form, so if you embed multiple forms, store each one separately.
+</Callout>
+
+### Signing a token
+
+Sign a fresh token on the server every time a visitor opens the page. Here's an example using `jose`.
+
+```js
+import { SignJWT } from 'jose';
+
+const secret = new TextEncoder().encode(process.env.WALLA_EMBED_SECRET);
+
+const token = await new SignJWT({ email: user.email })
+  .setProtectedHeader({ alg: 'HS256' })
+  .setSubject(user.id)          // required in member identification mode
+  .setAudience('{formId}')      // the Walla form ID
+  .setExpirationTime('5m')
+  .sign(secret);
+```
+
+In `Host-signed token` mode, `.setSubject(...)` is not required. In `Host-signed token + member identification` mode, the member ID must be placed in `sub`.
+
+### Token rules
+
+|Item|Requirement|
+|---|---|
+|`alg`|Only `HS256` is allowed.|
+|Signing key|Use the UTF-8 bytes of the signing secret string.|
+|`aud`|Must equal the form ID. If it's an array, it must contain the form ID.|
+|`exp`|Required, and no more than 10 minutes in the future. 5 minutes is recommended.|
+|`sub`|Required in member identification mode, and must be 255 characters or fewer.|
+|`email`|Optional.|
+|Encoding|Use base64url characters (`A-Za-z0-9_-`).|
+
+## Passing the token to the iframe
+
+You can copy the base embed code from **Share → Embed code** in the dashboard.
+
+### Signing modes
+
+Pass the token in the URL fragment (`#`).
+
+```html
+<iframe
+  src="https://form-address/f/{formId}#embedToken=signed_token"
+  width="100%"
+  height="500"
+  style="border:0"
+  loading="lazy">
+</iframe>
+```
+
+<Callout type="warning" title="Before you continue">
+Do not send the token in the query string (`?embedToken=`). Query strings can end up in server access logs and Referer headers. Always use the fragment (`#embedToken=`).
+</Callout>
+
+### Allowed sites only mode
+
+This mode does not require a token.
+
+```html
+<iframe
+  src="https://form-address/f/{formId}"
+  width="100%"
+  height="500"
+  style="border:0"
+  loading="lazy">
+</iframe>
+```
+
+Enter only the scheme and host for allowed origins, like `https://your-site.com`. Do not include a trailing slash or a path.
+
+### The session after passing the gate
+
+Once the gate is passed, the result is kept for 2 hours. During that time respondents can refresh the page without a new token.
+
+## Integration flow
+
+In the signing modes, the form opens in this order.
+
+1. Check that the user is signed in to your service.
+2. Sign a token with the signing secret you were issued. In member identification mode, include the member ID in the token.
+3. Open the form with the signed token carried in the URL fragment.
+4. Walla verifies the token's signature and origin, then displays the form.
+
+
+## Troubleshooting
+
+<Accordions>
+  <Accordion title="The site is on the allowlist but the form won't open">
+    **Cause** The allowed origin includes a path or a trailing slash. **Fix** Keep only the scheme and host, then save again.
+  </Accordion>
+
+  <Accordion title="The restriction doesn't seem to apply">
+    **Cause** You're in `Allowed sites only` mode but the allowed origin list is empty. **Fix** Register at least one origin.
+  </Accordion>
+
+  <Accordion title="Everything was blocked right after I reissued the secret">
+    **Cause** Your host server is still signing with the old secret. **Fix** Replace the host's secret with the new value and redeploy. Sessions that were already open last up to 2 hours, so after that time all access is blocked.
+  </Accordion>
+
+  <Accordion title="I'm sending a token but it keeps getting rejected">
+    The token may be in the query string, expired, or have an invalid signature or `aud` value. Check that you pass the token in the fragment (`#embedToken=`), and verify the host server's signing secret, `aud`, and `exp`.
+  </Accordion>
+
+  <Accordion title="The member ID isn't used for duplicate response checks">
+    Check whether the mode is `Host-signed token`. To limit duplicate responses per member, use `Host-signed token + member identification` mode and put the member ID in the token's `sub`.
+  </Accordion>
+
+  <Accordion title="After reissuing, responses still come in under the old member info">
+    An already-open session may still be active. A session that passed the gate lasts up to 2 hours. Check again with a new token after 2 hours.
+  </Accordion>
+</Accordions>
+
+## Pre-launch checklist
+
+- [ ] Confirmed the mode you want is supported on your current plan.
+- [ ] Entered only the scheme and host for allowed origins.
+- [ ] Stored the signing secret only in host server environment variables.
+- [ ] Created a fresh token per request with a 5-minute lifetime.
+- [ ] Put the correct form ID in `aud`.
+- [ ] Included `sub` in tokens for member identification mode.
+- [ ] The iframe passes the token in the fragment (`#embedToken=`).
+- [ ] Verified on the real embed page that the form opens and submits correctly.
+
+<Callout title="When to use this">
+- You embedded a survey on an internal portal or member page and want to stop the link from leaking outside
+- Only members of your service should be able to respond
+- You want one response per member, but making them go through email verification is too much friction
+</Callout>

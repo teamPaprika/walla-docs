@@ -1,0 +1,73 @@
+---
+title: "トラッキング（隠しフィールド）"
+description: "トラッキングは、フォームの回答がどの経路から流入したかを把握できるようにする機能です。広告チャネルや顧客グループなど、さまざまな基準で回答を区別したいときに便利です。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## トラッキング項目（隠しフィールド）を追加する
+
+<Steps>
+  <Step>
+    ### トラッキング管理ページを開く
+    共有ページで `管理` ボタンをクリックします。
+  </Step>
+  <Step>
+    ### トラッキング項目を入力する
+    トラッキング名（隠しフィールド名）を入力したあと、Enter キーを押して登録しないと項目が作成されません。
+  </Step>
+  <Step>
+    ### 保存する
+    `保存` ボタンを押して保存します。
+  </Step>
+  <Step>
+    ### 活用する
+    登録した隠しフィールドは「流入経路を区別するためのカテゴリ」の役割を果たします。
+    - ① SNS 別の流入を確認 → 隠しフィールド名を `SNS` に設定（例: Instagram、YouTube など）
+    - ② 顧客グループ別に区別 → 隠しフィールド名を `customer` に設定
+  </Step>
+</Steps>
+## 隠しフィールドの URL を作る
+
+隠しフィールドを設定したら、フォームのリンク（URL）にそのフィールドを自分で追加する必要があります。
+
+<Steps>
+  <Step>
+    ### 基本のフォーム URL を用意する
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4
+    ```
+  </Step>
+  <Step>
+    ### 隠しフィールド名を追加する
+    `?フィールド名=` の形式で追加します。
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=
+    ```
+  </Step>
+  <Step>
+    ### フィールドの値を入力する
+    例: YouTube から流入した場合
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=youtube
+    ```
+  </Step>
+  <Step>
+    ### チャネル別にリンクを共有する
+    各リンクをチャネルごとに共有すると、回答シートで流入経路（例: YouTube、Instagram など）を確認できます。
+  </Step>
+</Steps>
+## 複数の隠しフィールドを使う
+
+- URL に複数の隠しフィールドを追加するには、「?」の代わりに「&」でつなげます。
+```
+https://walla.my/v/QA9S0imWeo232fSbd4?source=instagram&media=video
+```
+→ Instagram の動画広告からの流入という意味になります。
+<Callout type="warning" title="注意事項">
+- トラッキング項目の登録時は Enter を押さないと保存されません。
+- 隠しフィールド名は英数字とアンダースコア（_）だけで構成することをおすすめします。
+</Callout>
+<Callout title="ヒント">
+大量の隠しフィールド URL を作る必要がある場合は、[隠しフィールドのリンク生成 Google スプレッドシートのテンプレート](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing)を複製して使うと便利です。
+</Callout>

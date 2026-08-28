@@ -1,0 +1,55 @@
+---
+title: Integrar con Zapier
+description: Walla se conecta automáticamente con multitud de servicios a través de Zapier. Sigue estos pasos para configurarlo 👇
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Cómo configurar la integración
+
+<Steps>
+  <Step>
+    ### Elige Zapier e inicia sesión
+    En el menú «Integrar», selecciona Zapier e inicia sesión.
+  </Step>
+  <Step>
+    ### Selecciona Walla Form
+    En el paso App & event, elige «Walla Form».
+  </Step>
+  <Step>
+    ### Configura el Event
+    Define el Event como «New Response».
+  </Step>
+  <Step>
+    ### Inicia sesión con tu cuenta de Walla
+    En el apartado Account, inicia sesión con tu cuenta de Walla.
+  </Step>
+  <Step>
+    ### Elige el proyecto
+    Selecciona equipo, espacio de trabajo y proyecto para indicar de cuál quieres recibir las notificaciones de respuesta.
+  </Step>
+    <Step>
+    ### Elige una respuesta de prueba
+    Para probar el Zap, selecciona una de las respuestas ya recogidas y pulsa el botón `Continue with selected account`.
+  </Step>
+  <Step>
+    ### Conecta el servicio externo
+    En el siguiente paso Account, elige el servicio externo que quieres conectar. (Por ejemplo, Google Sheets o Slack.)
+  </Step>
+  <Step>
+    ### Configura las opciones
+    Define las opciones de envío del servicio externo, como Gmail o Google Sheets.
+  </Step>
+    <Step>
+    ### Haz una prueba
+    Si quieres comprobarlo, pulsa `Test Step`; si no necesitas probarlo, pulsa `Skip Test`.
+  </Step>
+  <Step>
+    ### Guarda
+    Cuando termines la prueba, pulsa el botón `Publish` para guardar.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atención al integrar con Google Sheets">
+Para sincronizar con Google Sheets a través de Zapier, la primera fila de la hoja debe contener encabezados (nombres de columna). Solo con esos encabezados se registrarán correctamente las respuestas.
+</Callout>

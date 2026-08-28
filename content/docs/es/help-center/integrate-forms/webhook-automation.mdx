@@ -1,0 +1,276 @@
+---
+title: "Automatización (webhooks)"
+description: "La automatización envía los datos al instante a servicios externos (webhooks, Slack, Discord, Gmail, etc.) en cuanto se recibe una respuesta en tu formulario."
+---
+## Crear un webhook personalizado
+
+Tras crear la automatización, en la pantalla de edición detallada puedes afinar mucho más la configuración.
+<Steps>
+  <Step>
+    ### Entra en la página de integraciones
+    Haz clic en `Integrar`, en la parte superior del editor del proyecto.
+
+  </Step>
+  <Step>
+    ### Añade una automatización
+    En la sección «Mis automatizaciones», pulsa el botón `Nueva automatización` para empezar.
+
+  </Step>
+  <Step>
+    ### Créala
+    En la ventana emergente, introduce el nombre y demás datos de la automatización, elige el tipo de disparador y pulsa `Crear`.
+	    - **Nombre de la automatización**: el nombre con el que la distinguirás.
+	    - **Tipo de disparador**: la condición que activa la automatización (al enviarse el formulario, al descartarse a alguien, etc.). El tipo de disparador no se puede cambiar después de crearla.
+
+  </Step>
+  <Step>
+    ### Configura la ruta (lógica)
+    Puedes aplicar filtros para que la notificación se envíe según ciertas condiciones (cuando la respuesta de opción múltiple sea A, cuando el texto corto contenga B, etc.).
+	    - Con el `+` de la esquina superior derecha puedes crear varias rutas. Si no conectas un módulo de automatización a cada ruta, funcionará como ruta predeterminada (notificación para todas las respuestas).
+	    - Con `+ Añadir condición`, al final de cada ruta, puedes definir condiciones combinadas.
+
+  </Step>
+  <Step>
+    ### Introduce la dirección del webhook
+    **Dirección del webhook**: la dirección del servidor que recibirá los datos.
+
+  </Step>
+  <Step>
+    ### Define el formato de envío del webhook
+	    Elige entre enviar en modo automático (el Body predeterminado del webhook) o definir un Body personalizado. Si eliges el automático, puedes activarlo y usarlo justo después de guardar; si eliges el Body personalizado, continúa con los pasos siguientes.
+	    - **Automático (predeterminado)**: los datos de respuesta del formulario se incluyen automáticamente en el payload. Al abrir la `vista previa` puedes comprobar de antemano cómo será el payload que se enviará.
+	    - **Personalizado**: defines tú el tipo de petición, las Headers y el Body.
+
+  </Step>
+  <Step>
+    ### Configura el tipo de petición y las Headers
+	    - **Tipo de petición**: POST / GET / PUT, etc.
+	    - **Headers**: añade `Content-Type`, tokens de autenticación, etc., si los necesitas
+
+  </Step>
+    <Step>
+    ### Edita el Body
+	    Puedes modificar libremente el texto del mensaje que se enviará o insertar valores de respuesta (`{{responseKey}}`) como variables.
+
+  </Step>
+    <Step>
+    ### Configura la autenticación (opcional)
+    Al usar el webhook puedes elegir métodos de autenticación como `Bearer Token`, `Basic Auth` o `API Key`.
+
+  </Step>
+    <Step>
+    ### Incluir los valores de los campos ocultos (opcional)
+	    Al activar `Incluir valores de campos ocultos` en los ajustes avanzados, los valores recogidos con el [seguimiento (campos ocultos)](/es/docs/help-center/share-forms/tracking-hidden-fields) se incluyen también en los datos que envía el webhook. Úsalo cuando necesites pasar a un servicio externo información de seguimiento como el canal de procedencia o el grupo de clientes. Si lo desactivas, solo se envían los valores de respuesta sin los campos ocultos.
+
+  </Step>
+    <Step>
+    ### Guarda los cambios y actívalo
+    El webhook solo funciona de verdad cuando guardas los cambios y pulsas activar.
+
+  </Step>
+</Steps>
+## Integración con Slack: notificaciones al recibir respuestas
+
+<Steps>
+ <Step>
+    ### Pulsa Create New App
+    En [https://api.slack.com/apps](https://api.slack.com/apps), haz clic en «Create New App».
+
+  </Step>
+  <Step>
+    ### Elige From scratch
+    Selecciona «From scratch».
+
+  </Step>
+  <Step>
+    ### Define el nombre de la app y el espacio de trabajo
+    Escribe el nombre de la app en «App Name» y elige en qué espacio de trabajo funcionará.
+
+  </Step>
+  <Step>
+    ### Activa Incoming Webhooks
+    Activa «Incoming Webhooks» y después haz clic en «Add New Webhook».
+
+  </Step>
+  <Step>
+    ### Elige el canal
+    Selecciona el canal del espacio de trabajo al que quieres aplicar el webhook.
+
+  </Step>
+  <Step>
+    ### Copia la Webhook URL
+    Copia la Webhook URL en «Install App».
+
+  </Step>
+<Step>
+    ### Entra en la página de integraciones
+    Haz clic en `Integrar`, en la parte superior del editor del proyecto.
+
+  </Step>
+  <Step>
+    ### Añade una automatización de Slack
+    En la sección «Mis automatizaciones», pulsa el botón `Slack` para empezar.
+
+  </Step>
+  <Step>
+    ### Créala
+    En la ventana emergente, introduce el nombre y demás datos de la automatización, elige el tipo de disparador y pulsa `Crear`.
+	    - **Nombre de la automatización**: el nombre con el que la distinguirás.
+	    - **Tipo de disparador**: la condición que activa la automatización (al enviarse el formulario, al descartarse a alguien, etc.). El tipo de disparador no se puede cambiar después de crearla.
+	    - **Webhook URL**: la dirección del servidor de Slack que recibirá los datos. Puedes ver cómo configurar la Webhook URL de Slack [aquí](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/).
+	    - **Body Preset**: define con qué formato llegará la notificación del webhook a Slack.
+
+  </Step>
+  <Step>
+    ### Configura la ruta (lógica)
+    Puedes aplicar filtros para que la notificación se envíe según ciertas condiciones (cuando la respuesta de opción múltiple sea A, cuando el texto corto contenga B, etc.).
+	    - Con el `+` de la esquina superior derecha puedes crear varias rutas. Si no conectas un módulo de automatización a cada ruta, funcionará como ruta predeterminada (notificación para todas las respuestas).
+	    - Con `+ Añadir condición`, al final de cada ruta, puedes definir condiciones combinadas.
+
+  </Step>
+  <Step>
+    ### Guarda los cambios y actívalo
+    El webhook solo funciona de verdad cuando guardas los cambios y pulsas activar.
+
+  </Step>
+</Steps>
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Integración con Discord: notificaciones al recibir respuestas
+
+<Steps>
+ <Step>
+    ### Entra en la edición del canal de Discord
+    Haz clic en el icono del engranaje que hay a la derecha del nombre del canal.
+
+  </Step>
+  <Step>
+    ### Crea un «webhook» nuevo y copia su URL
+    En la pestaña de integraciones, pulsa el botón `Nuevo webhook` para crear uno y haz clic en `Copiar URL del webhook`
+
+  </Step>
+<Step>
+    ### Entra en la página de integraciones
+    Haz clic en `Integrar`, en la parte superior del editor del proyecto.
+
+  </Step>
+  <Step>
+    ### Añade una automatización de Discord
+    En la sección «Mis automatizaciones», pulsa el botón `Discord` para empezar.
+
+  </Step>
+  <Step>
+    ### Créala
+    En la ventana emergente, introduce el nombre y demás datos de la automatización, elige el tipo de disparador y pulsa `Crear`.
+	    - **Nombre de la automatización**: el nombre con el que la distinguirás.
+	    - **Tipo de disparador**: la condición que activa la automatización (al enviarse el formulario, al descartarse a alguien, etc.). El tipo de disparador no se puede cambiar después de crearla.
+	    - **Webhook URL**: la dirección del servidor de Discord que recibirá los datos.
+	    - **Body Preset**: define con qué formato llegará la notificación del webhook a Discord.
+
+  </Step>
+  <Step>
+    ### Configura la ruta (lógica)
+    Puedes aplicar filtros para que la notificación se envíe según ciertas condiciones (cuando la respuesta de opción múltiple sea A, cuando el texto corto contenga B, etc.).
+	    - Con el `+` de la esquina superior derecha puedes crear varias rutas. Si no conectas un módulo de automatización a cada ruta, funcionará como ruta predeterminada (notificación para todas las respuestas).
+	    - Con `+ Añadir condición`, al final de cada ruta, puedes definir condiciones combinadas.
+
+  </Step>
+  <Step>
+    ### Guarda los cambios y actívalo
+    El webhook solo funciona de verdad cuando guardas los cambios y pulsas activar.
+
+  </Step>
+</Steps>
+
+## Integración con Gmail: enviar correos al recibir respuestas
+
+<Steps>
+  <Step>
+    ### Entra en la página de integraciones
+    Haz clic en `Integrar`, en la parte superior del editor del proyecto.
+
+  </Step>
+  <Step>
+    ### Añade una automatización
+    En la sección «Mis automatizaciones», pulsa el botón `Gmail` para empezar.
+
+  </Step>
+  <Step>
+    ### Créala
+    En la ventana emergente, introduce el nombre y demás datos de la automatización, elige el tipo de disparador y pulsa `Crear`.
+	    - **Nombre de la automatización**: el nombre con el que la distinguirás.
+	    - **Tipo de disparador**: la condición que activa la automatización (al enviarse el formulario, al descartarse a alguien, etc.). El tipo de disparador no se puede cambiar después de crearla.
+	    - **Remitente**: la cuenta de Google desde la que se enviará el correo. Elige una cuenta ya integrada en el espacio de trabajo o inicia sesión con una nueva.
+
+  </Step>
+  <Step>
+    ### Configura la ruta (lógica)
+    Puedes aplicar filtros para que la notificación se envíe según ciertas condiciones (cuando la respuesta de opción múltiple sea A, cuando el texto corto contenga B, etc.).
+	    - Con el `+` de la esquina superior derecha puedes crear varias rutas. Si no conectas un módulo de automatización a cada ruta, funcionará como ruta predeterminada (notificación para todas las respuestas).
+	    - Con `+ Añadir condición`, al final de cada ruta, puedes definir condiciones combinadas.
+
+  </Step>
+  <Step>
+    ### Indica el remitente
+	    Selecciona la cuenta de Google desde la que se enviará el correo y escribe el nombre del remitente.
+
+  </Step>
+  <Step>
+    ### Indica los destinatarios
+	    - Escribe la cuenta que recibirá el correo.
+	    - Puedes escribir la dirección directamente o definirla de forma dinámica con la referencia de valores (@).
+	    - Para añadir varias direcciones, sepáralas con comas (,), espacios o la tecla Enter.
+	    - Algunas referencias predefinidas, como responseKey o timestamp, no se pueden usar como dirección de correo.
+	    - Te recomendamos usar como referencia el campo de correo electrónico. Si el formato del correo no es válido, el envío puede fallar.
+
+  </Step>
+    <Step>
+    ### Indica CC, CCO y la dirección de respuesta
+	    - Escribe las cuentas que recibirán el correo en copia o copia oculta, o la dirección de respuesta.
+	    - Puedes escribir la dirección directamente o definirla de forma dinámica con la referencia de valores (@).
+	    - Para añadir varias direcciones, sepáralas con comas (,), espacios o la tecla Enter.
+	    - Algunas referencias predefinidas, como responseKey o timestamp, no se pueden usar como dirección de correo.
+
+  </Step>
+    <Step>
+    ### Incluir los valores de los campos ocultos (opcional)
+	    Al activar `Incluir valores de campos ocultos` en los ajustes avanzados, los valores recogidos con el [seguimiento (campos ocultos)](/es/docs/help-center/share-forms/tracking-hidden-fields) se incluyen también en el correo. Si lo desactivas, solo se usan los valores de respuesta sin los campos ocultos.
+	    <Callout type="warning" title="Advertencia">
+    Los campos ocultos pueden contener valores que la persona no ha escrito, como el canal de procedencia o un identificador de cliente. Si el correo se envía a destinatarios externos, comprueba qué valores se transmitirán antes de activarlo.
+    </Callout>
+    
+
+    
+  </Step>
+    <Step>
+    ### Guarda los cambios y actívalo
+    El webhook solo funciona de verdad cuando guardas los cambios y pulsas activar.
+
+  </Step>
+</Steps>
+
+## Probar el webhook
+
+Antes de activar el webhook puedes comprobar con un envío de prueba que funciona correctamente.
+
+### 1. Probar con una respuesta existente
+- Al pulsar el icono de `flecha hacia abajo` junto al botón `Probar`, puedes probar el webhook con una respuesta ya enviada. Elige la respuesta que quieras usar y haz clic en `Ejecutar prueba`.
+<Callout type="warning" title="Advertencia">
+Si has indicado un campo de correo como destinatario en la automatización de Gmail, te recomendamos probar con una respuesta existente para comprobar bien la recepción.
+</Callout>
+
+
+### 2. Probar con valores aleatorios
+- Si todavía no hay ninguna respuesta enviada, pulsa el botón `Probar` para probar el webhook con valores aleatorios.
+
+## Reenviar el webhook (cuando el envío falla)
+
+
+- Si el envío del webhook falla, puedes reenviarlo.
+- En el resumen del error puedes ver por qué falló el envío.
+	- Por ejemplo, si en la automatización de Gmail aparece «At least one 'to' recipient is required», significa que no se puede enviar porque no has indicado destinatarios.
+	- Si aparece «Webhook failed with status: 400», significa que el servidor del webhook recibió la petición pero la rechazó por considerarla una «petición incorrecta (Bad Request)», es decir, que el formato de los datos enviados no era válido.
+### Cómo reenviarlo
+- **Reintentar con la configuración original**: reenvía con la configuración guardada en el momento de la ejecución. Resulta útil para reintentar en las mismas condiciones sin cambiar nada. Si el fallo se debió a un error temporal del servidor, prueba primero con esta opción.
+- **Reenviar con la configuración actual**: reenvía con la configuración de automatización guardada ahora mismo. Resulta útil para reintentar tras corregir los ajustes. Si el error se debió a que faltaban destinatarios o el formato de los datos no era correcto, corrígelo y pulsa reenviar con la configuración actual.

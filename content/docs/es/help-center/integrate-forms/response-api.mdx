@@ -1,0 +1,411 @@
+---
+title: "API de respuestas"
+description: "Consulta y gestiona los datos de tus formularios y sus respuestas con la Walla Open API."
+---
+
+## Guía de la Walla Open API
+
+Con la Walla Open API puedes consultar y gestionar mediante programación los datos de los formularios y sus respuestas.
+
+## Información de versión
+
+- **Versión actual de la API:** v1
+- **Documentación Swagger:** [https://app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+
+Cuando haya cambios, se publicarán como una versión nueva.
+
+## Configurar la autenticación de la API
+### Obtener la clave de API
+
+- Inicia sesión en Walla.
+- Accede al visor de claves de API ([https://app.walla.my/open-api/doc](https://app.walla.my/)).
+- Una vez generada la clave, guárdala en un lugar seguro.
+### Método de autenticación
+
+La API de Walla utiliza autenticación por API Key. Incluye la siguiente cabecera en todas las peticiones.
+
+```
+X-WALLA-API-KEY: {tu clave de API}
+```
+
+### URL base
+
+```
+https://app.walla.my/open-api/v1
+```
+
+## Endpoints de la API
+### Espacios de trabajo
+#### Consultar la lista de espacios de trabajo
+
+Consulta la lista de todos los espacios de trabajo a los que tienes acceso.
+
+```
+GET /open-api/v1/workspaces
+```
+
+**Ejemplo de respuesta:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "workspace_abc123",      "name": "Espacio del equipo de marketing",  
+      "teamId": "team_xyz789",      "createdAt": "2024-01-15T09:00:00Z",      "updatedAt": "2024-01-20T14:30:00Z"    }  ]}
+```
+
+#### Consultar el detalle de un espacio de trabajo
+
+Consulta la información detallada de un espacio de trabajo concreto.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| workspaceId | Ruta | O | ID del espacio de trabajo |
+### Formularios (proyectos)
+#### Consultar todos los formularios
+
+Consulta la lista de formularios de todos los espacios de trabajo a los que tienes acceso.
+
+```
+GET /open-api/v1/forms
+```
+
+#### Consultar los formularios de un espacio de trabajo
+
+Consulta la lista de formularios de un espacio de trabajo concreto.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}/forms
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| workspaceId | Ruta | O | ID del espacio de trabajo |
+#### Consultar el detalle de un formulario
+
+Consulta la información detallada de un formulario concreto.
+
+```
+GET /open-api/v1/forms/{formId}
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| formId | Ruta | O | ID del formulario |
+
+**Ejemplo de respuesta:**
+
+```
+{  
+  "success": true,  "data": {    "id": "form_abc123",    "title": "Encuesta de satisfacción del cliente",  
+    "description": "Valora tu satisfacción tras usar el servicio",  
+    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "creator": "user_123",    "isDeleted": false,    "createdAt": "2024-01-15T09:00:00Z",    "updatedAt": "2024-01-20T14:30:00Z"  }}
+```
+
+### Campos
+#### Consultar los campos de un formulario
+
+Consulta la lista de campos publicados de un formulario concreto.
+
+```
+GET /open-api/v1/forms/{formId}/fields
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| formId | Ruta | O | ID del formulario (el ID del formulario publicado) |
+
+**Ejemplo de respuesta:**
+
+```
+{  
+  "success": true,  "data": {    "fields": [      {        "id": "field_001",        "label": "Introduce tu nombre",  
+        "fieldType": "SHORT_TEXT",        "outputType": "string"      },      {        "id": "field_002",        "label": "Elige tu nivel de satisfacción",  
+        "fieldType": "RADIO",        "outputType": "string"      }    ]  }}
+```
+
+#### Consultar el detalle de un campo
+
+Consulta la información detallada de un campo (propiedades, reglas de validación, esquema de salida, etc.).
+
+```
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| formId | Ruta | O | ID del formulario |
+| fieldId | Ruta | O | ID del campo |
+#### Consultar los esquemas de salida de los campos
+
+Consulta la correspondencia entre cada tipo de campo y su esquema de salida. Te permite saber qué formato de datos devuelve cada tipo.
+
+```
+GET /open-api/v1/field-output-schemas
+```
+
+### Datos de respuesta
+#### Consultar la lista de respuestas
+
+Consulta con paginación la lista de respuestas de un formulario. Con el parámetro `customerKey` también puedes filtrar solo las respuestas de un cliente concreto.
+
+```
+GET /open-api/v1/forms/{formId}/responses
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| formId | Ruta | O | ID del formulario |
+| customerKey | Consulta | X | Filtra por clave de cliente (solo las respuestas con ese customerKey) |
+| page | Consulta | X | Número de página (empieza en 1, por defecto: 1) |
+| limit | Consulta | X | Respuestas por página (máximo 100, por defecto: 20) |
+
+**Ejemplo de respuesta:**
+
+```
+{  
+  "success": true,  "data": {    "responses": [      {        "responseId": "resp_abc123",        "customerKey": "customer_001",        "submittedAt": "2024-01-20T14:30:00Z",        "field_001": "Ana García",  
+        "field_002": "Muy satisfecho",  
+        "hidden-field_utm": "facebook"      }    ],    "pagination": {      "page": 1,      "limit": 20,      "totalCount": 150,      "totalPages": 8    }  }}
+```
+
+**Ejemplo de filtrado por customerKey:**
+
+```
+GET /open-api/v1/forms/{formId}/responses?customerKey=customer_001
+```
+
+#### Consultar una respuesta concreta
+
+Consulta la información detallada de una respuesta concreta.
+
+```
+GET /open-api/v1/forms/{formId}/responses/{responseId}
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| formId | Ruta | O | ID del formulario |
+| responseId | Ruta | O | ID de la respuesta |
+
+**Ejemplo de respuesta:**
+
+```
+{  
+  "success": true,  "data": {    "responseId": "resp_abc123",    "formId": "form_abc123",    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "response": {      "field_001": "Ana García",  
+      "field_002": "Muy satisfecho",  
+      "hidden-field_utm": "facebook"    },    "submittedAt": "2024-01-20T14:30:00Z",    "customerKey": "customer_001",    "startedAt": "2024-01-20T14:25:00Z"  }}
+```
+
+### Form Delivery (envío)
+> **Nota:** la función Form Delivery solo está disponible en entornos ONPREM. No se puede usar en el entorno SaaS.
+#### Enviar un formulario
+
+Envía un proyecto concreto (un formulario publicado) a sus destinatarios. Los formularios sin publicar no se pueden enviar.
+
+```
+POST /open-api/v1/forms/{formId}/delivery
+```
+
+**Parámetros:**
+
+| Nombre | Ubicación | Obligatorio | Descripción |
+| --- | --- | --- | --- |
+| formId | Ruta | O | ID del formulario |
+
+**Cuerpo de la petición:**
+
+```
+{  
+  "recipients": [    {      "customerKey": "customer_001",      "email": "user@example.com",      "phoneNumber": "010-1234-5678"    }  ],  "subject": "Has recibido un formulario.",  
+  "message": "Consulta el enlace del formulario."  
+}
+```
+
+| Campo | Obligatorio | Descripción |
+| --- | --- | --- |
+| recipients | O | Lista de destinatarios (array) |
+| recipients[].customerKey | O | Clave identificadora del cliente |
+| recipients[].email | X | Correo electrónico |
+| recipients[].phoneNumber | X | Teléfono |
+| subject | X | Asunto del correo (por defecto: "Has recibido un formulario.") |
+| message | X | Mensaje del envío |
+#### Consultar la lista de destinatarios
+
+Consulta la lista completa de destinatarios de un proyecto.
+
+```
+GET /open-api/v1/forms/{formId}/delivery
+```
+
+#### Consultar el estado de los destinatarios
+
+Consulta el estado de determinados destinatarios.
+
+```
+POST /open-api/v1/forms/{formId}/delivery/status
+```
+
+**Cuerpo de la petición:**
+
+```
+{  
+  "customerKeys": ["customer_001", "customer_002"]}
+```
+
+**Ejemplo de respuesta:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "delivery_abc123",      "formId": "form_abc123",      "customerKey": "customer_001",      "email": "user@example.com",      "status": "RESPONDED",      "lastSentAt": "2024-01-20T10:00:00Z",      "createdAt": "2024-01-19T09:00:00Z"    }  ]}
+```
+
+**Valores del estado de envío:**
+
+| Estado | Descripción |
+| --- | --- |
+| NOT_SENT | Todavía no enviado |
+| SENT | Enviado |
+| OPENED | Ha abierto el enlace |
+| RESPONDED | Ha completado la respuesta |
+### Estructura de los datos de respuesta
+#### Formato del valor según el tipo de campo
+
+El formato de cada valor depende del tipo de campo.
+
+| Tipo de campo | Formato de salida | Ejemplo |
+| --- | --- | --- |
+| SHORT_TEXT, LONG_TEXT | string | `"Ana García"` |
+| DATE, NUMBER | string | `"2024-01-20"`, `"42"` |
+| EMAIL, PHONE_NUMBER, ADDRESS | string | `"user@example.com"` |
+| FILE_UPLOAD, IMAGE_UPLOAD, VIDEO_UPLOAD | string | `"https://...file1.pdf"` |
+| RADIO, DROPDOWN | string[] | `["Opción1"]` |
+| CHECKBOX, DROPDOWN_MULTI, PICTURE_CHOICE, LINEAR | string[] | `["Opción1", "Opción2"]` |
+| RADIO_GRID, CHECKBOX_GRID | Record&lt;string, string[]&gt; | `{ "Fila1": ["Columna1"] }` |
+| GEOLOCATION | object | `{ "latitude": "37.5665", "longitude": "126.9780" }` |
+| TABLE | object | `{ "Fila1": { "Columna1": "Valor1" } }` |
+| CUSTOM | Según el `outputSchema` de la versión del campo personalizado | `{ "score": 85 }` |
+
+Consulta el esquema de salida detallado en la API `GET /open-api/v1/field-output-schemas`.
+
+#### Campos ocultos
+
+Los campos ocultos se incluyen en los datos de respuesta con claves del formato `hidden-{IDdelCampo}`.
+
+```
+{  
+  "hidden-field_abc123": "facebook",  "hidden-field_xyz789": "spring_campaign"}
+```
+
+Los valores de los campos ocultos se pasan como parámetros de la URL.
+
+```
+https://walla.my/v/{formId}?utm_source=facebook&utm_campaign=spring_campaign
+```
+
+#### customerKey
+
+`customerKey` es el valor que Form Delivery genera automáticamente para identificar a cada destinatario.
+
+- Se usa para seguir el estado del envío (enviado → abierto → respondido).
+- Puedes aprovecharlo para filtrar los datos de respuesta.
+- Si no usas Form Delivery, puede estar vacío.
+## Respuestas de error
+
+Cuando una petición falla, se devuelven un código de estado HTTP y un mensaje de error.
+
+| Código de estado | Descripción |
+| --- | --- |
+| 400 | Petición incorrecta (parámetros erróneos, etc.) |
+| 401 | Fallo de autenticación (falta la clave de API o no es válida) |
+| 403 | Sin permisos (no puedes acceder a ese recurso) |
+| 404 | Recurso no encontrado |
+| 500 | Error del servidor |
+
+**Ejemplo de respuesta de error:**
+
+```
+{  
+  "error": "Form not found or not published"}
+```
+
+## Ejemplos de uso
+### 1. Escenario de integración de respuestas con customerKey
+
+
+- Usa el ID de cliente de tu sistema externo como `customerKey` de Walla.
+- `GET /forms/{formId}/responses?customerKey={customerKey}` para consultar las respuestas de ese cliente.
+- Si `totalCount` es mayor que 0, existen respuestas.
+### 2. Consultar la lista de respuestas de un formulario
+
+```
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 3. Consultar una respuesta concreta  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 4. Filtrar respuestas por customerKey  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 5. Enviar un formulario con Form Delivery  
+  
+```bash  
+curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X-WALLA-API-KEY: your_api_key" \  -H "Content-Type: application/json" \  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "Encuesta de satisfacción del cliente",  
+    "message": "Cuéntanos tu opinión, nos importa."  
+  }'```
+```
+
+## Field Type
+| Type | Name |
+| --- | --- |
+| RADIO | Opción múltiple |
+| CHECKBOX | Selección múltiple |
+| PICTURE_CHOICE | Selección con imágenes |
+| DROPDOWN | Desplegable |
+| DROPDOWN_MULTI | Desplegable (selección múltiple) |
+| LINEAR | Escala lineal |
+| RADIO_GRID | Cuadrícula de opción múltiple |
+| CHECKBOX_GRID | Cuadrícula de selección múltiple |
+| PRIVACY_POLICY_INFORMATION | Consentimiento de datos personales |
+| SHORT_TEXT | Texto corto |
+| LONG_TEXT | Texto largo |
+| NUMBER | Número |
+| TABLE | Tabla |
+| SECRETS | Información confidencial |
+| DESCRIPTION | Descripción |
+| WEBSITE_LINK | Incrustación |
+| DATE | Fecha |
+| TIME | Hora |
+| EMAIL | Correo electrónico |
+| ADDRESS | Dirección |
+| PHONE_NUMBER | Teléfono |
+| FILE_UPLOAD | Subida de archivos |
+| IMAGE_UPLOAD | Foto |
+| VIDEO_UPLOAD | Vídeo |
+| GEOLOCATION | Ubicación |
+| TOSS_PAYMENTS | Toss Payments |
+| CUSTOM | Campo personalizado |
+| REJECT | Descarte |
+| ENDING_DESCRIPTION | Campo final (página de cierre) |
+| ENDING_REDIRECT | Campo final (ir a una URL) |
+| SUBMIT | Enviar |

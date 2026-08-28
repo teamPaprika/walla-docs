@@ -1,0 +1,55 @@
+---
+title: 用 Zapier 整合
+description: Walla 可以透過 Zapier 自動串接各種服務。跟著以下步驟設定看看吧 👇
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 整合設定方式
+
+<Steps>
+  <Step>
+    ### 選擇 Zapier 並登入
+    在「整合」選單中選擇 Zapier 並登入。
+  </Step>
+  <Step>
+    ### 選擇 Walla Form
+    在 App & event 步驟中選擇「Walla Form」。
+  </Step>
+  <Step>
+    ### 設定 Event
+    請把 Event 設為「New Response」。
+  </Step>
+  <Step>
+    ### 登入 Walla 帳號
+    在 Account 項目中用 Walla 帳號登入。
+  </Step>
+  <Step>
+    ### 選擇專案
+    依序選擇團隊、工作區、專案，指定你想接收回覆通知的專案。
+  </Step>
+    <Step>
+    ### 選擇測試用回覆
+    為了測試 Zapier，請從已收集的回覆中選擇一筆，然後點選 `Continue with selected account` 按鈕。
+  </Step>
+  <Step>
+    ### 連接外部服務
+    在下一個 Account 步驟中選擇要連接的外部服務。（例如 Google Sheets、Slack 等）
+  </Step>
+  <Step>
+    ### 設定細部選項
+    設定 Gmail、Google Sheets 等外部服務的細部發送選項。
+  </Step>
+    <Step>
+    ### 測試
+    想測試確認的話點選 `Test Step`；不需要測試則點選 `Skip Test`。
+  </Step>
+  <Step>
+    ### 儲存
+    測試完成後，點選 `Publish` 按鈕儲存。
+  </Step>
+</Steps>
+
+<Callout type="warning" title="整合 Google Sheets 時的注意事項">
+要透過 Zapier 與 Google Sheets 整合時，Google Sheets 的第一列一定要設定好標頭（欄位名稱）。有這些標頭值，回覆才會被正確記錄。
+</Callout>
