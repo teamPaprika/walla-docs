@@ -11,9 +11,6 @@ importers:
       '@orama/orama':
         specifier: ^3.1.18
         version: 3.1.18
-      '@takumi-rs/image-response':
-        specifier: ^0.73.1
-        version: 0.73.1
       fumadocs-core:
         specifier: 16.7.6
         version: 16.7.6(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.14)(lucide-react@1.6.0(react@19.2.4))(next@16.2.1(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod@4.3.6)
@@ -4591,18 +4588,22 @@ snapshots:
       '@takumi-rs/core-linux-x64-musl': 0.73.1
       '@takumi-rs/core-win32-arm64-msvc': 0.73.1
       '@takumi-rs/core-win32-x64-msvc': 0.73.1
+    optional: true
 
-  '@takumi-rs/helpers@0.73.1': {}
+  '@takumi-rs/helpers@0.73.1':
+    optional: true
 
   '@takumi-rs/image-response@0.73.1':
     dependencies:
       '@takumi-rs/core': 0.73.1
       '@takumi-rs/helpers': 0.73.1
       '@takumi-rs/wasm': 0.73.1
+    optional: true
 
   '@takumi-rs/wasm@0.73.1':
     dependencies:
       '@takumi-rs/helpers': 0.73.1
+    optional: true
 
   '@tybys/wasm-util@0.10.1':
     dependencies:

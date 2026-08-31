@@ -1,4 +1,4 @@
-import { getPageImage, source } from '@/lib/source';
+import { source } from '@/lib/source';
 import {
   DocsBody,
   DocsDescription,
@@ -10,6 +10,7 @@ import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { i18n } from '@/lib/i18n';
+import { ogImage } from '@/lib/shared';
 
 export default async function Page(props: {
   params: Promise<{ lang: string; slug?: string[] }>;
@@ -56,7 +57,7 @@ export async function generateMetadata(props: {
     title: page.data.title,
     description: page.data.description,
     openGraph: {
-      images: getPageImage(page).url,
+      images: ogImage,
     },
   };
 }
