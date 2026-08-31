@@ -2,6 +2,8 @@ import './global.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  // 정적 내보내기라 요청 호스트를 알 수 없다. 없으면 og:image 가 localhost 로 굳는다.
+  metadataBase: new URL('https://docs.walla.my'),
   icons: {
     icon: '/favicon.ico',
   },

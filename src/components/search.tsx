@@ -48,6 +48,7 @@ export default function DefaultSearchDialog(props: SharedProps) {
   const locale = useLocaleFromPath();
   const { search, setSearch, query } = useDocsSearch({
     type: 'static',
+    from: `/api/search/${locale}`,
     initOrama,
     locale,
   });
