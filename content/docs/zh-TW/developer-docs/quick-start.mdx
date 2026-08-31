@@ -1,0 +1,439 @@
+---
+title: 快速上手指南
+description: 幾分鐘內開始使用 Walla Open API
+---
+
+# 快速上手指南
+
+本指南會帶你快速走過 Walla Open API 的基本流程：驗證、查詢表單、查詢回覆。
+
+## 事前準備
+
+開始之前請先確認下列項目。
+
+- 具備工作區存取權限的 Walla 帳號
+- API 金鑰（在 Walla 工作區設定中發行）
+- 工作區中至少有 1 份已發布的表單
+
+## 步驟 1：環境設定
+
+首先把 API 金鑰安全地存放在環境變數中。
+
+### 選項 A：使用 .env 檔案
+
+在專案根目錄建立 `.env` 檔案。
+
+```bash
+WALLA_API_KEY=your_api_key_here
+```
+
+> **重要**：請把 `.env` 檔案加進 `.gitignore`，避免 API 金鑰被提交進版控。
+
+### 選項 B：在 shell 中匯出
+
+```bash
+export WALLA_API_KEY=your_api_key_here
+```
+
+## 步驟 2：發出第一個 API 呼叫
+
+用查詢工作區來確認 API 金鑰是否正常運作。
+
+### 使用 cURL
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: $WALLA_API_KEY" \
+  -H "Content-Type: application/json"
+```
+
+### 使用 JavaScript/TypeScript
+
+```javascript
+// 需要先安裝 dotenv：npm install dotenv
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+async function getWorkspaces() {
+  const response = await fetch(`${BASE_URL}/workspaces`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 執行
+getWorkspaces()
+  .then(workspaces => {
+    console.log('Your workspaces:');
+    workspaces.forEach(ws => {
+      console.log(`- ${ws.name} (ID: ${ws.id})`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### 使用 Python
+
+```python
+# 安裝 requests：pip install requests python-dotenv
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_KEY = os.getenv('WALLA_API_KEY')
+BASE_URL = 'https://api.walla.my/open-api/v1'
+
+def get_workspaces():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/workspaces', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# 執行
+if __name__ == '__main__':
+    workspaces = get_workspaces()
+    print('Your workspaces:')
+    for ws in workspaces:
+        print(f"- {ws['name']} (ID: {ws['id']})")
+```
+
+**預期輸出：**
+
+```
+Your workspaces:
+- Marketing Team (ID: workspace_123)
+- Customer Success (ID: workspace_456)
+```
+
+## 步驟 3：查詢表單清單
+
+試著查詢所有表單清單。
+
+### JavaScript
+
+```javascript
+async function getAllForms() {
+  const response = await fetch(`${BASE_URL}/forms`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+getAllForms()
+  .then(workspaces => {
+    workspaces.forEach(workspace => {
+      console.log(`\nWorkspace: ${workspace.workspaceName}`);
+      workspace.forms.forEach(formWrapper => {
+        const form = formWrapper.form;
+        console.log(`  - ${form.title} (ID: ${form.id})`);
+        console.log(`    Submissions: ${formWrapper.analytics.submissions}`);
+      });
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_all_forms():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/forms', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# 執行
+workspaces = get_all_forms()
+for workspace in workspaces:
+    print(f"\nWorkspace: {workspace['workspaceName']}")
+    for form_wrapper in workspace['forms']:
+        form = form_wrapper['form']
+        print(f"  - {form['title']} (ID: {form['id']})")
+        print(f"    Submissions: {form_wrapper['analytics']['submissions']}")
+```
+
+## 步驟 4：查詢表單回覆
+
+取得特定表單的回覆資料。
+
+### JavaScript
+
+```javascript
+async function getResponses(formId, page = 1, limit = 20) {
+  const url = new URL(`${BASE_URL}/forms/${formId}/responses`);
+  url.searchParams.set('page', page);
+  url.searchParams.set('limit', limit);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 查詢回覆
+getResponses('form_abc', 1, 10)
+  .then(data => {
+    console.log(`\nTotal responses: ${data.pagination.totalCount}`);
+    console.log(`Page ${data.pagination.page} of ${data.pagination.totalPages}\n`);
+
+    data.responses.forEach((response, index) => {
+      console.log(`Response ${index + 1}:`);
+      console.log(`  ID: ${response.responseId}`);
+      console.log(`  Customer: ${response.customerKey || 'Anonymous'}`);
+      console.log(`  Submitted: ${response.submittedAt}`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_responses(form_id, page=1, limit=20):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(
+        f'{BASE_URL}/forms/{form_id}/responses',
+        headers=headers,
+        params={'page': page, 'limit': limit}
+    )
+    response.raise_for_status()
+    return response.json()['data']
+
+# 查詢回覆
+data = get_responses('form_abc', page=1, limit=10)
+
+print(f"\nTotal responses: {data['pagination']['totalCount']}")
+print(f"Page {data['pagination']['page']} of {data['pagination']['totalPages']}\n")
+
+for i, response in enumerate(data['responses'], 1):
+    print(f"Response {i}:")
+    print(f"  ID: {response['responseId']}")
+    print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
+    print(f"  Submitted: {response['submittedAt']}")
+```
+
+## 完整流程範例
+
+這是把上述步驟整合成一體的範例。
+
+### JavaScript
+
+```javascript
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+class WallaAPI {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.headers = {
+      'X-WALLA-API-KEY': apiKey,
+      'Content-Type': 'application/json'
+    };
+  }
+
+  async request(endpoint, options = {}) {
+    const url = `${BASE_URL}${endpoint}`;
+    const response = await fetch(url, {
+      ...options,
+      headers: { ...this.headers, ...options.headers }
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error);
+    }
+
+    return await response.json();
+  }
+
+  async getWorkspaces() {
+    const data = await this.request('/workspaces');
+    return data.data;
+  }
+
+  async getForms() {
+    const data = await this.request('/forms');
+    return data.data;
+  }
+
+  async getResponses(formId, page = 1, limit = 20) {
+    const data = await this.request(
+      `/forms/${formId}/responses?page=${page}&limit=${limit}`
+    );
+    return data.data;
+  }
+}
+
+// 使用方式
+async function main() {
+  const api = new WallaAPI(API_KEY);
+
+  try {
+    // 1. 查詢工作區
+    const workspaces = await api.getWorkspaces();
+    console.log(`Found ${workspaces.length} workspaces`);
+
+    // 2. 查詢表單
+    const forms = await api.getForms();
+    const firstForm = forms[0]?.forms[0]?.form;
+
+    if (!firstForm) {
+      console.log('No forms found');
+      return;
+    }
+
+    console.log(`Using form: ${firstForm.title} (${firstForm.id})`);
+
+    // 3. 查詢回覆
+    const responses = await api.getResponses(firstForm.id);
+    console.log(`Total responses: ${responses.pagination.totalCount}`);
+
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+main();
+```
+
+### Python
+
+```python
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class WallaAPI:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = 'https://api.walla.my/open-api/v1'
+        self.headers = {
+            'X-WALLA-API-KEY': api_key,
+            'Content-Type': 'application/json'
+        }
+
+    def request(self, endpoint, method='GET', **kwargs):
+        url = f'{self.base_url}{endpoint}'
+        response = requests.request(
+            method,
+            url,
+            headers=self.headers,
+            **kwargs
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_workspaces(self):
+        return self.request('/workspaces')['data']
+
+    def get_forms(self):
+        return self.request('/forms')['data']
+
+    def get_responses(self, form_id, page=1, limit=20):
+        return self.request(
+            f'/forms/{form_id}/responses',
+            params={'page': page, 'limit': limit}
+        )['data']
+
+# 使用方式
+def main():
+    api = WallaAPI(os.getenv('WALLA_API_KEY'))
+
+    try:
+        # 1. 查詢工作區
+        workspaces = api.get_workspaces()
+        print(f'Found {len(workspaces)} workspaces')
+
+        # 2. 查詢表單
+        forms = api.get_forms()
+        if not forms or not forms[0]['forms']:
+            print('No forms found')
+            return
+
+        first_form = forms[0]['forms'][0]['form']
+        print(f"Using form: {first_form['title']} ({first_form['id']})")
+
+        # 3. 查詢回覆
+        responses = api.get_responses(first_form['id'])
+        print(f"Total responses: {responses['pagination']['totalCount']}")
+
+    except requests.RequestException as e:
+        print(f'Error: {e}')
+
+if __name__ == '__main__':
+    main()
+```
+
+## 下一步
+
+熟悉基本用法之後，也看看各個 API 參考文件吧。
+
+<Cards>
+  <Card title="Workspaces API" href="/zh-TW/docs/developer-docs/workspaces" />
+  <Card title="Forms API" href="/zh-TW/docs/developer-docs/forms" />
+  <Card title="Form Responses API" href="/zh-TW/docs/developer-docs/responses" />
+</Cards>
+
+## 常見問題
+
+### "Authentication failed"
+
+- 確認 API 金鑰是否正確
+- 確認是否帶上了 `X-WALLA-API-KEY` 標頭
+- 確認是否為對應環境的 API 金鑰
+
+### "Form not found or not published"
+
+- 確認表單是否為已發布狀態
+- 確認表單 ID 是否正確
+- 確認你是否有該工作區的存取權限
+
+### 回傳空結果時
+
+- 確認該資源中是否有資料
+- 確認你查詢的是正確的工作區／表單
+- 確認你具備必要的權限
+
+詳細的錯誤資訊請參考[錯誤代碼](/zh-TW/docs/developer-docs/error-codes)文件。

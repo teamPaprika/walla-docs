@@ -1,0 +1,53 @@
+---
+title: "Campo de subida de archivos"
+description: "Es un campo que permite subir directamente archivos del dispositivo. Resulta útil para recibir fotos, documentos, vídeos y otros tipos de archivo."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Cómo se usa el campo de subida de archivos
+
+<Steps>
+  <Step>
+    ### Seleccionar el archivo
+    Quien responde pulsa el botón `Seleccionar archivo` y elige el archivo que quiere subir.
+  </Step>
+  <Step>
+    ### Completar la subida
+    Tras seleccionarlo, debe pulsar `Subir este archivo` para completar la subida.
+  </Step>
+  <Step>
+    ### Enviar la respuesta
+    Los archivos subidos solo se guardan definitivamente al enviar la respuesta, así que hay que completar la subida y enviar también el formulario.
+  </Step>
+</Steps>
+
+## Límites de tamaño
+
+- Plan Free: hasta 15 MB por campo
+- Plan Pro y superiores: hasta 500 MB por campo
+- También puedes fijar tú el tamaño máximo de subida en el menú de ajustes de abajo a la derecha.
+  - En el plan Free puedes definir hasta 15 MB y en Pro o superior hasta 500 MB.
+
+## Opciones configurables
+  - Obligatorio
+  - Control de acceso a archivos sensibles
+  - Borrado automático de datos
+
+## Control de acceso a archivos sensibles
+
+Al activar el control de acceso a archivos sensibles, los archivos se guardan de forma privada y solo pueden acceder a ellos las personas con los permisos indicados. Además, cada acceso exige **indicar un motivo**, y todos los accesos quedan registrados automáticamente en el registro de actividad.
+
+- Hay que indicar un motivo cada vez que se consulta o descarga un archivo, y ese motivo queda registrado en el registro de actividad.
+- Una vez activado, no se puede desactivar.
+
+<Callout type="warning" title="Advertencia">
+Si bajas del plan Enterprise a Free o Pro, la consulta y la descarga de archivos sensibles quedan restringidas.
+</Callout>
+
+- En la hoja de respuestas y en las exportaciones aparece un enlace de descarga seguro en lugar del enlace original, y en las descargas masivas de archivos ese campo queda excluido.
+- Los archivos de respuestas recibidas antes de activar la opción también quedan protegidos automáticamente. (Puede tardar un tiempo en aplicarse.)
+
+<Callout type="warning" title="Advertencia">
+Si no se envía el formulario tras completar la subida, el archivo no se guarda.
+</Callout>

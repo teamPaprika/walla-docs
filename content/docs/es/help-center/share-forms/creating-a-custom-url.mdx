@@ -1,0 +1,44 @@
+---
+title: "Crear una URL personalizada"
+description: "En la página de compartir puedes personalizar el enlace del formulario y definir el título, la descripción y la miniatura que se muestran en la vista previa al compartir."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Crear una URL personalizada
+
+- El enlace para compartir se genera por defecto con el formato `walla.my/a/parte-personalizada`.
+- La URL debe cumplir ciertas reglas.
+
+### Cómo configurarlo
+
+<Steps>
+  <Step>
+    ### Ve a Personalización del enlace
+    En la página de compartir, ve a la sección `Personalización del enlace`.
+  </Step>
+  <Step>
+    ### Escribe la URL personalizada y guarda
+    Introduce la URL personalizada que quieras y guarda.
+  </Step>
+  <Step>
+    ### Elige el modo de vista
+    Selecciona primero el modo de vista que prefieras —estándar o agrupada— y guarda; ese ajuste se aplica al instante, sin necesidad de publicar.
+  </Step>
+</Steps>
+
+### Reglas de la URL personalizada
+
+- Entre 0 y 30 caracteres
+- No puede contener barras (`/`)
+- No puede componerse solo de uno (`.`) o dos puntos (`..`)
+- No se admiten cadenas que coincidan con la expresión regular `__.*__`
+
+## Ajustes de la vista previa al compartir
+
+- Debajo de la URL personalizada puedes definir el título, la descripción y la miniatura del proyecto.
+- Con solo guardar se aplica al instante; no hace falta publicar.
+- Si no subes una miniatura, se mostrará la predeterminada, que refleja el título y el tema del proyecto.
+<Callout type="warning" title="Advertencia">
+Si has cambiado el título o la miniatura pero en aplicaciones de mensajería como Slack sigue apareciendo la imagen o el texto anteriores, se debe a la caché (los datos previos guardados) de esa aplicación o del navegador durante tus pruebas. Quien reciba el enlace por primera vez verá la vista previa actualizada correctamente, así que no te preocupes.
+</Callout>

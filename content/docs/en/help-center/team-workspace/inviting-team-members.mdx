@@ -6,12 +6,9 @@ description: "Invite new members by email and manage pending invitations from yo
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Before You Start
-
-- Team member invitations are available starting from the **Pro plan**.
-- You need **Owner** or **Admin** permissions to send invitations.
-
 ## Sending Invitations by Email
+
+<img src="/images/guides/team-workspace/team-member-management.png" alt="The email invite area and team member list on the Team Settings → Team Members screen" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 <Steps>
   <Step>
@@ -23,13 +20,13 @@ import { Callout } from 'fumadocs-ui/components/callout';
     In the invite area at the top of the screen, enter the new member's email address. You can enter multiple emails at once to invite several people in a single batch.
   </Step>
   <Step>
-    ### Choose a Role and Send
-    Select the role (Admin, Member, etc.) for the invitee and click `Send Invitation`. An invitation email is sent to each address you entered.
+    ### Click Invite
+    Click `Invite` and an invitation email is sent to each address you entered.
   </Step>
 </Steps>
 
 <Callout type="info" title="You can change roles later">
-The role chosen at invitation time can be updated anytime from the `Team Members` tab once the person joins. For a full breakdown of roles and permissions, see the [Managing Your Team](/help-center/team-workspace/managing-your-team) page.
+The role chosen at invitation time can be updated anytime from the `Team Members` tab once the person joins. For a full breakdown of roles and permissions, see the [Managing Your Team](/en/docs/help-center/team-workspace/managing-your-team) page.
 </Callout>
 
 ## Inviting via Invite Link
@@ -37,23 +34,33 @@ The role chosen at invitation time can be updated anytime from the `Team Members
 <Steps>
   <Step>
     ### Create an Invite Link
-    In the `Invite Link` area, click the **Create Invite Link** button to generate a new link.
+    On the Team Members page, click the `Create Invite Link` button to generate a new link.
+
+    <img src="/images/guides/team-workspace/invite-link-create-button.png" alt="The Create invite link button shown in the initial state with no invite link" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Copy and Share the Link
     Click the copy icon next to the generated link, then send it to anyone you want to add. By default, the link is valid for 7 days.
+
+    <img src="/images/guides/team-workspace/invite-link-created.png" alt="A generated invite link with the expires in 7 days notice" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Change the Expiry
-    Click the **Change Expiry** button to the right of the link to set a new remaining lifetime in hours.
+    Click the `Change Expiry` button to the right of the link to set a new remaining lifetime in hours.
+
+    <img src="/images/guides/team-workspace/invite-link-change-expiry.png" alt="The remaining validity panel that expands when the Change expiry button is clicked" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Confirm the Updated Expiry
     The expiry updates immediately based on the value you set, and the new expiration time is shown below the link.
+
+    <img src="/images/guides/team-workspace/invite-link-expiry-updated.png" alt="An invite link now showing expires in 11 hours after the validity was changed" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Delete the Invite Link
     When the link is no longer needed, click the trash icon to delete it. The link becomes invalid right away, but members who already joined remain on the team.
+
+    <img src="/images/guides/team-workspace/invite-link-delete-confirm.png" alt="The deletion confirmation dialog shown when deleting an invite link" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -61,7 +68,7 @@ The role chosen at invitation time can be updated anytime from the `Team Members
 
 - Invitations that haven't been accepted yet appear in the member list of the `Team Members` tab with a **Pending** status.
 - The menu next to each pending invitation lets you:
-  - **Resend invitation**: Send the email again if it was missed or has expired.
+  - **Copy link**: If the invitation email never arrived or has expired, copy the invite link and send it directly.
   - **Cancel invitation**: Immediately expire an invitation that was sent by mistake or is no longer needed.
 
 <Callout type="warning" title="Note">
@@ -72,15 +79,17 @@ Cancelling an invitation does not recall the email itself, but the cancelled lin
 
 <Steps>
   <Step>
-    ### Check the Invitation Email
-    The invitation email includes the team name, the inviter, and an accept button.
+    ### Check and accept the invitation email
+    The invitation email includes the team name, the inviter, and an accept button. Clicking `Go to team invitation` in the email opens the Walla sign-up/sign-in screen.
+
+    <img src="/images/guides/team-workspace/invitation-email.png" alt="The invitation email showing the team name, the inviter, and the Go to team invitation button" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### Click the Accept Link
-    Clicking `Accept Invitation` opens the Walla sign-up/sign-in screen. If they already have an account, signing in is enough.
-  </Step>
-  <Step>
-    ### Join the Team
-    After signing in, the invitee is automatically added to the team with the role chosen at invitation time.
+    ### Team invitation complete
+    Once they sign in to Walla, the team invitation is complete.
   </Step>
 </Steps>
+
+<Callout type="warning" title="Note">
+If you want to edit projects together with a teammate, you have to invite them to the team and then to the workspace as well. If the 'invite to team → invite to workspace' flow feels cumbersome, you can also invite them directly from the workspace.
+</Callout>

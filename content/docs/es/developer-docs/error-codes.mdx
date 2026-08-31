@@ -1,0 +1,572 @@
+---
+title: Códigos de error
+description: Guía de códigos de error y resolución de problemas de la API de Walla
+---
+
+# Códigos de error
+
+Aquí te explicamos las respuestas de error que devuelve la Walla Open API y cómo resolverlas.
+
+## Códigos de estado HTTP
+
+La API de Walla indica el éxito o el fallo de las peticiones con códigos de estado HTTP estándar.
+
+### Códigos de éxito
+
+| Código | Estado | Descripción |
+|------|--------|-------------|
+| 200 | OK | Petición correcta |
+
+### Códigos de error
+
+| Código | Estado | Descripción |
+|------|--------|-------------|
+| 400 | Bad Request | Parámetros incorrectos o petición con formato no válido |
+| 401 | Unauthorized | Fallo de autenticación (falta la clave de API o no es válida) |
+| 403 | Forbidden | Permisos insuficientes (no puedes acceder a ese recurso) |
+| 404 | Not Found | Recurso no encontrado |
+| 429 | Too Many Requests | Límite de peticiones superado |
+| 500 | Internal Server Error | Error del servidor |
+
+## Formato de las respuestas de error
+
+Todas las respuestas de error siguen un formato JSON coherente:
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+## Códigos de error en detalle
+
+### 400 Bad Request
+
+Se produce cuando el formato de la petición es incorrecto o incluye parámetros no válidos.
+
+**Causas principales:**
+
+1. **Falta un campo obligatorio**
+   ```json
+   {
+     "error": "Invalid request: recipients array is required"
+   }
+   ```
+   **Solución**: incluye todos los campos obligatorios en el cuerpo de la petición.
+
+2. **Formato de datos incorrecto**
+   ```json
+   {
+     "error": "Invalid email format"
+   }
+   ```
+   **Solución**: comprueba que el correo siga el formato `user@domain.com`.
+
+3. **Array vacío**
+   ```json
+   {
+     "error": "Recipients array must contain at least one recipient"
+   }
+   ```
+   **Solución**: incluye al menos un elemento en los arrays obligatorios.
+
+4. **Parámetros de paginación incorrectos**
+   ```json
+   {
+     "error": "Invalid page number. Page must be >= 1"
+   }
+   ```
+   **Solución**: la numeración de páginas empieza en 1, no en 0.
+
+5. **Límite superado**
+   ```json
+   {
+     "error": "Limit cannot exceed 100"
+   }
+   ```
+   **Solución**: mantén el parámetro `limit` en 100 o menos.
+
+**Escenario de ejemplo:**
+
+```javascript
+// ❌ Ejemplo incorrecto: falta un campo obligatorio
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    // Falta el campo 'recipients'
+    subject: 'Survey'
+  })
+});
+// Devuelve: 400: recipients array is required
+
+// ✅ Ejemplo correcto
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    recipients: [
+      { customerKey: 'customer_001', email: 'user@example.com' }
+    ],
+    subject: 'Survey'
+  })
+});
+```
+
+---
+
+### 401 Unauthorized
+
+Se produce cuando falta la clave de API o no es válida y falla la autenticación. La respuesta incluye además la cabecera `WWW-Authenticate: ApiKey realm="walla-open-api"`.
+
+**Causas principales:**
+
+1. **Falta la clave de API**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **Solución**: incluye la cabecera `X-WALLA-API-KEY` en la petición.
+
+2. **Clave de API incorrecta o caducada**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **Solución**: comprueba que la clave sea correcta y no haya caducado ni se haya revocado.
+
+**Escenario de ejemplo:**
+
+```javascript
+// ❌ Ejemplo incorrecto: falta la clave de API
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+    // Falta X-WALLA-API-KEY
+  }
+});
+// Devuelve: 401
+
+// ✅ Ejemplo correcto
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+---
+
+### 403 Forbidden
+
+Se produce cuando la autenticación es correcta pero no tienes permiso para acceder a ese recurso.
+
+**Causas principales:**
+
+1. **Acceso a un espacio o formulario sin permiso**
+   ```json
+   {
+     "error": "Forbidden"
+   }
+   ```
+   **Solución**: comprueba que el espacio de trabajo o el formulario pertenezcan a tu equipo y, si hace falta, pide acceso a quien administre el espacio.
+
+**Pasos para resolverlo:**
+
+1. Comprueba que la clave de API esté bien configurada en el entorno
+2. Comprueba que el nombre de la cabecera sea exactamente `X-WALLA-API-KEY` (distingue mayúsculas)
+3. Comprueba que la clave no se haya revocado ni caducado
+4. Comprueba que tengas acceso al espacio de trabajo solicitado
+5. Comprueba que uses la clave correspondiente al entorno (desarrollo, preproducción o producción)
+
+---
+
+### 404 Not Found
+
+Se produce cuando el recurso solicitado no existe o no es accesible.
+
+**Causas principales:**
+
+1. **Formulario no encontrado**
+   ```json
+   {
+     "error": "Form not found"
+   }
+   ```
+   **Solución**: comprueba que el ID del formulario exista y que tengas acceso.
+
+2. **Formulario sin publicar**
+   ```json
+   {
+     "error": "Form not found or not published"
+   }
+   ```
+   **Solución**: comprueba que el formulario esté publicado antes de intentar enviarlo.
+
+3. **Respuesta no encontrada**
+   ```json
+   {
+     "error": "Form or response not found"
+   }
+   ```
+   **Solución**: comprueba que tanto el ID del formulario como el de la respuesta sean correctos.
+
+4. **Espacio de trabajo no encontrado**
+   ```json
+   {
+     "error": "Workspace not found"
+   }
+   ```
+   **Solución**: comprueba el ID del espacio de trabajo y que tengas acceso.
+
+**Escenario de ejemplo:**
+
+```javascript
+// ❌ Ejemplo incorrecto: intentar enviar un formulario sin publicar
+await sendForm('unpublished_form_id', recipients);
+// Devuelve: 404: Form not found or not published
+
+// ✅ Ejemplo correcto: formulario publicado
+await sendForm('published_form_id', recipients);
+```
+
+**Pasos para resolverlo:**
+
+1. Comprueba que los ID de los recursos (formulario, respuesta, espacio) sean correctos
+2. Comprueba que el formulario esté publicado (en operaciones de envío)
+3. Comprueba que el recurso no se haya eliminado
+4. Comprueba que estés usando el entorno correcto (desarrollo o producción)
+
+---
+
+### 429 Too Many Requests
+
+Se produce cuando superas el límite de peticiones de la API.
+
+**Límite de peticiones:**
+- **Límite**: 6.000 peticiones por hora y clave de API
+- **Ventana temporal**: 1 hora (ventana deslizante)
+
+**Respuesta:**
+```json
+{
+  "error": "Rate limit exceeded"
+}
+```
+
+**Cómo actuar:**
+
+1. **Implementa el manejo del límite**: comprueba el estado de la respuesta y gestiona bien los 429
+2. **Usa retroceso exponencial**: espera cada vez más entre reintentos
+3. **Cachea las respuestas**: guarda en caché los datos que consultas a menudo para reducir llamadas
+4. **Agrupa las peticiones**: siempre que puedas, reúne varias operaciones en una
+5. **Monitoriza el consumo**: haz seguimiento de las llamadas para mantenerte dentro del límite
+
+**Ejemplo de manejo del límite:**
+
+```javascript
+async function makeRequestWithRateLimit(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      // Manejo del límite de peticiones
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After') || Math.pow(2, i);
+        console.log(`Límite superado. Reintentando en ${retryAfter} s...`);
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_rate_limit(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            # Manejo del límite de peticiones
+            if response.status_code == 429:
+                retry_after = int(response.headers.get('Retry-After', 2 ** i))
+                print(f'Límite superado. Reintentando en {retry_after} s...')
+                time.sleep(retry_after)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+**Buenas prácticas:**
+
+- **Respeta el límite**: diseña tu aplicación teniendo en cuenta el tope de 6.000 peticiones por hora
+- **Implementa caché**: guarda en caché los datos que cambian poco
+- **Aprovecha los webhooks**: si necesitas actualizaciones en tiempo real, plantéate webhooks en lugar de sondeo
+- **Agrupa las peticiones**: consulta varios elementos en una sola petición cuando sea posible
+- **Monitoriza y avisa**: haz seguimiento del consumo y configura alertas cuando te acerques al límite
+
+---
+
+### 500 Internal Server Error
+
+Se produce cuando ocurre un error inesperado en el servidor.
+
+**Respuesta:**
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+**Cómo actuar:**
+
+1. **Reintenta**: puede ser un error temporal, así que vuelve a intentarlo
+2. **Retroceso exponencial**: espera un tiempo antes de reintentar
+3. **Comprueba el estado**: verifica si se trata de una incidencia general
+4. **Contacta con soporte**: si el error persiste, escribe al equipo de soporte de Walla
+
+**Ejemplo de estrategia de reintentos:**
+
+```javascript
+async function makeRequestWithRetry(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      if (response.status === 500 && i < maxRetries - 1) {
+        // Retroceso exponencial: 1 s, 2 s, 4 s
+        const delay = Math.pow(2, i) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_retry(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 500 and i < max_retries - 1:
+                # Retroceso exponencial
+                delay = 2 ** i
+                time.sleep(delay)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+## Buenas prácticas para gestionar errores
+
+### 1. Comprueba siempre el estado de la respuesta
+
+```javascript
+const response = await fetch(url, options);
+
+if (!response.ok) {
+  const error = await response.json();
+  console.error(`Error ${response.status}:`, error.error);
+  throw new Error(error.error);
+}
+
+const data = await response.json();
+```
+
+### 2. Implementa una gestión de errores adecuada
+
+```typescript
+try {
+  const result = await sendForm(formId, recipients);
+  console.log('Success:', result);
+} catch (error) {
+  if (error.status === 400) {
+    console.error('Invalid request:', error.message);
+    // Gestión de errores de validación
+  } else if (error.status === 401) {
+    console.error('Authentication failed');
+    // Comprobar la clave de API
+  } else if (error.status === 403) {
+    console.error('Permission denied');
+    // Comprobar los permisos sobre el recurso
+  } else if (error.status === 404) {
+    console.error('Resource not found');
+    // Comprobar el ID
+  } else if (error.status === 429) {
+    console.error('Rate limit exceeded');
+    // Esperar con retroceso exponencial y reintentar
+  } else if (error.status === 500) {
+    console.error('Server error, retrying...');
+    // Implementar la lógica de reintentos
+  } else {
+    console.error('Unexpected error:', error);
+  }
+}
+```
+
+### 3. Registra los errores para depurar
+
+```javascript
+function logError(error, context) {
+  console.error({
+    timestamp: new Date().toISOString(),
+    context,
+    status: error.status,
+    message: error.message,
+    stack: error.stack
+  });
+}
+
+try {
+  await api.getResponses(formId);
+} catch (error) {
+  logError(error, { operation: 'getResponses', formId });
+  throw error;
+}
+```
+
+### 4. Ofrece mensajes claros a quien usa la aplicación
+
+```javascript
+function getUserFriendlyError(error) {
+  const messages = {
+    400: 'Revisa los datos introducidos e inténtalo de nuevo.',
+    401: 'Fallo de autenticación. Revisa la clave de API.',
+    403: 'No tienes permiso para realizar esta acción.',
+    404: 'No se ha encontrado el recurso solicitado.',
+    429: 'Demasiadas peticiones. Inténtalo de nuevo en unos instantes.',
+    500: 'Se ha producido un problema. Inténtalo de nuevo más tarde.'
+  };
+
+  return messages[error.status] || 'Se ha producido un error inesperado.';
+}
+```
+
+### 5. Gestiona los fallos parciales
+
+```javascript
+// Al enviar a varios destinatarios
+const result = await sendForm(formId, recipients);
+
+if (result.data.failedDeliveries.length > 0) {
+  console.warn('Algunos envíos han fallado:');
+  result.data.failedDeliveries.forEach(failure => {
+    console.error(`${failure.customerKey}: ${failure.error}`);
+  });
+
+  // Reintentar los envíos fallidos
+  const failedRecipients = result.data.failedDeliveries.map(f => ({
+    customerKey: f.customerKey,
+    email: f.email,
+    phoneNumber: f.phoneNumber
+  }));
+
+  // Implementar la lógica de reintentos
+}
+```
+
+## Escenarios de error habituales
+
+### Escenario 1: "Authentication failed"
+
+**Problema**: hay clave de API pero sale un error 401
+
+**Lista de comprobación:**
+- [ ] Comprueba que la clave vaya en la cabecera `X-WALLA-API-KEY`
+- [ ] Comprueba que el nombre de la cabecera sea exacto (distingue mayúsculas)
+- [ ] Comprueba que la clave sea válida y no haya caducado
+- [ ] Comprueba que tengas acceso al espacio de trabajo solicitado
+- [ ] Comprueba que uses la clave del entorno correcto
+
+### Escenario 2: "Form not found or not published"
+
+**Problema**: no se puede enviar el formulario
+
+**Lista de comprobación:**
+- [ ] Comprueba que el ID del formulario sea correcto
+- [ ] Comprueba que el formulario exista en el espacio de trabajo
+- [ ] Comprueba que el formulario esté publicado (no en modo borrador)
+- [ ] Comprueba que tengas permiso para acceder al formulario
+
+### Escenario 3: "Invalid page number"
+
+**Problema**: se produce un error de paginación al obtener las respuestas
+
+**Lista de comprobación:**
+- [ ] Comprueba que la numeración empiece en 1 (no en 0)
+- [ ] Comprueba que el número de página sea un entero positivo
+- [ ] Comprueba que no supere el número total de páginas
+
+### Escenario 4: array de respuestas vacío
+
+**Problema**: esperabas datos pero recibes un array vacío
+
+**Posibles motivos:**
+- Todavía no hay datos (no es un error)
+- Filtros o parámetros incorrectos
+- Estás accediendo al espacio o formulario equivocado
+- Los datos se han eliminado
+
+**Solución**: comprueba que el recurso tenga datos y que la consulta sea correcta
+
+## Cómo conseguir ayuda
+
+Si el error no se resuelve con lo anterior, revisa lo siguiente en este orden.
+
+1. **Revisa la respuesta de la API**: el mensaje de error suele indicar la causa
+2. **Revisa la petición**: comprueba que incluyas todos los parámetros obligatorios
+3. **Prueba con cURL**: haz una prueba con cURL para acotar el problema
+4. **Comprueba los permisos**: verifica que tengas los accesos necesarios
+5. **Contacta con soporte**: escribe al equipo de Walla con la siguiente información
+   - Datos de la petición (endpoint, método, parámetros)
+   - La respuesta de error completa
+   - La hora en que se produjo el error
+   - El ID del espacio de trabajo o del formulario (si procede)
+
+## Siguientes pasos
+
+<Cards>
+  <Card title="Autenticación" href="/es/docs/developer-docs/authentication" />
+  <Card title="Guía de inicio rápido" href="/es/docs/developer-docs/quick-start" />
+  <Card title="Referencia de la API" href="/es/docs/developer-docs/workspaces" />
+</Cards>

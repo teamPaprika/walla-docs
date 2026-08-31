@@ -1,0 +1,35 @@
+---
+title: Importar en formato simple de Qualtrics
+description: Importa a Walla un archivo .txt que siga el formato simple de Qualtrics.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Importar en formato simple de Qualtrics
+
+<Steps>
+  <Step>
+    ### Pulsa el botón Crear proyecto
+    En la pantalla del espacio de trabajo, haz clic en `Crear proyecto`.
+  </Step>
+  <Step>
+    ### Selecciona Importar en formato simple de Qualtrics
+    Elige `Importar en formato simple de Qualtrics`.
+  </Step>
+  <Step>
+    ### Selecciona el archivo
+    Pulsa `Examinar` y elige el archivo `.txt` o `.docx` exportado desde Qualtrics.
+  </Step>
+    <Step>
+    ### Revisa los campos omitidos
+    Al seleccionar el archivo, las preguntas se convierten automáticamente y el resultado se reparte en las pestañas `Convertidas`, `Conversión aproximada` y `Omitidas`. En la pestaña `Omitidas` verás las preguntas que no se han podido importar porque Walla no admite ese tipo. Solo se marca su posición, así que vuelve a crearlas tú en el editor una vez creado el formulario.
+  </Step>
+  <Step>
+    ### Escribe el nombre del proyecto y crea el formulario
+    Introduce el `nombre del proyecto` y añade etiquetas si las necesitas. Revisa el formulario convertido en la vista previa de la derecha y pulsa `Crear formulario` para terminar la importación.
+  </Step>
+  <Step>
+    ### Listo
+    Se crea un proyecto nuevo a partir del archivo que has subido.
+  </Step>
+</Steps>

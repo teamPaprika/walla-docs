@@ -1,0 +1,38 @@
+---
+title: 安裝 Walla MCP
+description: 把 Walla MCP 以自訂連接器的方式接上 Claude，就能直接在 Claude 裡操作 Walla 的表單與回覆資料。
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Walla 提供 MCP（Model Context Protocol）伺服器。將 Walla MCP 以自訂連接器接上 Claude 後，你可以一邊和 Claude 對話，一邊查詢 Walla 的表單與回覆、建立新表單，或製作自訂欄位。
+
+<Steps>
+  <Step>
+    ### 開啟連接器設定
+    前往 [claude.ai](https://claude.ai)，在左側邊欄開啟 `Customize` 選單，接著進入 `Connectors`。
+  </Step>
+  <Step>
+    ### 開始新增自訂連接器
+    點選 Connectors 畫面右上角的加號按鈕，選擇 `Add custom connector`。
+  </Step>
+  <Step>
+    ### 輸入連接器資訊
+    在 `Add custom connector` 視窗中填入以下資訊，然後點選 `Add`。OAuth 欄位可以留空。
+
+    - 名稱（Name）：Walla Form
+    - Remote MCP server URL：{"https://app.walla.my/api/mcp"}
+  </Step>
+  <Step>
+    ### 連結 Walla 帳號
+    選擇清單中新增的 Walla Form 連接器，然後點選 `Connect`。
+  </Step>
+  <Step>
+    ### 授權存取權限
+    在應用程式存取權限請求畫面確認 Claude 要求的權限（讀取專案、讀取專案回覆、下載專案回覆、寫入專案、離線存取），接著點選「允許」。
+  </Step>
+  <Step>
+    ### 確認連線狀態
+    連線完成後，連接器會變成 Connected 狀態。右側面板會顯示 Claude 可使用的工具清單與權限。
+  </Step>
+</Steps>

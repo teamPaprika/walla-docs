@@ -1,0 +1,23 @@
+{
+  "title": "Documentación para desarrolladores",
+  "root": true,
+  "pages": [
+    "index",
+    "---Guías---",
+    "quick-start",
+    "authentication",
+    "error-codes",
+    "---Referencia de la API---",
+    "workspaces",
+    "forms",
+    "field-schemas",
+    "responses",
+    "delivery",
+    "---Custom Field SDK---",
+    "custom-fields-overview",
+    "custom-fields-quick-start",
+    "custom-fields-lifecycle",
+    "custom-fields-api-reference",
+    "custom-fields-properties-schema"
+  ]
+}

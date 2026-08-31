@@ -1,0 +1,119 @@
+---
+title: Walla ヘルプセンター
+description: Walla ヘルプセンターへようこそ
+icon: House
+---
+
+import { Rocket, Users, PenTool, FolderOpen, Share2, Palette, Plug, Shield, BarChart2, Gift, Home, Zap, BookOpen, MessageCircle, CreditCard, ExternalLink, Sparkles, ArrowRight } from 'lucide-react';
+
+<a
+  href="/ja/docs/help-center/create-forms/custom-field"
+  className="not-prose group mb-10 flex flex-col gap-3 rounded-2xl overflow-hidden border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-8 no-underline transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:shadow-lg hover:-translate-y-0.5"
+>
+  <div className="flex items-center gap-2">
+    <span className="inline-flex items-center rounded-full bg-[hsl(193,100%,50%)]/15 px-2.5 py-1 text-xs font-semibold text-[hsl(193,100%,38%)] uppercase tracking-normal">
+      アップデート
+    </span>
+  </div>
+  <h1 className="text-[1.5em] font-semibold text-fd-foreground">カスタムフィールドを作る</h1>
+  <p className="text-fd-muted-foreground text-sm leading-6 max-w-xl">基本フィールドでは表現できなかった入力方式を、自然言語で指示するだけで自分で作れるようになりました。Walla MCP で思いどおりのフィールドを手軽に作る方法をご覧ください。<ArrowRight className="inline-block ml-1 h-4 w-4 align-text-bottom text-[hsl(193,100%,45%)] transition-transform duration-200 group-hover:translate-x-1" /></p>
+</a>
+
+## カテゴリ
+
+<Cards>
+  <Card title="はじめに" description="アカウント作成、プロフィール設定、料金プランの案内" href="/ja/docs/help-center/getting-started/creating-account" icon={<Rocket />} />
+  <Card title="チーム／ワークスペース" description="チーム構成とワークスペースの管理方法" href="/ja/docs/help-center/team-workspace/managing-your-team" icon={<Users />} />
+  <Card title="フォームを作成する" description="多彩なフィールドとロジックでフォームを作成" href="/ja/docs/help-center/create-forms/creating-project-ai" icon={<PenTool />} />
+  <Card title="フォームを管理する" description="フォームのスケジュール、締め切り、タグの管理" href="/ja/docs/help-center/manage-forms/managing-projects" icon={<FolderOpen />} />
+  <Card title="フォームを共有する" description="URL、隠しフィールド、ページ分割の設定" href="/ja/docs/help-center/share-forms/sharing-your-survey" icon={<Share2 />} />
+  <Card title="カスタムデザイン" description="ブランドに合わせたテーマとロゴの適用" href="/ja/docs/help-center/custom-design/changing-your-survey-theme" icon={<Palette />} />
+  <Card title="フォームを連携する" description="Google Sheets、Zapier、Webhook との連携" href="/ja/docs/help-center/integrate-forms/connecting-to-google-sheets" icon={<Plug />} />
+  <Card title="セキュリティ" description="2FA、IP 認証、データマスキングの設定" href="/ja/docs/help-center/security/auto-delete-responses" icon={<Shield />} />
+  <Card title="結果分析" description="統計、クロス集計、個別回答の確認" href="/ja/docs/help-center/result-analysis/cross-tabulation" icon={<BarChart2 />} />
+  <Card title="リワード" description="ギフト券の購入・送付・管理の方法" href="/ja/docs/help-center/reward/managing-gifticons" icon={<Gift />} />
+</Cards>
+
+## Walla へのリンク
+
+<div className="not-prose mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+  <a
+    href="https://home.walla.my/en/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Home className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">ホーム</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Walla 公式サイト</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://app.walla.my"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Zap className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Walla</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">アプリを開く</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/blog"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <BookOpen className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Walla ブログ</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">最新情報と活用のヒント</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://discord.gg/vSkQbCwPYV"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <MessageCircle className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">コミュニティ</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Discord に参加する</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/pricing/main"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <CreditCard className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">料金プラン</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">プランを見る</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+</div>

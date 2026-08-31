@@ -1,0 +1,35 @@
+---
+title: 以 Qualtrics 簡易格式匯入
+description: 把符合 Qualtrics 簡易格式的 .txt 檔匯入 Walla。
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 以 Qualtrics 簡易格式匯入
+
+<Steps>
+  <Step>
+    ### 點選建立專案按鈕
+    在工作區畫面點選 `建立專案` 按鈕。
+  </Step>
+  <Step>
+    ### 選擇以 Qualtrics 簡易格式匯入
+    選擇 `以 Qualtrics 簡易格式匯入`。
+  </Step>
+  <Step>
+    ### 選擇檔案
+    點選 `瀏覽` 按鈕，選取從 Qualtrics 匯出的 `.txt` 或 `.docx` 檔案。
+  </Step>
+    <Step>
+    ### 確認被略過的欄位
+    選好檔案後題目會自動轉換，轉換結果會分成 `已轉換`、`近似轉換`、`已略過` 三個分頁顯示。在 `已略過` 分頁可以查看因 Walla 不支援該類型而無法匯入的題目。這些題目只會保留位置，請在建立表單後於編輯器中自行重做。
+  </Step>
+  <Step>
+    ### 輸入專案名稱並建立表單
+    輸入 `專案名稱`，需要的話再加上標籤。在右側預覽確認轉換後的表單，然後點選 `建立表單` 按鈕即完成匯入。
+  </Step>
+  <Step>
+    ### 完成
+    系統會依你上傳的檔案建立新專案。
+  </Step>
+</Steps>

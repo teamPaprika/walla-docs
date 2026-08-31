@@ -3,15 +3,22 @@ title: "Data Masking"
 description: "Data masking is essential when you're collecting sensitive personal or business data. Korea's Personal Information Protection Act requires data handlers to take measures to secure personal information. With masking enabled, only authorized users can view the original values, while everyone else sees masked content."
 ---
 
-<video src="/videos/masking.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
-
 ## Applying Data Masking
+
+<img src="/images/guides/security/masking-01-toggle.png" alt="The data masking toggle" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
 - Sensitive data is masked, and only authorized users can see the original values.
 - After you enable data masking and publish the project, all responses for that question will be masked.
 - Because masking hides the original data, it cannot be undone once enabled.
+
+<img src="/images/guides/security/masking-02-confirm.png" alt="Confirming that masking is being enabled" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+
 ## Viewing Masked Data
 - You can reveal masked data by hovering over the column header in the response sheet. (Only users with the proper permission can view it.)
 - Depending on admin security settings, viewing masked data may require providing a reason. You can review the reasons under 'Activity Logs' in 'Team Settings'.
+
+<img src="/images/guides/security/masking-03-unmask-reason.png" alt="Entering a reason for unmasking" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+
 <Callout type="warning" title="Warning">
 - Once masking is enabled, it can never be disabled!
 - Per-option response limits cannot be used on a field with masking enabled.

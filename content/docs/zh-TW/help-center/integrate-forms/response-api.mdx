@@ -1,0 +1,411 @@
+---
+title: "回覆 API"
+description: "用 Walla Open API 查詢與管理表單資料和回覆。"
+---
+
+## Walla Open API 指南
+
+使用 Walla Open API，就能以程式化的方式查詢與管理表單資料和回覆。
+
+## 版本資訊
+
+- **目前 API 版本：** v1
+- **Swagger 文件：** [https://app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+
+若有變更，會以新版本提供。
+
+## API 驗證設定
+### 發行 API 金鑰
+
+- 登入 Walla。
+- 前往 API 金鑰檢視器（[https://app.walla.my/open-api/doc](https://app.walla.my/））。
+- 發行 API 金鑰後，請保存在安全的地方。
+### 驗證方式
+
+Walla API 採用 API Key 驗證方式。請在所有請求中加入下列標頭。
+
+```
+X-WALLA-API-KEY: {發行到的 API 金鑰}
+```
+
+### 基本 URL
+
+```
+https://app.walla.my/open-api/v1
+```
+
+## API 端點
+### 工作區
+#### 查詢工作區清單
+
+查詢你有存取權限的所有工作區清單。
+
+```
+GET /open-api/v1/workspaces
+```
+
+**回應範例：**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "workspace_abc123",      "name": "行銷團隊工作區",  
+      "teamId": "team_xyz789",      "createdAt": "2024-01-15T09:00:00Z",      "updatedAt": "2024-01-20T14:30:00Z"    }  ]}
+```
+
+#### 查詢工作區詳細資訊
+
+查詢特定工作區的詳細資訊。
+
+```
+GET /open-api/v1/workspaces/{workspaceId}
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| workspaceId | 路徑 | O | 工作區 ID |
+### 表單（專案）
+#### 查詢所有表單清單
+
+查詢你有存取權限的所有工作區的表單清單。
+
+```
+GET /open-api/v1/forms
+```
+
+#### 查詢工作區內的表單清單
+
+查詢特定工作區內的表單清單。
+
+```
+GET /open-api/v1/workspaces/{workspaceId}/forms
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| workspaceId | 路徑 | O | 工作區 ID |
+#### 查詢表單詳細資訊
+
+查詢特定表單的詳細資訊。
+
+```
+GET /open-api/v1/forms/{formId}
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| formId | 路徑 | O | 表單 ID |
+
+**回應範例：**
+
+```
+{  
+  "success": true,  "data": {    "id": "form_abc123",    "title": "顧客滿意度調查",  
+    "description": "請為使用服務後的滿意度評分",  
+    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "creator": "user_123",    "isDeleted": false,    "createdAt": "2024-01-15T09:00:00Z",    "updatedAt": "2024-01-20T14:30:00Z"  }}
+```
+
+### 欄位
+#### 查詢表單欄位清單
+
+查詢特定表單已發布的欄位清單。
+
+```
+GET /open-api/v1/forms/{formId}/fields
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| formId | 路徑 | O | 表單 ID（已發布問卷的 ID） |
+
+**回應範例：**
+
+```
+{  
+  "success": true,  "data": {    "fields": [      {        "id": "field_001",        "label": "請輸入姓名",  
+        "fieldType": "SHORT_TEXT",        "outputType": "string"      },      {        "id": "field_002",        "label": "請選擇滿意度",  
+        "fieldType": "RADIO",        "outputType": "string"      }    ]  }}
+```
+
+#### 查詢欄位詳細資訊
+
+查詢特定欄位的詳細資訊（屬性、驗證規則、輸出結構等）。
+
+```
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| formId | 路徑 | O | 表單 ID |
+| fieldId | 路徑 | O | 欄位 ID |
+#### 查詢欄位輸出結構
+
+查詢各欄位類型的輸出結構對應資訊。可以確認每種欄位類型會回傳什麼格式的資料。
+
+```
+GET /open-api/v1/field-output-schemas
+```
+
+### 回覆資料
+#### 查詢回覆清單
+
+以分頁方式查詢特定表單的回覆清單。也可以用 `customerKey` 參數只篩選特定顧客的回覆。
+
+```
+GET /open-api/v1/forms/{formId}/responses
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| formId | 路徑 | O | 表單 ID |
+| customerKey | 查詢字串 | X | 以顧客金鑰篩選（只查詢帶有該 customerKey 的回覆） |
+| page | 查詢字串 | X | 頁碼（從 1 開始，預設值：1） |
+| limit | 查詢字串 | X | 每頁回覆筆數（最多 100，預設值：20） |
+
+**回應範例：**
+
+```
+{  
+  "success": true,  "data": {    "responses": [      {        "responseId": "resp_abc123",        "customerKey": "customer_001",        "submittedAt": "2024-01-20T14:30:00Z",        "field_001": "洪吉童",  
+        "field_002": "非常滿意",  
+        "hidden-field_utm": "facebook"      }    ],    "pagination": {      "page": 1,      "limit": 20,      "totalCount": 150,      "totalPages": 8    }  }}
+```
+
+**以 customerKey 篩選的範例：**
+
+```
+GET /open-api/v1/forms/{formId}/responses?customerKey=customer_001
+```
+
+#### 查詢單筆回覆
+
+查詢特定回覆的詳細資訊。
+
+```
+GET /open-api/v1/forms/{formId}/responses/{responseId}
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| formId | 路徑 | O | 表單 ID |
+| responseId | 路徑 | O | 回覆 ID |
+
+**回應範例：**
+
+```
+{  
+  "success": true,  "data": {    "responseId": "resp_abc123",    "formId": "form_abc123",    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "response": {      "field_001": "洪吉童",  
+      "field_002": "非常滿意",  
+      "hidden-field_utm": "facebook"    },    "submittedAt": "2024-01-20T14:30:00Z",    "customerKey": "customer_001",    "startedAt": "2024-01-20T14:25:00Z"  }}
+```
+
+### Form Delivery（發送）
+> **注意：** Form Delivery 功能僅能在 ONPREM 環境中使用，SaaS 環境無法使用。
+#### 發送表單
+
+把特定專案（已發布的問卷）發送給收件人。未發布的問卷無法發送。
+
+```
+POST /open-api/v1/forms/{formId}/delivery
+```
+
+**參數：**
+
+| 名稱 | 位置 | 必填 | 說明 |
+| --- | --- | --- | --- |
+| formId | 路徑 | O | 表單 ID |
+
+**請求內容：**
+
+```
+{  
+  "recipients": [    {      "customerKey": "customer_001",      "email": "user@example.com",      "phoneNumber": "010-1234-5678"    }  ],  "subject": "問卷已送達。",  
+  "message": "請確認問卷連結。"  
+}
+```
+
+| 欄位 | 必填 | 說明 |
+| --- | --- | --- |
+| recipients | O | 收件人清單（陣列） |
+| recipients[].customerKey | O | 顧客識別金鑰 |
+| recipients[].email | X | 電子郵件 |
+| recipients[].phoneNumber | X | 電話號碼 |
+| subject | X | 郵件主旨（預設值："問卷已送達。"） |
+| message | X | 發送訊息 |
+#### 查詢收件人清單
+
+查詢特定專案的所有收件人清單。
+
+```
+GET /open-api/v1/forms/{formId}/delivery
+```
+
+#### 查詢收件人狀態
+
+查詢特定收件人的進行狀態。
+
+```
+POST /open-api/v1/forms/{formId}/delivery/status
+```
+
+**請求內容：**
+
+```
+{  
+  "customerKeys": ["customer_001", "customer_002"]}
+```
+
+**回應範例：**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "delivery_abc123",      "formId": "form_abc123",      "customerKey": "customer_001",      "email": "user@example.com",      "status": "RESPONDED",      "lastSentAt": "2024-01-20T10:00:00Z",      "createdAt": "2024-01-19T09:00:00Z"    }  ]}
+```
+
+**發送狀態值：**
+
+| 狀態 | 說明 |
+| --- | --- |
+| NOT_SENT | 尚未發送 |
+| SENT | 已發送 |
+| OPENED | 已開啟連結 |
+| RESPONDED | 已完成回覆 |
+### 回覆資料結構
+#### 各欄位類型的回覆值格式
+
+每個欄位值的格式會依欄位類型而不同。
+
+| 欄位類型 | 輸出格式 | 範例 |
+| --- | --- | --- |
+| SHORT_TEXT, LONG_TEXT | string | `"洪吉童"` |
+| DATE, NUMBER | string | `"2024-01-20"`, `"42"` |
+| EMAIL, PHONE_NUMBER, ADDRESS | string | `"user@example.com"` |
+| FILE_UPLOAD, IMAGE_UPLOAD, VIDEO_UPLOAD | string | `"https://...file1.pdf"` |
+| RADIO, DROPDOWN | string[] | `["選項1"]` |
+| CHECKBOX, DROPDOWN_MULTI, PICTURE_CHOICE, LINEAR | string[] | `["選項1", "選項2"]` |
+| RADIO_GRID, CHECKBOX_GRID | Record&lt;string, string[]&gt; | `{ "列1": ["欄1"] }` |
+| GEOLOCATION | object | `{ "latitude": "37.5665", "longitude": "126.9780" }` |
+| TABLE | object | `{ "列1": { "欄1": "值1" } }` |
+| CUSTOM | 依自訂欄位版本的 `outputSchema` 而定 | `{ "score": 85 }` |
+
+詳細的輸出結構請參考 `GET /open-api/v1/field-output-schemas` API。
+
+#### 隱藏欄位
+
+隱藏欄位會以 `hidden-{欄位ID}` 格式的鍵包含在回覆資料中。
+
+```
+{  
+  "hidden-field_abc123": "facebook",  "hidden-field_xyz789": "spring_campaign"}
+```
+
+隱藏欄位的值透過 URL 參數傳遞。
+
+```
+https://walla.my/v/{formId}?utm_source=facebook&utm_campaign=spring_campaign
+```
+
+#### customerKey
+
+`customerKey` 是 Form Delivery 為了識別每位收件人而自動產生的值。
+
+- 用於追蹤發送狀態（已發送 → 已開啟 → 已回覆）。
+- 可以用來篩選回覆資料。
+- 若沒有使用 Form Delivery，這個值可能是空的。
+## 錯誤回應
+
+API 請求失敗時會回傳 HTTP 狀態碼與錯誤訊息。
+
+| 狀態碼 | 說明 |
+| --- | --- |
+| 400 | 錯誤的請求（參數錯誤等） |
+| 401 | 驗證失敗（缺少 API 金鑰或金鑰無效） |
+| 403 | 沒有權限（無法存取該資源） |
+| 404 | 找不到資源 |
+| 500 | 伺服器錯誤 |
+
+**錯誤回應範例：**
+
+```
+{  
+  "error": "Form not found or not published"}
+```
+
+## 使用範例
+### 1. 運用 customerKey 的回覆串接情境
+
+
+- 把外部系統的顧客 ID 當作 Walla 的 `customerKey` 使用。
+- `GET /forms/{formId}/responses?customerKey={customerKey}`查詢該顧客的回覆。
+- `totalCount` 大於 0 就代表有回覆存在。
+### 2. 查詢表單回覆清單
+
+```
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 3. 查詢特定回覆  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 4. 以 customerKey 篩選回覆  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 5. 用 Form Delivery 發送問卷  
+  
+```bash  
+curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X-WALLA-API-KEY: your_api_key" \  -H "Content-Type: application/json" \  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "顧客滿意度調查",  
+    "message": "請留下您寶貴的意見。"  
+  }'```
+```
+
+## Field Type
+| Type | Name |
+| --- | --- |
+| RADIO | 選擇題 |
+| CHECKBOX | 選擇題（多選） |
+| PICTURE_CHOICE | 圖片選擇 |
+| DROPDOWN | 下拉式選單 |
+| DROPDOWN_MULTI | 下拉式選單（多選） |
+| LINEAR | 線性刻度 |
+| RADIO_GRID | 選擇題表格 |
+| CHECKBOX_GRID | 選擇題表格（多選） |
+| PRIVACY_POLICY_INFORMATION | 個資蒐集 |
+| SHORT_TEXT | 簡答 |
+| LONG_TEXT | 長答 |
+| NUMBER | 數字 |
+| TABLE | 表格 |
+| SECRETS | 機密資訊輸入 |
+| DESCRIPTION | 說明 |
+| WEBSITE_LINK | 嵌入 |
+| DATE | 日期 |
+| TIME | 時間 |
+| EMAIL | 電子郵件 |
+| ADDRESS | 地址 |
+| PHONE_NUMBER | 電話號碼 |
+| FILE_UPLOAD | 檔案上傳 |
+| IMAGE_UPLOAD | 拍照 |
+| VIDEO_UPLOAD | 錄影 |
+| GEOLOCATION | 位置紀錄 |
+| TOSS_PAYMENTS | Toss Payments |
+| CUSTOM | 自訂欄位 |
+| REJECT | 淘汰 |
+| ENDING_DESCRIPTION | 結尾欄位（結束頁面） |
+| ENDING_REDIRECT | 結尾欄位（前往 URL） |
+| SUBMIT | 送出 |

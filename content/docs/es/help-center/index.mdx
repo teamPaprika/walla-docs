@@ -1,0 +1,119 @@
+---
+title: Centro de ayuda de Walla
+description: Te damos la bienvenida al centro de ayuda de Walla
+icon: House
+---
+
+import { Rocket, Users, PenTool, FolderOpen, Share2, Palette, Plug, Shield, BarChart2, Gift, Home, Zap, BookOpen, MessageCircle, CreditCard, ExternalLink, Sparkles, ArrowRight } from 'lucide-react';
+
+<a
+  href="/es/docs/help-center/create-forms/custom-field"
+  className="not-prose group mb-10 flex flex-col gap-3 rounded-2xl overflow-hidden border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-8 no-underline transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:shadow-lg hover:-translate-y-0.5"
+>
+  <div className="flex items-center gap-2">
+    <span className="inline-flex items-center rounded-full bg-[hsl(193,100%,50%)]/15 px-2.5 py-1 text-xs font-semibold text-[hsl(193,100%,38%)] uppercase tracking-normal">
+      NOVEDAD
+    </span>
+  </div>
+  <h1 className="text-[1.5em] font-semibold text-fd-foreground">Crear campos personalizados</h1>
+  <p className="text-fd-muted-foreground text-sm leading-6 max-w-xl">Los métodos de entrada que los campos básicos no podían expresar ahora puedes construirlos tú mismo describiéndolos en lenguaje natural. Descubre cómo crear el campo que necesitas con el MCP de Walla.<ArrowRight className="inline-block ml-1 h-4 w-4 align-text-bottom text-[hsl(193,100%,45%)] transition-transform duration-200 group-hover:translate-x-1" /></p>
+</a>
+
+## Categorías
+
+<Cards>
+  <Card title="Primeros pasos" description="Crear la cuenta, configurar el perfil e información de planes" href="/es/docs/help-center/getting-started/creating-account" icon={<Rocket />} />
+  <Card title="Equipo y espacio de trabajo" description="Cómo organizar el equipo y gestionar los espacios de trabajo" href="/es/docs/help-center/team-workspace/managing-your-team" icon={<Users />} />
+  <Card title="Crear formularios" description="Crea formularios con distintos campos y lógica" href="/es/docs/help-center/create-forms/creating-project-ai" icon={<PenTool />} />
+  <Card title="Gestionar formularios" description="Programación, cierre y etiquetas de los formularios" href="/es/docs/help-center/manage-forms/managing-projects" icon={<FolderOpen />} />
+  <Card title="Compartir formularios" description="URL, campos ocultos y saltos de página" href="/es/docs/help-center/share-forms/sharing-your-survey" icon={<Share2 />} />
+  <Card title="Diseño personalizado" description="Aplica temas y logotipos acordes a tu marca" href="/es/docs/help-center/custom-design/changing-your-survey-theme" icon={<Palette />} />
+  <Card title="Integrar formularios" description="Integraciones con Google Sheets, Zapier y webhooks" href="/es/docs/help-center/integrate-forms/connecting-to-google-sheets" icon={<Plug />} />
+  <Card title="Seguridad" description="2FA, verificación de IP y enmascarado de datos" href="/es/docs/help-center/security/auto-delete-responses" icon={<Shield />} />
+  <Card title="Análisis de resultados" description="Estadísticas, tabulación cruzada y respuestas individuales" href="/es/docs/help-center/result-analysis/cross-tabulation" icon={<BarChart2 />} />
+  <Card title="Recompensas" description="Cómo comprar, enviar y gestionar tarjetas regalo" href="/es/docs/help-center/reward/managing-gifticons" icon={<Gift />} />
+</Cards>
+
+## Accesos directos de Walla
+
+<div className="not-prose mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+  <a
+    href="https://home.walla.my/en/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Home className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Inicio</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Web de Walla</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://app.walla.my"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <Zap className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Walla</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Ir a la app</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/blog"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <BookOpen className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Blog de Walla</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Novedades y consejos</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://discord.gg/vSkQbCwPYV"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <MessageCircle className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Comunidad</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Únete a Discord</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+
+  <a
+    href="https://home.walla.my/en/pricing/main"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-col items-center gap-3 rounded-xl border border-fd-border bg-fd-card p-5 text-center transition-all duration-200 hover:border-[hsl(193,100%,50%)]/50 hover:bg-[hsl(193,100%,50%)]/5 hover:shadow-md hover:-translate-y-0.5"
+  >
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(193,100%,50%)]/10 transition-colors group-hover:bg-[hsl(193,100%,50%)]/20">
+      <CreditCard className="h-5 w-5 text-[hsl(193,100%,38%)]" />
+    </div>
+    <div>
+      <div className="text-sm font-semibold text-[#1A2C5C]">Precios</div>
+      <div className="mt-0.5 text-xs text-fd-muted-foreground">Ver los planes</div>
+    </div>
+    <ExternalLink className="h-3 w-3 text-fd-muted-foreground/50 transition-colors group-hover:text-[hsl(193,100%,50%)]" />
+  </a>
+</div>

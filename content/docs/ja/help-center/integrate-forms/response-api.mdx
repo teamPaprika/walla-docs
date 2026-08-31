@@ -1,0 +1,411 @@
+---
+title: "回答 API"
+description: "Walla Open API でフォームデータと回答を取得・管理しましょう。"
+---
+
+## Walla Open API ガイド
+
+Walla Open API を使うと、フォームデータと回答をプログラムから取得・管理できます。
+
+## バージョン情報
+
+- **現在の API バージョン:** v1
+- **Swagger ドキュメント:** [https://app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+
+変更があった場合は新しいバージョンとして提供されます。
+
+## API 認証の設定
+### API キーの発行
+
+- Walla にログインします。
+- API キービューア（[https://app.walla.my/open-api/doc](https://app.walla.my/）にアクセスします。
+- API キーを発行したら、安全な場所に保管します。
+### 認証方式
+
+Walla API は API Key 認証方式を使用します。すべてのリクエストに以下のヘッダーを含めてください。
+
+```
+X-WALLA-API-KEY: {発行された API キー}
+```
+
+### 基本 URL
+
+```
+https://app.walla.my/open-api/v1
+```
+
+## API エンドポイント
+### ワークスペース
+#### ワークスペース一覧の取得
+
+アクセス権限のあるすべてのワークスペースの一覧を取得します。
+
+```
+GET /open-api/v1/workspaces
+```
+
+**レスポンス例:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "workspace_abc123",      "name": "マーケティングチームのワークスペース",  
+      "teamId": "team_xyz789",      "createdAt": "2024-01-15T09:00:00Z",      "updatedAt": "2024-01-20T14:30:00Z"    }  ]}
+```
+
+#### ワークスペースの詳細取得
+
+特定のワークスペースの詳細情報を取得します。
+
+```
+GET /open-api/v1/workspaces/{workspaceId}
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| workspaceId | パス | O | ワークスペース ID |
+### フォーム（プロジェクト）
+#### すべてのフォーム一覧の取得
+
+アクセス権限のあるすべてのワークスペースのフォーム一覧を取得します。
+
+```
+GET /open-api/v1/forms
+```
+
+#### ワークスペース内のフォーム一覧の取得
+
+特定のワークスペース内のフォーム一覧を取得します。
+
+```
+GET /open-api/v1/workspaces/{workspaceId}/forms
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| workspaceId | パス | O | ワークスペース ID |
+#### フォームの詳細取得
+
+特定のフォームの詳細情報を取得します。
+
+```
+GET /open-api/v1/forms/{formId}
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| formId | パス | O | フォーム ID |
+
+**レスポンス例:**
+
+```
+{  
+  "success": true,  "data": {    "id": "form_abc123",    "title": "顧客満足度調査",  
+    "description": "サービス利用後の満足度をご評価ください",  
+    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "creator": "user_123",    "isDeleted": false,    "createdAt": "2024-01-15T09:00:00Z",    "updatedAt": "2024-01-20T14:30:00Z"  }}
+```
+
+### フィールド
+#### フォームのフィールド一覧の取得
+
+特定のフォームの公開済みフィールド一覧を取得します。
+
+```
+GET /open-api/v1/forms/{formId}/fields
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| formId | パス | O | フォーム ID（公開済みフォームの ID） |
+
+**レスポンス例:**
+
+```
+{  
+  "success": true,  "data": {    "fields": [      {        "id": "field_001",        "label": "お名前をご入力ください",  
+        "fieldType": "SHORT_TEXT",        "outputType": "string"      },      {        "id": "field_002",        "label": "満足度をお選びください",  
+        "fieldType": "RADIO",        "outputType": "string"      }    ]  }}
+```
+
+#### フィールドの詳細取得
+
+特定のフィールドの詳細情報（属性、検証ルール、出力スキーマなど）を取得します。
+
+```
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| formId | パス | O | フォーム ID |
+| fieldId | パス | O | フィールド ID |
+#### フィールド出力スキーマの取得
+
+フィールドタイプ別の出力スキーマのマッピング情報を取得します。各フィールドタイプがどの形式のデータを返すかを確認できます。
+
+```
+GET /open-api/v1/field-output-schemas
+```
+
+### 回答データ
+#### 回答一覧の取得
+
+特定のフォームの回答一覧をページネーションで取得します。`customerKey` パラメータで特定の顧客の回答だけを絞り込むこともできます。
+
+```
+GET /open-api/v1/forms/{formId}/responses
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| formId | パス | O | フォーム ID |
+| customerKey | クエリ | X | 顧客キーで絞り込み（その customerKey を持つ回答のみ取得） |
+| page | クエリ | X | ページ番号（1 から開始、デフォルト: 1） |
+| limit | クエリ | X | 1 ページあたりの回答件数（最大 100、デフォルト: 20） |
+
+**レスポンス例:**
+
+```
+{  
+  "success": true,  "data": {    "responses": [      {        "responseId": "resp_abc123",        "customerKey": "customer_001",        "submittedAt": "2024-01-20T14:30:00Z",        "field_001": "山田太郎",  
+        "field_002": "非常に満足",  
+        "hidden-field_utm": "facebook"      }    ],    "pagination": {      "page": 1,      "limit": 20,      "totalCount": 150,      "totalPages": 8    }  }}
+```
+
+**customerKey で絞り込む例:**
+
+```
+GET /open-api/v1/forms/{formId}/responses?customerKey=customer_001
+```
+
+#### 単一回答の取得
+
+特定の回答の詳細情報を取得します。
+
+```
+GET /open-api/v1/forms/{formId}/responses/{responseId}
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| formId | パス | O | フォーム ID |
+| responseId | パス | O | 回答 ID |
+
+**レスポンス例:**
+
+```
+{  
+  "success": true,  "data": {    "responseId": "resp_abc123",    "formId": "form_abc123",    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "response": {      "field_001": "山田太郎",  
+      "field_002": "非常に満足",  
+      "hidden-field_utm": "facebook"    },    "submittedAt": "2024-01-20T14:30:00Z",    "customerKey": "customer_001",    "startedAt": "2024-01-20T14:25:00Z"  }}
+```
+
+### Form Delivery（送信）
+> **注意:** Form Delivery 機能は ONPREM 環境でのみ利用できます。SaaS 環境では利用できません。
+#### フォームの送信
+
+特定のプロジェクト（公開済みフォーム）を宛先へ送信します。未公開のフォームは送信できません。
+
+```
+POST /open-api/v1/forms/{formId}/delivery
+```
+
+**パラメータ:**
+
+| 名前 | 位置 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| formId | パス | O | フォーム ID |
+
+**リクエストボディ:**
+
+```
+{  
+  "recipients": [    {      "customerKey": "customer_001",      "email": "user@example.com",      "phoneNumber": "010-1234-5678"    }  ],  "subject": "フォームが届きました。",  
+  "message": "フォームのリンクをご確認ください。"  
+}
+```
+
+| フィールド | 必須 | 説明 |
+| --- | --- | --- |
+| recipients | O | 宛先リスト（配列） |
+| recipients[].customerKey | O | 顧客識別キー |
+| recipients[].email | X | メールアドレス |
+| recipients[].phoneNumber | X | 電話番号 |
+| subject | X | メールの件名（デフォルト: "フォームが届きました。"） |
+| message | X | 送信メッセージ |
+#### 宛先一覧の取得
+
+特定のプロジェクトのすべての宛先一覧を取得します。
+
+```
+GET /open-api/v1/forms/{formId}/delivery
+```
+
+#### 宛先ステータスの取得
+
+特定の宛先の進行状況を取得します。
+
+```
+POST /open-api/v1/forms/{formId}/delivery/status
+```
+
+**リクエストボディ:**
+
+```
+{  
+  "customerKeys": ["customer_001", "customer_002"]}
+```
+
+**レスポンス例:**
+
+```
+{  
+  "success": true,  "data": [    {      "id": "delivery_abc123",      "formId": "form_abc123",      "customerKey": "customer_001",      "email": "user@example.com",      "status": "RESPONDED",      "lastSentAt": "2024-01-20T10:00:00Z",      "createdAt": "2024-01-19T09:00:00Z"    }  ]}
+```
+
+**送信ステータスの値:**
+
+| ステータス | 説明 |
+| --- | --- |
+| NOT_SENT | まだ送信されていない |
+| SENT | 送信済み |
+| OPENED | リンクを閲覧した |
+| RESPONDED | 回答完了 |
+### 回答データの構造
+#### フィールドタイプ別の回答値の形式
+
+各フィールド値の形式はフィールドタイプによって異なります。
+
+| フィールドタイプ | 出力形式 | 例 |
+| --- | --- | --- |
+| SHORT_TEXT, LONG_TEXT | string | `"山田太郎"` |
+| DATE, NUMBER | string | `"2024-01-20"`, `"42"` |
+| EMAIL, PHONE_NUMBER, ADDRESS | string | `"user@example.com"` |
+| FILE_UPLOAD, IMAGE_UPLOAD, VIDEO_UPLOAD | string | `"https://...file1.pdf"` |
+| RADIO, DROPDOWN | string[] | `["選択肢1"]` |
+| CHECKBOX, DROPDOWN_MULTI, PICTURE_CHOICE, LINEAR | string[] | `["選択肢1", "選択肢2"]` |
+| RADIO_GRID, CHECKBOX_GRID | Record&lt;string, string[]&gt; | `{ "行1": ["列1"] }` |
+| GEOLOCATION | object | `{ "latitude": "37.5665", "longitude": "126.9780" }` |
+| TABLE | object | `{ "行1": { "列1": "値1" } }` |
+| CUSTOM | カスタムフィールドのバージョンの `outputSchema` に従う | `{ "score": 85 }` |
+
+詳細な出力スキーマは `GET /open-api/v1/field-output-schemas` API を参照してください。
+
+#### 隠しフィールド
+
+隠しフィールドは `hidden-{フィールドID}` 形式のキーとして回答データに含まれます。
+
+```
+{  
+  "hidden-field_abc123": "facebook",  "hidden-field_xyz789": "spring_campaign"}
+```
+
+隠しフィールドの値は URL パラメータで渡されます。
+
+```
+https://walla.my/v/{formId}?utm_source=facebook&utm_campaign=spring_campaign
+```
+
+#### customerKey
+
+`customerKey` は Form Delivery で各宛先を識別するために自動生成される値です。
+
+- 送信ステータスの追跡（送信済み → 閲覧 → 回答完了）に使用します。
+- 回答データを絞り込むときに活用できます。
+- Form Delivery を使わない場合は空になることがあります。
+## エラーレスポンス
+
+API リクエストが失敗すると、HTTP ステータスコードとエラーメッセージが返されます。
+
+| ステータスコード | 説明 |
+| --- | --- |
+| 400 | 不正なリクエスト（パラメータの誤りなど） |
+| 401 | 認証失敗（API キーの欠落または無効） |
+| 403 | 権限なし（該当リソースにアクセスできない） |
+| 404 | リソースが見つからない |
+| 500 | サーバーエラー |
+
+**エラーレスポンス例:**
+
+```
+{  
+  "error": "Form not found or not published"}
+```
+
+## 使用例
+### 1. customerKey を活用した回答連携のシナリオ
+
+
+- 外部システムの顧客 ID を Walla の `customerKey` として使用します。
+- `GET /forms/{formId}/responses?customerKey={customerKey}`でその顧客の回答を取得します。
+- `totalCount` が 0 より大きければ回答が存在します。
+### 2. フォームの回答一覧を取得する
+
+```
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 3. 特定の回答を取得する  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 4. customerKey で回答を絞り込む  
+  
+```bash  
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \  -H "X-WALLA-API-KEY: your_api_key"```  
+  
+### 5. Form Delivery でフォームを送信する  
+  
+```bash  
+curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X-WALLA-API-KEY: your_api_key" \  -H "Content-Type: application/json" \  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "顧客満足度調査",  
+    "message": "貴重なご意見をお聞かせください。"  
+  }'```
+```
+
+## Field Type
+| Type | Name |
+| --- | --- |
+| RADIO | 選択式 |
+| CHECKBOX | 選択式（複数選択） |
+| PICTURE_CHOICE | 画像選択 |
+| DROPDOWN | ドロップダウン |
+| DROPDOWN_MULTI | ドロップダウン（複数選択） |
+| LINEAR | リニアスケール |
+| RADIO_GRID | 選択式グリッド |
+| CHECKBOX_GRID | 選択式グリッド（複数選択） |
+| PRIVACY_POLICY_INFORMATION | 個人情報収集 |
+| SHORT_TEXT | 短文 |
+| LONG_TEXT | 長文 |
+| NUMBER | 数値 |
+| TABLE | 表 |
+| SECRETS | 機密情報入力 |
+| DESCRIPTION | 説明 |
+| WEBSITE_LINK | 埋め込み |
+| DATE | 日付 |
+| TIME | 時刻 |
+| EMAIL | メールアドレス |
+| ADDRESS | 住所 |
+| PHONE_NUMBER | 電話番号 |
+| FILE_UPLOAD | ファイルアップロード |
+| IMAGE_UPLOAD | 写真撮影 |
+| VIDEO_UPLOAD | 動画撮影 |
+| GEOLOCATION | 位置情報 |
+| TOSS_PAYMENTS | Toss Payments |
+| CUSTOM | カスタムフィールド |
+| REJECT | 不適格 |
+| ENDING_DESCRIPTION | 終了フィールド（終了ページ） |
+| ENDING_REDIRECT | 終了フィールド（URL へ移動） |
+| SUBMIT | 送信 |

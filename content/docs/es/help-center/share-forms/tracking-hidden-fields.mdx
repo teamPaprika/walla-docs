@@ -1,0 +1,73 @@
+---
+title: "Seguimiento (campos ocultos)"
+description: "El seguimiento te permite saber por qué canal han llegado las respuestas del formulario. Resulta útil cuando quieres distinguir las respuestas por canal publicitario, grupo de clientes u otros criterios."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Añadir elementos de seguimiento (campos ocultos)
+
+<Steps>
+  <Step>
+    ### Abre la página de gestión del seguimiento
+    En la página de compartir, pulsa el botón `Gestionar`.
+  </Step>
+  <Step>
+    ### Introduce el elemento de seguimiento
+    Escribe el nombre del seguimiento (el nombre del campo oculto) y pulsa Enter para registrarlo; si no, el elemento no se crea.
+  </Step>
+  <Step>
+    ### Guarda
+    Pulsa el botón `Guardar`.
+  </Step>
+  <Step>
+    ### Úsalo
+    Los campos ocultos registrados funcionan como «categorías para distinguir el canal de procedencia».
+    - ① Ver la procedencia por red social → llama al campo oculto `SNS` (por ejemplo: Instagram, YouTube, etc.)
+    - ② Distinguir por grupo de clientes → llama al campo oculto `customer`
+  </Step>
+</Steps>
+## Crear la URL con campos ocultos
+
+Una vez configurado el campo oculto, tienes que añadirlo tú mismo al enlace (URL) del formulario.
+
+<Steps>
+  <Step>
+    ### Parte de la URL básica del formulario
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4
+    ```
+  </Step>
+  <Step>
+    ### Añade el nombre del campo oculto
+    Añádelo con el formato `?nombreDelCampo=`.
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=
+    ```
+  </Step>
+  <Step>
+    ### Escribe el valor del campo
+    Por ejemplo, si la visita llega desde YouTube:
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=youtube
+    ```
+  </Step>
+  <Step>
+    ### Comparte un enlace por canal
+    Si compartes cada enlace en un canal distinto, podrás ver en la hoja de respuestas de dónde procede cada una (YouTube, Instagram, etc.).
+  </Step>
+</Steps>
+## Usar varios campos ocultos
+
+- Para añadir varios campos ocultos a la URL, encadénalos con «&» en lugar de «?».
+```
+https://walla.my/v/QA9S0imWeo232fSbd4?source=instagram&media=video
+```
+→ Significa que la visita procede de un anuncio en vídeo de Instagram.
+<Callout type="warning" title="Advertencia">
+- Al registrar un elemento de seguimiento hay que pulsar Enter para que se guarde.
+- Te recomendamos usar solo letras latinas, números y guiones bajos (_) en los nombres de los campos ocultos.
+</Callout>
+<Callout title="Consejo">
+Si necesitas crear muchas URL con campos ocultos, resulta muy práctico duplicar esta [plantilla de Google Sheets para generar enlaces con campos ocultos](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing).
+</Callout>

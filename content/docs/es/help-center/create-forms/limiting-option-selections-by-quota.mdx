@@ -1,0 +1,38 @@
+---
+title: "Cerrar opciones por orden de llegada"
+description: "En las preguntas de opción múltiple, selección múltiple y desplegable puedes limitar cuántas veces se puede elegir una opción concreta. (Por ejemplo, inscripciones por orden de llegada o límites de selección por opción.)"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Cómo configurarlo
+
+<Steps>
+  <Step>
+    ### Activa la función
+    Selecciona la pregunta y activa la función «Límite de respuestas por opción».
+  </Step>
+  <Step>
+    ### Introduce el máximo de respuestas
+    Pulsa el botón «Configurar» e introduce el número máximo de respuestas de cada opción.
+  </Step>
+  <Step>
+    ### Publica
+    Al publicar, el número de veces que se elige esa opción sobre el total de respuestas no superará la cifra que hayas fijado.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Advertencia">
+- Si eliminas o modificas una opción, se restablece su configuración de límite.
+- El límite de respuestas se aplica a partir del momento en que publicas el formulario.
+</Callout>
+
+## Cómo se muestra al aplicarse
+
+1. **Si la opción ya está completa** → aparece desactivada y no se puede elegir.
+
+2. **Si la opción se completa mientras se responde** → al pulsar `Enviar respuesta` se muestra el mensaje de error «Se ha superado el número de envíos de una de las preguntas».
+
+<Callout title="Ten en cuenta">
+El límite de respuestas por opción te ayuda a evitar respuestas duplicadas y a recoger las respuestas de forma justa en situaciones como inscripciones por orden de llegada o reservas de plaza.
+</Callout>

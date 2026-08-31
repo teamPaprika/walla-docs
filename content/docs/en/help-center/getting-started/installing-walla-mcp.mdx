@@ -1,0 +1,50 @@
+---
+title: Installing the Walla MCP
+description: Connect the Walla MCP to Claude as a custom connector and work with your Walla forms and response data straight from Claude.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Walla provides an MCP (Model Context Protocol) server. Connect the Walla MCP to Claude as a custom connector, and you can look up forms and responses, create new forms, or build custom fields — all while chatting with Claude.
+
+<Steps>
+  <Step>
+    ### Open connector settings
+    Go to [claude.ai](https://claude.ai), open the `Customize` menu in the left sidebar, then go to `Connectors`.
+
+    <img src="/images/guides/getting-started/mcp-01-connectors.png" alt="Navigating to the Connectors menu from the Customize screen" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Start adding a custom connector
+    Click the plus button in the top right of the Connectors screen and select `Add custom connector`.
+
+    <img src="/images/guides/getting-started/mcp-02-add-custom-connector.png" alt="Selecting Add custom connector from the plus button menu" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Enter the connector details
+    Fill in the following in the `Add custom connector` dialog and click `Add`. You can leave the OAuth fields empty.
+
+    - Name: Walla Form
+    - Remote MCP server URL: {"https://app.walla.my/api/mcp"}
+
+    <img src="/images/guides/getting-started/mcp-03-connector-info.png" alt="Entering the name and URL in the Add custom connector dialog, then clicking Add" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Connect your Walla account
+    Select the Walla Form connector that was added to the list, then click `Connect`.
+
+    <img src="/images/guides/getting-started/mcp-04-connect.png" alt="Clicking the Connect button on the Walla Form connector" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Grant access
+    On the app authorization screen, review the permissions Claude is requesting (read projects, read project responses, download project responses, write projects, offline access) and click `Allow`.
+
+    <img src="/images/guides/getting-started/mcp-05-authorize.png" alt="Clicking Allow on the app authorization request screen" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confirm the connection
+    Once connected, the connector switches to a Connected state. The right-hand panel shows the tools Claude can use and the permissions granted.
+
+    <img src="/images/guides/getting-started/mcp-06-connected.png" alt="Tool list and permissions for the Walla Form connector after connecting" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>

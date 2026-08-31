@@ -1,0 +1,56 @@
+---
+title: "Evitar respuestas duplicadas"
+description: "Cuando quieras impedir que una misma persona responda varias veces al mismo formulario, usa la prevención de respuestas duplicadas."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Limitar las respuestas duplicadas
+Cuando quieras impedir que una misma persona responda varias veces al mismo formulario, usa la función de límite de respuestas duplicadas.
+Hay dos métodos, y puedes activarlos a la vez.
+
+|Método|Criterio|Características|
+|---|---|---|
+|Prevención por navegador|El navegador de quien responde|Es fácil de configurar, pero se puede volver a responder desde otro navegador o en modo incógnito|
+|Una vez por usuario verificado|Correo, teléfono o ID de miembro externo verificados|El límite se mantiene aunque se cambie de dispositivo|
+
+## Cómo configurarlo
+
+<Steps>
+  <Step>
+    ### Ve a la pestaña Respondientes
+    Haz clic en el icono `⚙️` de la esquina superior derecha del editor para abrir los ajustes del formulario y selecciona `Respondientes` en la lista de pestañas de la izquierda.
+  </Step>
+
+  <Step>
+    ### Elige el método de limitación
+    Activa el interruptor que quieras en la sección `Respuestas duplicadas`. La frase resumen de la parte superior te indica al instante cómo está la configuración.
+
+|Configuración|Resumen que se muestra|
+|---|---|
+|Nada activado|La misma persona puede responder varias veces|
+|`Una vez por usuario verificado` activado|Solo se puede responder una vez por correo, teléfono o ID de miembro externo verificados|
+
+### 1. Prevención por navegador
+
+- Quien ya haya respondido desde el mismo navegador no podrá volver a hacerlo.
+- Tras responder, la página del formulario no se abre y se muestra un mensaje indicando que ya se envió una respuesta.
+- Sí es posible volver a responder desde otro navegador, otro dispositivo o en modo incógnito.
+
+### 2. Una vez por usuario verificado
+
+- Solo se puede responder una vez por correo, teléfono o ID de miembro externo verificados. Como el límite se mantiene aunque se cambie de dispositivo o navegador, la prevención de duplicados es más fiable.
+
+- Para activar este interruptor necesitas un modo de identificar a quien responde. Si lo activas sin ningún método de verificación, también se activará la verificación por correo.
+
+- El criterio de identificación varía según la configuración.
+	- Si usas verificación por correo en la pestaña `Respondientes` → el correo verificado
+	- Si usas verificación por teléfono en la pestaña `Respondientes` → el teléfono verificado
+	- Si usas token firmado por el host + identificación de miembro en la pestaña `Incrustación` → el ID de miembro externo del token
+
+<Callout title="Ten en cuenta">
+Si desactivas `Verificación de usuario`, también se desactiva `Una vez por usuario verificado`. Si has desactivado y vuelto a activar la verificación, comprueba que el límite de duplicados siga en pie.
+</Callout>
+
+  </Step>
+</Steps>

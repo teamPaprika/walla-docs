@@ -1,0 +1,278 @@
+---
+title: 認証
+description: Walla Open API の認証方法
+---
+
+# 認証
+
+Walla Open API は API キーによる認証を使用します。すべての API リクエストには、有効な API キーをヘッダーに含める必要があります。
+
+## API キー認証
+
+すべてのリクエストの `X-WALLA-API-KEY` ヘッダーに API キーを含めてください。
+
+### ヘッダーの形式
+
+```
+X-WALLA-API-KEY: your_api_key_here
+```
+
+### チームスコープの API キー
+
+Walla の API キーは **チーム単位** で生成されます。
+
+- 各 API キーは特定のチームに紐づきます
+- チーム情報はすべてのリクエストに自動的に含まれます
+- API 呼び出し時に別途チーム情報を渡す必要はありません
+- ワークスペース、フォーム、回答は自動的にそのチームの範囲で絞り込まれます
+
+## API キーを発行する
+
+1. [app.walla.my](https://app.walla.my) にログインします
+2. [app.walla.my/open-api/doc](https://app.walla.my/open-api/doc) へ移動します
+3. ページ上部の API キーのセクションでキーを生成またはコピーします
+
+> **重要**: API キーはパスワードと同様に安全に保管し、外部に共有しないでください。
+
+## 認証済みリクエストを送る
+
+各言語で API キーを含める方法は次のとおりです。
+
+### cURL
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+### JavaScript (Fetch)
+
+```javascript
+fetch('https://api.walla.my/open-api/v1/workspaces', {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('エラー:', error));
+```
+
+### Python (requests)
+
+```python
+import requests
+
+url = "https://api.walla.my/open-api/v1/workspaces"
+headers = {
+    "X-WALLA-API-KEY": "your_api_key_here",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+data = response.json()
+print(data)
+```
+
+### Node.js (axios)
+
+```javascript
+const axios = require('axios');
+
+const config = {
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+};
+
+axios.get('https://api.walla.my/open-api/v1/workspaces', config)
+  .then(response => console.log(response.data))
+  .catch(error => console.error('エラー:', error));
+```
+
+## 認証エラー
+
+認証に失敗すると、以下のようなエラーが返されます。
+
+### 401 Unauthorized
+
+次の場合に発生します。
+- リクエストに API キーが含まれていない場合
+- API キーが無効、または期限切れ・取り消し済みの場合
+
+**レスポンス例:**
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 403 Forbidden
+
+認証は通過したものの、そのリソースにアクセスする権限がない場合に発生します。
+
+**レスポンス例:**
+
+```json
+{
+  "error": "Forbidden"
+}
+```
+
+## ベストプラクティス
+
+### セキュリティ
+
+- **API キーをコミットしない** - Git などのバージョン管理システムに API キーを含めないでください
+- **環境変数を使う** - API キーは環境変数で管理してください
+- **キーを定期的に交換する** - セキュリティのため、定期的にキーを更新してください
+- **環境ごとにキーを分ける** - 開発・ステージング・本番でそれぞれ別のキーを使ってください
+
+### 環境変数
+
+API キーを環境変数に保存してください。
+
+```bash
+# .env ファイル
+WALLA_API_KEY=your_api_key_here
+```
+
+コードからは以下のように読み込めます。
+
+```javascript
+// JavaScript
+const apiKey = process.env.WALLA_API_KEY;
+```
+
+```python
+# Python
+import os
+api_key = os.getenv('WALLA_API_KEY')
+```
+
+### レート制限
+
+Walla Open API には、システムの安定性のためレート制限が適用されます。
+
+- **制限**: API キーあたり 1 時間 6,000 件
+- **時間ウィンドウ**: 1 時間（ローリングウィンドウ）
+
+レート制限を超えると `429 Too Many Requests` が返されます。その場合は:
+
+- 指数バックオフで再試行してください
+- 可能ならレスポンスをキャッシュしてください
+- 不要な重複リクエストを減らしてください
+- API の使用量をモニタリングしてください
+- 可能ならリクエストをまとめて処理してください
+
+## トラブルシューティング
+
+### よくある問題
+
+**問題**: API キーを入れているのに 401 エラーが発生する
+
+**解決方法**:
+- API キーが正しく、期限切れでないか確認してください
+- そのワークスペースに対する権限があるか確認してください
+- ヘッダー名が正確に `X-WALLA-API-KEY` か確認してください（大文字・小文字を区別）
+- アクセス権限のあるワークスペースのリソースか確認してください
+
+**問題**: API キーが送信されていない
+
+**解決方法**:
+- ヘッダーの形式が正しいか確認してください
+- HTTP クライアントでカスタムヘッダーが含まれているか確認してください
+- ヘッダー名に打ち間違いがないか確認してください
+
+## 次のステップ
+
+認証の設定が終わったら、以下のドキュメントをご覧ください。
+
+<Cards>
+  <Card title="クイックスタートガイド" href="/ja/docs/developer-docs/quick-start" />
+  <Card title="ワークスペース API" href="/ja/docs/developer-docs/workspaces" />
+  <Card title="フォーム API" href="/ja/docs/developer-docs/forms" />
+</Cards>
+
+## 追加のセキュリティ上の考慮点
+
+### API キーの保護
+
+1. **コードにハードコーディングしない**
+   - ソースコードに API キーを直接書かないでください
+   - 環境変数やシークレット管理サービスを使ってください
+
+2. **HTTPS のみを使う**
+   - API は HTTPS でのみアクセスできます
+   - HTTP リクエストは拒否されます
+
+3. **キーの流出を監視する**
+   - 公開リポジトリにキーが上がっていないか定期的に確認してください
+   - キーが流出した場合はただちに破棄し、新しく発行してください
+
+### 権限の管理
+
+- API キーはワークスペースの権限と連動します
+- チームメンバーごとに個別の API キーを発行してください
+- 使わなくなったキーはすぐに破棄してください
+- API キーの利用状況を定期的に点検してください
+
+### エラー処理のベストプラクティス
+
+```javascript
+async function makeAuthenticatedRequest(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status === 401) {
+      console.error('認証に失敗しました: API キーを確認してください');
+      // ユーザーに通知するか、再認証のプロセスを開始する
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP エラー! ステータス: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('リクエスト失敗:', error);
+    throw error;
+  }
+}
+```
+
+```python
+import requests
+import os
+
+def make_authenticated_request(url):
+    headers = {
+        'X-WALLA-API-KEY': os.getenv('WALLA_API_KEY'),
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            print('認証に失敗しました: API キーを確認してください')
+            return None
+
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as e:
+        print(f'リクエスト失敗: {e}')
+        raise
+```

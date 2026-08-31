@@ -1,0 +1,278 @@
+---
+title: 驗證
+description: Walla Open API 的驗證方式
+---
+
+# 驗證
+
+Walla Open API 採用以 API 金鑰為基礎的驗證。所有 API 請求都必須在標頭中帶上有效的 API 金鑰。
+
+## API 金鑰驗證
+
+請在所有請求的 `X-WALLA-API-KEY` 標頭中帶上 API 金鑰。
+
+### 標頭格式
+
+```
+X-WALLA-API-KEY: your_api_key_here
+```
+
+### 團隊範圍的 API 金鑰
+
+Walla API 金鑰是以**團隊為單位**建立的。
+
+- 每把 API 金鑰都連結到特定團隊
+- 團隊資訊會自動包含在所有請求中
+- 呼叫 API 時不需要另外傳送團隊資訊
+- 工作區、表單與回覆會自動以該團隊範圍篩選
+
+## 取得 API 金鑰
+
+1. 登入 [app.walla.my](https://app.walla.my)
+2. 前往 [app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+3. 在頁面上方的 API 金鑰區塊建立或複製金鑰
+
+> **重要**：請像保管密碼一樣妥善保存 API 金鑰，切勿對外分享。
+
+## 發送已驗證的請求
+
+各語言帶上 API 金鑰的方式如下。
+
+### cURL
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+### JavaScript (Fetch)
+
+```javascript
+fetch('https://api.walla.my/open-api/v1/workspaces', {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('錯誤:', error));
+```
+
+### Python (requests)
+
+```python
+import requests
+
+url = "https://api.walla.my/open-api/v1/workspaces"
+headers = {
+    "X-WALLA-API-KEY": "your_api_key_here",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+data = response.json()
+print(data)
+```
+
+### Node.js (axios)
+
+```javascript
+const axios = require('axios');
+
+const config = {
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+};
+
+axios.get('https://api.walla.my/open-api/v1/workspaces', config)
+  .then(response => console.log(response.data))
+  .catch(error => console.error('錯誤:', error));
+```
+
+## 驗證錯誤
+
+驗證失敗時會回傳下列錯誤。
+
+### 401 Unauthorized
+
+在下列情況下發生。
+- 請求中缺少 API 金鑰
+- API 金鑰無效，或已過期／被撤銷
+
+**回應範例：**
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 403 Forbidden
+
+在通過驗證但沒有存取該資源的權限時發生。
+
+**回應範例：**
+
+```json
+{
+  "error": "Forbidden"
+}
+```
+
+## 最佳做法
+
+### 安全性
+
+- **不要把 API 金鑰提交進版控** - 請勿把 API 金鑰放進 Git 等版本控制系統
+- **使用環境變數** - 請以環境變數管理 API 金鑰
+- **定期更換金鑰** - 為了安全請定期更新金鑰
+- **依環境分開金鑰** - 開發、測試、正式環境請各自使用不同的金鑰
+
+### 環境變數
+
+請把 API 金鑰存放在環境變數中。
+
+```bash
+# .env 檔案
+WALLA_API_KEY=your_api_key_here
+```
+
+在程式碼中可以像下面這樣讀取。
+
+```javascript
+// JavaScript
+const apiKey = process.env.WALLA_API_KEY;
+```
+
+```python
+# Python
+import os
+api_key = os.getenv('WALLA_API_KEY')
+```
+
+### 速率限制
+
+Walla Open API 為了系統穩定性設有速率限制。
+
+- **限制**：每把 API 金鑰每小時 6,000 次
+- **時間視窗**：1 小時（滾動視窗）
+
+超過速率限制時會回傳 `429 Too Many Requests`。此時請：
+
+- 以指數退避（exponential backoff）方式重試
+- 盡可能快取回應
+- 減少不必要的重複請求
+- 監控 API 使用量
+- 盡可能把請求批次處理
+
+## 疑難排解
+
+### 常見問題
+
+**問題**：已帶上 API 金鑰卻仍出現 401 錯誤
+
+**解決方式**：
+- 確認 API 金鑰正確且尚未過期
+- 確認你對該工作區具有權限
+- 確認標頭名稱正好是 `X-WALLA-API-KEY`（區分大小寫）
+- 確認該資源屬於你有存取權限的工作區
+
+**問題**：API 金鑰沒有被送出
+
+**解決方式**：
+- 確認標頭格式正確
+- 確認 HTTP 用戶端有帶上自訂標頭
+- 確認標頭名稱沒有拼字錯誤
+
+## 下一步
+
+設定好驗證之後，請參考以下文件。
+
+<Cards>
+  <Card title="快速上手指南" href="/zh-TW/docs/developer-docs/quick-start" />
+  <Card title="工作區 API" href="/zh-TW/docs/developer-docs/workspaces" />
+  <Card title="表單 API" href="/zh-TW/docs/developer-docs/forms" />
+</Cards>
+
+## 其他安全性考量
+
+### 保護 API 金鑰
+
+1. **不要寫死在程式碼中**
+   - 請勿把 API 金鑰直接放進原始碼
+   - 請使用環境變數或密鑰管理服務
+
+2. **只使用 HTTPS**
+   - API 只能透過 HTTPS 存取
+   - HTTP 請求會被拒絕
+
+3. **監控金鑰外洩**
+   - 定期確認金鑰沒有被推送到公開的儲存庫
+   - 一旦金鑰外洩，請立即撤銷並重新發行
+
+### 權限管理
+
+- API 金鑰會連結到工作區權限
+- 請為每位團隊成員各自發行 API 金鑰
+- 不再使用的金鑰請立即撤銷
+- 請定期檢視 API 金鑰的使用狀況
+
+### 錯誤處理最佳做法
+
+```javascript
+async function makeAuthenticatedRequest(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status === 401) {
+      console.error('驗證失敗：請確認 API 金鑰');
+      // 通知使用者或啟動重新驗證流程
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP 錯誤！狀態: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('請求失敗:', error);
+    throw error;
+  }
+}
+```
+
+```python
+import requests
+import os
+
+def make_authenticated_request(url):
+    headers = {
+        'X-WALLA-API-KEY': os.getenv('WALLA_API_KEY'),
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            print('驗證失敗：請確認 API 金鑰')
+            return None
+
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as e:
+        print(f'請求失敗: {e}')
+        raise
+```

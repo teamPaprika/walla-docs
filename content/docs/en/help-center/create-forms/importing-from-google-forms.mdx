@@ -1,0 +1,51 @@
+---
+title: Importing from Google Forms
+description: Bring a survey you built in Google Forms into Walla and use it as is.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Importing a Google Forms survey
+
+<Steps>
+  <Step>
+    ### Click the Create Project button
+    On the workspace screen, click the `Create Project` button.
+
+    <img src="/images/guides/manage-forms/team-template-create-project.png" alt="The Create Project button in the top right of the workspace" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Select Import from Google Forms
+    Choose `Import from Google Forms`.
+
+    <img src="/images/guides/manage-forms/import-google-forms-select.png" alt="Selecting the Import from Google Forms card in the new project popup" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Paste the Google Forms respondent link and import
+    Paste the Google Forms respondent link (`https://docs.google.com/forms/d/...`) into the input box and click the `Import` button.
+
+    <img src="/images/guides/manage-forms/import-google-forms-dialog.png" alt="The Import from Google Forms dialog highlighting the respondent link input and Import button, with cautions, unsupported items, and the collect responses in Google Forms option" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <Callout type="warning" title="Before you import">
+    In Google Forms, go to Settings → Responses and turn off any sub-options that require sign-in.
+    Section headers are imported as Walla description fields.
+    </Callout>
+
+    <Callout type="warning" title="What can't be imported">
+    - Background images and question images set in Google Forms
+    - File upload questions configured in Google Forms
+    </Callout>
+  </Step>
+  <Step>
+    ### Done
+    A new project is created from the Google Forms link you entered.
+
+    <img src="/images/guides/manage-forms/import-google-forms-result.png" alt="The editor of a Walla project created by importing from Google Forms, showing the field list and survey body" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+### Collecting responses in Google Forms
+
+- Selecting `Collect responses in Google Forms` creates a custom automation.
+- Responses submitted to Walla are also submitted to Google Forms. This automation is one-time only: if you edit and republish the survey in either Google Forms or Walla, the automation **stops** from that point on and **responses will no longer reach Google Forms.**
+- We recommend finishing all survey edits in Google Forms before importing into Walla.
+- Responses that include an "Other (write in)" answer on a multiple choice or checkbox question cannot be forwarded.

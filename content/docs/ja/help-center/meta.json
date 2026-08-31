@@ -1,0 +1,22 @@
+{
+  "title": "ヘルプセンター",
+  "root": true,
+  "pages": [
+    "index",
+    "faq",
+    "---はじめに---",
+    "getting-started",
+    "team-workspace",
+    "---フォーム---",
+    "create-forms",
+    "manage-forms",
+    "share-forms",
+    "custom-design",
+    "---データと連携---",
+    "result-analysis",
+    "integrate-forms",
+    "---設定---",
+    "security",
+    "reward"
+  ]
+}

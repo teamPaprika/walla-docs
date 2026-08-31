@@ -1,0 +1,38 @@
+---
+title: "Añadir o eliminar campos"
+description: "En la pantalla de edición del proyecto puedes añadir, eliminar o duplicar campos para construir el formulario. Ajusta libremente la posición y la estructura de los campos para gestionarlo con más facilidad."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Añadir un campo
+
+### Haz clic en el icono «+» de la lista de campos de la izquierda
+Elige el campo que quieras y se añadirá. Si lo añades con otro campo seleccionado, el nuevo se colocará automáticamente debajo.
+
+### Añadir desde el centro de la pantalla de edición
+Sitúa el cursor entre dos campos y aparecerá el botón `Añadir`.
+Haz clic para insertar un campo nuevo en esa posición.
+
+### Añadir dentro de un grupo de campos
+Sitúa el cursor en la parte inferior de un grupo de campos y aparecerá el botón `Añadir`. Haz clic para añadir una pregunta dentro del grupo.
+
+## Eliminar o duplicar un campo
+### Eliminar o duplicar desde la pantalla de edición
+Pulsa los iconos de la derecha del campo para eliminar o duplicar el campo seleccionado.
+
+### Eliminar o duplicar desde la lista de campos
+<Steps>
+  <Step>
+    ### Localiza el icono de más opciones
+    En la lista de campos de la izquierda, pasa el ratón por encima de un campo y aparecerá el icono `...` (más) a su derecha.
+  </Step>
+  <Step>
+    ### Elige Eliminar o Duplicar
+    Haz clic en el icono para elegir entre «Eliminar» y «Duplicar».
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Advertencia">
+Al eliminar un campo también se borran los datos de respuesta de ese campo. Haz una copia de seguridad de lo que necesites antes de borrar.
+</Callout>

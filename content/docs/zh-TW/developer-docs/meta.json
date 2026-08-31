@@ -1,0 +1,23 @@
+{
+  "title": "開發者文件",
+  "root": true,
+  "pages": [
+    "index",
+    "---指南---",
+    "quick-start",
+    "authentication",
+    "error-codes",
+    "---API 參考---",
+    "workspaces",
+    "forms",
+    "field-schemas",
+    "responses",
+    "delivery",
+    "---Custom Field SDK---",
+    "custom-fields-overview",
+    "custom-fields-quick-start",
+    "custom-fields-lifecycle",
+    "custom-fields-api-reference",
+    "custom-fields-properties-schema"
+  ]
+}

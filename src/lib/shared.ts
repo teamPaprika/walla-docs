@@ -1,6 +1,6 @@
 export const appName = 'Walla Docs';
 export const docsRoute = '/docs';
-export const docsImageRoute = '/og/docs';
+export const ogImage = '/og-image.jpg';
 export const docsContentRoute = '/llms.mdx/docs';
 
 export const gitConfig = {

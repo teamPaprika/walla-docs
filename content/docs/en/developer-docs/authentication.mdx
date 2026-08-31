@@ -201,3 +201,81 @@ Now that you understand authentication, you can:
   <Card title="Workspaces API" href="/en/docs/developer-docs/workspaces" />
   <Card title="Forms API" href="/en/docs/developer-docs/forms" />
 </Cards>
+
+## Additional Security Considerations
+
+### Protecting Your API Key
+
+1. **Don't hardcode it**
+   - Never put an API key directly in your source code
+   - Use environment variables or a secret management service
+
+2. **Use HTTPS only**
+   - The API is reachable over HTTPS only
+   - HTTP requests are rejected
+
+3. **Monitor for exposure**
+   - Regularly check that keys haven't been pushed to public repositories
+   - If a key is exposed, revoke it immediately and issue a new one
+
+### Managing Permissions
+
+- API keys are tied to workspace permissions
+- Issue a separate API key per team member
+- Revoke unused keys right away
+- Review API key usage periodically
+
+### Error Handling Best Practices
+
+```javascript
+async function makeAuthenticatedRequest(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status === 401) {
+      console.error('Authentication failed: check your API key');
+      // Notify the user or start a re-authentication flow
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Request failed:', error);
+    throw error;
+  }
+}
+```
+
+```python
+import requests
+import os
+
+def make_authenticated_request(url):
+    headers = {
+        'X-WALLA-API-KEY': os.getenv('WALLA_API_KEY'),
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            print('Authentication failed: check your API key')
+            return None
+
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as e:
+        print(f'Request failed: {e}')
+        raise
+```

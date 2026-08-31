@@ -1,0 +1,22 @@
+{
+  "title": "說明中心",
+  "root": true,
+  "pages": [
+    "index",
+    "faq",
+    "---開始使用---",
+    "getting-started",
+    "team-workspace",
+    "---表單---",
+    "create-forms",
+    "manage-forms",
+    "share-forms",
+    "custom-design",
+    "---資料與整合---",
+    "result-analysis",
+    "integrate-forms",
+    "---設定---",
+    "security",
+    "reward"
+  ]
+}

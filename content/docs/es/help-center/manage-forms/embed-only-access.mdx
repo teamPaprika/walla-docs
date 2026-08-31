@@ -1,0 +1,226 @@
+---
+title: Configurar el acceso solo por incrustación
+description: Cómo restringir el acceso directo mediante el enlace del formulario y recibir respuestas únicamente desde el formulario incrustado en tu web.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+## Cómo configurarlo
+
+<Steps>
+  <Step>
+    ### Ve a la pestaña Incrustación
+    Haz clic en el icono `⚙️` de la esquina superior derecha del editor para abrir los ajustes del formulario y selecciona `Incrustación` en la lista de pestañas de la izquierda.
+  </Step>
+
+  <Step>
+    ### Activa el acceso solo por incrustación
+    Al activar `Acceso solo por incrustación` puedes elegir entre tres modos.
+
+|Modo|Qué bloquea|Qué necesitas|Plan|
+|---|---|---|---|
+|Solo sitios permitidos|Incrustaciones en sitios fuera de la lista y acceso directo por enlace|Orígenes permitidos|Pro|
+|Token firmado por el host|Lo anterior + peticiones que no vengan de un navegador|Orígenes permitidos, secreto de firma e integración con tu servidor|Enterprise|
+|Token firmado + identificación de miembro|Lo anterior + respuestas duplicadas por miembro|Lo anterior + ID de miembro dentro del token|Enterprise|
+
+#### 1. Solo sitios permitidos
+
+Bloquea desde el navegador las incrustaciones en sitios no permitidos y el acceso directo. Es la configuración más sencilla.
+Sin embargo, las peticiones entre servidores pueden imitar las mismas cabeceras. Si necesitas verificar quién responde, usa uno de los modos con firma.
+
+#### 2. Token firmado por el host
+
+El formulario solo se abre con un token firmado por tu servidor, incluso para peticiones que no vengan de un navegador. Imitar cabeceras no basta para pasar.
+
+#### 3. Token firmado + identificación de miembro
+
+Usa además el ID de miembro incluido en el token para bloquear respuestas duplicadas por miembro.
+En este modo, el resumen de respuestas duplicadas de la pestaña `Respondientes` muestra también el «ID de miembro externo» como criterio. Puedes limitar a una respuesta por miembro sin pedir una verificación adicional por correo o teléfono.
+  </Step>
+    <Step>
+    ### Introduce los orígenes permitidos
+    Escribe la dirección del sitio donde vas a incrustar el formulario.
+
+- Introduce solo el esquema y el host. `https://your-site.com`
+- No incluyas barra final ni ruta. `https://your-site.com/survey` no es válido.
+
+<Callout type="warning" title="Advertencia">
+En el modo `Solo sitios permitidos`, la restricción solo se aplica cuando añades al menos un origen. Si la lista está vacía no se aplica ningún límite, así que compruébalo siempre.
+</Callout>
+
+  </Step>
+  <Step>
+    ### Genera el secreto de firma
+    Al elegir un modo con firma aparece la sección `Secreto de firma`. Es el valor con el que tu servidor firma los tokens.
+
+#### 1. La primera vez que lo generas
+
+Al pulsar `Generar secreto`, el valor se muestra una sola vez. Pulsa `Copiar` de inmediato y guárdalo en un lugar seguro, como una variable de entorno de tu servidor.
+
+<Callout type="warning" title="Ten cuidado">
+Este valor no se vuelve a mostrar. Si no lo copiaste, tendrás que regenerarlo, y al hacerlo los tokens existentes dejan de funcionar al instante.
+</Callout>
+
+#### 2. Al regenerarlo
+
+Si ya existe un secreto, el botón cambia a `Regenerar secreto`. Al pulsarlo aparece una ventana de confirmación.
+Al regenerarlo ocurre lo siguiente.
+
+- Los tokens firmados con el secreto actual se rechazan de inmediato.
+- Hay que sustituir el secreto en todos los hosts que firmen tokens de incrustación.
+- Las sesiones ya abiertas se mantienen hasta que caduquen (máximo 2 horas).
+
+Regenera el secreto solo cuando el despliegue de tu servidor esté listo. Si alteras el orden, durante ese intervalo nadie podrá abrir el formulario.
+  </Step>
+
+</Steps>
+
+
+## Integración con tu servidor
+
+En los modos con firma, tu servidor debe generar un token JWT de vida corta para cada visitante y pasárselo a la incrustación.
+
+|Término|Significado|
+|---|---|
+|**Secreto de firma**|Un valor que se genera por formulario. Tu servidor firma los tokens con él.|
+|**Token**|Un JWT de vida corta que tu servidor firma para cada visitante.|
+
+### Guardar el secreto de firma
+
+Guarda el secreto que copiaste en una variable de entorno de tu servidor.
+
+```bash
+WALLA_EMBED_SECRET=pega_aquí_el_valor_copiado
+```
+
+<Callout type="warning" title="Advertencia">
+No pongas nunca el secreto de firma en el bundle del navegador, en el código de front-end ni en un repositorio. Si se filtra, cualquiera podrá falsificar tokens. Los secretos son distintos para cada formulario, así que si incrustas varios, guárdalos por separado.
+</Callout>
+
+### Firmar el token
+
+Firma un token nuevo en el servidor cada vez que un visitante abra la página. Este es un ejemplo con `jose`.
+
+```js
+import { SignJWT } from 'jose';
+
+const secret = new TextEncoder().encode(process.env.WALLA_EMBED_SECRET);
+
+const token = await new SignJWT({ email: user.email })
+  .setProtectedHeader({ alg: 'HS256' })
+  .setSubject(user.id)          // obligatorio en el modo de identificación de miembro
+  .setAudience('{formId}')      // ID del formulario de Walla
+  .setExpirationTime('5m')
+  .sign(secret);
+```
+
+En el modo `Token firmado por el host` no hace falta `.setSubject(...)`. En el modo `Token firmado + identificación de miembro` hay que poner el ID de miembro en `sub`.
+
+### Reglas del token
+
+|Elemento|Requisito|
+|---|---|
+|`alg`|Solo se admite `HS256`.|
+|Clave de firma|Se usan los bytes UTF-8 de la cadena del secreto de firma.|
+|`aud`|Debe coincidir con el ID del formulario. Si es un array, debe contenerlo.|
+|`exp`|Obligatorio, y como máximo 10 minutos en el futuro. Se recomienda 5 minutos.|
+|`sub`|Obligatorio en el modo de identificación de miembro, y de 255 caracteres como máximo.|
+|`email`|Opcional.|
+|Codificación|Usa caracteres base64url (`A-Za-z0-9_-`).|
+
+## Pasar el token al iframe
+
+Puedes copiar el código de incrustación básico en **Compartir → Código de incrustación** del panel.
+
+### Modos con firma
+
+El token se pasa en el fragmento de la URL (`#`).
+
+```html
+<iframe
+  src="https://dirección-del-formulario/f/{formId}#embedToken=token_firmado"
+  width="100%"
+  height="500"
+  style="border:0"
+  loading="lazy">
+</iframe>
+```
+
+<Callout type="warning" title="Advertencia">
+No envíes el token en la cadena de consulta (`?embedToken=`). Las cadenas de consulta pueden quedar registradas en los logs del servidor y en la cabecera Referer. Usa siempre el fragmento (`#embedToken=`).
+</Callout>
+
+### Modo Solo sitios permitidos
+
+Este modo no necesita token.
+
+```html
+<iframe
+  src="https://dirección-del-formulario/f/{formId}"
+  width="100%"
+  height="500"
+  style="border:0"
+  loading="lazy">
+</iframe>
+```
+
+En los orígenes permitidos escribe solo el esquema y el host, como `https://your-site.com`. No añadas barra final ni ruta.
+
+### La sesión tras pasar la comprobación
+
+Una vez superada la comprobación, el resultado se mantiene 2 horas. Durante ese tiempo se puede recargar la página sin necesidad de un token nuevo.
+
+## Flujo de la integración
+
+En los modos con firma, el formulario se abre en este orden.
+
+1. Comprueba si la persona ha iniciado sesión en tu servicio.
+2. Firma un token con el secreto de firma que se te ha generado. En el modo de identificación de miembro, incluye también el ID de miembro.
+3. Abre el formulario con el token firmado en el fragmento de la URL.
+4. Walla verifica la firma y el origen del token y muestra el formulario.
+
+## Resolución de problemas
+
+<Accordions>
+  <Accordion title="El sitio está permitido pero el formulario no se abre">
+    **Causa** El origen permitido incluye una ruta o una barra final. **Solución** Deja solo el esquema y el host y vuelve a guardar.
+  </Accordion>
+
+  <Accordion title="Parece que la restricción no se aplica">
+    **Causa** Estás en el modo `Solo sitios permitidos` pero la lista de orígenes está vacía. **Solución** Registra al menos un origen.
+  </Accordion>
+
+  <Accordion title="Tras regenerar el secreto se bloqueó todo de golpe">
+    **Causa** Tu servidor sigue firmando con el secreto antiguo. **Solución** Sustituye el secreto del host por el nuevo y vuelve a desplegar. Las sesiones ya abiertas duran hasta 2 horas, así que pasado ese tiempo se bloquean todos los accesos.
+  </Accordion>
+
+  <Accordion title="Envío el token pero lo rechaza continuamente">
+    Puede que el token vaya en la cadena de consulta, haya caducado, o que la firma o el valor de `aud` no sean correctos. Comprueba que pasas el token en el fragmento (`#embedToken=`) y revisa el secreto de firma, el `aud` y el `exp` de tu servidor.
+  </Accordion>
+
+  <Accordion title="El ID de miembro no se tiene en cuenta para los duplicados">
+    Comprueba si el modo es `Token firmado por el host`. Para limitar los duplicados por miembro debes usar el modo `Token firmado + identificación de miembro` y poner el ID de miembro en el `sub` del token.
+  </Accordion>
+
+  <Accordion title="Tras regenerar, siguen llegando respuestas con los datos de miembro antiguos">
+    Puede que queden sesiones abiertas. Una sesión que ha pasado la comprobación dura hasta 2 horas. Vuelve a comprobarlo con un token nuevo pasadas 2 horas.
+  </Accordion>
+</Accordions>
+
+## Lista de comprobación antes de publicar
+
+- [ ] He confirmado que el modo que quiero usar está disponible en mi plan.
+- [ ] He introducido solo el esquema y el host en los orígenes permitidos.
+- [ ] He guardado el secreto de firma únicamente en variables de entorno del servidor.
+- [ ] Genero un token nuevo en cada petición, con una vida de 5 minutos.
+- [ ] He puesto el ID de formulario correcto en `aud`.
+- [ ] He incluido `sub` en los tokens del modo de identificación de miembro.
+- [ ] El iframe pasa el token en el fragmento (`#embedToken=`).
+- [ ] He comprobado en la página real de incrustación que el formulario se abre y se envía correctamente.
+
+<Callout title="Cuándo conviene usarlo">
+- Has incrustado el formulario en un portal interno o en una página de socios y quieres evitar que el enlace se filtre
+- Solo deben poder responder los miembros de tu servicio
+- Quieres una respuesta por miembro, pero obligar a una verificación por correo te parece demasiado engorroso
+</Callout>

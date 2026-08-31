@@ -1,6 +1,6 @@
 ---
 name: walla-docs:translate
-description: "walla-docs 문서를 번역하고 언어 간 일관성을 검증합니다. 한국어↔영어 번역, 번역 누락 검사, 페이지 구조 동기화를 수행합니다. 번역, translate, 번역 검증, 언어 동기화 등의 요청에 사용합니다."
+description: "walla-docs 문서를 번역하고 언어 간 일관성을 검증합니다. 한국어 원본을 지원 언어 전체로 번역하고, 드리프트(누락·뒤처짐) 검사와 목차 동기화를 수행합니다. 번역, translate, 번역 검증, 언어 동기화 등의 요청에 사용합니다."
 user_invocable: true
 ---
 
@@ -15,9 +15,10 @@ content/docs/
 ├── {lang}/    # 언어별 폴더
 ```
 
-- **지원 언어는 `src/lib/i18n.ts`의 `languages` 배열에서 확인** (현재 en, ko이지만 추가될 수 있음)
-- 실행 시 반드시 `src/lib/i18n.ts`를 읽어서 현재 지원 언어 목록을 파악할 것
+- **번역 원본은 `ko`** 입니다. 한국어를 먼저 쓰고 나머지 언어로 옮깁니다.
+- **지원 언어는 `src/lib/i18n.ts`의 `languages` 배열이 정본**입니다. 이 문서에 언어를 나열하지 말고, 실행할 때마다 그 파일을 읽어 현재 목록을 파악하세요.
 - 모든 언어는 **완전히 동일한 폴더 구조와 파일명**을 가져야 합니다.
+- 단, `content/docs/.i18n-ignore` 에 적힌 경로는 의도적으로 번역하지 않습니다 (영어 폴백 사용).
 
 ## 모드
 
@@ -31,35 +32,50 @@ content/docs/
 2. 대상 언어 버전이 있는지 확인합니다
 3. 번역을 생성하거나 기존 번역을 업데이트합니다
 
-### 모드 2: 번역 누락 검사 (검증)
+### 모드 2: 드리프트 검사 (검증)
 
-사용자가 번역 검증, 동기화 확인을 요청하면:
+사용자가 번역 검증·동기화 확인을 요청하면 **직접 파일을 비교하지 말고 스크립트를 돌립니다.**
 
-1. `src/lib/i18n.ts`에서 지원 언어 목록을 읽습니다
-2. 모든 언어 폴더 간 파일 목록을 비교합니다
-3. 누락된 파일을 찾습니다
-4. meta.json의 pages 배열이 모든 언어에서 동일한지 확인합니다
-5. 결과를 보고합니다:
-
+```bash
+pnpm i18n:check
 ```
-번역 검증 결과 (지원 언어: en, ko):
 
-✅ 모든 언어에 존재하는 페이지: 45개
-❌ ko에만 있는 페이지: 없음
-❌ en에만 있는 페이지: 2개
-  - developer-docs/new-feature.mdx
-  - help-center/create-forms/new-guide.mdx
+세 종류를 잡아냅니다:
 
-❌ meta.json 불일치: 1개
-  - help-center/create-forms/meta.json
-    ko: 27개 항목, en: 25개 항목
+| 항목 | 의미 |
+|---|---|
+| ❌ 번역 파일 없음 | ko 에 있는데 해당 언어에 없는 파일 |
+| ⚠️ 원본이 더 최신 | 파일은 있으나 ko 가 나중에 수정됨 → **번역이 뒤처진 상태** |
+| ❌ meta.json 페이지 목록 불일치 | 새 페이지를 번역 쪽 목차에 안 넣은 경우 |
 
-번역이 필요한 파일을 번역할까요?
+**"원본이 더 최신"이 이 검사의 핵심입니다.** 파일 존재만 확인하면 한국어 문서에
+섹션이 추가돼도 번역은 그대로 남아 조용히 낡습니다. 실제로 그렇게 EN 문서에서
+섹션이 통째로 빠져 있던 사례가 있었습니다.
+
+판정 기준은 파일별 git 최종 커밋 시각입니다(미커밋 파일은 mtime). 그래서
+**번역을 갱신했으면 원본과 같은 커밋이나 그 이후에 커밋해야** 검사가 깨끗해집니다.
+
+"원본이 더 최신"으로 뜬 파일은 ko 와 나란히 놓고 **무엇이 달라졌는지 확인한 뒤
+해당 부분만** 반영하세요. 통째로 다시 번역하면 기존 번역 품질이 유실됩니다.
+
+### 오탐 처리
+
+내용은 이미 같은데 커밋 시각만 어긋나서 뜨는 경우가 있습니다(원본에 오탈자 수정
+같은 사소한 커밋이 들어간 경우). **두 파일을 직접 비교해 같다고 확인한 뒤에만**
+아래를 실행하세요:
+
+```bash
+pnpm i18n:accept
 ```
+
+현재 뜬 항목을 "확인 완료"로 기록합니다(`content/docs/.i18n-verified.json`).
+원본이 다시 수정되면 해시가 달라져 경고가 자동으로 되살아납니다.
+확인도 안 하고 실행하면 진짜 드리프트를 덮어버리니 주의하세요.
 
 ### 모드 3: 전체 번역 동기화
 
-누락된 모든 페이지를 한꺼번에 번역합니다.
+`pnpm i18n:check` 결과의 누락·뒤처짐 항목을 모두 해소합니다. 언어가 여러 개이므로
+**한 원본 파일을 한 번만 읽고 여러 언어를 동시에 작성**하는 편이 효율적입니다.
 
 ## 병렬 처리 (중요)
 
@@ -102,20 +118,20 @@ Agent 6: security/auto-delete-responses.mdx 번역
 
 ### 용어 사전
 
-| 한국어 | 영어 |
-|--------|------|
-| 설문 | Survey / Form |
-| 워크스페이스 | Workspace |
-| 설문 항목 / 필드 | Field |
-| 응답 | Response |
-| 객관식 | Multiple Choice |
-| 주관식 | Open-ended / Text |
-| 로직 | Logic |
-| 분기 | Branching |
-| 리워드 | Reward |
-| 기프티콘 | Gift Card / Gifticon |
-| 결과 분석 | Result Analysis |
-| 교차 분석 | Cross Tabulation |
+| 한국어 | 영어 | 繁體中文 | 日本語 | Español |
+|--------|------|------|------|------|
+| 설문 | Survey / Form | 問卷 / 表單 | フォーム | formulario |
+| 워크스페이스 | Workspace | 工作區 | ワークスペース | espacio de trabajo |
+| 설문 항목 / 필드 | Field | 欄位 | フィールド | campo |
+| 응답 | Response | 回覆 | 回答 | respuesta |
+| 객관식 | Multiple Choice | 選擇題 | 選択式 | opción múltiple |
+| 주관식 | Open-ended / Text | 問答題 | 記述式 | respuesta abierta |
+| 로직 | Logic | 邏輯 | ロジック | lógica |
+| 분기 | Branching | 分支 | 分岐 | ramificación |
+| 리워드 | Reward | 獎勵 | リワード | recompensa |
+| 기프티콘 | Gift Card / Gifticon | 禮物卡 | ギフト券 | tarjeta regalo |
+| 결과 분석 | Result Analysis | 結果分析 | 結果分析 | análisis de resultados |
+| 교차 분석 | Cross Tabulation | 交叉分析 | クロス集計 | tabulación cruzada |
 
 ### frontmatter 번역
 
@@ -176,10 +192,14 @@ Preview your survey before sharing it.
 
 번역 완료 후 반드시 확인:
 
-1. **파일 존재**: en/과 ko/에 동일한 파일이 모두 존재하는가
+0. **`pnpm i18n:check` 가 통과하는가** (누락·뒤처짐·목차 불일치 0건)
+0. **`pnpm build` 가 통과하는가** — frontmatter 의 `title`/`description` 값에
+   콜론+공백(`: `)이 들어가면 YAML 파싱이 깨져 빌드가 실패합니다. 그런 값은
+   반드시 따옴표로 감싸세요.
+1. **파일 존재**: 모든 지원 언어에 동일한 파일이 존재하는가
 2. **meta.json 일치**: 양쪽 meta.json의 pages 배열이 동일한가
 3. **컴포넌트 구조**: 양쪽 페이지의 컴포넌트 종류와 순서가 동일한가
-4. **링크 경로**: href의 언어 접두어가 올바른가 (`/ko/...` vs `/en/...`)
+4. **링크 경로**: href의 언어 접두어가 대상 언어와 맞는가 (`/ko/...` → `/ja/...` 등)
 5. **frontmatter**: title과 description이 해당 언어로 작성되었는가
 
 ## 주의사항

@@ -1,0 +1,439 @@
+---
+title: クイックスタートガイド
+description: 数分で Walla Open API を使い始める
+---
+
+# クイックスタートガイド
+
+このガイドでは、Walla Open API の認証、フォームの取得、回答の取得までの基本的な流れをすばやく確認します。
+
+## 事前準備
+
+始める前に以下の項目を確認してください。
+
+- ワークスペースへのアクセス権限がある Walla アカウント
+- API キー（Walla のワークスペース設定で発行）
+- ワークスペースに公開済みのフォーム 1 つ以上
+
+## ステップ 1: 環境の設定
+
+まず API キーを環境変数として安全に保存します。
+
+### オプション A: .env ファイルを使う
+
+プロジェクトのルートに `.env` ファイルを作成してください。
+
+```bash
+WALLA_API_KEY=your_api_key_here
+```
+
+> **重要**: API キーがコミットされないよう、`.env` ファイルを `.gitignore` に追加してください。
+
+### オプション B: シェルでエクスポートする
+
+```bash
+export WALLA_API_KEY=your_api_key_here
+```
+
+## ステップ 2: 最初の API 呼び出し
+
+API キーが正しく動作するか、ワークスペースの取得で確認してみます。
+
+### cURL を使う
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: $WALLA_API_KEY" \
+  -H "Content-Type: application/json"
+```
+
+### JavaScript/TypeScript を使う
+
+```javascript
+// dotenv のインストールが必要です: npm install dotenv
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+async function getWorkspaces() {
+  const response = await fetch(`${BASE_URL}/workspaces`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 実行
+getWorkspaces()
+  .then(workspaces => {
+    console.log('Your workspaces:');
+    workspaces.forEach(ws => {
+      console.log(`- ${ws.name} (ID: ${ws.id})`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python を使う
+
+```python
+# requests のインストール: pip install requests python-dotenv
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_KEY = os.getenv('WALLA_API_KEY')
+BASE_URL = 'https://api.walla.my/open-api/v1'
+
+def get_workspaces():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/workspaces', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# 実行
+if __name__ == '__main__':
+    workspaces = get_workspaces()
+    print('Your workspaces:')
+    for ws in workspaces:
+        print(f"- {ws['name']} (ID: {ws['id']})")
+```
+
+**想定される出力:**
+
+```
+Your workspaces:
+- Marketing Team (ID: workspace_123)
+- Customer Success (ID: workspace_456)
+```
+
+## ステップ 3: フォーム一覧を取得する
+
+すべてのフォームの一覧を取得してみます。
+
+### JavaScript
+
+```javascript
+async function getAllForms() {
+  const response = await fetch(`${BASE_URL}/forms`, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+getAllForms()
+  .then(workspaces => {
+    workspaces.forEach(workspace => {
+      console.log(`\nWorkspace: ${workspace.workspaceName}`);
+      workspace.forms.forEach(formWrapper => {
+        const form = formWrapper.form;
+        console.log(`  - ${form.title} (ID: ${form.id})`);
+        console.log(`    Submissions: ${formWrapper.analytics.submissions}`);
+      });
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_all_forms():
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(f'{BASE_URL}/forms', headers=headers)
+    response.raise_for_status()
+    return response.json()['data']
+
+# 実行
+workspaces = get_all_forms()
+for workspace in workspaces:
+    print(f"\nWorkspace: {workspace['workspaceName']}")
+    for form_wrapper in workspace['forms']:
+        form = form_wrapper['form']
+        print(f"  - {form['title']} (ID: {form['id']})")
+        print(f"    Submissions: {form_wrapper['analytics']['submissions']}")
+```
+
+## ステップ 4: フォームの回答を取得する
+
+特定のフォームの回答データを取得します。
+
+### JavaScript
+
+```javascript
+async function getResponses(formId, page = 1, limit = 20) {
+  const url = new URL(`${BASE_URL}/forms/${formId}/responses`);
+  url.searchParams.set('page', page);
+  url.searchParams.set('limit', limit);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'X-WALLA-API-KEY': API_KEY,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const data = await response.json();
+  return data.data;
+}
+
+// 回答の取得
+getResponses('form_abc', 1, 10)
+  .then(data => {
+    console.log(`\nTotal responses: ${data.pagination.totalCount}`);
+    console.log(`Page ${data.pagination.page} of ${data.pagination.totalPages}\n`);
+
+    data.responses.forEach((response, index) => {
+      console.log(`Response ${index + 1}:`);
+      console.log(`  ID: ${response.responseId}`);
+      console.log(`  Customer: ${response.customerKey || 'Anonymous'}`);
+      console.log(`  Submitted: ${response.submittedAt}`);
+    });
+  })
+  .catch(error => console.error('Error:', error));
+```
+
+### Python
+
+```python
+def get_responses(form_id, page=1, limit=20):
+    headers = {
+        'X-WALLA-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.get(
+        f'{BASE_URL}/forms/{form_id}/responses',
+        headers=headers,
+        params={'page': page, 'limit': limit}
+    )
+    response.raise_for_status()
+    return response.json()['data']
+
+# 回答の取得
+data = get_responses('form_abc', page=1, limit=10)
+
+print(f"\nTotal responses: {data['pagination']['totalCount']}")
+print(f"Page {data['pagination']['page']} of {data['pagination']['totalPages']}\n")
+
+for i, response in enumerate(data['responses'], 1):
+    print(f"Response {i}:")
+    print(f"  ID: {response['responseId']}")
+    print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
+    print(f"  Submitted: {response['submittedAt']}")
+```
+
+## ワークフロー全体の例
+
+上記のステップを 1 つにまとめた例です。
+
+### JavaScript
+
+```javascript
+require('dotenv').config();
+
+const API_KEY = process.env.WALLA_API_KEY;
+const BASE_URL = 'https://api.walla.my/open-api/v1';
+
+class WallaAPI {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.headers = {
+      'X-WALLA-API-KEY': apiKey,
+      'Content-Type': 'application/json'
+    };
+  }
+
+  async request(endpoint, options = {}) {
+    const url = `${BASE_URL}${endpoint}`;
+    const response = await fetch(url, {
+      ...options,
+      headers: { ...this.headers, ...options.headers }
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error);
+    }
+
+    return await response.json();
+  }
+
+  async getWorkspaces() {
+    const data = await this.request('/workspaces');
+    return data.data;
+  }
+
+  async getForms() {
+    const data = await this.request('/forms');
+    return data.data;
+  }
+
+  async getResponses(formId, page = 1, limit = 20) {
+    const data = await this.request(
+      `/forms/${formId}/responses?page=${page}&limit=${limit}`
+    );
+    return data.data;
+  }
+}
+
+// 使い方
+async function main() {
+  const api = new WallaAPI(API_KEY);
+
+  try {
+    // 1. ワークスペースの取得
+    const workspaces = await api.getWorkspaces();
+    console.log(`Found ${workspaces.length} workspaces`);
+
+    // 2. フォームの取得
+    const forms = await api.getForms();
+    const firstForm = forms[0]?.forms[0]?.form;
+
+    if (!firstForm) {
+      console.log('No forms found');
+      return;
+    }
+
+    console.log(`Using form: ${firstForm.title} (${firstForm.id})`);
+
+    // 3. 回答の取得
+    const responses = await api.getResponses(firstForm.id);
+    console.log(`Total responses: ${responses.pagination.totalCount}`);
+
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+main();
+```
+
+### Python
+
+```python
+import os
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class WallaAPI:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = 'https://api.walla.my/open-api/v1'
+        self.headers = {
+            'X-WALLA-API-KEY': api_key,
+            'Content-Type': 'application/json'
+        }
+
+    def request(self, endpoint, method='GET', **kwargs):
+        url = f'{self.base_url}{endpoint}'
+        response = requests.request(
+            method,
+            url,
+            headers=self.headers,
+            **kwargs
+        )
+        response.raise_for_status()
+        return response.json()
+
+    def get_workspaces(self):
+        return self.request('/workspaces')['data']
+
+    def get_forms(self):
+        return self.request('/forms')['data']
+
+    def get_responses(self, form_id, page=1, limit=20):
+        return self.request(
+            f'/forms/{form_id}/responses',
+            params={'page': page, 'limit': limit}
+        )['data']
+
+# 使い方
+def main():
+    api = WallaAPI(os.getenv('WALLA_API_KEY'))
+
+    try:
+        # 1. ワークスペースの取得
+        workspaces = api.get_workspaces()
+        print(f'Found {len(workspaces)} workspaces')
+
+        # 2. フォームの取得
+        forms = api.get_forms()
+        if not forms or not forms[0]['forms']:
+            print('No forms found')
+            return
+
+        first_form = forms[0]['forms'][0]['form']
+        print(f"Using form: {first_form['title']} ({first_form['id']})")
+
+        # 3. 回答の取得
+        responses = api.get_responses(first_form['id'])
+        print(f"Total responses: {responses['pagination']['totalCount']}")
+
+    except requests.RequestException as e:
+        print(f'Error: {e}')
+
+if __name__ == '__main__':
+    main()
+```
+
+## 次のステップ
+
+基本的な使い方を覚えたら、各 API リファレンスもぜひご覧ください。
+
+<Cards>
+  <Card title="Workspaces API" href="/ja/docs/developer-docs/workspaces" />
+  <Card title="Forms API" href="/ja/docs/developer-docs/forms" />
+  <Card title="Form Responses API" href="/ja/docs/developer-docs/responses" />
+</Cards>
+
+## よくある問題
+
+### "Authentication failed"
+
+- API キーが正しいか確認してください
+- `X-WALLA-API-KEY` ヘッダーが含まれているか確認してください
+- 環境に合った API キーかどうか確認してください
+
+### "Form not found or not published"
+
+- フォームが公開状態か確認してください
+- フォーム ID が正しいか確認してください
+- そのワークスペースへのアクセス権限があるか確認してください
+
+### 空の結果が返る場合
+
+- そのリソースにデータがあるか確認してください
+- 正しいワークスペース／フォームを取得しているか確認してください
+- 必要な権限があるか確認してください
+
+詳しいエラー情報は[エラーコード](/ja/docs/developer-docs/error-codes)のドキュメントをご覧ください。

@@ -1,0 +1,47 @@
+---
+title: "整合 Google 試算表"
+description: "透過 Google 試算表整合，可以即時自動記錄回覆資料。每當問卷回覆被送出時，指定的試算表就會新增一列，不用另外下載回覆也能方便管理。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 整合方式
+
+<Steps>
+  <Step>
+    ### 前往自動化分頁
+    前往專案編輯畫面的「自動化」分頁。
+  </Step>
+  <Step>
+    ### 點選整合
+    在「Google 試算表」項目點選 `整合`。
+  </Step>
+  <Step>
+    ### 登入 Google 帳號
+    點選 `Sign in with Google` 按鈕，用 Google 帳號登入。
+    - 系統會顯示這個工作區可整合的所有 Google 帳號。
+    - 你可以選擇既有帳號，或重新登入新帳號。
+  </Step>
+  <Step>
+    ### 選擇試算表
+    選擇要整合到既有的試算表，還是建立新的試算表。
+  </Step>
+  <Step>
+    ### 完成建立試算表
+    整合完成後，Walla 會自動建立一份 Google 試算表（你所擁有、儲存在你的雲端硬碟）。你可以複製建立好的試算表連結前往查看。
+  </Step>
+  <Step>
+    ### 解除整合（需要時）
+    要解除整合時，點選 `解除整合` 按鈕即可。
+  </Step>
+</Steps>
+## 運作方式
+- 問卷收到新回覆時，各個回覆項目會自動對應成試算表的欄（Column）並記錄下來。
+- 資料會即時同步，不必手動匯出就能立即查看。
+
+<Callout type="warning" title="注意事項">
+你必須對已連結 Google 帳號的試算表擁有編輯權限（Edit access）。即使是共用的試算表，也請務必確認是否具備編輯權限。
+</Callout>
+<Callout type="warning" title="注意事項">
+已設定資料遮罩的欄位，在 Google 試算表整合時也會以加密形式呈現。
+</Callout>

@@ -1,0 +1,76 @@
+---
+title: "Registros de actividad"
+description: "Toda la actividad importante del equipo se guarda automáticamente en los registros. Puedes ver de un vistazo quién hizo qué y cuándo, algo muy útil para la gestión de la seguridad y el seguimiento del historial operativo."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Cómo consultar los registros
+
+<Steps>
+  <Step>
+    ### Ve a la pestaña de registros
+    Página de configuración del equipo → pestaña «Registros de actividad».
+  </Step>
+  <Step>
+    ### Revisa el historial de operaciones
+    Puedes consultar en orden el historial de las operaciones importantes realizadas en el equipo.
+  </Step>
+  <Step>
+    ### Consulta el detalle de cada registro
+    Cada registro guarda quién lo hizo, cuándo y qué acción ejecutó. En los registros de actividad del equipo también puedes ver la IP de acceso, y el registro de auditoría se aplica a todos los dominios.
+  </Step>
+</Steps>
+## Principales entradas de registro
+
+### Team Actions (7)
+
+| Action | Descripción |
+| --- | --- |
+| team:leave | Salir del equipo |
+| team:member.invite | Invitar a un miembro |
+| team:member.invite.cancel | Cancelar una invitación |
+| team:member.delete | Eliminar a un miembro |
+| team:member.role.assign | Cambiar el rol de un miembro |
+| team:security.update | Cambiar los ajustes de seguridad del equipo |
+| team:audit.log.download | Descargar el registro de auditoría |
+
+### Workspace Actions (11)
+
+| Action | Descripción |
+| --- | --- |
+| workspace:create | Crear un espacio de trabajo |
+| workspace:update | Cambiar el nombre del espacio |
+| workspace:delete | Eliminar el espacio |
+| workspace:leave | Salir del espacio |
+| workspace:member.create | Invitar a un miembro al espacio |
+| workspace:member.delete | Eliminar a un miembro del espacio |
+| workspace:member.role.assign | Cambiar el rol de un miembro del espacio |
+| workspace:role.create | Crear un rol |
+| workspace:role.update | Modificar un rol |
+| workspace:role.delete | Eliminar un rol |
+| workspace:permission.update | Modificar permisos |
+
+### Project Actions (19)
+
+| Action | Descripción |
+| --- | --- |
+| project:read | Consultar el proyecto |
+| project:create | Crear un proyecto |
+| project:update | Modificar el proyecto |
+| project:delete | Eliminar el proyecto |
+| project:copy | Duplicar el proyecto |
+| project:archive | Archivar el proyecto |
+| project:move_to_workspace | Mover de espacio de trabajo |
+| project:publish | Publicar el proyecto |
+| project:privacy.field_masking.update | Cambiar el enmascarado de un campo |
+| project:privacy.auto_delete.update | Cambiar el borrado automático |
+| project:privacy.auto_delete.execute | Ejecutar el borrado automático |
+| project:automation.create | Crear una automatización |
+| project:automation.update | Modificar una automatización |
+| project:automation.delete | Eliminar una automatización |
+| project:response.read | Consultar respuestas |
+| project:response.delete | Eliminar respuestas |
+| project:response.download | Descargar respuestas |
+| project:response.unmask | Desenmascarar |
+| project:response.field_file_download | Descargar archivos de un campo |

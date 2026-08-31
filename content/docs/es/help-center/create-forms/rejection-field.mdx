@@ -1,0 +1,38 @@
+---
+title: "Campo de descarte"
+description: "El campo de descarte se usa para finalizar el formulario sin recoger la respuesta cuando se cumplen ciertas condiciones. Te permite filtrar a quién quieres encuestar y controlar el flujo del formulario de forma eficiente."
+---
+
+## Características del campo de descarte
+
+- Cuando aparece el campo de descarte, la respuesta no se guarda.
+- Con el [editor de texto](/es/docs/help-center/create-forms/editing-field-text) puedes aplicar estilos como color, tamaño y grosor de letra.
+- También puedes insertar imágenes, tablas o títulos fácilmente con los [comandos de barra (/)](/es/docs/help-center/create-forms/editing-field-text).
+- Resulta útil para distinguir a quienes quedan fuera de la recogida de respuestas.
+  - Ejemplo: personas que no forman parte del público objetivo, plazo de respuesta vencido, etc.
+
+## Cómo colocarlo
+
+- Si añades un campo de descarte, **debes configurar la lógica sin falta**.
+  - En la vista estándar todas las preguntas aparecen en una sola página, así que si el campo de descarte queda en medio sin lógica, se puede descartar a la persona nada más abrir la página.
+  - En la vista agrupada, si lo colocas al principio, se puede descartar nada más empezar.
+  - Comprueba siempre que la ramificación esté configurada como se indica abajo.
+
+- Conviene añadir un `salto de página` justo antes del campo de descarte.
+
+## Ejemplos de uso
+
+#### Ejemplo 1. Filtrar al público por edad
+  - **Condición**: `pregunta de edad` `no es igual a` `adolescente`
+  - **Ir a**: `campo de descarte`
+  - **Resultado**: si quien responde no es adolescente, el formulario finaliza de inmediato.
+#### Ejemplo 2. Usarlo como aviso de cierre
+  - Si el formulario está cerrado y quieres mostrar tu propio mensaje en lugar de la página de cierre por defecto, mueve el campo de descarte a la **primera pregunta**.
+  - **Ejemplo**: «Este formulario ya está cerrado.»
+
+<Callout type="warning" title="Advertencia">
+- No confundas el campo de descarte con el campo final.
+  - **Campo final**: lleva a una página informativa o a una URL **después** de enviar la respuesta.
+  - **Campo de descarte**: finaliza el formulario **durante** la respuesta y no registra nada.
+- Las respuestas descartadas no se pueden consultar ni recuperar en ningún caso, así que revisa con cuidado las condiciones que configuras.
+</Callout>

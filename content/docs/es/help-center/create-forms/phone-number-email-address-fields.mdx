@@ -1,0 +1,70 @@
+---
+title: Campos de teléfono, correo electrónico y dirección
+description: Son los campos que puedes usar para recoger datos de contacto en tu formulario. Consulta las características de cada uno y las opciones configurables 👇
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Campo de teléfono
+
+- Permite introducir un número de teléfono.
+- Pulsa el icono de la bandera para cambiar al formato telefónico de otro país.
+- Con el [editor de texto](/es/docs/help-center/create-forms/editing-field-text) puedes aplicar estilos como color, tamaño y grosor de letra.
+- También puedes insertar imágenes, tablas o títulos fácilmente con los [comandos de barra (/)](/es/docs/help-center/create-forms/editing-field-text).
+- El formato por defecto es el de móvil coreano (010-0000-0000).
+- Opciones configurables
+  - Obligatorio
+  - Longitud de la respuesta
+  - Contenido obligatorio o prohibido
+  - Expresión regular (Regex)
+  - Verificación de teléfono obligatoria
+  - Enmascarado de datos
+  - Borrado automático de respuestas
+
+### Verificación de teléfono obligatoria
+
+- Al activar «Verificación de teléfono obligatoria», solo se recogen números de teléfono que existen realmente.
+- Quien responde debe verificar su número con un código SMS antes de enviar.
+- Para la verificación, el número se envía a nuestro proveedor de SMS (Twilio Inc., Estados Unidos).
+
+<Steps>
+  <Step>
+    #### Activa la verificación de teléfono obligatoria
+  </Step>
+  <Step>
+    #### Al responder, se introduce el teléfono y se pulsa el botón de verificar
+  </Step>
+  <Step>
+    #### Se envía el código de verificación
+  </Step>
+  <Step>
+    #### Se confirma la verificación
+  </Step>
+</Steps>
+
+## Campo de correo electrónico
+
+- Permite introducir una dirección de correo electrónico.
+- Debe seguir el formato `~~~@~~~.~~~`; si no coincide, no se puede enviar la respuesta.
+- Con el [editor de texto](/es/docs/help-center/create-forms/editing-field-text) puedes aplicar estilos como color, tamaño y grosor de letra.
+- También puedes insertar imágenes, tablas o títulos fácilmente con los [comandos de barra (/)](/es/docs/help-center/create-forms/editing-field-text).
+- Pulsa el icono del lápiz para cambiar el texto de marcador de posición.
+- Opciones configurables
+  - Obligatorio
+  - Longitud de la respuesta
+  - Contenido obligatorio o prohibido
+  - Expresión regular (Regex)
+  - Enmascarado de datos
+  - Borrado automático de respuestas
+
+## Campo de dirección
+
+- Solo admite direcciones de Corea; tras buscar la dirección se puede añadir el detalle.
+- Opciones configurables
+  - Obligatorio
+  - Enmascarado de datos
+  - Borrado automático de respuestas
+
+<Callout title="Consejo">
+Para proteger los datos personales, te recomendamos activar el enmascarado de datos y el borrado automático de respuestas en los campos de teléfono, correo y dirección.
+</Callout>

@@ -1,0 +1,55 @@
+---
+title: Zapier と連携する
+description: Walla は Zapier を通じてさまざまなサービスと自動で連携できます。以下の手順で設定してみてください 👇
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 連携の設定方法
+
+<Steps>
+  <Step>
+    ### Zapier を選んでログインする
+    「連携する」メニューで Zapier を選び、ログインしてください。
+  </Step>
+  <Step>
+    ### Walla Form を選ぶ
+    App & event のステップで「Walla Form」を選択します。
+  </Step>
+  <Step>
+    ### Event を設定する
+    Event は「New Response」に設定してください。
+  </Step>
+  <Step>
+    ### Walla アカウントでログインする
+    Account の項目で Walla アカウントにログインします。
+  </Step>
+  <Step>
+    ### プロジェクトを選ぶ
+    チーム、ワークスペース、プロジェクトの順に選び、回答通知を受け取りたいプロジェクトを指定します。
+  </Step>
+    <Step>
+    ### テスト用の回答を選ぶ
+    Zapier のテストのため、すでに収集した回答から 1 件を選び、`Continue with selected account` ボタンをクリックします。
+  </Step>
+  <Step>
+    ### 外部サービスを接続する
+    次の Account のステップで、接続する外部サービスを選びます。（例: Google Sheets、Slack など）
+  </Step>
+  <Step>
+    ### 詳細オプションを設定する
+    Gmail、Google Sheets など外部サービスの詳細な送信オプションを設定します。
+  </Step>
+    <Step>
+    ### テストする
+    テストして確認したい場合は `Test Step` を、テストが不要な場合は `Skip Test` をクリックします。
+  </Step>
+  <Step>
+    ### 保存する
+    テストが終わったら `Publish` ボタンを押して保存します。
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Google Sheets と連携するときの注意事項">
+Zapier を使って Google スプレッドシートと連携するには、スプレッドシートの 1 行目に必ずヘッダー（列名）が設定されている必要があります。このヘッダーの値があって初めて、回答が正しく記録されます。
+</Callout>

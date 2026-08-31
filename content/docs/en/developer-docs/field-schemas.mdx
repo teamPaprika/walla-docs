@@ -7,6 +7,12 @@ description: API reference for understanding field types and their output format
 
 The Field Output Schemas API provides essential mapping information that helps you understand what data format each field type returns. This is crucial for correctly parsing and processing form response data.
 
+## When to Use This
+
+Response data fetched from the [Form Responses API](/en/docs/developer-docs/responses) contains dynamic values keyed by field ID. To know whether a value is a string, an array, or an object, you need the field output schema first. Call this API before building a response parser or transforming the data.
+
+> **Note**: A [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key applies. Schemas rarely change, so caching them is recommended.
+
 ## Overview
 
 When you retrieve form responses, the `response` object contains field values as dynamic properties, where field IDs are keys and values vary by field type. The Field Output Schemas API tells you exactly what data structure to expect for each field type.

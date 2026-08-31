@@ -1,0 +1,105 @@
+---
+title: Introducción
+description: Documentación de la Walla Open API
+---
+
+# Documentación de la Walla Open API
+
+Con la Walla Open API puedes gestionar formularios, consultar espacios de trabajo, enviar formularios y recoger respuestas mediante programación.
+
+## Descripción general
+
+La Walla Open API funciona de forma RESTful y ofrece las siguientes funciones.
+
+- **Gestión de espacios de trabajo**: consulta la información de los espacios de trabajo
+- **Gestión de formularios**: consulta los datos y la configuración de los formularios
+- **Envío de formularios**: envía formularios por correo electrónico o SMS
+- **Seguimiento de respuestas**: consulta y monitoriza las respuestas y los datos enviados
+
+## Jerarquía de recursos
+
+Los recursos de la API de Walla se organizan con la siguiente jerarquía.
+
+```
+Team → Workspace → Form → Response
+```
+
+- **Team (equipo)**: es la unidad organizativa superior. Las claves de API se generan por equipo e incluyen automáticamente su información.
+- **Workspace (espacio de trabajo)**: la unidad que agrupa formularios y proyectos dentro de un equipo.
+- **Form (formulario)**: el formulario creado dentro de un espacio de trabajo.
+- **Response (respuesta)**: cada respuesta enviada a un formulario.
+
+**Nota**: como la clave de API ya incluye la información del equipo, no hace falta enviarla aparte en las peticiones.
+
+## URL base
+
+La URL base de todas las peticiones a la API es la siguiente.
+
+```
+https://api.walla.my/open-api/v1
+```
+
+## Empezar
+
+<Cards>
+  <Card title="Autenticación" href="/es/docs/developer-docs/authentication" />
+  <Card title="Guía de inicio rápido" href="/es/docs/developer-docs/quick-start" />
+  <Card title="Referencia de la API" href="/es/docs/developer-docs/workspaces" />
+  <Card title="Códigos de error" href="/es/docs/developer-docs/error-codes" />
+</Cards>
+
+## Funciones principales
+
+### Gestión de espacios de trabajo
+Consulta la lista de todos los espacios a los que tienes acceso y la información detallada de cada uno.
+
+### Gestión de formularios
+Consulta datos de los formularios como la lista, la configuración o el número de envíos.
+
+### Envío de formularios
+Envía formularios a varios destinatarios por correo o SMS y haz seguimiento del estado del envío y la participación.
+
+### Recogida de respuestas
+Con la API de consulta de respuestas, que admite paginación, puedes ver datos detallados como la clave de cliente o la hora de envío.
+
+## Especificaciones de la API
+
+- **Versión**: 1.0
+- **Protocolo**: HTTPS
+- **Formato de datos**: JSON
+- **Autenticación**: clave de API (mediante cabecera)
+
+## Soporte
+
+Si tienes dudas o quieres solicitar una función, ponte en contacto con el equipo de soporte de Walla.
+
+## Resumen de endpoints
+
+| Categoría | Endpoint | Descripción |
+|---------|-----------|------|
+| Espacios de trabajo | `GET /workspaces` | Consultar todos los espacios |
+| Espacios de trabajo | `GET /workspaces/{workspaceId}` | Consultar un espacio concreto |
+| Espacios de trabajo | `GET /workspaces/{workspaceId}/forms` | Consultar los formularios de un espacio |
+| Formularios | `GET /forms` | Consultar todos los formularios |
+| Formularios | `GET /forms/{formId}` | Consultar un formulario concreto |
+| Campos | `GET /field-output-schemas` | Consultar los esquemas de salida |
+| Campos | `GET /forms/{formId}/fields` | Consultar los campos de un formulario |
+| Campos | `GET /forms/{formId}/fields/{fieldId}` | Consultar el detalle de un campo |
+| Campos | `GET /forms/{formId}/fields/{fieldId}/description` | Consultar la descripción de un campo |
+| Campos ocultos | `GET /forms/{formId}/hidden-fields` | Consultar los campos ocultos |
+| Campos ocultos | `POST /forms/{formId}/hidden-fields` | Añadir un campo oculto |
+| Campos ocultos | `DELETE /forms/{formId}/hidden-fields/{hiddenFieldId}` | Eliminar un campo oculto |
+| Envío | `POST /forms/{formId}/delivery` | Enviar un formulario |
+| Envío | `POST /forms/{formId}/delivery/recipients` | Registrar destinatarios |
+| Envío | `PATCH /forms/{formId}/delivery/recipients` | Modificar los datos de los destinatarios |
+| Envío | `POST /forms/{formId}/delivery/send` | Enviar a los destinatarios registrados |
+| Envío | `GET /forms/{formId}/delivery` | Consultar la lista de destinatarios |
+| Envío | `POST /forms/{formId}/delivery/status` | Consultar el estado del envío |
+| Respuestas | `GET /forms/{formId}/responses` | Consultar las respuestas de un formulario (con paginación) |
+| Respuestas | `GET /forms/{formId}/responses/{responseId}` | Consultar una respuesta concreta |
+| Exportar respuestas | `POST /forms/{formId}/exports/responses` | Exportar las respuestas a un archivo Parquet |
+| Exportar respuestas | `POST /forms/{formId}/exports/field-definitions` | Exportar las definiciones de campos a un archivo Parquet |
+
+## Siguientes pasos
+
+Revisa la documentación de cada API e implementa con la Walla Open API las funciones que necesites.

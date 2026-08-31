@@ -1,0 +1,12 @@
+{
+  "title": "安全性",
+  "pages": [
+    "auto-delete-responses",
+    "two-factor-authentication",
+    "ip-address-verification",
+    "activity-logs",
+    "data-masking",
+    "blocking-external-ai",
+    "managing-permissions"
+  ]
+}

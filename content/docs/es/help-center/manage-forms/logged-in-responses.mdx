@@ -1,0 +1,65 @@
+---
+title: "Aceptar solo a personas verificadas"
+description: "Quien responde no necesita crear una cuenta de Walla. Basta con introducir una contraseña compartida de antemano, o el código de verificación recibido por correo o SMS, para empezar a responder."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Protección con contraseña
+
+- Si activas la protección con contraseña y defines una, hará falta introducir esa contraseña compartida de antemano (solo se admite una contraseña común) para acceder al formulario.
+
+## Verificación de usuario
+<Steps>
+  <Step>
+    ### Abre los ajustes del formulario
+    Haz clic en el icono `⚙️` de la esquina superior derecha del editor para abrir los ajustes del formulario.
+  </Step>
+
+  <Step>
+    ### Ve a la pestaña Respondientes
+    Selecciona `Respondientes` en la lista de pestañas de la izquierda.
+  </Step>
+
+  <Step>
+    ### Activa la verificación de usuario
+    Activa `Verificación de usuario` en la sección `Verificación`. Al hacerlo aparecerán las opciones para elegir el método.
+
+    |Método de verificación|Qué hace quien responde|
+|---|---|
+|`Correo electrónico`|Introduce su correo → escribe el código recibido por correo|
+|`Teléfono`|Introduce su teléfono → escribe el código recibido por SMS|
+  </Step>
+
+  <Step>
+    ### Listo
+    Solo quienes completen la verificación podrán entrar al formulario.
+  </Step>
+</Steps>
+
+## Permitir solo a determinadas personas
+### Permitir correos y dominios
+- Activa `Permitir correos/dominios concretos` e introduce los valores en el campo.
+
+	- Para permitir una dirección concreta: `user@example.com`
+	- Para permitir todo un dominio: `@example.com`
+		- Si el formulario va dirigido a toda la plantilla de una empresa, el formato de dominio resulta muy cómodo.
+
+	- Si lo dejas vacío, se permiten todos los correos.
+### Permitir teléfonos
+- Activa `Permitir teléfonos concretos` e introdúcelos con el prefijo del país.
+- Si lo dejas vacío, se permiten todos los números.
+
+## Cambiar el texto de la pantalla de verificación
+- Quien responde ve un texto predeterminado en la pantalla de verificación. Si quieres escribir el tuyo, activa `Mensaje de la pantalla de verificación` en la parte superior de la pestaña Respondientes.
+- Con el interruptor desactivado se muestra el texto predeterminado.
+- El mensaje aparece en esta posición.
+
+## Aceptar una sola respuesta por usuario verificado
+- Con la verificación activada, una misma persona todavía puede responder varias veces. Para limitarlo a una respuesta por persona, activa también `Una vez por usuario verificado` en la sección `Respuestas duplicadas`.
+- Así solo se podrá responder una vez por correo y teléfono verificados.
+- Encontrarás más información en [Evitar respuestas duplicadas](/es/docs/help-center/manage-forms/preventing-duplicate-responses).
+
+<Callout title="Ten en cuenta">
+Si activas `Una vez por usuario verificado` sin ningún método de verificación, también se activará la verificación por correo. A la inversa, al desactivar `Verificación de usuario` también se desactiva `Una vez por usuario verificado`. Si has desactivado y vuelto a activar la verificación, comprueba que el límite de duplicados siga en pie.
+</Callout>

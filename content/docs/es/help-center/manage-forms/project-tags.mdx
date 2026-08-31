@@ -1,0 +1,188 @@
+---
+title: "Etiquetas de proyecto"
+description: "Para que gestiones los proyectos de forma más eficiente en el espacio de trabajo, hemos añadido etiquetas, filtros, modos de vista y selección múltiple."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Etiquetas de proyecto
+
+Puedes clasificar y gestionar los proyectos poniéndoles etiquetas.
+
+### Qué cambia respecto a las antiguas insignias de emoji
+
+- Las insignias de emoji por proyecto (emoji + color de fondo) se sustituyen por el sistema de etiquetas
+- Al actualizar, las insignias existentes se convierten automáticamente en etiquetas
+- Ya no es posible asignar insignias de emoji a proyectos concretos
+
+<Callout type="warning" title="Advertencia">
+Los nombres de etiqueta se generan a partir del emoji. Los proyectos que usaban el mismo emoji se unifican en una sola etiqueta, aunque tuvieran distinto color de fondo.
+</Callout>
+
+## Crear etiquetas
+
+### Método 1. Desde la gestión de etiquetas
+
+<Steps>
+  <Step>
+    ### Selecciona Gestión de etiquetas
+    En el espacio de trabajo, elige `Gestión de etiquetas`.
+  </Step>
+  <Step>
+    ### Crea la etiqueta
+    Haz clic en crear etiqueta.
+  </Step>
+  <Step>
+    ### Escribe el nombre
+    Introduce el nombre. (Por ejemplo: Marketing, Urgente, Terminado)
+  </Step>
+  <Step>
+    ### Elige un color y guarda
+    Selecciona el color y guarda.
+  </Step>
+</Steps>
+
+### Método 2. Directamente desde el proyecto
+
+<Steps>
+  <Step>
+    ### Pulsa Añadir etiqueta
+    Haz clic en `+ Añadir etiqueta` en la tarjeta o la fila del proyecto.
+  </Step>
+  <Step>
+    ### Pulsa crear etiqueta
+    En el desplegable de selección de etiquetas, haz clic en crear etiqueta.
+  </Step>
+  <Step>
+    ### Escribe nombre y color y guarda
+    Introduce el nombre y el color, y guarda.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Advertencia">Los nombres de etiqueta no pueden repetirse dentro de un mismo espacio de trabajo.</Callout>
+
+## Poner etiquetas a los proyectos
+
+### Al crear el proyecto
+
+- Puedes elegir etiquetas durante el proceso de creación
+- Puedes crearlas rápidamente con el botón de añadir (+) de la cabecera de columna
+  - Columna de estado: solo se puede crear en la columna «Sin publicar»
+  - Columna de etiqueta: al crearlo, esa etiqueta se aplica automáticamente
+
+### Añadirlas después - (1) De una en una
+
+Haz clic en el botón `+ Añadir etiqueta` de la tarjeta o la fila del proyecto
+
+### Añadirlas después - (2) En bloque a varios proyectos
+
+<Steps>
+  <Step>
+    ### Selecciona los proyectos
+    Mantén pulsado `Shift` para seleccionar varios proyectos.
+  </Step>
+  <Step>
+    ### Pulsa Etiquetas
+    En la barra de acciones inferior, haz clic en Etiquetas.
+  </Step>
+  <Step>
+    ### Añade o quita etiquetas
+    Añade o elimina etiquetas.
+  </Step>
+</Steps>
+
+## Fusionar etiquetas
+
+Puedes unificar etiquetas parecidas en una sola.
+
+<Steps>
+  <Step>
+    ### Abre la gestión de etiquetas
+    Accede a la gestión de etiquetas.
+  </Step>
+  <Step>
+    ### Elige las etiquetas que quieres fusionar
+    Selecciona las etiquetas a fusionar. (No admite selección múltiple con Shift)
+  </Step>
+  <Step>
+    ### Pulsa Fusionar
+    Haz clic en Fusionar.
+  </Step>
+  <Step>
+    ### Fusión completada
+    Se unifican en la última etiqueta que hayas seleccionado.
+  </Step>
+</Steps>
+
+Ejemplo: `Marketing / MKT / Equipo de marketing → Marketing`
+
+## Filtros de proyecto
+
+### Filtro por estado
+
+- Sin publicar: todavía no se ha publicado
+- Publicado: recogiendo respuestas
+- Cerrado: proyecto finalizado
+
+### Filtro por etiqueta
+
+- Si seleccionas varias etiquetas: se muestra si incluye al menos una
+- Si seleccionas «Sin etiqueta»: solo se muestran los proyectos sin etiquetas
+
+### Filtro combinado
+
+Si eliges estado + etiqueta a la vez, solo se muestran los proyectos que **cumplen ambas condiciones**.
+- Ejemplo: `Publicado + Marketing` → proyectos publicados que además tienen la etiqueta Marketing
+
+## Modos de vista
+
+### Vista de tarjetas / vista de lista
+
+| Vista de tarjetas | Vista de lista |
+| --- | --- |
+| Formato de tarjeta | Formato de lista |
+| Información de un vistazo | Muestra más proyectos |
+| Configuración por defecto | Estructura sencilla |
+
+### Ver agrupado
+
+#### Columnas (grupo)
+
+- Por estado
+- Por etiqueta
+
+#### Filas (subgrupo)
+
+- Sin agrupar
+- Por estado
+- Por etiqueta
+
+### Criterio de ordenación
+
+- Fecha de modificación
+- Fecha de creación
+- Número de respuestas
+  (se puede alternar entre ascendente y descendente)
+
+### Guardar los ajustes de vista
+
+- Se guardan automáticamente para cada espacio de trabajo
+- Se mantienen tras recargar
+- Puedes volver a los valores por defecto con el botón de restablecer
+
+## Ejemplos de uso
+
+1. Gestión por equipos (crea etiquetas con el nombre del equipo → filtra para ver los proyectos de cada uno)
+1. Usarlo como un tablero kanban (modo de vista: columnas = estado → arrastra para cambiar el estado)
+1. Ordenar proyectos terminados (filtro «Cerrado» → selección múltiple → mover al archivo)
+2. Limpiar etiquetas repetidas (gestión de etiquetas → fusionar)
+
+## Términos clave
+
+| Término | Descripción |
+| --- | --- |
+| Etiqueta | Marca para clasificar proyectos |
+| Filtro | Ver proyectos según ciertas condiciones |
+| Agrupación | Reunir por categorías |
+| Acción en bloque | Operar sobre varios proyectos a la vez |
+| Archivo | Espacio donde se guardan los proyectos inactivos |

@@ -1,0 +1,216 @@
+---
+title: Preguntas frecuentes
+description: Hemos reunido las preguntas que más nos hacéis.
+icon: CircleQuestionMark
+---
+
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+## Equipo y espacio de trabajo
+
+<Accordions>
+
+  <Accordion title="Al entrar en Walla me lleva a la pantalla de registro en lugar de a la de inicio de sesión.">
+    Suele ocurrir porque hace mucho que no accedes a esa cuenta y, para protegerla, vuelven a mostrarse la verificación de identidad y la aceptación de los términos del servicio. No es un error ni un problema con tu cuenta: vuelve a iniciar sesión, completa los pasos que aparecen y podrás seguir usando Walla con normalidad. Los formularios que creaste y los datos que recogiste en esa cuenta se conservan intactos.
+  </Accordion>
+
+  <Accordion title="¿Los equipos con plan Free también pueden invitar a miembros?">
+    Sí, Walla tiene un plan gratuito. Con él puedes usar las funciones esenciales, como crear formularios y recoger respuestas. Si necesitas más, echa un vistazo a los planes de pago.
+  </Accordion>
+
+  <Accordion title="He invitado a alguien al equipo, pero no ve el proyecto.">
+    Parece que la invitación al equipo se completó, pero esa persona todavía no se ha añadido como miembro del espacio de trabajo. Haz clic en el icono del engranaje de la parte superior del espacio y añádela desde [Gestión de miembros]. Cuando lo hagas, ya podrá ver el espacio al que se le invitó.
+  </Accordion>
+
+  <Accordion title="Quiero que solo determinados miembros puedan ver los resultados.">
+    Para limitar quién puede ver los resultados, ajusta los permisos de los miembros del espacio de trabajo. Haz clic en el icono del engranaje de la parte superior del espacio y configura las funciones disponibles por rol en el menú [Roles y permisos].
+
+    ※ Esta función solo está disponible en el plan Enterprise.
+  </Accordion>
+
+  <Accordion title="Quiero transferir la propiedad del equipo a otra cuenta.">
+    Por norma general no admitimos la transferencia de equipos. La única vía estándar es que la persona propietaria contrate el plan Pro, solicite la «transferencia de propiedad» y después pida el reembolso a atención al cliente. Dicho esto, si resulta imposible contactar con la persona propietaria anterior, podemos ayudar con la transferencia de forma excepcional, siempre tras confirmar —conforme a nuestros procedimientos de protección de datos y seguridad— que la solicitud procede oficialmente de la misma organización (empresa o dominio). Escríbenos a [cs@walla.my](mailto:cs@walla.my) para más detalles.
+  </Accordion>
+
+</Accordions>
+
+## Suscripción y pagos
+
+<Accordions>
+
+  <Accordion title="¿Se puede usar Walla gratis?">
+    Sí. Con Walla puedes crear formularios ilimitados, recoger respuestas ilimitadas y consultar estadísticas y resultados de forma gratuita.
+  </Accordion>
+
+  <Accordion title="He pagado pero no he usado ninguna función de pago. ¿Me podéis devolver el dinero?">
+    Además de crear proyectos, Walla se puede usar de muchas formas: compartir el enlace del formulario, recoger respuestas, consultar analíticas o mantener activas las funciones de pago en proyectos existentes. Por la propia naturaleza del servicio, puede haber uso real aunque no quede registrada una actividad explícita, así que no podemos determinar el uso basándonos únicamente en un «no lo he usado». Gracias por tu comprensión.
+  </Accordion>
+
+  <Accordion title="¿Cómo cancelo mi suscripción?">
+    En la página «Configuración del equipo → Gestión del equipo», pulsa el botón `Gestionar plan` para ir a la página de facturación y allí haz clic en `Cancelar suscripción`. Encontrarás los detalles en [Cancelar un plan](/es/docs/help-center/getting-started/starting-or-changing-subscription).
+  </Accordion>
+
+  <Accordion title="¿Puedo cancelar la suscripción y recibir un reembolso?">
+    Depende de cuándo pagaste y del tipo de plan. En las suscripciones mensuales, pasadas 24 horas desde el pago se considera que el servicio se ha utilizado y no se puede reembolsar. En las anuales, si cancelas dentro de los 14 días siguientes al pago se devuelve el importe íntegro; después se descuenta una parte. Si quieres solicitar un reembolso, escríbenos a [cs@walla.my](mailto:cs@walla.my). Consulta los detalles en la [política de reembolsos](https://home.walla.my/en/policy/refund-latest).
+  </Accordion>
+
+  <Accordion title="El importe cobrado no coincide con el de la página de precios.">
+    Walla utiliza una pasarela de pago extranjera, así que al contratar un plan o comprar tarjetas regalo tu banco puede aplicar comisiones por transacción internacional según su política.
+  </Accordion>
+
+</Accordions>
+
+## Crear proyectos
+
+<Accordions>
+
+  <Accordion title="¿Puedo añadir imágenes al formulario?">
+    En cualquier campo, escribe una barra («/») en el cuadro del título o de la descripción de la pregunta para insertar una imagen. Puedes escribir primero la descripción y luego insertar la imagen con la barra («/»), o insertar la imagen antes y arrastrarla para colocarla. [Más sobre los comandos de barra (/) →](/es/docs/help-center/create-forms/editing-field-text)
+  </Accordion>
+
+  <Accordion title="¿Se puede traducir texto como «Enviar respuesta»?">
+    Los textos propios del formulario (obligatorio, enviar respuesta, mensajes de error, mensaje de envío completado, etc.) se traducen automáticamente según el idioma del navegador de quien responde: coreano, inglés, japonés, chino simplificado, vietnamita, tailandés y más.
+  </Accordion>
+
+  <Accordion title="¿En qué se diferencia el campo de descarte del campo final?">
+      El campo de descarte sirve para detener el formulario cuando la persona no forma parte del público objetivo, y las respuestas que llegan a él no se guardan. Si quieres mostrar un mensaje después de enviar la respuesta, te recomendamos usar el «campo final», y eliminar el campo de descarte o configurar la lógica para que no siga a la pregunta anterior.
+  </Accordion>
+
+  <Accordion title="Me gustaría que se vieran varias preguntas en una página.">
+    En la vista estándar todas las preguntas aparecen en una sola página y se avanza haciendo scroll. Ahí puedes añadir `saltos de página` entre preguntas para dividir la pantalla como prefieras. En la vista agrupada puedes usar grupos de campos para reunir varias preguntas en una misma pantalla.
+  </Accordion>
+
+  <Accordion title="He abierto el formulario pero no avanza a la siguiente pregunta.">
+    Se debe a que la lógica de esa pregunta hace referencia a un campo que no se encuentra. Cambia la configuración de la lógica y vuelve a intentarlo: corrige lo que aparezca como «campo u opción no encontrados» y publica.
+  </Accordion>
+
+  <Accordion title="¿Puedo hacer que se vaya a preguntas distintas según lo que responda cada persona?">
+    Sí. Con la [configuración de lógica](/es/docs/help-center/create-forms/setting-up-logic) puedes mostrar u ocultar preguntas concretas según lo que elija quien responde.
+  </Accordion>
+
+  <Accordion title="He añadido un campo final, pero solo aparece la pantalla de cierre predeterminada.">
+    Si añades un campo final pero no configuras la lógica, se muestra automáticamente la página de cierre por defecto («Tu respuesta se ha enviado correctamente.»). Para dirigir a otro campo final tras el envío:
+1. Haz clic en el botón «Enviar» en la página de lógica.
+2. Indica a qué campo final debe ir según cada condición.
+
+Si quieres ir siempre a un campo final concreto sin ninguna condición, cambia la ruta predeterminada a ese campo final.
+  </Accordion>
+
+</Accordions>
+
+## Gestionar proyectos
+<Accordions>
+
+  <Accordion title="No encuentro un proyecto que había creado.">
+      Si no lo has eliminado, puede que estés en otra cuenta, otro equipo u otro espacio de trabajo. Comprueba primero si la cuenta, el equipo y el espacio en los que estás coinciden con aquellos donde creaste el proyecto.
+
+#### 1. Cómo comprobar la cuenta actual
+
+Pulsa el icono de perfil de la esquina superior derecha para ver con qué cuenta has iniciado sesión. Si quieres entrar con otra cuenta, haz clic en «Cerrar sesión».
+
+#### 2. Cómo comprobar el equipo actual
+
+Puedes ver en qué equipo estás desde la lista de equipos de la esquina superior izquierda.
+
+#### 3. Cómo comprobar el espacio de trabajo actual
+
+Puedes ver en qué espacio estás desde la lista de espacios que aparece debajo de la de equipos.
+  </Accordion>
+
+  <Accordion title="He borrado sin querer un formulario o unas respuestas. ¿Se pueden recuperar?">
+      Conforme a nuestra política de priorizar la privacidad y la seguridad de los datos, los formularios y las respuestas eliminados se borran de forma permanente al instante y no se pueden recuperar. Configura los permisos por rol del espacio de trabajo para evitar borrados accidentales. A partir del plan Enterprise puedes consultar registros con la hora del borrado, la cuenta implicada y más datos.
+  </Accordion>
+
+  <Accordion title="¿Puedo programar la hora de apertura y de cierre del formulario?">
+      Sí, puedes programar que un formulario se abra o se cierre automáticamente a una hora concreta. Con la [función de programación](/es/docs/help-center/manage-forms/scheduling-survey-start-end-times), el formulario se abre y se cierra según el calendario previsto sin que tengas que cambiarlo a mano cada vez.
+  </Accordion>
+
+</Accordions>
+
+## Integrar proyectos
+
+<Accordions>
+
+  <Accordion title="¿Puedo recibir una notificación cuando llegue una respuesta?">
+    Sí. En la página «Integrar» puedes configurar notificaciones de Slack, Discord, Gmail y más. También puedes configurar un webhook por tu cuenta para recibirlas en la plataforma externa que prefieras.
+  </Accordion>
+
+  <Accordion title="¿Puedo enviar una copia de la respuesta a quien la ha enviado?">
+    Para ello, usa la automatización de Gmail. Elige Gmail en la configuración de la automatización y asigna al campo de destinatario (To) el campo donde recoges el correo de quien responde. Una vez configurado, cada vez que alguien responda incluyendo su correo se le enviará automáticamente el contenido de su respuesta.
+  </Accordion>
+
+  <Accordion title="¿Puedo ver las respuestas en tiempo real en Google Sheets?">
+    Sí. Al configurar la integración con Google Sheets, se crea una hoja nueva en la cuenta de Google con la que has iniciado sesión. A partir de ahí, cada respuesta recogida añade automáticamente una fila a esa hoja.
+  </Accordion>
+
+</Accordions>
+
+## Compartir proyectos
+
+<Accordions>
+
+  <Accordion title="La miniatura o el título de una URL compartida en redes no se actualizan.">
+    Si compartes una URL y después cambias la miniatura o el título y vuelves a compartirla, puede seguir apareciendo la versión anterior. Esto ocurre porque muchas aplicaciones guardan en caché las URL que ya se han enviado desde ese dispositivo para cargar más rápido. Para reducirlo, borra la caché [aquí](https://developers.kakao.com/tool/debugger/sharing). En un dispositivo que no haya enviado antes esa URL, la miniatura y el título actualizados se mostrarán correctamente.
+  </Accordion>
+
+  <Accordion title="¿En qué se diferencia la vista estándar de la vista agrupada?">
+    La vista estándar muestra todas las preguntas en una sola página, mientras que la vista agrupada muestra una pregunta (o un grupo de campos) por página.
+  </Accordion>
+
+  <Accordion title="¿Puedo registrar de dónde procede el tráfico del proyecto?">
+    Configura el seguimiento (campos ocultos) y añade parámetros a la URL antes de compartirla. Cuando lleguen las respuestas, podrás ver en la hoja de respuestas y en las estadísticas por qué canal ha entrado cada persona.
+  </Accordion>
+   <Accordion title="¿Puedo usar la miniatura y la URL de mi marca al compartir el proyecto?">
+    Sí, puedes configurar una miniatura y una URL acordes a tu marca. En la página «Compartir», personaliza la imagen de vista previa y el enlace como prefieras y guarda. A partir de ese momento se aplicarán al compartir.
+  </Accordion>
+     <Accordion title="Ya tengo una lista de personas. ¿Puedo invitarlas a responder y ver quién lo ha hecho?">
+    Sí. Sube tu lista en un archivo CSV o XLSX para registrarla como panel y podrás enviar el formulario a ese panel desde cada proyecto. Después del envío también podrás comprobar quién ha respondido.
+  </Accordion>
+
+</Accordions>
+
+## Consultar los resultados
+<Accordions>
+  <Accordion title="¿Puedo descargar las analíticas?">
+    Las analíticas no se pueden descargar: solo se consultan en la pestaña «Analíticas» de cada formulario.
+</Accordion>
+  <Accordion title="¿Se pueden recuperar las respuestas eliminadas?">
+    Las respuestas cuya eliminación se solicita se borran de inmediato y no se pueden recuperar en ningún caso. En «Registros de actividad» puedes consultar qué cuenta y qué IP las eliminaron.
+</Accordion>
+  <Accordion title="¿Puedo asignar valores predefinidos al customerKey de las respuestas?">
+    Sube en un archivo CSV o XLSX una lista que ya contenga los valores de customerKey para registrarla como panel, y podrás enviar el formulario a ese panel desde cada proyecto. En ese caso, la columna customerKey de la hoja de respuestas se rellenará con los valores predefinidos.
+</Accordion>
+
+</Accordions>
+
+## Enviar recompensas
+
+<Accordions>
+
+  <Accordion title="¿Cómo envío recompensas?">
+    Primero tienes que añadir al formulario un campo de teléfono (recomendado) para recoger los números. Después, compra las recompensas, elige a las personas destinatarias y envíalas. Encontrarás el detalle en [Enviar tarjetas regalo](/es/docs/help-center/reward/sending-gifticons).
+  </Accordion>
+   <Accordion title="No recogí el teléfono en el formulario. ¿Aun así puedo enviar recompensas?">
+    Lo sentimos, sin los números de teléfono no es posible enviar recompensas. Para poder enviarlas, recoge siempre en el formulario la información necesaria, como el teléfono.
+  </Accordion>
+     <Accordion title="¿Podéis enviar tarjetas regalo de marcas que no están en Walla?">
+    Sí. Escríbenos a cs@walla.my indicando la marca que prefieres o el rango de precio y la cantidad que necesitas, y tras estudiarlo te ayudaremos a que puedas comprarla en la tienda de recompensas de Walla.
+  </Accordion>
+       <Accordion title="¿Puedo entregar recompensas propias de mi marca (puntos de mi tienda, etc.)?">
+    Sí, es posible. Eso sí, esta función solo está disponible a partir del plan Custom. Escríbenos a cs@walla.my para más detalles.
+  </Accordion>
+
+</Accordions>
+
+
+
+
+<div className="not-prose mt-10 rounded-2xl border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-6 text-center">
+  <span className="block text-lg font-bold text-[#1A2C5C] mb-1">¿No has encontrado lo que buscabas?</span>
+  <span className="block text-[#76809D] text-sm mb-4">El equipo de Walla te responderá enseguida.</span>
+  <div className="flex justify-center">
+    <a href="https://walla.my/survey/9Z04inEDzv9XKqVC7d14?source=helpcenter-faq" className="inline-flex items-center justify-center rounded-full bg-[hsl(193,100%,50%)] px-5 py-2 text-sm font-bold text-white hover:opacity-90 transition-opacity no-underline">
+      Contactar →
+    </a>
+  </div>
+</div>

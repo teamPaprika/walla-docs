@@ -1,0 +1,572 @@
+---
+title: 錯誤代碼
+description: Walla API 錯誤代碼與疑難排解指南
+---
+
+# 錯誤代碼
+
+說明 Walla Open API 會回傳的錯誤回應以及解決方式。
+
+## HTTP 狀態碼
+
+Walla API 以標準 HTTP 狀態碼表示請求的成功／失敗。
+
+### 成功代碼
+
+| 代碼 | 狀態 | 說明 |
+|------|--------|-------------|
+| 200 | OK | 請求成功 |
+
+### 錯誤代碼
+
+| 代碼 | 狀態 | 說明 |
+|------|--------|-------------|
+| 400 | Bad Request | 錯誤的請求參數，或格式不正確的請求 |
+| 401 | Unauthorized | 驗證失敗（缺少 API 金鑰或金鑰無效） |
+| 403 | Forbidden | 權限不足（無法存取該資源） |
+| 404 | Not Found | 找不到資源 |
+| 429 | Too Many Requests | 超過速率限制 |
+| 500 | Internal Server Error | 發生伺服器錯誤 |
+
+## 錯誤回應格式
+
+所有錯誤回應都遵循一致的 JSON 格式：
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+## 各錯誤代碼詳解
+
+### 400 Bad Request
+
+在請求格式錯誤，或包含錯誤參數時發生。
+
+**主要原因：**
+
+1. **缺少必填欄位**
+   ```json
+   {
+     "error": "Invalid request: recipients array is required"
+   }
+   ```
+   **解決方式**：請在請求內容中帶上所有必填欄位。
+
+2. **資料格式錯誤**
+   ```json
+   {
+     "error": "Invalid email format"
+   }
+   ```
+   **解決方式**：請確認電子郵件是否符合 `user@domain.com` 格式。
+
+3. **空陣列**
+   ```json
+   {
+     "error": "Recipients array must contain at least one recipient"
+   }
+   ```
+   **解決方式**：必填陣列中請至少提供一個項目。
+
+4. **分頁參數錯誤**
+   ```json
+   {
+     "error": "Invalid page number. Page must be >= 1"
+   }
+   ```
+   **解決方式**：頁碼從 1 開始，不是 0。
+
+5. **超過上限**
+   ```json
+   {
+     "error": "Limit cannot exceed 100"
+   }
+   ```
+   **解決方式**：請把 `limit` 參數維持在 100 以下。
+
+**範例情境：**
+
+```javascript
+// ❌ 錯誤示範 - 缺少必填欄位
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    // 缺少 'recipients' 欄位
+    subject: 'Survey'
+  })
+});
+// 回傳：400: recipients array is required
+
+// ✅ 正確示範
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    recipients: [
+      { customerKey: 'customer_001', email: 'user@example.com' }
+    ],
+    subject: 'Survey'
+  })
+});
+```
+
+---
+
+### 401 Unauthorized
+
+在缺少 API 金鑰或金鑰無效導致驗證失敗時發生。回應中會一併帶上 `WWW-Authenticate: ApiKey realm="walla-open-api"` 標頭。
+
+**主要原因：**
+
+1. **缺少 API 金鑰**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **解決方式**：請在請求中帶上 `X-WALLA-API-KEY` 標頭。
+
+2. **API 金鑰錯誤或已過期**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **解決方式**：請確認 API 金鑰正確，且尚未過期或被撤銷。
+
+**範例情境：**
+
+```javascript
+// ❌ 錯誤示範 - 缺少 API 金鑰
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+    // 缺少 X-WALLA-API-KEY
+  }
+});
+// 回傳：401
+
+// ✅ 正確示範
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+---
+
+### 403 Forbidden
+
+在通過驗證但沒有存取該資源的權限時發生。
+
+**主要原因：**
+
+1. **存取沒有權限的工作區／表單**
+   ```json
+   {
+     "error": "Forbidden"
+   }
+   ```
+   **解決方式**：請確認你請求的工作區或表單是否屬於自己的團隊，必要時向工作區管理者申請存取權限。
+
+**疑難排解步驟：**
+
+1. 確認 API 金鑰是否已在環境中正確設定
+2. 確認標頭名稱正好是 `X-WALLA-API-KEY`（區分大小寫）
+3. 確認 API 金鑰未被撤銷或過期
+4. 確認你對該工作區具有存取權限
+5. 確認你使用的是對應環境（開發／測試／正式）的正確 API 金鑰
+
+---
+
+### 404 Not Found
+
+在請求的資源不存在或無法存取時發生。
+
+**主要原因：**
+
+1. **找不到表單**
+   ```json
+   {
+     "error": "Form not found"
+   }
+   ```
+   **解決方式**：請確認表單 ID 存在，且你具有存取權限。
+
+2. **表單尚未發布**
+   ```json
+   {
+     "error": "Form not found or not published"
+   }
+   ```
+   **解決方式**：嘗試發送之前，請先確認表單已發布。
+
+3. **找不到回覆**
+   ```json
+   {
+     "error": "Form or response not found"
+   }
+   ```
+   **解決方式**：請確認表單 ID 與回覆 ID 都正確。
+
+4. **找不到工作區**
+   ```json
+   {
+     "error": "Workspace not found"
+   }
+   ```
+   **解決方式**：請確認工作區 ID，並確認你具有存取權限。
+
+**範例情境：**
+
+```javascript
+// ❌ 錯誤示範 - 嘗試發送尚未發布的表單
+await sendForm('unpublished_form_id', recipients);
+// 回傳：404: Form not found or not published
+
+// ✅ 正確示範 - 已發布的表單
+await sendForm('published_form_id', recipients);
+```
+
+**疑難排解步驟：**
+
+1. 確認資源 ID（表單、回覆、工作區）是否正確
+2. 確認表單是否已發布（發送作業時）
+3. 確認資源是否已被刪除
+4. 確認你使用的是正確的環境（開發／正式）
+
+---
+
+### 429 Too Many Requests
+
+在超過 API 速率限制時發生。
+
+**速率限制：**
+- **限制**：每把 API 金鑰每小時 6,000 次
+- **時間視窗**：1 小時（滾動視窗）
+
+**回應：**
+```json
+{
+  "error": "Rate limit exceeded"
+}
+```
+
+**因應方式：**
+
+1. **實作速率限制處理**：確認回應狀態並妥善處理 429
+2. **使用指數退避**：逐步拉長重試間隔再等待
+3. **快取回應**：把常查詢的資料快取起來，減少 API 呼叫
+4. **批次處理請求**：盡可能把多項作業合併成一次
+5. **監控使用量**：追蹤 API 呼叫量，維持在限制之內
+
+**速率限制處理範例：**
+
+```javascript
+async function makeRequestWithRateLimit(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      // 處理速率限制
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After') || Math.pow(2, i);
+        console.log(`超過速率限制。${retryAfter} 秒後重試...`);
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_rate_limit(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            # 處理速率限制
+            if response.status_code == 429:
+                retry_after = int(response.headers.get('Retry-After', 2 ** i))
+                print(f'超過速率限制。{retry_after} 秒後重試...')
+                time.sleep(retry_after)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+**最佳做法：**
+
+- **遵守速率限制**：設計應用程式時請把每小時 6,000 次的限制納入考量
+- **實作快取**：不常變動的資料請做快取
+- **善用 Webhook**：需要即時更新時，請考慮用 Webhook 取代輪詢
+- **批次處理請求**：盡可能用一次請求查詢多個項目
+- **監控與告警**：追蹤 API 使用量，並設定在接近限制時收到通知
+
+---
+
+### 500 Internal Server Error
+
+伺服器發生非預期錯誤的情況。
+
+**回應：**
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+**因應方式：**
+
+1. **重試**：可能只是暫時性錯誤，請再試一次
+2. **指數退避**：重試前請先等待一段時間
+3. **確認狀態**：確認是否為整體系統問題
+4. **聯繫支援團隊**：錯誤持續發生時請聯繫 Walla 支援團隊
+
+**重試策略範例：**
+
+```javascript
+async function makeRequestWithRetry(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      if (response.status === 500 && i < maxRetries - 1) {
+        // 指數退避：1 秒、2 秒、4 秒
+        const delay = Math.pow(2, i) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_retry(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 500 and i < max_retries - 1:
+                # 指數退避
+                delay = 2 ** i
+                time.sleep(delay)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+## 錯誤處理最佳做法
+
+### 1. 永遠確認回應狀態
+
+```javascript
+const response = await fetch(url, options);
+
+if (!response.ok) {
+  const error = await response.json();
+  console.error(`Error ${response.status}:`, error.error);
+  throw new Error(error.error);
+}
+
+const data = await response.json();
+```
+
+### 2. 實作適當的錯誤處理
+
+```typescript
+try {
+  const result = await sendForm(formId, recipients);
+  console.log('Success:', result);
+} catch (error) {
+  if (error.status === 400) {
+    console.error('Invalid request:', error.message);
+    // 處理驗證錯誤
+  } else if (error.status === 401) {
+    console.error('Authentication failed');
+    // 確認 API 金鑰
+  } else if (error.status === 403) {
+    console.error('Permission denied');
+    // 確認資源存取權限
+  } else if (error.status === 404) {
+    console.error('Resource not found');
+    // 確認 ID
+  } else if (error.status === 429) {
+    console.error('Rate limit exceeded');
+    // 使用指數退避等待後重試
+  } else if (error.status === 500) {
+    console.error('Server error, retrying...');
+    // 實作重試邏輯
+  } else {
+    console.error('Unexpected error:', error);
+  }
+}
+```
+
+### 3. 為了除錯記錄錯誤日誌
+
+```javascript
+function logError(error, context) {
+  console.error({
+    timestamp: new Date().toISOString(),
+    context,
+    status: error.status,
+    message: error.message,
+    stack: error.stack
+  });
+}
+
+try {
+  await api.getResponses(formId);
+} catch (error) {
+  logError(error, { operation: 'getResponses', formId });
+  throw error;
+}
+```
+
+### 4. 提供對使用者友善的訊息
+
+```javascript
+function getUserFriendlyError(error) {
+  const messages = {
+    400: '請確認輸入的內容後再試一次。',
+    401: '驗證失敗。請確認 API 金鑰。',
+    403: '你沒有執行這項作業的權限。',
+    404: '找不到請求的資源。',
+    429: '請求次數過多。請稍後再試。',
+    500: '發生問題。請稍後再試。'
+  };
+
+  return messages[error.status] || '發生非預期的錯誤。';
+}
+```
+
+### 5. 處理部分失敗
+
+```javascript
+// 發送給多位收件人時
+const result = await sendForm(formId, recipients);
+
+if (result.data.failedDeliveries.length > 0) {
+  console.warn('部分發送失敗：');
+  result.data.failedDeliveries.forEach(failure => {
+    console.error(`${failure.customerKey}: ${failure.error}`);
+  });
+
+  // 重試失敗的發送
+  const failedRecipients = result.data.failedDeliveries.map(f => ({
+    customerKey: f.customerKey,
+    email: f.email,
+    phoneNumber: f.phoneNumber
+  }));
+
+  // 實作重試邏輯
+}
+```
+
+## 常見的錯誤情境
+
+### 情境 1："Authentication failed"
+
+**問題**：已帶上 API 金鑰卻仍出現 401 錯誤
+
+**檢查清單：**
+- [ ] 確認 API 金鑰是否帶在 `X-WALLA-API-KEY` 標頭中
+- [ ] 確認標頭名稱是否正確（區分大小寫）
+- [ ] 確認 API 金鑰有效且尚未過期
+- [ ] 確認你對該工作區具有存取權限
+- [ ] 確認你使用的是對應環境的 API 金鑰
+
+### 情境 2："Form not found or not published"
+
+**問題**：無法發送表單
+
+**檢查清單：**
+- [ ] 確認表單 ID 是否正確
+- [ ] 確認表單是否存在於工作區中
+- [ ] 確認表單是否已發布（不是草稿模式）
+- [ ] 確認你具有存取該表單的權限
+
+### 情境 3："Invalid page number"
+
+**問題**：取得回覆時發生分頁錯誤
+
+**檢查清單：**
+- [ ] 確認頁碼是否從 1 開始（不是 0）
+- [ ] 確認頁碼是否為正整數
+- [ ] 確認是否超出總頁數
+
+### 情境 4：回覆陣列是空的
+
+**問題**：預期會有資料，卻收到空陣列
+
+**可能的原因：**
+- 目前還沒有資料（不是錯誤）
+- 篩選條件或參數錯誤
+- 存取到錯誤的工作區／表單
+- 資料已被刪除
+
+**解決方式**：確認該資源中有資料，且查詢方式正確
+
+## 取得協助
+
+若遇到上述內容無法解決的錯誤，請依下列順序檢查。
+
+1. **確認 API 回應**：錯誤訊息中通常已包含原因
+2. **檢視請求**：確認所有必填參數都已帶上
+3. **用 cURL 測試**：用 cURL 測試以縮小問題範圍
+4. **確認權限**：確認你具備必要的存取權限
+5. **聯繫支援團隊**：請帶著下列資訊聯繫 Walla 支援團隊
+   - 請求資訊（端點、方法、參數）
+   - 完整的錯誤回應
+   - 錯誤發生的時間
+   - 工作區／表單 ID（若適用）
+
+## 下一步
+
+<Cards>
+  <Card title="驗證" href="/zh-TW/docs/developer-docs/authentication" />
+  <Card title="快速上手指南" href="/zh-TW/docs/developer-docs/quick-start" />
+  <Card title="API 參考" href="/zh-TW/docs/developer-docs/workspaces" />
+</Cards>

@@ -1,0 +1,34 @@
+---
+title: "整合 GA4 與 Meta Pixel"
+description: "整合 Google Analytics 4（GA4）與 Meta Pixel 後，就能把問卷頁面的瀏覽與回覆送出追蹤為轉換事件。歡迎運用在廣告成效衡量與再行銷上。"
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 整合方式
+
+<Steps>
+  <Step>
+    ### 開啟問卷設定
+    點選問卷編輯畫面右上角的設定（齒輪）按鈕，開啟問卷設定。
+  </Step>
+  <Step>
+    ### 前往外部追蹤分頁
+    在問卷設定視窗中選擇左側選單的「外部追蹤」分頁。
+  </Step>
+  <Step>
+    ### 輸入測量 ID
+    輸入要追蹤的平台 ID。輸入的值會自動儲存。
+    - Meta Pixel ID：例）123456789012345
+    - GA4 測量 ID：例）G-XXXXXXXXXX
+  </Step>
+</Steps>
+
+## 會送出的事件
+
+完成整合後，系統會依填答者的行為把下列標準事件送到各平台。
+
+- 瀏覽表單時：PageView（Meta）／page_view（GA4）
+- 完成送出時：Lead（Meta）／generate_lead（GA4）
+
+轉換事件中會一併包含 walla_response_id、walla_customer_key 參數。設定廣告轉換目標時，請選擇上述的標準事件名稱。

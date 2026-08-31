@@ -321,6 +321,31 @@ def get_workspace_by_id(workspace_id):
     return response.json()["data"]
 ```
 
+## Use Cases
+
+### Workspace Information Dashboard
+
+```typescript
+// Build a dashboard showing every workspace and its form count
+async function createWorkspaceDashboard() {
+  const workspaces = await getAllWorkspaces();
+
+  for (const workspace of workspaces) {
+    const forms = await getWorkspaceForms(workspace.id);
+    console.log(`${workspace.name}: ${forms.length} forms`);
+  }
+}
+```
+
+### Filtering Data by Workspace
+
+```python
+# Fetch only the workspaces belonging to a specific team
+def get_workspaces_by_team(team_id):
+    all_workspaces = get_all_workspaces()
+    return [ws for ws in all_workspaces if ws['teamId'] == team_id]
+```
+
 ## Next Steps
 
 <Cards>

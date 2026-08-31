@@ -1,0 +1,278 @@
+---
+title: Autenticación
+description: Cómo autenticarse en la Walla Open API
+---
+
+# Autenticación
+
+La Walla Open API usa autenticación basada en claves de API. Todas las peticiones deben incluir una clave válida en la cabecera.
+
+## Autenticación con clave de API
+
+Incluye la clave de API en la cabecera `X-WALLA-API-KEY` de todas las peticiones.
+
+### Formato de la cabecera
+
+```
+X-WALLA-API-KEY: your_api_key_here
+```
+
+### Claves de API con alcance de equipo
+
+Las claves de API de Walla se generan **por equipo**.
+
+- Cada clave está vinculada a un equipo concreto
+- La información del equipo se incluye automáticamente en todas las peticiones
+- No hace falta enviar los datos del equipo por separado al llamar a la API
+- Los espacios de trabajo, formularios y respuestas se filtran automáticamente al alcance de ese equipo
+
+## Obtener una clave de API
+
+1. Inicia sesión en [app.walla.my](https://app.walla.my)
+2. Ve a [app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+3. Genera o copia la clave en la sección de claves de API de la parte superior de la página
+
+> **Importante**: guarda la clave de API con el mismo cuidado que una contraseña y no la compartas con nadie.
+
+## Enviar peticiones autenticadas
+
+Así se incluye la clave de API en cada lenguaje.
+
+### cURL
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json"
+```
+
+### JavaScript (Fetch)
+
+```javascript
+fetch('https://api.walla.my/open-api/v1/workspaces', {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+### Python (requests)
+
+```python
+import requests
+
+url = "https://api.walla.my/open-api/v1/workspaces"
+headers = {
+    "X-WALLA-API-KEY": "your_api_key_here",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+data = response.json()
+print(data)
+```
+
+### Node.js (axios)
+
+```javascript
+const axios = require('axios');
+
+const config = {
+  headers: {
+    'X-WALLA-API-KEY': 'your_api_key_here',
+    'Content-Type': 'application/json'
+  }
+};
+
+axios.get('https://api.walla.my/open-api/v1/workspaces', config)
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+```
+
+## Errores de autenticación
+
+Cuando falla la autenticación se devuelven los siguientes errores.
+
+### 401 Unauthorized
+
+Se produce en estos casos.
+- La petición no incluye la clave de API
+- La clave no es válida, ha caducado o se ha revocado
+
+**Ejemplo de respuesta:**
+
+```json
+{
+  "error": "Unauthorized"
+}
+```
+
+### 403 Forbidden
+
+Se produce cuando la autenticación es correcta pero no tienes permiso para acceder a ese recurso.
+
+**Ejemplo de respuesta:**
+
+```json
+{
+  "error": "Forbidden"
+}
+```
+
+## Buenas prácticas
+
+### Seguridad
+
+- **No subas la clave al repositorio**: no incluyas claves de API en Git ni en otros sistemas de control de versiones
+- **Usa variables de entorno**: gestiona la clave mediante variables de entorno
+- **Rota las claves con regularidad**: renuévalas periódicamente por seguridad
+- **Separa las claves por entorno**: usa claves distintas en desarrollo, preproducción y producción
+
+### Variables de entorno
+
+Guarda la clave de API en una variable de entorno.
+
+```bash
+# Archivo .env
+WALLA_API_KEY=your_api_key_here
+```
+
+En el código puedes leerla así.
+
+```javascript
+// JavaScript
+const apiKey = process.env.WALLA_API_KEY;
+```
+
+```python
+# Python
+import os
+api_key = os.getenv('WALLA_API_KEY')
+```
+
+### Límite de peticiones
+
+La Walla Open API aplica límites de peticiones para garantizar la estabilidad del sistema.
+
+- **Límite**: 6.000 peticiones por hora y clave de API
+- **Ventana temporal**: 1 hora (ventana deslizante)
+
+Si superas el límite se devuelve `429 Too Many Requests`. En ese caso:
+
+- Reintenta con retroceso exponencial
+- Cachea las respuestas siempre que puedas
+- Reduce las peticiones duplicadas innecesarias
+- Monitoriza tu consumo de la API
+- Agrupa las peticiones cuando sea posible
+
+## Resolución de problemas
+
+### Problemas habituales
+
+**Problema**: incluyo la clave de API pero sigue saliendo un error 401
+
+**Solución**:
+- Comprueba que la clave sea correcta y no haya caducado
+- Comprueba que tengas permisos sobre ese espacio de trabajo
+- Comprueba que el nombre de la cabecera sea exactamente `X-WALLA-API-KEY` (distingue mayúsculas y minúsculas)
+- Comprueba que el recurso pertenezca a un espacio al que tengas acceso
+
+**Problema**: la clave de API no se está enviando
+
+**Solución**:
+- Comprueba que el formato de la cabecera sea correcto
+- Comprueba que tu cliente HTTP incluya las cabeceras personalizadas
+- Comprueba que no haya erratas en el nombre de la cabecera
+
+## Siguientes pasos
+
+Cuando tengas la autenticación lista, consulta la siguiente documentación.
+
+<Cards>
+  <Card title="Guía de inicio rápido" href="/es/docs/developer-docs/quick-start" />
+  <Card title="API de espacios de trabajo" href="/es/docs/developer-docs/workspaces" />
+  <Card title="API de formularios" href="/es/docs/developer-docs/forms" />
+</Cards>
+
+## Otras consideraciones de seguridad
+
+### Proteger la clave de API
+
+1. **No la escribas directamente en el código**
+   - No pongas la clave de API en el código fuente
+   - Usa variables de entorno o un servicio de gestión de secretos
+
+2. **Usa solo HTTPS**
+   - A la API solo se puede acceder por HTTPS
+   - Las peticiones HTTP se rechazan
+
+3. **Vigila posibles filtraciones**
+   - Comprueba con regularidad que la clave no haya acabado en un repositorio público
+   - Si se filtra, revócala de inmediato y genera una nueva
+
+### Gestión de permisos
+
+- Las claves de API están vinculadas a los permisos del espacio de trabajo
+- Genera una clave distinta para cada miembro del equipo
+- Revoca cuanto antes las claves que ya no uses
+- Revisa periódicamente el uso de las claves
+
+### Buenas prácticas para gestionar errores
+
+```javascript
+async function makeAuthenticatedRequest(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status === 401) {
+      console.error('Fallo de autenticación: revisa la clave de API');
+      // Avisa a la persona usuaria o inicia el proceso de reautenticación
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP. Estado: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Petición fallida:', error);
+    throw error;
+  }
+}
+```
+
+```python
+import requests
+import os
+
+def make_authenticated_request(url):
+    headers = {
+        'X-WALLA-API-KEY': os.getenv('WALLA_API_KEY'),
+        'Content-Type': 'application/json'
+    }
+
+    try:
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            print('Fallo de autenticación: revisa la clave de API')
+            return None
+
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as e:
+        print(f'Petición fallida: {e}')
+        raise
+```

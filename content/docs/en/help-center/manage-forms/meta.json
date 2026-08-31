@@ -8,6 +8,7 @@
     "saving-responses-temporarily",
     "scheduling-survey-start-end-times",
     "preventing-duplicate-responses",
-    "logged-in-responses"
+    "logged-in-responses",
+    "embed-only-access"
   ]
 }

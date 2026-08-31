@@ -1,0 +1,572 @@
+---
+title: エラーコード
+description: Walla API のエラーコードとトラブルシューティングガイド
+---
+
+# エラーコード
+
+Walla Open API が返すエラーレスポンスと、その解決方法をご案内します。
+
+## HTTP ステータスコード
+
+Walla API は標準の HTTP ステータスコードでリクエストの成功／失敗を表します。
+
+### 成功コード
+
+| コード | ステータス | 説明 |
+|------|--------|-------------|
+| 200 | OK | リクエスト成功 |
+
+### エラーコード
+
+| コード | ステータス | 説明 |
+|------|--------|-------------|
+| 400 | Bad Request | 不正なリクエストパラメータ、または形式が正しくないリクエスト |
+| 401 | Unauthorized | 認証失敗（API キーの欠落または無効） |
+| 403 | Forbidden | 権限不足（該当リソースにアクセスできない） |
+| 404 | Not Found | リソースが見つからない |
+| 429 | Too Many Requests | レート制限の超過 |
+| 500 | Internal Server Error | サーバーエラーの発生 |
+
+## エラーレスポンスの形式
+
+すべてのエラーレスポンスは一貫した JSON 形式に従います:
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+## エラーコードの詳細
+
+### 400 Bad Request
+
+リクエストの形式が誤っている場合や、不正なパラメータが含まれている場合に発生します。
+
+**主な原因:**
+
+1. **必須フィールドの欠落**
+   ```json
+   {
+     "error": "Invalid request: recipients array is required"
+   }
+   ```
+   **解決方法**: リクエストボディにすべての必須フィールドを含めてください。
+
+2. **データ形式の誤り**
+   ```json
+   {
+     "error": "Invalid email format"
+   }
+   ```
+   **解決方法**: メールアドレスが `user@domain.com` の形式に従っているか確認してください。
+
+3. **空の配列**
+   ```json
+   {
+     "error": "Recipients array must contain at least one recipient"
+   }
+   ```
+   **解決方法**: 必須の配列には少なくとも 1 つの項目を指定してください。
+
+4. **ページネーションパラメータの誤り**
+   ```json
+   {
+     "error": "Invalid page number. Page must be >= 1"
+   }
+   ```
+   **解決方法**: ページ番号は 0 ではなく 1 から始まります。
+
+5. **上限の超過**
+   ```json
+   {
+     "error": "Limit cannot exceed 100"
+   }
+   ```
+   **解決方法**: `limit` パラメータは 100 以下にしてください。
+
+**シナリオ例:**
+
+```javascript
+// ❌ 誤った例 - 必須フィールドの欠落
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    // 'recipients' フィールドが欠落
+    subject: 'Survey'
+  })
+});
+// 返却: 400: recipients array is required
+
+// ✅ 正しい例
+await fetch(`${API_BASE}/forms/form_abc/delivery`, {
+  method: 'POST',
+  headers: headers,
+  body: JSON.stringify({
+    recipients: [
+      { customerKey: 'customer_001', email: 'user@example.com' }
+    ],
+    subject: 'Survey'
+  })
+});
+```
+
+---
+
+### 401 Unauthorized
+
+API キーがない、または無効で認証に失敗した場合に発生します。レスポンスには `WWW-Authenticate: ApiKey realm="walla-open-api"` ヘッダーも一緒に返されます。
+
+**主な原因:**
+
+1. **API キーの欠落**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **解決方法**: リクエストに `X-WALLA-API-KEY` ヘッダーを含めてください。
+
+2. **API キーが誤っている、または期限切れ**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **解決方法**: API キーが正しく、期限切れ・取り消し済みでないか確認してください。
+
+**シナリオ例:**
+
+```javascript
+// ❌ 誤った例 - API キーの欠落
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+    // X-WALLA-API-KEY が欠落
+  }
+});
+// 返却: 401
+
+// ✅ 正しい例
+await fetch(`${API_BASE}/workspaces`, {
+  method: 'GET',
+  headers: {
+    'X-WALLA-API-KEY': process.env.WALLA_API_KEY,
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+---
+
+### 403 Forbidden
+
+認証は通過したものの、そのリソースにアクセスする権限がない場合に発生します。
+
+**主な原因:**
+
+1. **権限のないワークスペース・フォームへのアクセス**
+   ```json
+   {
+     "error": "Forbidden"
+   }
+   ```
+   **解決方法**: リクエストしたワークスペースまたはフォームが自分のチームのリソースか確認し、必要ならワークスペース管理者にアクセス権限を依頼してください。
+
+**トラブルシューティングの手順:**
+
+1. API キーが環境に正しく設定されているか確認
+2. ヘッダー名が正確に `X-WALLA-API-KEY` か確認（大文字・小文字を区別）
+3. API キーが取り消されたり期限切れになっていないか確認
+4. リクエストしたワークスペースへのアクセス権限があるか確認
+5. 環境（開発／ステージング／本番）に合った API キーを使っているか確認
+
+---
+
+### 404 Not Found
+
+リクエストしたリソースが存在しない、またはアクセスできない場合に発生します。
+
+**主な原因:**
+
+1. **フォームが見つからない**
+   ```json
+   {
+     "error": "Form not found"
+   }
+   ```
+   **解決方法**: フォーム ID が存在し、アクセス権限があるか確認してください。
+
+2. **未公開のフォーム**
+   ```json
+   {
+     "error": "Form not found or not published"
+   }
+   ```
+   **解決方法**: 送信を試みる前に、フォームが公開されているか確認してください。
+
+3. **回答が見つからない**
+   ```json
+   {
+     "error": "Form or response not found"
+   }
+   ```
+   **解決方法**: フォーム ID と回答 ID の両方が正しいか確認してください。
+
+4. **ワークスペースが見つからない**
+   ```json
+   {
+     "error": "Workspace not found"
+   }
+   ```
+   **解決方法**: ワークスペース ID を確認し、アクセス権限があるか確認してください。
+
+**シナリオ例:**
+
+```javascript
+// ❌ 誤った例 - 未公開のフォームを送信しようとする
+await sendForm('unpublished_form_id', recipients);
+// 返却: 404: Form not found or not published
+
+// ✅ 正しい例 - 公開済みのフォーム
+await sendForm('published_form_id', recipients);
+```
+
+**トラブルシューティングの手順:**
+
+1. リソース ID（フォーム、回答、ワークスペース）が正しいか確認
+2. フォームが公開されているか確認（送信操作の場合）
+3. リソースが削除されていないか確認
+4. 正しい環境（開発／本番）を使っているか確認
+
+---
+
+### 429 Too Many Requests
+
+API のレート制限を超えた場合に発生します。
+
+**レート制限:**
+- **制限**: API キーあたり 1 時間 6,000 件
+- **時間ウィンドウ**: 1 時間（ローリングウィンドウ）
+
+**レスポンス:**
+```json
+{
+  "error": "Rate limit exceeded"
+}
+```
+
+**対処方法:**
+
+1. **レート制限の処理を実装する**: レスポンスのステータスを確認し、429 を適切に処理してください
+2. **指数バックオフを使う**: 再試行の間隔を徐々に広げながら待機してください
+3. **レスポンスをキャッシュする**: よく取得するデータをキャッシュして API 呼び出しを減らしてください
+4. **リクエストをまとめる**: 可能なら複数の処理を 1 つにまとめてください
+5. **使用量をモニタリングする**: API の呼び出し量を追跡して制限内に収めてください
+
+**レート制限の処理例:**
+
+```javascript
+async function makeRequestWithRateLimit(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      // レート制限の処理
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After') || Math.pow(2, i);
+        console.log(`レート制限を超えました。${retryAfter} 秒後に再試行...`);
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_rate_limit(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            # レート制限の処理
+            if response.status_code == 429:
+                retry_after = int(response.headers.get('Retry-After', 2 ** i))
+                print(f'レート制限を超えました。{retry_after} 秒後に再試行...')
+                time.sleep(retry_after)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+**ベストプラクティス:**
+
+- **レート制限を守る**: 1 時間 6,000 件の制限を考慮してアプリケーションを設計してください
+- **キャッシュを実装する**: あまり変わらないデータはキャッシュしてください
+- **Webhook を活用する**: リアルタイムの更新が必要なら、ポーリングではなく Webhook を検討してください
+- **リクエストをまとめる**: 可能なら 1 回のリクエストで複数の項目を取得してください
+- **モニタリングと通知**: API の使用量を追跡し、制限に近づいたら通知が届くよう設定してください
+
+---
+
+### 500 Internal Server Error
+
+サーバーで予期しないエラーが発生した場合です。
+
+**レスポンス:**
+```json
+{
+  "error": "Internal server error"
+}
+```
+
+**対処方法:**
+
+1. **再試行する**: 一時的なエラーの可能性があるので、もう一度試してください
+2. **指数バックオフ**: 再試行の前に待機時間を設けてください
+3. **状態を確認する**: システム全体の問題かどうか確認してください
+4. **サポートへ問い合わせる**: エラーが続く場合は Walla サポートチームへご連絡ください
+
+**再試行戦略の例:**
+
+```javascript
+async function makeRequestWithRetry(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+
+      if (response.status === 500 && i < maxRetries - 1) {
+        // 指数バックオフ: 1 秒、2 秒、4 秒
+        const delay = Math.pow(2, i) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}
+```
+
+```python
+import time
+import requests
+
+def make_request_with_retry(url, headers, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 500 and i < max_retries - 1:
+                # 指数バックオフ
+                delay = 2 ** i
+                time.sleep(delay)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.RequestException as e:
+            if i == max_retries - 1:
+                raise
+```
+
+## エラー処理のベストプラクティス
+
+### 1. 常にレスポンスのステータスを確認する
+
+```javascript
+const response = await fetch(url, options);
+
+if (!response.ok) {
+  const error = await response.json();
+  console.error(`Error ${response.status}:`, error.error);
+  throw new Error(error.error);
+}
+
+const data = await response.json();
+```
+
+### 2. 適切なエラー処理を実装する
+
+```typescript
+try {
+  const result = await sendForm(formId, recipients);
+  console.log('Success:', result);
+} catch (error) {
+  if (error.status === 400) {
+    console.error('Invalid request:', error.message);
+    // バリデーションエラーの処理
+  } else if (error.status === 401) {
+    console.error('Authentication failed');
+    // API キーの確認
+  } else if (error.status === 403) {
+    console.error('Permission denied');
+    // リソースへのアクセス権限の確認
+  } else if (error.status === 404) {
+    console.error('Resource not found');
+    // ID の確認
+  } else if (error.status === 429) {
+    console.error('Rate limit exceeded');
+    // 指数バックオフで待機してから再試行
+  } else if (error.status === 500) {
+    console.error('Server error, retrying...');
+    // 再試行ロジックの実装
+  } else {
+    console.error('Unexpected error:', error);
+  }
+}
+```
+
+### 3. デバッグのためにエラーログを記録する
+
+```javascript
+function logError(error, context) {
+  console.error({
+    timestamp: new Date().toISOString(),
+    context,
+    status: error.status,
+    message: error.message,
+    stack: error.stack
+  });
+}
+
+try {
+  await api.getResponses(formId);
+} catch (error) {
+  logError(error, { operation: 'getResponses', formId });
+  throw error;
+}
+```
+
+### 4. ユーザーにわかりやすいメッセージを提供する
+
+```javascript
+function getUserFriendlyError(error) {
+  const messages = {
+    400: '入力内容をご確認のうえ、もう一度お試しください。',
+    401: '認証に失敗しました。API キーをご確認ください。',
+    403: 'この操作を実行する権限がありません。',
+    404: 'リクエストされたリソースが見つかりません。',
+    429: 'リクエストが多すぎます。しばらくしてからもう一度お試しください。',
+    500: '問題が発生しました。しばらくしてからもう一度お試しください。'
+  };
+
+  return messages[error.status] || '予期しないエラーが発生しました。';
+}
+```
+
+### 5. 部分的な失敗を処理する
+
+```javascript
+// 複数の宛先へ送信するとき
+const result = await sendForm(formId, recipients);
+
+if (result.data.failedDeliveries.length > 0) {
+  console.warn('一部の送信に失敗しました:');
+  result.data.failedDeliveries.forEach(failure => {
+    console.error(`${failure.customerKey}: ${failure.error}`);
+  });
+
+  // 失敗した送信を再試行
+  const failedRecipients = result.data.failedDeliveries.map(f => ({
+    customerKey: f.customerKey,
+    email: f.email,
+    phoneNumber: f.phoneNumber
+  }));
+
+  // 再試行ロジックの実装
+}
+```
+
+## よくあるエラーのシナリオ
+
+### シナリオ 1: "Authentication failed"
+
+**問題**: API キーがあるのに 401 エラーが発生する
+
+**チェックリスト:**
+- [ ] API キーが `X-WALLA-API-KEY` ヘッダーに含まれているか確認
+- [ ] ヘッダー名が正確か確認（大文字・小文字を区別）
+- [ ] API キーが有効で期限切れでないか確認
+- [ ] リクエストしたワークスペースへのアクセス権限があるか確認
+- [ ] 環境に合った API キーを使っているか確認
+
+### シナリオ 2: "Form not found or not published"
+
+**問題**: フォームを送信できない
+
+**チェックリスト:**
+- [ ] フォーム ID が正しいか確認
+- [ ] フォームがワークスペースに存在するか確認
+- [ ] フォームが公開されているか確認（下書きモードでないこと）
+- [ ] フォームにアクセスする権限があるか確認
+
+### シナリオ 3: "Invalid page number"
+
+**問題**: 回答を取得するときにページネーションのエラーが発生する
+
+**チェックリスト:**
+- [ ] ページ番号が 1 から始まっているか確認（0 ではない）
+- [ ] ページ番号が正の整数か確認
+- [ ] 総ページ数を超えていないか確認
+
+### シナリオ 4: 空の回答配列
+
+**問題**: データを期待したのに空の配列が返ってくる
+
+**考えられる理由:**
+- まだデータが存在しない（エラーではありません）
+- フィルターやパラメータの誤り
+- 誤ったワークスペース／フォームへのアクセス
+- データが削除された
+
+**解決方法**: そのリソースにデータがあり、正しくクエリしているか確認
+
+## サポートを受ける
+
+上記で解決しないエラーが発生した場合は、次の順序で確認してみてください。
+
+1. **API レスポンスを確認する**: エラーメッセージに原因が含まれていることが多いです
+2. **リクエストを見直す**: 必須パラメータがすべて含まれているか確認してください
+3. **cURL でテストする**: cURL でテストして問題を絞り込んでみてください
+4. **権限を確認する**: 必要なアクセス権限があるか確認してください
+5. **サポートへ問い合わせる**: 以下の情報を添えて Walla サポートチームへご連絡ください
+   - リクエスト情報（エンドポイント、メソッド、パラメータ）
+   - エラーレスポンス全文
+   - エラーが発生した時刻
+   - ワークスペース／フォーム ID（該当する場合）
+
+## 次のステップ
+
+<Cards>
+  <Card title="認証" href="/ja/docs/developer-docs/authentication" />
+  <Card title="クイックスタートガイド" href="/ja/docs/developer-docs/quick-start" />
+  <Card title="API リファレンス" href="/ja/docs/developer-docs/workspaces" />
+</Cards>

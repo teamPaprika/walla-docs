@@ -1,0 +1,129 @@
+---
+title: "Configurar la lógica"
+description: "La lógica controla qué pregunta se muestra a continuación según lo que responde cada persona. En lugar de avanzar siempre en el mismo orden, el formulario puede seguir rutas distintas según las respuestas."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## El concepto de lógica
+
+- La lógica decide «a dónde lleva la siguiente pregunta según la respuesta».
+- La ruta predeterminada es el flujo por el que pasan todas las personas. (Es un concepto distinto del de campo «obligatorio».)
+
+## Añadir lógica
+
+<Steps>
+  <Step>
+    ### Abre la pantalla de lógica
+    En la pantalla de edición del proyecto, pulsa el botón `Lógica` para ir a la configuración de la lógica.
+  </Step>
+  <Step>
+    ### Entiende la estructura de condición e ir a
+    La lógica se compone de dos partes: la «condición» y la acción «ir a».
+  </Step>
+  <Step>
+    ### Condición
+    1. **Elige la pregunta de referencia** – selecciona en qué respuesta se basará la lógica.
+    2. **Elige la condición** – selecciona el tipo de condición. Las condiciones se dividen en comparaciones de texto/valor, de opciones, numéricas y de fecha; consulta la lista completa en [Tipos de condición en detalle](#tipos-de-condición-en-detalle).
+    3. **Elige la opción o respuesta** – selecciona con qué respuestas se activa la condición.
+       - También puedes seleccionar varias respuestas a la vez.
+  </Step>
+  <Step>
+    ### Añadir varias condiciones
+    - Pulsa `+ Añadir condición` para combinar varias condiciones.
+    - Al combinarlas, elige una de estas dos opciones.
+      - **AND**: la lógica se activa solo si se cumplen la condición anterior y la siguiente.
+      - **OR**: la lógica se activa si se cumple cualquiera de las dos.
+  </Step>
+  <Step>
+    ### Ir a
+    - Cuando hayas definido todas las condiciones, elige a qué campo debe ir la persona.
+    - Una vez configurado, quien cumpla esa condición saltará directamente a la pregunta indicada.
+  </Step>
+</Steps>
+
+## Tipos de condición en detalle
+
+### Comparación de texto y valores
+
+| Condición | Significado | Ejemplo | Respuesta de ejemplo |
+| ------ | -------------- | ---------------- | ----------------- |
+| Es igual a | El valor coincide exactamente | Si la respuesta es `Seúl` | Seúl |
+| No es igual a | El valor no coincide | Si la respuesta no es `Seúl` | Incheon |
+| Empieza por | Comienza por un valor concreto | Si la respuesta empieza por `010` | 010-1234-5678 |
+| Termina en | Acaba en un valor concreto | Si la respuesta acaba en `.com` | example<span>@</span>walla.com |
+| Contiene texto | Incluye ciertos caracteres | Si la respuesta contiene `S.L.` | Paprika Data Lab S.L. |
+| No contiene texto | No incluye ciertos caracteres | Si la respuesta no contiene `manzana` | Zumo de uva |
+
+### Comparación de opciones
+Se usa en preguntas donde se pueden elegir varios elementos, como las de opción múltiple o casillas, para comprobar qué opciones se han seleccionado.
+
+| Condición | Significado | Ejemplo |
+| -------- | --------------------- | ----------------------- |
+| Contiene todas | Se han seleccionado todos los elementos indicados | Si se han elegido `A` y `B` |
+| Contiene al menos una | Se ha seleccionado al menos uno de los elementos indicados | Si se ha elegido `A` o `B` |
+| No contiene ninguna | No se ha seleccionado ninguno de los elementos indicados | Si no se ha elegido ni `A` ni `B` |
+| Falta al menos una | No se ha seleccionado al menos uno de los elementos indicados | Si falta al menos una de `A` o `B` |
+
+
+### Comparación numérica
+
+| Condición | Significado | Ejemplo |
+| ----- | ------------ | ------------------------ |
+| Mayor que | Superior al valor de referencia | Si la edad es mayor que `19` |
+| Mayor o igual que | Igual o superior al valor de referencia | Si la edad es `19` o más |
+| Menor que | Inferior al valor de referencia | Si la puntuación es menor que `60` |
+| Menor o igual que | Igual o inferior al valor de referencia | Si la puntuación es `60` o menos |
+
+### Comparación de fechas
+
+| Condición | Significado | Ejemplo |
+| -------- | ----------------------- | --------------------- |
+| Anterior a | Antes de la fecha de referencia (sin incluirla) | Si es anterior al `2026-01-01` |
+| Anterior o igual | En la fecha de referencia o antes (incluyéndola) | Si es el `2026-01-01` o antes |
+| Posterior a | Después de la fecha de referencia (sin incluirla) | Si es posterior al `2026-01-01` |
+| Posterior o igual | En la fecha de referencia o después (incluyéndola) | Si es el `2026-01-01` o después |
+
+## Configurar la lógica con nodos
+
+<Steps>
+  <Step>
+    ### Observa los nodos y los conectores
+    En la pantalla de lógica, cada pregunta aparece como un nodo y los conectores entre nodos muestran el flujo. La `ruta predeterminada` es el flujo por el que pasan todas las personas, mientras que las ramas numeradas como `Lógica #1` o `Lógica #2` son los caminos que se bifurcan según las condiciones.
+  </Step>
+  <Step>
+    ### Define la ruta predeterminada
+    Al pulsar la etiqueta `Ruta predeterminada` de un nodo se abre un desplegable para elegir el `campo siguiente`. Busca un campo o elígelo de la lista para indicar a dónde va quien no cumple ninguna condición.
+  </Step>
+  <Step>
+    ### Edita las condiciones en el nodo de lógica
+    Al pulsar una etiqueta de rama numerada, como `Lógica #1` o `Lógica #2`, se despliega ahí mismo el área de condiciones. Puedes modificar la pregunta de referencia, la condición y las opciones directamente en el nodo, o añadir una `nueva condición`.
+  </Step>
+  <Step>
+    ### Pulsa el conector para editarlo directamente
+    Tras seleccionar un campo, puedes hacer clic directamente en el conector entre nodos para editar ese flujo, sin necesidad de pulsar las etiquetas `Lógica` o `Ruta predeterminada` del nodo.
+  </Step>
+  <Step>
+    ### Arrastra los nodos para conectarlos
+    Arrastra el punto de conexión de la parte inferior de un nodo hasta otro nodo de pregunta para enlazarlos directamente y crear un flujo. Al trazar un conector nuevo, las respuestas seguirán esa ruta.
+  </Step>
+</Steps>
+
+## Ejemplos de uso de la lógica
+
+- #### Ejemplo 1. Bifurcar según el consentimiento de datos
+  - Condición: `campo de consentimiento de datos` = «Acepto»
+  - Ir a: la pregunta posterior a las que recogen datos personales (campo de teléfono, etc.)
+- #### Ejemplo 2. Descartar por edad
+  - Condición: `pregunta de edad (campo de opción múltiple o desplegable)`, no es igual a, «adolescente»
+  - Ir a: `campo de descarte`
+- #### Ejemplo 3. Ir a una pregunta concreta si aparece una palabra clave
+  - Condición: `campo de texto corto o largo`, contiene texto, «manzana»
+  - Ir a: `campo de pago del zumo de manzana`
+
+## Otros ajustes y advertencias
+
+- Si la lógica se interrumpe a mitad, lo más probable es que **haya un campo de descarte en medio o que la lógica de una pregunta anterior esté mal configurada**.
+
+- Las preguntas dentro de un grupo de campos también pueden tener su propia lógica; si la lógica apunta a una pregunta concreta, la vista empieza en el grupo que la contiene.
+- Al pulsar el botón `Restablecer` se elimina toda la lógica de esa pregunta.

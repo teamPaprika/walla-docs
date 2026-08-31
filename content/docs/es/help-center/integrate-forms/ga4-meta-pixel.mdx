@@ -1,0 +1,34 @@
+---
+title: "Integrar GA4 y Meta Pixel"
+description: "Al integrar Google Analytics 4 (GA4) y Meta Pixel puedes medir como eventos de conversión las visualizaciones de la página del formulario y los envíos de respuesta. Aprovéchalo para medir el rendimiento de tus anuncios y hacer retargeting."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Cómo integrarlo
+
+<Steps>
+  <Step>
+    ### Abre los ajustes del formulario
+    Haz clic en el botón de ajustes (el engranaje) de la esquina superior derecha del editor.
+  </Step>
+  <Step>
+    ### Ve a la pestaña de seguimiento externo
+    En la ventana de ajustes, selecciona la pestaña «Seguimiento externo» del menú de la izquierda.
+  </Step>
+  <Step>
+    ### Introduce el ID de medición
+    Escribe el ID de la plataforma que quieres medir. El valor se guarda automáticamente.
+    - ID de Meta Pixel: p. ej., 123456789012345
+    - ID de medición de GA4: p. ej., G-XXXXXXXXXX
+  </Step>
+</Steps>
+
+## Eventos que se envían
+
+Una vez integrado, se envían a cada plataforma los siguientes eventos estándar según el comportamiento de quien responde.
+
+- Al ver el formulario: PageView (Meta) / page_view (GA4)
+- Al completar el envío: Lead (Meta) / generate_lead (GA4)
+
+Los eventos de conversión incluyen además los parámetros walla_response_id y walla_customer_key. Al configurar los objetivos de conversión de tus anuncios, elige los nombres de evento estándar indicados arriba.

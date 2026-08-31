@@ -1,0 +1,49 @@
+---
+title: "Campo final"
+description: "El campo final es la última pantalla que se muestra tras enviar la respuesta. Puedes diseñar libremente la página que aparece al terminar el formulario o redirigir directamente a un sitio web."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Tipos de campo final
+
+### Página de cierre
+   - Es una pantalla de cierre personalizada que se muestra tras enviar la respuesta.
+   - Igual que en el campo de descripción, puedes añadir texto, imágenes, tablas y otros contenidos.
+	   - Con el [editor de texto](/es/docs/help-center/create-forms/editing-field-text) puedes aplicar estilos como color, tamaño y grosor de letra.
+	   - También puedes insertar imágenes, tablas o títulos fácilmente con los [comandos de barra (/)](/es/docs/help-center/create-forms/editing-field-text).
+   - Ejemplos:
+     - «Tu formulario se ha enviado. Si tienes dudas, escríbenos a [cs@walla.my](mailto:cs@walla.my).»
+     - «Código promocional exclusivo para participantes: WALLA10»
+
+### Ir a una URL
+   - Puedes redirigir a una página web concreta tras enviar la respuesta.
+   - Solo tienes que escribir la URL de destino en los ajustes del campo final, en la pantalla de edición del proyecto.
+
+## Cómo usarlo junto con la lógica
+
+Para redirigir al campo final tras el envío, es imprescindible configurar la lógica.
+
+<Steps>
+  <Step>
+    ### Pulsa el botón Enviar
+    En la página de lógica, haz clic en el botón «Enviar».
+  </Step>
+  <Step>
+    ### Indica el campo final
+    Define a qué campo final se debe ir según cada condición.
+  </Step>
+  <Step>
+    ### Publica
+    La lógica configurada solo se aplica al formulario real cuando pulsas `Publicar`.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Advertencia">
+Si añades un campo final pero no configuras la lógica, se mostrará automáticamente la página de cierre por defecto («Tu respuesta se ha enviado correctamente.»).
+</Callout>
+
+<Callout title="Consejo">
+- El campo final es ideal para cerrar el formulario con un agradecimiento, información adicional o una promoción.
+- Si se trata de una campaña de marca o de una encuesta de marketing, el campo final con redirección a URL te permite llevar a la gente de forma natural a tu web o a la página del evento.
+</Callout>

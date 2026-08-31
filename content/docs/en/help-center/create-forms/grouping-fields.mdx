@@ -3,23 +3,30 @@ title: Grouping Fields
 description: The former multi-field feature has been replaced by field groups, which let you bundle multiple questions together for easier management.
 ---
 
-<video src="/videos/group.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginBottom: "24px" }} />
-
 ## Creating a Field Group
 
-1. In the project editor, hover below a field and an `Add` button will appear.
-2. Click it to add a new question — a field group will be created automatically.
-3. You can then place other questions inside the group.
+In the project editor, hover below a field and an `Add` button appears. Click it to add a new question, and a field group is created automatically.
+
+<img src="/images/guides/manage-forms/field-group-add-button.png" alt="The Add button shown on hover below a field, with questions 1-1 and 1-2 bundled into a field group" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Naming a Group
+
+- A group containing two or more fields can be given a group name.
+- The group name is not shown to respondents — it's only visible in the project editor.
+
+<img src="/images/guides/manage-forms/field-group-name.png" alt="The group name input at the top of a group and the group name shown in the page divider of the field list on the left" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 ## How Groups Work
 
 - Groups simply bundle questions together; logic is still applied to each question individually.
-- `Page breaks`, which are used in Standard View, cannot be used inside a group. You can only separate pages with questions that are outside the group.
+- `Page breaks`, which are used in standard view, cannot be used inside a group. You can only separate pages with questions that are outside the group.
 
-## Display in Grouped and Standard Views
+## Display in Standard and Grouped Views
 
-- In Grouped View, questions normally appear one per page, but questions bundled into a group are shown together on the same page.
-- In Standard View, all questions are normally shown on a single page, but by placing `page breaks` before and after a group, you can visually separate it by scroll.
+- In standard view, all questions are normally shown on a single page, but by placing `page breaks` before and after a group, you can split the scroll and visually separate the questions.
+- In grouped view, questions normally appear one per page, but questions bundled into a group are shown together on the same page.
+
+<img src="/images/guides/manage-forms/field-group-default-view.png" alt="Standard view separated by page breaks, shown as the editor screen next to the respondent URL screen" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 <Callout title="Note">
 Field groups help you organize your survey flow more cleanly and make complex question structures easier to scan at a glance.

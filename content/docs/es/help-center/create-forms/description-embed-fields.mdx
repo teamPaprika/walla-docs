@@ -1,0 +1,87 @@
+---
+title: Campos de descripción e incrustación
+description: Cuando quieras mostrar textos informativos, imágenes, tablas o páginas web dentro del formulario, puedes usar los campos de descripción e incrustación.
+---
+
+## Campo de descripción
+
+- Sirve para portadas, separadores de sección, textos informativos y cualquier contenido descriptivo libre.
+- Con el [editor de texto](/es/docs/help-center/create-forms/editing-field-text) puedes aplicar estilos como color, tamaño y grosor de letra.
+- También puedes insertar imágenes, tablas o títulos fácilmente con los [comandos de barra (/)](/es/docs/help-center/create-forms/editing-field-text).
+
+<Callout title="Consejo">
+Usar bien los campos de descripción para separar secciones o añadir indicaciones ayuda a que quien participa entienda mejor el contenido.
+</Callout>
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Campo de incrustación
+
+- Pega la URL de un sitio web para mostrar esa página directamente dentro del formulario de Walla.
+
+### Incrustar un vídeo de YouTube
+
+Pega la URL de compartir o el código de inserción de un vídeo de YouTube en el campo de incrustación y el vídeo se reproducirá dentro del formulario.
+
+<Steps>
+  <Step>
+    ### Pulsa Compartir en YouTube
+    Abre en YouTube el vídeo que quieras incrustar y pulsa el botón Compartir que hay debajo.
+  </Step>
+  <Step>
+    ### Elige Insertar en la ventana de compartir
+    Cuando se abra la ventana de compartir, haz clic en la opción Insertar, la primera por la izquierda.
+  </Step>
+  <Step>
+    ### Copia solo la URL del código de inserción
+    En lugar de toda la etiqueta iframe, selecciona y copia únicamente la URL del atributo src, la que empieza por https://www.youtube.com/embed/...
+  </Step>
+  <Step>
+    ### Pulsa Incrustar URL en el campo de Walla
+    Añade un campo de incrustación en el editor del proyecto de Walla y pulsa el botón Incrustar URL dentro del campo.
+  </Step>
+  <Step>
+    ### Pega la URL y pulsa Incrustar
+    Pega en el cuadro la URL de inserción de YouTube que copiaste y pulsa el botón Incrustar.
+  </Step>
+  <Step>
+    ### Comprueba el resultado
+    Verás el vídeo de YouTube listo para reproducirse dentro del formulario.
+  </Step>
+</Steps>
+
+### Incrustar Google Calendar
+
+Pega la URL de compartir de Google Calendar en el campo de incrustación para mostrar la agenda o la información de reservas dentro del formulario.
+
+<Steps>
+  <Step>
+    ### Abre las opciones de compartir en Google Calendar
+    Haz clic en el evento o la cita que quieras incrustar y elige `Más opciones de compartir` en el menú `⋮` (más) de la ventana emergente.
+  </Step>
+  <Step>
+    ### Insertar en la web → despliega Página de reservas insertada
+    Selecciona la pestaña `Insertar en la web` en la parte superior de la ventana de compartir y haz clic en `Página de reservas insertada` para desplegarla.
+  </Step>
+  <Step>
+    ### Copia solo la URL del código de inserción
+    En lugar de toda la etiqueta iframe del área `Código de inserción`, selecciona y copia solo la URL de `src="..."` que empieza por `https://calendar.google.com/...`.
+  </Step>
+  <Step>
+    ### Pulsa Incrustar URL en el campo de Walla
+    Añade un campo de incrustación en el editor del proyecto de Walla y pulsa el botón `Incrustar URL` dentro del campo.
+  </Step>
+  <Step>
+    ### Pega la URL y pulsa Incrustar
+    Pega en el cuadro la URL de Google Calendar que copiaste y pulsa el botón `Incrustar`.
+  </Step>
+  <Step>
+    ### Comprueba el resultado
+    Verás la pantalla de selección de horario del calendario tal cual dentro del formulario.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Advertencia">
+- Según las políticas de seguridad o la configuración de HTTPS del sitio externo, es posible que la incrustación no se muestre.
+- Si al pegar una URL normal aparece el mensaje «… ha rechazado la conexión», vuelve a intentarlo con el enlace de incrustación que ofrezca ese sitio.
+</Callout>

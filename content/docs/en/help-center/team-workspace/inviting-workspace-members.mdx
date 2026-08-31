@@ -6,33 +6,48 @@ description: "Invite team members into a workspace and assign their roles from t
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Before You Start
-
-- Only members who have already joined the team can be invited to a workspace. For people outside the team, start with [Inviting Team Members](/help-center/team-workspace/inviting-team-members).
-- Workspace invitations are available on the **Pro plan or higher**. (On the Free plan, team-level invitations themselves are not supported.)
-
-## Inviting Members to a Workspace
+## Adding members to a workspace
 
 <Steps>
   <Step>
-    ### Open Workspace Settings
-    In the left sidebar, click the gear icon next to the workspace you want to invite people to, opening Workspace Settings.
+    ### Open workspace settings
+    Click the `gear icon` in the top right of the workspace.
+
+    <img src="/images/guides/team-workspace/workspace-settings-button.png" alt="The gear (settings) icon in the top right of the workspace page" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### Go to the Member Management Tab
-    In the settings modal, switch to the `Member Management` tab.
+    ### Select team members and add them
+    Select the team members you want to add to the workspace, or enter the account of someone you want to newly invite to the team/workspace, then click the `Add` button.
+
+    <img src="/images/guides/team-workspace/workspace-member-added.png" alt="A new member added to the workspace member list with the invitation complete toast" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### Select Team Members and Add Them
-    Pick from the list of team members who have already joined the team, then add them. The selected members are joined to the workspace immediately.
+    ### Invitation complete
+    Team members are added immediately. Accounts that aren't team members yet are invited to the team and workspace automatically when they click the `Go to invitation` button in the email.
+
+    <img src="/images/guides/team-workspace/workspace-add-member-select.png" alt="The team member selection dropdown and the Add button highlighted" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
-<Callout type="info" title="Assigning Roles">
-For workspace roles (Admin/Member, etc.) and permission management, see the [Managing Workspaces](/help-center/team-workspace/managing-workspaces#roles-and-permissions) page.
-</Callout>
+## Inviting with an invite link
 
-## Removing Members
+### Creating an invite link
+Click the `Create invite link` button in the `Invite link` area to generate a new invite link.
 
-- Use the menu next to each member in the `Member Management` tab to remove them from the workspace.
-- A member removed from a workspace no longer has access to that workspace's projects but remains part of the team itself.
+<img src="/images/guides/team-workspace/workspace-invite-link-create-button.png" alt="The Create invite link button shown in the initial state with no invite link" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Setting the expiry
+A generated link is valid for 7 days by default. Click the `Change expiry` button to the right of the link to reset the remaining validity in hours.
+
+<img src="/images/guides/team-workspace/workspace-invite-link-created.png" alt="A generated invite link showing the expires in 7 days notice and the creation toast" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/team-workspace/workspace-invite-link-change-expiry.png" alt="The remaining validity panel that expands when the Change expiry button is clicked" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Deleting an invite link
+If you no longer need the link, click the trash icon to its right. Click `Confirm` in the deletion dialog and the link is invalidated immediately. Members who already joined stay as they are.
+
+<img src="/images/guides/team-workspace/workspace-invite-link-delete-button.png" alt="The trash icon to the right of the invite link highlighted" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/team-workspace/workspace-invite-link-delete-confirm.png" alt="The deletion confirmation dialog shown when deleting an invite link" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/team-workspace/workspace-invite-link-deleted.png" alt="The invite link deleted, returning to the initial state with the deletion complete toast" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />

@@ -10,7 +10,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 - Logic determines "where the next question leads based on the response."
 - The default path is the flow every respondent goes through. (This is a different concept from 'Required'.)
 
-<video src="/videos/logic.mp4" autoPlay muted loop playsInline style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px" }} />
+<img src="/images/guides/create-forms/logic-concept.png" alt="A comparison of an ordinary survey without logic and a Walla survey with logic configured" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 ## Adding Logic
 
@@ -18,24 +18,23 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### Open the Logic Settings
     In the project editor, click the `Logic` button to open the logic settings screen.
+
+    <img src="/images/guides/create-forms/logic-button.png" alt="The Logic button in the top right of the project editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Understand Condition and Go to
     Logic is made up of two parts: a 'Condition' and a 'Go to' action.
+
+    <img src="/images/guides/create-forms/logic-condition-action.png" alt="The condition area and the Go to area of a logic rule" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Condition
     1. **Select the reference field** – Choose which field's response the logic should be based on.
-    2. **Select a condition** – Pick the type of condition.
-       - Equals / Does not equal
-       - Starts with / Ends with
-       - Contains text / Does not contain text
-       - Contains all / Missing all
-       - Contains at least one / Missing at least one
-       - Less than / Less than or equal to / Greater than / Greater than or equal to / Before
-       - Before or equal / After / After or equal
-    1. **Select the option/response** – Choose which response triggers the condition.
+    2. **Select a condition** – Pick the type of condition. Conditions fall into text/value, choice, number, and date comparisons — see [Condition Types in Detail](#condition-types-in-detail) below for the full list.
+    3. **Select the option/response** – Choose which response triggers the condition.
        - You can select multiple responses at the same time.
+
+    <img src="/images/guides/create-forms/logic-condition.png" alt="The condition area of a logic rule showing reference field, condition, and option selection" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Adding Multiple Conditions
@@ -43,11 +42,92 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     - When combining conditions, choose one of the following:
       - **AND**: The logic runs only when both the previous and following conditions are satisfied.
       - **OR**: The logic runs when either the previous or the following condition is satisfied.
+
+    <img src="/images/guides/create-forms/logic-condition-multiple.png" alt="Adding a new condition and choosing an AND/OR combination" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Go to
     - Once all conditions are set, choose which field the respondent should move to.
     - When configured, any respondent who meets the condition jumps straight to the specified question.
+
+    <img src="/images/guides/create-forms/logic-action.png" alt="Choosing the destination field in the Go to area of a logic rule" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Condition Types in Detail
+
+### Text / value comparison
+
+| Condition | Meaning | Example | Sample answer |
+| ------ | -------------- | ---------------- | ----------------- |
+| Equals | The value matches exactly | If the answer is `Seoul` | Seoul |
+| Does not equal | The value does not match | If the answer is not `Seoul` | Incheon |
+| Starts with | Begins with a given value | If the answer starts with `010` | 010-1234-5678 |
+| Ends with | Ends with a given value | If the answer ends with `.com` | example<span>@</span>walla.com |
+| Contains text | Includes given characters | If the answer contains `Inc.` | Paprika Data Lab Inc. |
+| Does not contain text | Does not include given characters | If the answer does not contain `apple` | Grape juice |
+
+### Choice comparison
+Use this on questions where several items can be picked, such as multiple choice and checkbox questions, to test which options were selected.
+
+| Condition | Meaning | Example |
+| -------- | --------------------- | ----------------------- |
+| Contains all | All of the specified items were selected | If both `A` and `B` were selected |
+| Contains at least one | At least one of the specified items was selected | If either `A` or `B` was selected |
+| Missing all | None of the specified items were selected | If neither `A` nor `B` was selected |
+| Missing at least one | At least one of the specified items was not selected | If at least one of `A` or `B` is missing |
+
+
+### Number comparison
+
+| Condition | Meaning | Example |
+| ----- | ------------ | ------------------------ |
+| Greater than | Larger than the reference value | If age is greater than `19` |
+| Greater than or equal to | Larger than or equal to the reference value | If age is `19` or greater |
+| Less than | Smaller than the reference value | If the score is less than `60` |
+| Less than or equal to | Smaller than or equal to the reference value | If the score is `60` or less |
+
+### Date comparison
+
+| Condition | Meaning | Example |
+| -------- | ----------------------- | --------------------- |
+| Before | Earlier than the reference date (excluding that date) | If it's before `2026-01-01` |
+| Before or equal | On or earlier than the reference date (including that date) | If it's on or before `2026-01-01` |
+| After | Later than the reference date (excluding that date) | If it's after `2026-01-01` |
+| After or equal | On or later than the reference date (including that date) | If it's on or after `2026-01-01` |
+
+## Setting Up Logic with Nodes
+
+<Steps>
+  <Step>
+    ### Look at the nodes and connectors
+    On the logic screen, each question appears as a node and the connectors between nodes show the flow. `Default path` is the flow every respondent takes, while numbered branches such as `Logic #1` and `Logic #2` are the paths that split off based on conditions.
+
+    <img src="/images/guides/create-forms/logic-node-overview.png" alt="The logic node screen with the default path and the Logic #1, #2, #3 branch connectors highlighted" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Set the default path
+    Click the `Default path` label on a node to open a dropdown for choosing the `Next field`. Search for a field or pick one from the list to set where respondents who match no condition go next.
+
+    <img src="/images/guides/create-forms/logic-node-default-move.png" alt="Clicking the default path node to open the next field dropdown and field search list" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Edit conditions on a logic node
+    Clicking a numbered branch label such as `Logic #1` or `Logic #2` expands the condition area right there. You can edit the reference field, the condition, and the options directly on the node, or add a `New condition`.
+
+    <img src="/images/guides/create-forms/logic-node-condition.png" alt="Editing the reference field and options in the condition area expanded from the Logic #3 node" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Click a connector to edit it directly
+    After selecting a field, you can click the connector between nodes directly to edit that flow — no need to click the `Logic` or `Default path` label on the node.
+
+    <img src="/images/guides/create-forms/logic-node-line-edit.png" alt="Clicking the connector between nodes to highlight the Logic #1 label and edit the flow directly" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Drag nodes to connect them
+    Drag the connection point at the bottom of a node onto another question node to link the two directly and create a flow. Drawing a new connector sends respondents down that path.
+
+    <img src="/images/guides/create-forms/logic-node-connect.png" alt="Dragging a node's connection point to draw a connector to another question node" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -66,6 +146,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 ## Additional Settings and Notes
 
 - If logic breaks midway, it's most likely because **a rejection field sits in the middle of the flow, or an earlier question's logic is misconfigured**.
+
+  <img src="/images/guides/create-forms/logic-broken-conflict.png" alt="A conflict caused by logic pointing to an option that can no longer be found" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 - Questions inside a field group can each have their own logic. If logic points to a specific question, the view starts from the group that contains it.
 - Clicking the `Reset` button removes all logic from the current question.
