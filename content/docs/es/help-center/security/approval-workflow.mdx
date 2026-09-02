@@ -1,0 +1,77 @@
+---
+title: "Aprobaciones"
+description: "Exige la aprobación de un administrador para acciones sensibles como invitar a miembros, descargar respuestas, quitar el enmascaramiento o eliminar formularios. Cada decisión queda registrada."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Con las aprobaciones activadas, un miembro necesita la aprobación de un administrador antes de realizar una acción sensible. El recorrido va desde el ajuste hasta la decisión.
+
+<Steps>
+  <Step>
+    ### Activa las acciones que requieren aprobación
+
+    Ve a Gestión del equipo → `Seguridad` → `Acciones que requieren aprobación`, activa el interruptor de cada acción y pulsa `Guardar cambios`.
+
+    | Acción | Alcance de la aprobación |
+    | --- | --- |
+    | Invitar a un miembro | Una invitación a la dirección de correo solicitada |
+    | Descargar respuestas | Permiso de descarga limitado en el tiempo sobre un formulario |
+    | Quitar el enmascaramiento | Permiso limitado en el tiempo para ver los datos sin enmascarar |
+    | Eliminar formulario | Una eliminación |
+
+    Los administradores y perfiles superiores actúan sin aprobación: el control se aplica a los miembros de rango inferior. Para cambiar estos ajustes hace falta el permiso de configuración de seguridad del equipo.
+  </Step>
+  <Step>
+    ### Un miembro solicita la aprobación
+
+    Cuando alguien intenta una acción controlada, se abre una ventana de solicitud. Escribe el motivo, elige a qué administradores avisar y envía la solicitud.
+
+    - Los administradores elegidos reciben una notificación en la aplicación y un correo.
+    - La solicitud caduca a los 7 días.
+    - Si ya hay una solicitud pendiente para la misma acción y el mismo destino, el nuevo intento se une a ella en lugar de crear otra.
+  </Step>
+  <Step>
+    ### Un administrador aprueba o rechaza
+
+    Ve a Gestión del equipo → `Aprobaciones`, revisa en la pestaña `Pendientes` quién solicita, la acción, el destino, el motivo, la hora de solicitud y la caducidad, y pulsa `Aprobar` o `Rechazar`. El menú indica cuántas solicitudes están pendientes. No puedes aprobar tu propia solicitud.
+  </Step>
+  <Step>
+    ### Elige el periodo de aprobación
+
+    La descarga de respuestas y el desenmascaramiento se aprueban por un periodo. Al pulsar `Aprobar` eliges cuánto dura, y dentro de esa ventana la persona puede repetir la acción.
+
+    Invitar a un miembro y eliminar un formulario son de **un solo uso**. En cuanto se realiza la acción aprobada, esa aprobación queda consumida.
+  </Step>
+  <Step>
+    ### La decisión llega a quien solicitó
+
+    La decisión se comunica por correo a quien hizo la solicitud. Si se aprueba, ya puede realizar la acción: durante el periodo que hayas fijado, o hasta realizarla una vez si es de un solo uso.
+
+    Si se rechaza, la acción sigue bloqueada. El miembro puede escribir un motivo nuevo y volver a solicitarla.
+  </Step>
+</Steps>
+
+<Callout title="Nota">
+Activar un control nuevo solo es posible con el plan Enterprise. Un control ya activado sigue vigente con cualquier plan, y puedes desactivarlo en cualquier momento.
+</Callout>
+
+## Consultar el historial
+
+La pestaña `Historial` recoge todas las solicitudes procesadas. Puedes filtrar por estado, acción y solicitante, y cambiar el orden.
+
+- Los estados son aprobada, rechazada, usada, revocada, cancelada y caducada.
+- Las aprobaciones por periodo muestran hasta cuándo siguen siendo válidas.
+- Cada miembro ve solo sus solicitudes; los administradores ven todas las del equipo.
+
+## Revocar una aprobación
+
+Puedes retirar una aprobación ya concedida: una aprobación de un solo uso que aún no se ha usado, o una por periodo que sigue vigente.
+
+Pulsa `Revocar` en la solicitud, dentro de la pestaña `Historial`, e indica el motivo. El motivo queda en el registro de auditoría.
+
+Al revocarla, la aprobación deja de tener efecto de inmediato y la acción queda bloqueada durante el tiempo restante. Solo los administradores pueden revocar.
+
+<Callout title="Nota">
+Las solicitudes y decisiones también quedan en el [registro de actividad](/es/docs/help-center/security/activity-logs). Cada descarga o desenmascaramiento realizado queda vinculado a la aprobación que lo permitió.
+</Callout>

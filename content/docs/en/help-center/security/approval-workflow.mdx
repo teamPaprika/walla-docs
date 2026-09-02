@@ -1,0 +1,77 @@
+---
+title: "Approvals"
+description: "Require an admin's approval for sensitive actions such as inviting team members, downloading responses, unmasking responses, and deleting surveys. Every decision is kept on record."
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Once approvals are on, a member has to get an admin's approval before performing a sensitive action. The flow runs from the setting through to the decision below.
+
+<Steps>
+  <Step>
+    ### Turn on the actions that require approval
+
+    Go to Team Management → `Security` → `Actions requiring approval`, switch on each action, and click `Save Changes`.
+
+    | Action | What the approval covers |
+    | --- | --- |
+    | Invite team member | Approval covers a single invite to the requested email |
+    | Download responses | Approval grants time-limited download access to a survey |
+    | Unmask responses | Approval grants time-limited unmask access to a survey |
+    | Delete survey | Approval covers a single deletion |
+
+    Admins and above act without approval — the gate applies to members below that rank. Changing these settings requires the team security settings permission.
+  </Step>
+  <Step>
+    ### A member requests approval
+
+    When a member attempts a gated action, a request dialog opens. They write a reason, choose which admins to notify, and send the request.
+
+    - The selected admins receive an in-app notification and an email.
+    - A request expires after 7 days.
+    - If a request for the same action and target is already waiting, the new attempt joins that request instead of creating a second one.
+  </Step>
+  <Step>
+    ### An admin approves or rejects
+
+    Go to Team Management → `Approvals`, review the requester, action, target, reason, request time, and expiry in the `Pending` tab, then click `Approve` or `Reject`. The menu shows how many requests are waiting. You cannot approve your own request.
+  </Step>
+  <Step>
+    ### Choose the approval period
+
+    Download responses and unmask responses are approved for a period. When you click `Approve`, you pick how long it lasts, and the member can repeat the action freely within that window.
+
+    Invite team member and delete survey are **single-use** instead. Once the approved action is performed, that approval is used up.
+  </Step>
+  <Step>
+    ### The decision reaches the requester
+
+    The requester gets the decision by email. Once approved, they can perform the action — for the period you set, or until they perform it once for a single-use approval.
+
+    If the request is rejected, the action stays blocked. The member can write a new reason and request again if needed.
+  </Step>
+</Steps>
+
+<Callout title="Note">
+Turning a new gate on requires the Enterprise plan. A gate you already turned on stays in force regardless of the plan, and you can turn it off at any time.
+</Callout>
+
+## Reviewing the history
+
+The `History` tab lists every processed request. You can filter by status, action, and requester, and change the sort order.
+
+- Statuses are Approved, Rejected, Used, Revoked, Canceled, and Expired.
+- Period-based approvals show how long they remain valid.
+- Members see only their own requests; admins see every request in the team.
+
+## Revoking an approval
+
+You can take back an approval you already granted — a single-use approval that has not been used yet, or a period approval that is still valid.
+
+Click `Revoke` on the request in the `History` tab and enter a reason. The reason is kept in the audit record.
+
+Revoking voids the approval immediately, so the action is blocked for the rest of the period. Only admins can revoke.
+
+<Callout title="Note">
+Approval requests and decisions are also kept in [Activity logs](/en/docs/help-center/security/activity-logs). A download or unmask that actually ran is linked to the approval that allowed it.
+</Callout>
