@@ -1,5 +1,9 @@
 {
   "en/developer-docs/quick-start.mdx": "30e9d2b4e10349ac9805305586f5b2e3cd7487da",
   "en/help-center/manage-forms/field-template.mdx": "be042773ca897cd12dcd182c2fdf82be75ad3d98",
-  "en/help-center/result-analysis/analytics.mdx": "b41db28b91f415e364f3dd6faa04ccec69d64b38"
+  "en/help-center/result-analysis/analytics.mdx": "b41db28b91f415e364f3dd6faa04ccec69d64b38",
+  "en/help-center/create-forms/multiple-choice-checkbox-fields.mdx": "54c4a2a4947f7280505dcf57de580243a64b16a8",
+  "zh-TW/help-center/create-forms/multiple-choice-checkbox-fields.mdx": "54c4a2a4947f7280505dcf57de580243a64b16a8",
+  "ja/help-center/create-forms/multiple-choice-checkbox-fields.mdx": "54c4a2a4947f7280505dcf57de580243a64b16a8",
+  "es/help-center/create-forms/multiple-choice-checkbox-fields.mdx": "54c4a2a4947f7280505dcf57de580243a64b16a8"
 }
