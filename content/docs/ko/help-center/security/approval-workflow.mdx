@@ -1,0 +1,87 @@
+---
+title: 승인이 필요한 작업
+description: 팀원 초대, 응답 다운로드, 마스킹 해제, 설문 삭제처럼 민감한 작업에 관리자 승인을 요구하는 기능이에요. 누가 무엇을 언제 승인했는지 모두 기록으로 남습니다.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## 멤버의 작업 승인하기
+
+<Steps>
+  <Step>
+    ### 승인이 필요한 작업 켜기
+
+    팀 관리 → `보안` → `승인이 필요한 작업` 에서 작업별 스위치를 켜고 `변경사항 저장` 을 누릅니다.
+
+    <img src="/images/guides/security/approval-policy-toggles.png" alt="팀 관리 보안 페이지의 승인이 필요한 작업 카드" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+    | 작업 | 승인의 효력 |
+    | --- | --- |
+    | 팀원 초대 | 요청한 이메일 주소로의 초대 1건 |
+    | 응답 다운로드 | 설문에 대한 기간 한정 다운로드 권한 |
+    | 응답 마스킹 해제 | 설문에 대한 기간 한정 마스킹 해제 권한 |
+    | 설문 삭제 | 삭제 1건 |
+
+    관리자(admin) 이상은 승인 없이 바로 작업할 수 있어요. 승인은 그보다 낮은 등급의 팀원에게 적용됩니다. 설정을 바꾸려면 팀 보안 설정 권한이 필요해요.
+  </Step>
+  <Step>
+    ### 팀원이 승인 요청
+
+    팀원이 승인이 필요한 작업을 시도하면 요청 창이 열려요. 사유를 적고 알림을 받을 관리자를 골라 요청을 보냅니다.
+
+    - 선택한 관리자에게 알림과 이메일이 갑니다.
+    - 요청은 7일 뒤 자동으로 만료돼요.
+    - 같은 작업·같은 대상으로 이미 요청해둔 건이 있으면 새 요청이 생기지 않고 기존 요청으로 합쳐집니다.
+  </Step>
+  <Step>
+    ### 관리자가 승인 또는 반려
+
+    팀 관리 → `승인` 으로 이동해 `대기` 탭에서 요청자, 작업, 대상, 사유, 요청 시각, 만료를 확인하고 `승인` 또는 `반려` 를 누릅니다. 처리할 요청이 있으면 메뉴에 대기 건수가 표시돼요. 자기가 올린 요청은 스스로 승인할 수 없습니다.
+
+    <img src="/images/guides/security/approval-pending-list.png" alt="승인 페이지의 대기 탭에서 요청 목록과 승인, 반려 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### 승인 기간 정하기
+
+    응답 다운로드와 응답 마스킹 해제는 기간을 정해 승인해요. `승인` 을 누르면 기간을 고를 수 있고, 그 기간 안에서는 팀원이 반복해서 작업할 수 있습니다.
+
+    <img src="/images/guides/security/approval-grant-duration.png" alt="승인 버튼을 눌러 1시간, 1일, 3일, 7일 동안 승인 중에서 기간을 고르는 메뉴" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+    팀원 초대와 설문 삭제는 기간 승인이 아니라 **1회용**이에요. 승인받은 작업을 한 번 수행하면 그 승인은 사용 완료 처리됩니다.
+  </Step>
+  <Step>
+    ### 승인 완료
+
+    처리 결과는 요청자에게 이메일로 전달돼요. 승인되면 그때부터 요청했던 작업을 할 수 있고, 기간 승인은 정한 기간 동안, 1회용 승인은 한 번 수행할 때까지 유효합니다.
+
+    반려된 경우에는 작업이 계속 막혀 있어요. 필요하면 팀원이 사유를 다시 적어 요청할 수 있습니다.
+  </Step>
+</Steps>
+
+<Callout title="참고">
+승인을 새로 켜는 것은 Enterprise 플랜에서만 가능해요. 이미 켜둔 설정은 플랜과 무관하게 계속 적용되며, 끄는 것은 언제든 가능합니다.
+</Callout>
+
+## 이력 확인하기
+
+- `이력` 탭에서 처리된 요청을 모두 볼 수 있어요. 상태, 작업, 요청자로 필터링하고 정렬할 수 있습니다.
+- 상태는 승인됨, 반려됨, 사용됨, 철회됨, 취소됨, 만료됨으로 표시돼요.
+- 기간 승인은 언제까지 유효한지 함께 보여줍니다.
+- 팀원은 자신이 올린 요청만, 관리자는 팀의 모든 요청을 볼 수 있어요.
+
+<img src="/images/guides/security/approval-history.png" alt="승인 페이지의 이력 탭에서 처리된 요청 목록" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+
+
+## 승인 철회하기
+
+- 이미 내준 승인을 즉시 거둬들일 수 있어요. 아직 사용하지 않은 1회용 승인과, 기간이 남은 승인이 대상입니다.
+- 철회하면 그 즉시 승인이 무효가 되고, 남은 기간 동안에도 해당 작업을 할 수 없습니다. 철회는 관리자만 할 수 있어요.
+
+
+<img src="/images/guides/security/approval-revoke-modal.png" alt="승인을 철회할까요 확인 창과 철회 사유 입력란" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+
+<Callout title="참고">
+승인 요청과 처리 내역은 [로그 기록](/ko/docs/help-center/security/activity-logs)에도 함께 남습니다. 다운로드나 마스킹 해제가 실제로 실행된 기록에는 어떤 승인으로 이루어졌는지가 연결돼요.
+</Callout>
