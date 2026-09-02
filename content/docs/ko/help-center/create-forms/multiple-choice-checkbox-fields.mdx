@@ -38,11 +38,13 @@ description: 객관식 필드는 응답자가 하나 이상의 선택지 중에�
   - 옵션 값 설정: 선택지의 값을 직접 지정할 수 있습니다. (예: 첫 번째 선택지를 ‘1’로 지정 → 응답 시트에 1로 표기됨)
   - 선택지 섞기: 응답 시 선택지 순서를 랜덤으로 표시할 수 있습니다.
 
-- 설정 가능한 옵션
-  - 필수 입력
-  - 선택 개수 설정
-  - 선택지 포함
-  - 선택지 제외
-  - 옵션별 응답 수 제한
-  - 데이터 마스킹
-  - 응답 자동 삭제
+## 단독 선택
+
+- ‘해당 없음’처럼 다른 선택지와 함께 고를 수 없는 선택지를 지정할 수 있어요.
+- 응답자가 단독 선택지를 고르면 같은 문항의 다른 선택은 모두 해제되고, 반대로 다른 선택지를 고르면 단독 선택지가 해제돼요.
+-  단독 선택지에는 선택 개수 설정(최소·최대·정확히)이 적용되지 않습니다.
+- 선택지 위에 마우스를 올린 뒤 `…`(더보기) 버튼을 클릭하고 단독 선택을 켜면 됩니다.
+	<img src="/images/guides/manage-forms/exclusive-option-menu.png" alt="선택지 오른쪽의 더보기 버튼을 눌러 단독 선택 메뉴를 연 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- 단독 선택으로 지정된 선택지에는 ‘단독 선택’ 표시가 붙어요.
+	<img src="/images/guides/manage-forms/exclusive-option-applied.png" alt="해당하지 않음 선택지에 단독 선택 표시가 붙은 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
