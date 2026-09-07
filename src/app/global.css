@@ -10,10 +10,10 @@
 
   --color-walla-info: hsl(215 12% 48% / 0.09); /* #6b778c1a */
   --color-walla-info-foreground: hsl(215 12% 48%); /* #6b778c */
-  --color-walla-pro: hsl(217 79% 51% / 0.09); /* #1e64e91a */
-  --color-walla-pro-foreground: hsl(217 79% 51%); /* #1e64e9 */
-  --color-walla-enterprise: hsl(170 78% 45% / 0.15); /* #17CFB41a */
-  --color-walla-enterprise-foreground: hsl(170 78% 45%); /* #17CFB4 */
+  --color-walla-pro: rgb(23 207 180 / 20%); /* #17CFB4 at 20% */
+  --color-walla-pro-foreground: #17CFB4;
+  --color-walla-enterprise: rgb(254 138 182 / 20%); /* #FE8AB6 at 20% */
+  --color-walla-enterprise-foreground: #FE8AB6;
   --color-walla-beta: hsl(170 78% 45% / 0.1); /* #17CFB41a */
   --color-walla-beta-foreground: hsl(170 78% 45%); /* #17CFB4 */
   --color-walla-new: hsl(335 98% 77% / 0.1); /* #FE8AB61a */
@@ -190,10 +190,10 @@
   --sidebar-primary-foreground: hsl(0 0% 100%);
     --color-walla-info: hsl(215 12% 48% / 0.25);
   --color-walla-info-foreground: hsl(215 12% 65%);
-  --color-walla-pro: hsl(217 79% 51% / 0.3);
-  --color-walla-pro-foreground: hsl(217 79% 65%);
-  --color-walla-enterprise: hsl(170 78% 45% / 0.2);
-  --color-walla-enterprise-foreground: hsl(170 78% 60%);
+  --color-walla-pro: rgb(23 207 180 / 20%);
+  --color-walla-pro-foreground: #17CFB4;
+  --color-walla-enterprise: rgb(254 138 182 / 20%);
+  --color-walla-enterprise-foreground: #FE8AB6;
   --color-walla-beta: hsl(170 78% 45% / 0.2);
   --color-walla-beta-foreground: hsl(170 78% 60%);
   --color-walla-new: hsl(335 98% 77% / 0.2);

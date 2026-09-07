@@ -6,7 +6,15 @@ import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 export const docs = defineDocs({
   dir: 'content/docs',
   docs: {
-    schema: pageSchema,
+    schema: pageSchema.extend({
+      plan: pageSchema.shape.title
+        .nullish()
+        .transform((value) => value?.trim().toLowerCase() || undefined)
+        .refine(
+          (value) => value === undefined || value === 'pro' || value === 'enterprise',
+          { message: 'plan must be empty, pro, or enterprise' },
+        ),
+    }),
     postprocess: {
       includeProcessedMarkdown: true,
     },

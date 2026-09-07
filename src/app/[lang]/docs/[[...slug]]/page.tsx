@@ -11,6 +11,7 @@ import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { i18n } from '@/lib/i18n';
 import { ogImage } from '@/lib/shared';
+import { PlanBadge } from '@/components/badge';
 
 export default async function Page(props: {
   params: Promise<{ lang: string; slug?: string[] }>;
@@ -20,10 +21,25 @@ export default async function Page(props: {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const planSourcePage =
+    slug?.[0] === 'help-center' && lang !== 'ko'
+      ? source.getPage(slug, 'ko')
+      : page;
+  const plan =
+    slug?.[0] === 'help-center' &&
+    (planSourcePage?.data.plan === 'pro' ||
+      planSourcePage?.data.plan === 'enterprise')
+      ? planSourcePage.data.plan
+      : undefined;
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsTitle>
+        <span className="inline-flex flex-wrap items-center gap-2">
+          {page.data.title}
+          <PlanBadge plan={plan} />
+        </span>
+      </DocsTitle>
       <DocsDescription className="bg-fd-muted rounded-xl p-4 text-sm leading-6">
         {page.data.description}
       </DocsDescription>
