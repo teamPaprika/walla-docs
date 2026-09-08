@@ -1,12 +1,42 @@
 ---
 title: 安裝 Walla MCP
-description: 把 Walla MCP 以自訂連接器的方式接上 Claude，就能直接在 Claude 裡操作 Walla 的表單與回覆資料。
+description: 將 Walla MCP 連接至 ChatGPT 或 Claude，就能直接透過 AI 助理操作 Walla 的表單與回覆資料。
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Walla 提供 MCP（Model Context Protocol）伺服器。將 Walla MCP 以自訂連接器接上 Claude 後，你可以一邊和 Claude 對話，一邊查詢 Walla 的表單與回覆、建立新表單，或製作自訂欄位。
+Walla 提供 MCP（Model Context Protocol）伺服器。將 Walla MCP 連接至 ChatGPT 或 Claude 後，你可以一邊和 AI 助理對話，一邊查詢 Walla 的表單與回覆、建立新表單，或製作自訂欄位。
+
+## 連接 ChatGPT 外掛
+<Steps>
+  <Step>
+    ### 安裝 Walla 外掛
+    在 ChatGPT 的 Walla 外掛頁面點選 `安裝外掛`。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-01-install.png" alt="在 ChatGPT 的 Walla 外掛頁面點選安裝按鈕" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 登入 Walla 帳號
+    依照你的帳號選擇 Google、SSO 或電子郵件登入。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-02-sign-in.png" alt="在 Walla 登入頁面選擇登入方式" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 授權存取權限
+    在應用程式存取權限請求畫面確認 ChatGPT 要求的權限，接著點選 `允許`。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-03-authorize.png" alt="在 Walla 應用程式授權畫面點選允許" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 確認安裝完成
+    出現安裝完成提示後，點選 `在聊天中試用` 即可開始使用 Walla 外掛。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-04-installed.png" alt="Walla 外掛安裝完成畫面" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## 連接 Claude 連接器
 
 <Steps>
   <Step>

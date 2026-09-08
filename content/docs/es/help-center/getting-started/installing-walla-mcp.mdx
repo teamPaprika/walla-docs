@@ -1,12 +1,42 @@
 ---
 title: Instalar el MCP de Walla
-description: Conecta el MCP de Walla a Claude como conector personalizado y trabaja con tus formularios y respuestas de Walla directamente desde Claude.
+description: Conecta el MCP de Walla a ChatGPT o Claude y trabaja con tus formularios y respuestas de Walla directamente desde tu asistente de IA.
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Walla ofrece un servidor MCP (Model Context Protocol). Si conectas el MCP de Walla a Claude como conector personalizado, podrás consultar formularios y respuestas, crear formularios nuevos o construir campos personalizados mientras conversas con Claude.
+Walla ofrece un servidor MCP (Model Context Protocol). Al conectar el MCP de Walla a ChatGPT o Claude, podrás consultar formularios y respuestas, crear formularios nuevos o construir campos personalizados mientras conversas con tu asistente de IA.
+
+## Conecta el plugin de ChatGPT
+<Steps>
+  <Step>
+    ### Instala el plugin de Walla
+    En la página del plugin de Walla en ChatGPT, pulsa `Instalar plugin`.
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-01-install.png" alt="Botón para instalar el plugin de Walla en ChatGPT" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Inicia sesión en tu cuenta de Walla
+    Elige el método que corresponda a tu cuenta: Google, SSO o correo electrónico.
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-02-sign-in.png" alt="Selección del método de inicio de sesión en Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Concede los permisos
+    En la pantalla de autorización, revisa los permisos solicitados por ChatGPT y pulsa `Permitir`.
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-03-authorize.png" alt="Botón Permitir en la pantalla de autorización de Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Comprueba la instalación
+    Cuando aparezca la confirmación, pulsa `Probar en el chat` para empezar a usar el plugin de Walla.
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-04-installed.png" alt="Confirmación de instalación del plugin de Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Conecta el conector de Claude
 
 <Steps>
   <Step>

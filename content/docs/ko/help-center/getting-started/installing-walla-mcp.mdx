@@ -1,13 +1,41 @@
 ---
 title: 왈라 MCP 설치하기
-description: 왈라 MCP를 Claude에 커스텀 커넥터로 연결하면, Claude에서 바로 왈라의 폼과 응답 데이터를 다룰 수 있어요.
+description: 왈라 MCP를 Claude에 커스텀 커넥터로 연결하면, Chat GPT와 Claude에서 바로 왈라의 폼과 응답 데이터를 다룰 수 있어요.
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-왈라는 MCP(Model Context Protocol) 서버를 제공합니다. Claude에 왈라 MCP를 커스텀 커넥터로 연결하면, Claude와 대화하면서 바로 왈라의 폼과 응답을 조회하거나 새 폼을 만들거나, 커스텀 필드를 만들 수 있어요.
+왈라는 MCP(Model Context Protocol) 서버를 제공합니다. Chat GPT와 Claude에 왈라 MCP를 커스텀 커넥터로 연결하면, AI와 대화하면서 바로 왈라의 폼과 응답을 조회하거나 새 폼을 만들거나, 커스텀 필드를 만들 수 있어요.
+## Chat GPT 플러그인 연결하기
+<Steps>
+  <Step>
+    ### 왈라 플러그인 설치
+    ChatGPT의 왈라 플러그인 페이지에서 `플러그인 설치`를 클릭합니다.
 
+    <img src="/images/guides/getting-started/chatgpt-plugin-01-install.png" alt="ChatGPT의 Walla 플러그인 페이지에서 플러그인 설치 버튼 클릭" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 왈라 계정으로 로그인
+    사용하는 계정에 맞춰 `Google 계정으로 로그인`, `SSO로 로그인`, `이메일로 로그인` 중 하나를 선택합니다.
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-02-sign-in.png" alt="Walla 로그인 페이지에서 로그인 방식 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 접근 권한 허용
+    '앱 접근 권한 요청' 화면에서 ChatGPT가 요청하는 권한을 확인한 뒤 `허용`을 클릭합니다.
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-03-authorize.png" alt="Walla 앱 접근 권한 요청 화면에서 허용 버튼 클릭" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 설치 완료 확인
+    설치 완료 안내가 나타나면 `채팅에서 사용해 보기`를 클릭해 왈라 플러그인을 시작합니다.
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-04-installed.png" alt="Walla 플러그인 설치 완료 후 채팅에서 사용해 보기 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Claude 커넥터 연결하기
 <Steps>
   <Step>
     ### 커넥터 설정 열기

@@ -1,12 +1,42 @@
 ---
 title: Walla MCP をインストールする
-description: Walla MCP を Claude にカスタムコネクタとして接続すると、Claude から直接 Walla のフォームや回答データを扱えます。
+description: Walla MCP を ChatGPT または Claude に接続すると、AI アシスタントから直接 Walla のフォームや回答データを扱えます。
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Walla は MCP（Model Context Protocol）サーバーを提供しています。Walla MCP を Claude にカスタムコネクタとして接続すると、Claude と会話しながら Walla のフォームや回答を確認したり、新しいフォームを作成したり、カスタムフィールドを作ったりできます。
+Walla は MCP（Model Context Protocol）サーバーを提供しています。Walla MCP を ChatGPT または Claude に接続すると、AI アシスタントと会話しながら Walla のフォームや回答を確認したり、新しいフォームを作成したり、カスタムフィールドを作ったりできます。
+
+## ChatGPT プラグインを接続する
+<Steps>
+  <Step>
+    ### Walla プラグインをインストールする
+    ChatGPT の Walla プラグインページで `プラグインをインストール` をクリックします。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-01-install.png" alt="ChatGPT の Walla プラグインページでインストールボタンをクリック" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Walla アカウントにログインする
+    アカウントに合ったログイン方法（Google、SSO、メール）を選択します。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-02-sign-in.png" alt="Walla のログインページでログイン方法を選択" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### アクセスを許可する
+    アプリのアクセス権限リクエスト画面で ChatGPT が要求する権限を確認し、`許可` をクリックします。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-03-authorize.png" alt="Walla のアプリ認可画面で許可ボタンをクリック" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### インストール完了を確認する
+    完了メッセージが表示されたら `チャットで試す` をクリックして Walla プラグインを使い始めます。
+
+    <img src="/images/guides/getting-started/chatgpt-plugin-04-installed.png" alt="Walla プラグインのインストール完了画面" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Claude コネクタを接続する
 
 <Steps>
   <Step>
