@@ -28,7 +28,7 @@ The constructor automatically:
 - Listens for the host's `MessagePort` transfer
 - Establishes a Cap'n Web RPC session when the port is received
 
-Construct `WallaField` **at module scope**. The host transfers the port when the iframe fires its `load` event and `postMessage` is not redelivered, so constructing it inside a mount hook such as `useEffect`/`onMounted` can miss the port (see [Lifecycle & Communication → Handshake Contract](./custom-fields-lifecycle)).
+Construct `WallaField` **at module scope**. The host transfers the port when the iframe fires its `load` event. `postMessage` is not redelivered. If you construct the SDK inside a mount hook such as `useEffect` or `onMounted`, the field can miss the port (see [Lifecycle & Communication → Handshake Contract](./custom-fields-lifecycle)).
 
 ## Callbacks
 
@@ -51,7 +51,7 @@ field.onInit(({ properties, value, theme, locale, fieldInfo, formContext, mode }
 ```
 
 - The SDK invokes this callback **synchronously**, and its return is what sends the `init` ack to the host
-- Slow synchronous work inside the callback that passes the 5 second ack timeout makes the host declare the field dead — starting async work is fine
+- Slow synchronous work in the callback can pass the 5-second ack timeout. Then the host declares the field dead. Async work is not a problem.
 
 ### onValidate
 
@@ -185,7 +185,7 @@ field.uploadBlob(
 Upload binary data through the host. Returns a promise that resolves with the uploaded file's URL.
 
 <Callout type="warning" title="uploadBlob is not implemented on the host yet">
-Calling it throws a runtime error. The example below is for reference once the host implementation is complete.
+The `uploadBlob()` call throws a runtime error. The example below is for reference until the host implements this method.
 </Callout>
 
 ```typescript

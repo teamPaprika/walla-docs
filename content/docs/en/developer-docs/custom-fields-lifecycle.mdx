@@ -37,7 +37,7 @@ Field is ready for interaction
 
 ## Handshake Contract
 
-The connection itself is automatic, but there are three contracts your field has to keep. The host uses the `init()` answer as the field's liveness signal, so breaking one of them makes a working field count as dead.
+The connection is automatic, but your field must keep three contracts. The host uses the `init()` answer as the liveness signal. If your field breaks one contract, the host counts a working field as dead.
 
 | Limit | Value |
 |-------|-------|
@@ -234,7 +234,7 @@ Values outside the 0–50000 range are clamped. Rapid calls within 100ms are thr
 Custom fields can upload binary data through the host:
 
 <Callout type="warning" title="uploadBlob is not implemented on the host yet">
-Calling it throws a runtime error. The example below is for reference once the host implementation is complete.
+The `uploadBlob()` call throws a runtime error. The example below is for reference until the host implements this method.
 </Callout>
 
 ```typescript
