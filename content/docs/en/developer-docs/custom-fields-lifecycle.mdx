@@ -234,7 +234,7 @@ Values outside the 0–50000 range are clamped. Rapid calls within 100ms are thr
 Custom fields can upload binary data through the host:
 
 <Callout type="warning" title="uploadBlob is not implemented on the host yet">
-The `uploadBlob()` call throws a runtime error. The example below is for reference until the host implements this method.
+Do not call `uploadBlob()` yet. The call throws a runtime error. The example below shows the intended use.
 </Callout>
 
 ```typescript
