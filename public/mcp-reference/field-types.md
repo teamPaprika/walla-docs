@@ -107,7 +107,7 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 
 ## Properties shape per type
 
-Types not listed have **no properties object** (omit `properties` or send `{}`): `DATE`, `TIME`, `GEOLOCATION`, `ADDRESS`, `DESCRIPTION`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD`, `REJECT`, `ENDING_DESCRIPTION`, `SUBMIT`. (`CUSTOM` takes properties too, but their shape is defined by the extension version's own schema, not this catalog — see `walla://reference/custom-fields`.)
+Types not listed have **no properties object** (omit `properties` or send `{}`): `DATE`, `TIME`, `GEOLOCATION`, `ADDRESS`, `DESCRIPTION`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD`, `ENDING_DESCRIPTION`, `SUBMIT`. (`CUSTOM` takes properties too, but their shape is defined by the extension version's own schema, not this catalog — see `walla://reference/custom-fields`.)
 
 | Properties shape | Types | Defaults / fields |
 |---|---|---|
@@ -122,6 +122,7 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 | `{ link? }` | `WEBSITE_LINK` | created empty unless you set `link` |
 | `{ isFileVolumeLimited?, fileVolumeLimit? }` | `FILE_UPLOAD` | `isFileVolumeLimited: false`, `fileVolumeLimit: 15` |
 | `{ redirectUrl }` | `ENDING_REDIRECT` | `redirectUrl: ""` |
+| `{ redirectEnabled?, redirectUrl? }` | `REJECT` | `redirectEnabled: false`, `redirectUrl: ""`. `redirectEnabled: true` puts the field in redirect mode: the respondent goes to `redirectUrl`, and a missing or unusable address (only an absolute http(s) address or a same-origin path counts) shows a not-found page instead. `redirectEnabled: false` keeps the static reject page. Reject fields created earlier carry an empty `{}` properties object, and the oldest rows can carry `null`. The switch needs a paid plan — see `walla://reference/editing-contract`. |
 | `{ workspaceSecretDataId, variantKey, orderIdPrefix, orderName, amount }` | `TOSS_PAYMENTS` | all required |
 
 > `shuffleRows` / `shuffleColumns` exist on the grid shape but are not honored at fill time — only `shuffle` on `RADIO`, `CHECKBOX`, `PICTURE_CHOICE` actually randomizes order.
@@ -130,6 +131,8 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 
 A field's `validation` object can carry these kinds. **`basic` is the only one enforced on the server alongside `quota`; `string` / `numeric` / `array` are checked at fill time only; `custom` / `remote` are accepted but never enforced (do not rely on them).**
 
+**`phoneVerification` is server-enforced as well.**
+
 | Kind | Shape | Meaning |
 |---|---|---|
 | `basic` | `{ isRequired: boolean }` | Required toggle (default `false`). |
@@ -137,6 +140,7 @@ A field's `validation` object can carry these kinds. **`basic` is the only one e
 | `numeric` | `{ min?, max? }` | Numeric range (the answer is a string, compared numerically). |
 | `array` | `{ min?, max?, exact?, includes?, excludes? }` | Selection-count / required-value constraints for multi-select. |
 | `quota` | `{ config: { [optionId]: number \| null } \| null }` | Per-option response cap (`null` = uncapped). **Server-enforced.** |
+| `phoneVerification` | `{ enabled: boolean }` | Require SMS OTP ownership check on `PHONE_NUMBER`. **Server-enforced.** Turning it on requires an **Enterprise** plan. |
 
 Which kinds each type accepts:
 
@@ -156,6 +160,7 @@ Which kinds each type accepts:
 Notes you will get wrong otherwise:
 - **`quota` is only valid on `RADIO`, `CHECKBOX`, `DROPDOWN`, `DROPDOWN_MULTI`, `PICTURE_CHOICE`.** `LINEAR` and `PRIVACY_POLICY_INFORMATION` have options but are **not** quota-eligible.
 - `quota.config` keys are option **ids**. Over-cap submissions are rejected server-side; a busy form may transiently reject with a retryable error.
+- **`phoneVerification` is only valid on `PHONE_NUMBER`** (it is not in the table above — that table covers the always-available kinds), and setting `enabled: true` requires an Enterprise plan (turning it off is free).
 - The six bottom-row types take no validation at all.
 
 ## Answer (output) shape per type
@@ -228,9 +233,11 @@ Worked example — a `RADIO` field and a matching submitted answer:
 | `SECRETS` | TEXT | no | basic, string | string |
 | `CUSTOM` | ACTION | per field | basic | per custom field |
 | `SUBMIT` | (none) | no | — | null |
-| `REJECT` | ACTION | no | — | null |
+| `REJECT` | ACTION | no | — | null (optional `redirectEnabled` + `redirectUrl` in properties) |
 | `ENDING_REDIRECT` | ENDING | no | — | null (`redirectUrl` in properties) |
 | `ENDING_DESCRIPTION` | ENDING | no | — | null |
+
+`PHONE_NUMBER` additionally accepts `phoneVerification` — see "Validations per type" above.
 
 ## Gotchas
 
@@ -240,4 +247,4 @@ Worked example — a `RADIO` field and a matching submitted answer:
 - **`quota` keys on option `id`** and is the one validation enforced for everyone at submit time; required-ness (`basic.isRequired`) is enforced at fill time. `string` / `numeric` / `array` / `custom` / `remote` are not re-checked server-side — never assume a stored answer passed them.
 - **`WEBSITE_LINK` accepts a `{ link? }` properties shape but is created empty** — set `link` explicitly.
 - **`SUBMIT` has no group and no properties schema**; its only setting is an optional button label. Do not synthesize a `properties` object for it, and note `SUBMIT` cannot be added or deleted through `form_apply_edits` (it is a system field).
-- **`REJECT` is a screen-out / disqualification step.** When a respondent reaches it the form ends immediately as *rejected* (its `descriptionHtml` is the disqualification message shown to them) — **distinct from `ENDING_*`**, which are post-submission thank-you / redirect screens shown only after a **successful** submission. To screen someone out, add a `REJECT` field and route to it with `set_field_logic` (`goTo { field: <rejectId> }`); do **not** use an ending for disqualification.
+- **`REJECT` is a screen-out / disqualification step.** When a respondent reaches it the form ends immediately as *rejected* (its `descriptionHtml` is the disqualification message shown to them) — **distinct from `ENDING_*`**, which are post-submission thank-you / redirect screens shown only after a **successful** submission. To screen someone out, add a `REJECT` field and route to it with `set_field_logic` (`goTo { field: <rejectId> }`); do **not** use an ending for disqualification. A reject field can also carry `properties.redirectEnabled` and `properties.redirectUrl`: set both to send the screened-out respondent to that URL instead of the static reject page.

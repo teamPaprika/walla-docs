@@ -192,7 +192,7 @@ The `reorder` op takes the **full** updated object. The shapes you produce:
 - **Move a field within / across groups** — remove its id from the source group's `children` and splice it into the target group's `children` at the desired index.
 - **Reorder fields in a group** — reorder the strings in that group's `children`.
 - **Reorder groups (pages)** — change each group's `order`. The server **renumbers `order`** into a clean sequence, so small gaps or duplicates are tolerated — just keep the relative order you intend.
-- **New group** — add a `group_<slug>` key whose `slug` matches `^[A-Za-z0-9_]+$` (only `submit`, `ending`, and `group_*` keys are permitted). Set its `order`, `chaining` (default `"APPEND"`), and `children`.
+- **New group** — add a `group_<slug>` key whose `slug` matches `^[A-Za-z0-9_-]+$` (only `submit`, `ending`, and `group_*` keys are permitted). Set its `order`, `chaining` (default `"APPEND"`), and `children`.
 
 > Adding or deleting a field is done by the `add_field` / `delete_field` ops in (a) — those update `formFieldsOrder` for you. Write `formFieldsOrder` yourself only for `reorder`.
 
@@ -299,6 +299,5 @@ Some field types and settings require a paid team plan. Setting one on a team wh
 | Response **quota** | `validations.quota.config` on `update_field` (non-empty) | per-option response caps; set after the field exists — quota on add_field is rejected (option ids are assigned on create) |
 | File **volume limit** | `properties.isFileVolumeLimited: true` | upload size cap |
 | Numeric/custom **option values** | option / grid-column `value` ≠ `label` (on `update_field`) | scored choices |
-<!-- feature:phoneVerification -->
+| Reject **redirect** | `properties.redirectEnabled: true` on a `REJECT` field (the switch alone, whatever the address) | Pro. The `REJECT` field type itself is free, and sending `redirectEnabled: false` turns the redirect off on any plan. |
 | **Phone verification** | `validations.phoneVerification.enabled` on `add_field` / `update_field` | `true` only (Enterprise). Sending `false` is free, so a downgraded team can still turn it off — but you must send it **explicitly**: omitting the key leaves the option ON (see the merge note above). |
-<!-- /feature:phoneVerification -->

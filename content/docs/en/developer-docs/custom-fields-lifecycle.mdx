@@ -35,6 +35,55 @@ host calls init(payload) ──── your onInit callback fires
 Field is ready for interaction
 ```
 
+## Handshake Contract
+
+The connection itself is automatic, but there are three contracts your field has to keep. The host uses the `init()` answer as the field's liveness signal, so breaking one of them makes a working field count as dead.
+
+| Limit | Value |
+|-------|-------|
+| `init` ack timeout | 5 sec |
+| Port re-post interval | 5 sec × 4 |
+| Field ready budget | 20 sec |
+
+### Construct `WallaField` at module scope
+
+The host transfers the `MessagePort` when the iframe fires its `load` event. `postMessage` is **not** redelivered to a listener that attaches later, so a field that constructs the SDK inside a framework mount hook (React `useEffect`, Vue `onMounted`) can miss the port entirely.
+
+```tsx
+// ✅ Runs while the document is still parsing — the listener is up before `load`.
+const field = new WallaField();
+createRoot(el).render(<App field={field} />);
+
+// ❌ Runs after the first commit, which can land after `load`.
+useEffect(() => { const field = new WallaField(); }, []);
+```
+
+The host re-posts the port every 5 seconds until the field answers, 4 attempts in all, so a late listener usually still connects — the last one goes out around 15 seconds in, and a listener that attaches after it will never receive a port. The respondent watches a spinner for that whole time, and the field is reported as failed once the 20-second ready budget runs out. Treat the retry as a safety net, not a supported pattern.
+
+### Return from `onInit` quickly
+
+The host's `init()` call doubles as its liveness probe: the SDK invokes your `onInit` callback **synchronously**, and the host counts the field as alive only once that call returns. Slow synchronous work inside `onInit` delays that answer, and passing the ack timeout makes the host declare a working field dead.
+
+```typescript
+// ✅ Store what you need, return, then do the slow part.
+field.onInit(payload => {
+  applyTheme(payload.theme);
+  void loadCatalog().then(render); // async — does not hold up the ack
+});
+
+// ❌ A slow synchronous body holds the ack open.
+field.onInit(payload => {
+  const rows = parseHugeDatasetSynchronously(payload.properties.data);
+  renderEverything(rows);
+});
+```
+
+Starting async work is fine — only synchronous work inside the callback counts.
+
+### Budget your cold load
+
+The host allows 20 seconds from the start of the iframe load to the `init()` answer. A deployed field was measured at 10.5 seconds cold on a heavily throttled device, so the margin is not large: keep the bundle small and do not block the boot path on external fetches.
+
 ## Init Payload
 
 The `onInit` callback receives a `FieldInitPayload` object with everything your field needs:
@@ -175,14 +224,18 @@ Call `setHeight()` whenever your content changes size — after initialization, 
 
 | Limit | Value |
 |-------|-------|
-| Height range | 0–5000 px |
+| Height range | 0–50000 px |
 | Throttle interval | 100 ms |
 
-Values outside the 0–5000 range are clamped. Rapid calls within 100ms are throttled.
+Values outside the 0–50000 range are clamped. Rapid calls within 100ms are throttled.
 
 ## File Uploads
 
 Custom fields can upload binary data through the host:
+
+<Callout type="warning" title="uploadBlob is not implemented on the host yet">
+Calling it throws a runtime error. The example below is for reference once the host implementation is complete.
+</Callout>
 
 ```typescript
 // Example: upload a canvas signature as PNG
@@ -312,6 +365,10 @@ field.reportError({
 ```
 
 The `message` is truncated to 500 characters on the host side.
+
+<Callout type="warning" title="recoverable: false is one-way">
+The host removes the field from the page and it cannot come back — a later recovery inside your iframe will never be shown. Use it only when the field truly cannot continue for this respondent. For anything retryable (a failed lookup, a transient network error) send `recoverable: true`, which shows a notice above the field and leaves it running.
+</Callout>
 
 ## Complete Lifecycle Summary
 

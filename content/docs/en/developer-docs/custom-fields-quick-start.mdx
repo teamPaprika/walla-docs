@@ -194,7 +194,7 @@ field.setValue(color)                      // Report value changes
 field.setHeight(document.body.scrollHeight) // Resize iframe
 ```
 
-These methods send RPC calls to the host. `setValue()` is auto-saved by the host on every call (debounced at 50ms). `setHeight()` adjusts the iframe height (throttled at 100ms, clamped to 0–5000px).
+These methods send RPC calls to the host. `setValue()` is auto-saved by the host on every call (debounced at 50ms). `setHeight()` adjusts the iframe height (throttled at 100ms, clamped to 0–50000px).
 
 ## Next Steps
 
