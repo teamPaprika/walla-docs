@@ -4,7 +4,7 @@ The catalog of field types you encounter in `get_form` / `get_published_form` ou
 
 ## How to read this
 
-A form is a tree of **fields**. Every field carries a stable `id`, a `label`, a `fieldType` (one of 31 values below), an optional `branches` array (skip logic), a `properties` object (type-specific config), a `validation` object (answer constraints), and an `outputSchema` (the shape a submitted answer must match). For the form/field object model and discovery chain (`list_teams` → `list_workspaces` → `list_forms` → `get_form` / `get_published_form`) and the error contract, see the server instructions. For branch logic, see `walla://reference/branch-logic`. For the `CUSTOM` iframe field, see `walla://reference/custom-fields`.
+A form is a tree of **fields**. Every field carries a stable `id`, a `label`, a `fieldType` (one of the values below), an optional `branches` array (skip logic), a `properties` object (type-specific config), a `validation` object (answer constraints), and an `outputSchema` (the shape a submitted answer must match). For the form/field object model and discovery chain (`list_teams` → `list_workspaces` → `list_forms` → `get_form` / `get_published_form`) and the error contract, see the server instructions. For branch logic, see `walla://reference/branch-logic`. For the `CUSTOM` iframe field, see `walla://reference/custom-fields`.
 
 ## The option `id` / `value` / `label` rule (read this first)
 
@@ -20,16 +20,18 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 >
 > Practical consequence: renaming a `label` changes the `value` (and therefore the stored answer text and what a branch operand matches) but does **not** change the `id`, so branches stay stable because they anchor on `id`. On `add_field` the server mints option `id`s — you supply none (use a `key` to reference a new option in same-batch logic); only when adding an option via `update_field` do you assign a fresh unique `id` (never a reused one). (Adding an option forces its `value` to equal its `label` — a custom `value` supplied on add is discarded; to store a `value` distinct from `label`, set it when **updating** the field via `form_apply_edits`, which preserves a supplied `value`. The system default is `value === label`.)
 
-## The 31 types and 9 groups
+## Field types and groups
 
 ```jsonc
 // fieldType — one of:
 "SHORT_TEXT","LONG_TEXT","NUMBER","CHECKBOX","RADIO",
 "PICTURE_CHOICE","DROPDOWN","DROPDOWN_MULTI","LINEAR","CHECKBOX_GRID",
-"RADIO_GRID","DATE","TIME","DESCRIPTION","GEOLOCATION",
-"TABLE","PRIVACY_POLICY_INFORMATION","EMAIL","PHONE_NUMBER","WEBSITE_LINK",
-"IMAGE_UPLOAD","VIDEO_UPLOAD","FILE_UPLOAD","ADDRESS","TOSS_PAYMENTS",
-"SECRETS","CUSTOM","SUBMIT","REJECT","ENDING_REDIRECT","ENDING_DESCRIPTION"
+"RADIO_GRID","RANKING","DATE","TIME","DESCRIPTION",
+"GEOLOCATION","TABLE","PRIVACY_POLICY_INFORMATION","EMAIL","PHONE_NUMBER",
+"WEBSITE_LINK","IMAGE_UPLOAD","VIDEO_UPLOAD","FILE_UPLOAD","ADDRESS",
+"TOSS_PAYMENTS",
+"SECRETS","CUSTOM","SUBMIT",
+"REJECT","ENDING_REDIRECT","ENDING_DESCRIPTION"
 
 // group — one of:
 "CHOICES","TEXT","CONTACTS","FORM_STRUCTURE","DATA",
@@ -38,7 +40,7 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 
 | Group | Types |
 |---|---|
-| **CHOICES** | `CHECKBOX`, `RADIO`, `PICTURE_CHOICE`, `DROPDOWN`, `DROPDOWN_MULTI`, `LINEAR`, `CHECKBOX_GRID`, `RADIO_GRID`, `PRIVACY_POLICY_INFORMATION` |
+| **CHOICES** | `CHECKBOX`, `RADIO`, `PICTURE_CHOICE`, `DROPDOWN`, `DROPDOWN_MULTI`, `LINEAR`, `CHECKBOX_GRID`, `RADIO_GRID`, `RANKING`, `PRIVACY_POLICY_INFORMATION` |
 | **TEXT** | `SHORT_TEXT`, `LONG_TEXT`, `NUMBER`, `TABLE`, `SECRETS` |
 | **CONTACTS** | `EMAIL`, `PHONE_NUMBER`, `ADDRESS` |
 | **FORM_STRUCTURE** | `DESCRIPTION`, `WEBSITE_LINK` |
@@ -48,7 +50,7 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 | **ENDING** | `ENDING_REDIRECT`, `ENDING_DESCRIPTION` |
 | **ACTION** | `CUSTOM`, `REJECT` (and `SUBMIT`, which has no group) |
 
-> `SUBMIT` is special: it has no group, no `properties` schema, and a null answer. Do not assume all 31 types appear in a properties/group map — `SUBMIT` is absent from both.
+> `SUBMIT` is special: it has no group, no `properties` schema, and a null answer. Do not assume all types appear in a properties/group map — `SUBMIT` is absent from both.
 
 ## Options model
 
@@ -103,7 +105,15 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 }
 ```
 
-**Ranking questions** — Walla has no dedicated ranking field type; build one from a `RADIO_GRID`: **rows = the items to rank, columns = the rank positions** (`1st`, `2nd`, `3rd`, …). Because it is radio, each row (item) takes exactly one column (rank). To make each rank usable only once (no two items sharing a rank), set `isDuplicateColumnLimited: true`; left `false`, two items may land on the same rank. This yields an "assign each item a distinct rank" matrix, not a drag-to-reorder UI.
+### RANKING
+
+`RANKING` uses server-generated rank-slot rows (`rank-1..rank-N`) and choice columns: `add_field` accepts omitted rows or `[]`, while `update_field` requires one row per rank (zero → `invalid_args`).
+With N rows, respondents rank exactly N choices or none.
+The stored value `{"rank-1":["value"], ...}` uses choice values and, with `hasCustomInput`, permits one free-text value of 1–200 characters without line breaks.
+Read ranks from row-id keys, which can identify slots absent from the current rows.
+Open API lists flatten values to `fieldId::rank-N`.
+CSV/XLSX exports and MCP `list_responses` include current rows only, like grid rows.
+Keep `isDuplicateColumnLimited: true`.
 
 ## Properties shape per type
 
@@ -117,6 +127,7 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 | `{ options[], imageHeight?, multiSelect?, isSingleLineOnMobile?, shuffle? }` | `PICTURE_CHOICE` | `imageHeight: 120` |
 | `{ options[], min, max, minLabel, maxLabel }` | `LINEAR` | scale 1..5; **author `min`/`max`/`minLabel`/`maxLabel` only — `options` are derived from `min`/`max`, not supplied** |
 | `{ rows[], columns[], shuffleRows?, shuffleColumns?, isDuplicateColumnLimited? }` | `CHECKBOX_GRID`, `RADIO_GRID`, `TABLE` | one blank row + one blank column |
+| `{ rows[], columns[], hasCustomInput?, isDuplicateColumnLimited? }` | `RANKING` | rows are rank slots; columns are choices; see RANKING above for add/update rules |
 | `{ defaultCountry? }` | `PHONE_NUMBER` | — |
 | `{ placeholder?, allowPaste?, requireConfirmation? }` | `SECRETS` | `allowPaste: true`, `requireConfirmation: false` |
 | `{ link? }` | `WEBSITE_LINK` | created empty unless you set `link` |
@@ -151,7 +162,7 @@ Which kinds each type accepts:
 | `NUMBER` | ✅ | | ✅ | | |
 | `CHECKBOX`, `RADIO`, `DROPDOWN`, `DROPDOWN_MULTI`, `PICTURE_CHOICE` | ✅ | | | ✅ | ✅ |
 | `LINEAR`, `PRIVACY_POLICY_INFORMATION` | ✅ | | | ✅ | |
-| `CHECKBOX_GRID`, `RADIO_GRID`, `TABLE` | ✅ | | | | |
+| `CHECKBOX_GRID`, `RADIO_GRID`, `TABLE`, `RANKING` | ✅ | | | | |
 | `DATE`, `TIME`, `GEOLOCATION`, `ADDRESS` | ✅ | | | | |
 | `IMAGE_UPLOAD`, `VIDEO_UPLOAD`, `FILE_UPLOAD` | ✅ | | | | |
 | `TOSS_PAYMENTS`, `CUSTOM` | ✅ | | | | |
@@ -173,6 +184,7 @@ A submitted answer must validate against the field's `outputSchema`. For choice 
 | `RADIO`, `DROPDOWN`, `LINEAR`, `PRIVACY_POLICY_INFORMATION` | `string[]` (length ≤ 1) | array of option **values**. |
 | `CHECKBOX`, `DROPDOWN_MULTI`, `PICTURE_CHOICE` | `string[]` | array of option **values**. |
 | `CHECKBOX_GRID`, `RADIO_GRID` | `{ [rowId]: string[] }` | each row maps to selected **column values** (≤1 for RADIO_GRID). |
+| `RANKING` | `{ [rowId]: string[] }` | rank-N slots, at most one value per cell, static GridOutputSchema. |
 | `TABLE` | `{ [rowId]: { [colId]: string } }` | free-text cell per row×column (not a column selection). |
 | `GEOLOCATION` | `{ latitude: string, longitude: string }` | |
 | `TOSS_PAYMENTS` | `{ status, orderId, amount, message?, code? }` | `status` ∈ `request_success`, `request_fail`, `confirm_fail`, `confirm_cancel`, `confirm_cancel_fail`. |
@@ -216,6 +228,7 @@ Worked example — a `RADIO` field and a matching submitted answer:
 | `LINEAR` | CHOICES | yes (auto) | basic, array | value[] (≤1) |
 | `CHECKBOX_GRID` | CHOICES | rows+cols | basic | `{rowId: value[]}` |
 | `RADIO_GRID` | CHOICES | rows+cols | basic | `{rowId: value[]}` (≤1/row) |
+| `RANKING` | CHOICES | rows+cols | basic | `{rowId: value[]}` (≤1/slot) |
 | `DATE` | DATE_TIME | no | basic | string |
 | `TIME` | DATE_TIME | no | basic | string |
 | `DESCRIPTION` | FORM_STRUCTURE | no | — | null |

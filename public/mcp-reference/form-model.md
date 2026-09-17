@@ -245,7 +245,8 @@ The submitted-value category by field type:
 | Submitted value | Field types |
 |---|---|
 | Array of strings | `RADIO`, `DROPDOWN`, `DROPDOWN_MULTI`, `CHECKBOX`, `PICTURE_CHOICE`, `PRIVACY_POLICY_INFORMATION`, `LINEAR` |
-| Object mapping row id → array of column ids | `CHECKBOX_GRID`, `RADIO_GRID` |
+| Object mapping row id → array of column values | `CHECKBOX_GRID`, `RADIO_GRID` |
+| Object mapping rank slot id (`rank-N`) → one-element array holding the chosen column value, or the custom text | `RANKING` |
 | Object mapping row id → (column id → string) | `TABLE` |
 | `{ "latitude": string, "longitude": string }` | `GEOLOCATION` |
 | Payment result object (`status`, `orderId`, `amount`, optional `message`/`code`) | `TOSS_PAYMENTS` |
@@ -253,7 +254,8 @@ The submitted-value category by field type:
 | Plain string | `NUMBER`, `DATE`, `TIME`, `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`, `SECRETS`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD`, `FILE_UPLOAD` |
 | Defined by the field's own version (not inlined) | `CUSTOM` |
 
-For selection, grid, and table fields the schema is normally narrowed to the field's actual option / row / column ids, so the value a submission carries references those ids rather than free strings.
+For selection and table fields the schema is normally narrowed to the field's actual option / row / column ids, so the value a submission carries references those ids rather than free strings.
+A grid or ranking cell is the exception, because it holds the column **value**.
 
 For `TOSS_PAYMENTS`, `status` is one of a fixed set: `request_success`, `request_fail`, `confirm_fail`, `confirm_cancel`, `confirm_cancel_fail`.
 

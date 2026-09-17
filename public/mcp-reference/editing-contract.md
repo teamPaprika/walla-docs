@@ -75,7 +75,8 @@ The `properties` object is **discriminated by `fieldType`** — there is one sha
 - The visible text is `label`; matching/logic resolves to `value`; the authoring/output schema is keyed on `id`. (Full rationale in `walla://reference/field-types`.)
 
 ```jsonc
-// grid field properties (CHECKBOX_GRID / RADIO_GRID / TABLE)
+// grid field properties (CHECKBOX_GRID / RADIO_GRID / TABLE / RANKING)
+// RANKING reuses this shape, but its rows are rank slots — see `walla://reference/field-types`
 {
   "rows":    [ { "id": "r4Kp9", "label": "Speed" } ],
   "columns": [ { "id": "cN2vX", "label": "Good", "value": "Good" } ]
