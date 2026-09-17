@@ -28,7 +28,7 @@ const field = new WallaField(options?: WallaFieldOptions);
 - 호스트의 `MessagePort` 전달 대기
 - 포트 수신 시 Cap'n Web RPC 세션 수립
 
-`WallaField`는 **모듈 최상위에서** 생성하세요. 호스트는 iframe의 `load` 이벤트에 맞춰 포트를 전달합니다. `postMessage`는 재배달되지 않습니다. `useEffect`나 `onMounted` 같은 마운트 훅 안에서 생성하면 포트를 놓칠 수 있습니다 ([라이프사이클 & 통신 → 핸드셰이크 계약](./custom-fields-lifecycle) 참조).
+`WallaField`는 **모듈 최상위에서** 생성하세요. 호스트는 iframe의 `load` 이벤트에 맞춰 포트를 전달합니다. `postMessage`는 재배달되지 않습니다. `useEffect`나 `onMounted` 같은 마운트 훅 안에서 생성하면 포트를 놓칠 수 있습니다 ([라이프사이클 & 통신 → 핸드셰이크 계약](./custom-fields-lifecycle) 참조). 생성자는 브라우저 전용입니다. SSR 프레임워크를 쓴다면 이 모듈을 서버 렌더에서 제외하세요. `typeof window` 가드는 쓰지 마세요.
 
 ## 콜백
 
@@ -51,7 +51,7 @@ field.onInit(({ properties, value, theme, locale, fieldInfo, formContext, mode }
 ```
 
 - SDK가 이 콜백을 **동기로** 호출하며, 콜백이 반환하면 호스트에 `init` ack가 전달됩니다
-- 콜백 안의 느린 동기 작업이 5초 ack 타임아웃을 넘길 수 있습니다. 그러면 호스트가 필드를 죽은 것으로 판정합니다. 비동기 작업은 문제되지 않습니다.
+- 콜백 안의 느린 동기 작업은 ack를 지연시킵니다. 20초 ready 예산이 지나면 호스트가 로딩 오류를 표시합니다. 이후에 ack가 도착하면 필드가 복구됩니다. 비동기 작업은 문제되지 않습니다.
 
 ### onValidate
 
@@ -217,7 +217,7 @@ field.reportError({
 ```
 
 <Callout type="warning" title="recoverable: false는 되돌릴 수 없습니다">
-호스트가 필드를 화면에서 제거하고 다시 살아나지 않습니다 — 이후 iframe 안에서 복구하더라도 화면에 표시되지 않습니다. 이 응답자에게 정말로 계속할 수 없을 때만 사용하세요. 재시도 가능한 문제(조회 실패, 일시적 네트워크 오류)는 `recoverable: true`로 보내면 필드 위에 안내만 뜨고 필드는 계속 동작합니다.
+호스트가 필드를 화면에서 제거하고 다시 살아나지 않습니다 — iframe 안에서 나중에 복구되더라도 그 결과는 응답자에게 표시되지 않습니다. 이 응답자에게 정말로 계속할 수 없을 때만 쓰세요. 재시도 가능한 문제(조회 실패, 일시적 네트워크 오류)는 `recoverable: true`로 보내면 필드 위에 안내만 뜨고 필드는 계속 동작합니다.
 </Callout>
 
 ### destroy
@@ -491,13 +491,12 @@ interface HostRpcApi {
 | 동작 | 제한 | 설명 |
 |------|------|------|
 | `setValue` 크기 | 64 KB | 최대 JSON 직렬화 값 크기 |
-| `setValue` 디바운스 | 50 ms | 연속 호출은 배치 처리 |
+| `setValue` 디바운스 | 50 ms | 정리 시와 RPC 검증 전후에 대기 중인 값 반영 |
 | `setHeight` 범위 | 0–50000 px | 범위를 벗어나면 제한됨 |
 | `setHeight` 스로틀 | 100 ms | 연속 호출은 스로틀 |
 | `reportError` 메시지 | 500자 | 초과 시 잘림 |
 | `validate` 타임아웃 | 10초 | 응답 없으면 타임아웃 |
-| `init` ack 타임아웃 | 5초 | `onInit`이 이 시간 안에 반환해야 함 |
-| 포트 재전송 간격 | 5초 × 4회 | 필드가 응답할 때까지 호스트가 포트 재전송 |
+| 포트 재전송 간격 | 5초 | 최대 4회 제안, ready 마감에 재시도 중단, 응답 전까지 전달한 포트 유지 |
 | 필드 ready 예산 | 20초 | iframe 로드 시작부터 `init` ack까지 |
 
 ## 내보내는 멤버

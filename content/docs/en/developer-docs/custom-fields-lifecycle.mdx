@@ -37,12 +37,11 @@ Field is ready for interaction
 
 ## Handshake Contract
 
-The connection is automatic, but your field must keep three contracts. The host uses the `init()` answer as the liveness signal. If your field breaks one contract, the host counts a working field as dead.
+The connection is automatic, but your field must keep three contracts. The host uses the `init()` answer as the liveness signal. If the answer does not arrive within the 20-second ready budget, the host shows a loading error, even if the field operates correctly. The host keeps offered ports alive, so a field that answers late recovers.
 
 | Limit | Value |
 |-------|-------|
-| `init` ack timeout | 5 sec |
-| Port re-post interval | 5 sec × 4 |
+| Port re-post interval | 5 sec (up to 4 offers) |
 | Field ready budget | 20 sec |
 
 ### Construct `WallaField` at module scope
@@ -58,11 +57,13 @@ createRoot(el).render(<App field={field} />);
 useEffect(() => { const field = new WallaField(); }, []);
 ```
 
-The host re-posts the port every 5 seconds until the field answers, 4 attempts in all, so a late listener usually still connects — the last one goes out around 15 seconds in, and a listener that attaches after it will never receive a port. The respondent watches a spinner for that whole time, and the field is reported as failed once the 20-second ready budget runs out. Treat the retry as a safety net, not a supported pattern.
+The constructor reads `window.location` and registers a `message` listener, so it is browser-only. A field built with an SSR-capable framework must keep this module out of the server render (a client-only entry, a dynamic import with SSR disabled) rather than guard it with `typeof window` — the listener still has to be installed before the iframe's `load` event.
+
+The host offers the first port on iframe `load`, then retries every 5 seconds until the field answers, up to 4 attempts in total. Retries stop at the 20-second ready deadline. For the first document, that budget starts when the iframe `src` is assigned, so a slow load leaves fewer retries. The host shows a loading error at the deadline but keeps offered ports alive for a late answer. Treat retries as a safety net, not a supported pattern.
 
 ### Return from `onInit` quickly
 
-The host's `init()` call doubles as its liveness probe: the SDK invokes your `onInit` callback **synchronously**, and the host counts the field as alive only once that call returns. Slow synchronous work inside `onInit` delays that answer, and passing the ack timeout makes the host declare a working field dead.
+The host's `init()` call doubles as its liveness probe: the SDK invokes your `onInit` callback **synchronously**, and the host counts the field as alive only once that call returns. Slow synchronous work inside `onInit` delays that answer. The host shows a loading error after the 20-second ready budget, but keeps offered ports alive so a late answer from the same document can restore the field.
 
 ```typescript
 // ✅ Store what you need, return, then do the slow part.
@@ -167,7 +168,7 @@ field.onValueSet((value) => {
 | Maximum value size | 64 KB (JSON-serialized) |
 | Debounce interval | 50 ms |
 
-Rapid `setValue()` calls within 50ms are debounced — only the last value is saved.
+Rapid `setValue()` calls within 50ms are debounced — only the last value is saved. The host flushes pending values on cleanup and before and after RPC validation.
 
 ## Validation
 
