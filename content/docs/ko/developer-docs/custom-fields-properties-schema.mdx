@@ -352,6 +352,10 @@ field.onInit(({ observedFields, formContext, properties }) => {
 
 ### 필드 구현
 
+<Callout type="warning" title="uploadBlob은 현재 호스트에 미구현 상태입니다">
+`uploadBlob()`은 아직 호출하지 마세요. 호출하면 런타임 에러가 발생합니다. 아래 예제는 의도된 사용법을 보여줍니다.
+</Callout>
+
 ```typescript
 import { WallaField } from '@wallaform/custom-field-sdk';
 

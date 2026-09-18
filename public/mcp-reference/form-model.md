@@ -47,7 +47,7 @@ An object with these members:
 |---|---|---|
 | `submit` | `{ "children": string[] }` | The submit/last screen. `children` are field ids shown there. **Always present.** |
 | `ending` | `{ "children": string[] }` *(optional)* | Post-submission screens (e.g. redirect / thank-you). `children` are **ending** field ids. May be absent. |
-| `group_xxxxx` | `FieldGroup` (see below) | One per page/screen of questions. Any number of these. The **key** must match the pattern `group_` followed by word characters. |
+| `group_xxxxx` | `FieldGroup` (see below) | One per page/screen of questions. Any number of these. The **key** must match the pattern `group_` followed by word characters or hyphens. |
 
 A `FieldGroup` (each `group_xxxxx` value):
 
@@ -97,7 +97,7 @@ Read this as: page 0 ("About you") shows `fld_name` then `fld_email`; page 1 sho
 
 When producing a `formFieldsOrder` (e.g. for the `form_apply_edits` reorder op):
 - Always include `submit`.
-- Mint new group keys as `group_` + a short unique suffix; ensure they match `group_\w+`.
+- Mint new group keys as `group_` + a short unique suffix; ensure they match `group_[\w-]+`.
 - Keep `order` values contiguous starting at 0.
 - Every id you place in any `children` array must correspond to a field object you also include in the field list.
 
@@ -189,6 +189,7 @@ An object keyed by rule name; every key is optional except `basic`. Only `basic`
   "array":   { "min": null, "max": null, "exact": null, "includes": [], "excludes": [] },
   "custom":  { /* arbitrary JSON-Schema */ },
   "remote":  { "url": "https://...", "method": "POST", "body": "", "headers": {} },
+  "phoneVerification": { "enabled": true },       // PHONE_NUMBER only; Enterprise
   "quota":   { "config": { "<optionId>": 100 } }  // see note below
 }
 ```
@@ -206,6 +207,7 @@ Which rules are meaningful depends on `fieldType`:
 | `array` | `CHECKBOX`, `RADIO`, `DROPDOWN`, `DROPDOWN_MULTI`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`, `PICTURE_CHOICE`. |
 | `custom`, `remote` | Any field type. |
 | `quota` | Option-bearing types: `RADIO`, `CHECKBOX`, `DROPDOWN`, `DROPDOWN_MULTI`, `PICTURE_CHOICE`. `config` maps an option id to its max count. |
+| `phoneVerification` | `PHONE_NUMBER` only. Turning it **on** requires the Enterprise plan; turning it off is always allowed. |
 
 ### `outputSchema` — the submitted-value shape
 
@@ -243,7 +245,8 @@ The submitted-value category by field type:
 | Submitted value | Field types |
 |---|---|
 | Array of strings | `RADIO`, `DROPDOWN`, `DROPDOWN_MULTI`, `CHECKBOX`, `PICTURE_CHOICE`, `PRIVACY_POLICY_INFORMATION`, `LINEAR` |
-| Object mapping row id → array of column ids | `CHECKBOX_GRID`, `RADIO_GRID` |
+| Object mapping row id → array of column values | `CHECKBOX_GRID`, `RADIO_GRID` |
+| Object mapping rank slot id (`rank-N`) → one-element array holding the chosen column value, or the custom text | `RANKING` |
 | Object mapping row id → (column id → string) | `TABLE` |
 | `{ "latitude": string, "longitude": string }` | `GEOLOCATION` |
 | Payment result object (`status`, `orderId`, `amount`, optional `message`/`code`) | `TOSS_PAYMENTS` |
@@ -251,7 +254,8 @@ The submitted-value category by field type:
 | Plain string | `NUMBER`, `DATE`, `TIME`, `SHORT_TEXT`, `LONG_TEXT`, `EMAIL`, `PHONE_NUMBER`, `ADDRESS`, `SECRETS`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD`, `FILE_UPLOAD` |
 | Defined by the field's own version (not inlined) | `CUSTOM` |
 
-For selection, grid, and table fields the schema is normally narrowed to the field's actual option / row / column ids, so the value a submission carries references those ids rather than free strings.
+For selection and table fields the schema is normally narrowed to the field's actual option / row / column ids, so the value a submission carries references those ids rather than free strings.
+A grid or ranking cell is the exception, because it holds the column **value**.
 
 For `TOSS_PAYMENTS`, `status` is one of a fixed set: `request_success`, `request_fail`, `confirm_fail`, `confirm_cancel`, `confirm_cancel_fail`.
 
@@ -263,7 +267,7 @@ Some entries in `formFieldsOrder` point at non-question fields:
 
 - **Submit field** (`fieldType: "SUBMIT"`): the terminal node referenced from `submit.children`. Collects no input (its `outputSchema` is `null`). Its `properties` may carry `{ "buttonLabel"?: string }`. Can carry `branches`.
 - **Ending fields** (referenced from `ending.children`): post-submission screens. Two types — `ENDING_REDIRECT` (`properties: { "redirectUrl": string }`) and `ENDING_DESCRIPTION` (a shown message). Ending fields have a minimal shape — `id`, `formId`, `label`, `fieldType`, `properties`, `outputSchema` — and never carry `branches` or `validations`.
-- **Reject field** (`fieldType: "REJECT"`): a non-question terminal field that **disqualifies / screens out** a respondent mid-flow — when they reach it the form ends as *rejected* instead of completing. Collects no input. Unlike an ending (shown after a successful submission), it is reached *during* the field walk, typically via branch logic. See `walla://reference/field-types` for how to route to it.
+- **Reject field** (`fieldType: "REJECT"`): a non-question terminal field that **disqualifies / screens out** a respondent mid-flow — when they reach it the form ends as *rejected* instead of completing. Collects no input. Unlike an ending (shown after a successful submission), it is reached *during* the field walk, typically via branch logic. Its `properties` may carry `{ "redirectEnabled"?: boolean, "redirectUrl"?: string }`. The switch alone decides the mode: with `redirectEnabled: true` the respondent goes to the address instead of the static reject page, and a missing or unusable address (only an absolute http(s) address or a same-origin path counts) then shows a not-found page, the same way an ending redirect treats it. With `redirectEnabled: false` the static reject page shows as before. See `walla://reference/field-types` for how to route to it.
 
 ---
 

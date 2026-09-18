@@ -35,6 +35,56 @@ host calls init(payload) ──── your onInit callback fires
 Field is ready for interaction
 ```
 
+## Handshake Contract
+
+The connection is automatic, but your field must keep three contracts. The host uses the `init()` answer as the liveness signal. If the answer does not arrive within the 20-second ready budget, the host shows a loading error, even if the field operates correctly. The host keeps offered ports alive, so a field that answers late recovers.
+
+| Limit | Value |
+|-------|-------|
+| Port re-post interval | 5 sec (up to 4 offers) |
+| Field ready budget | 20 sec |
+
+### Construct `WallaField` at module scope
+
+The host transfers the `MessagePort` when the iframe fires its `load` event. `postMessage` is **not** redelivered to a listener that attaches later, so a field that constructs the SDK inside a framework mount hook (React `useEffect`, Vue `onMounted`) can miss the port entirely.
+
+```tsx
+// ✅ Runs while the document is still parsing — the listener is up before `load`.
+const field = new WallaField();
+createRoot(el).render(<App field={field} />);
+
+// ❌ Runs after the first commit, which can land after `load`.
+useEffect(() => { const field = new WallaField(); }, []);
+```
+
+The constructor reads `window.location` and registers a `message` listener, so it is browser-only. A field built with an SSR-capable framework must keep this module out of the server render (a client-only entry, a dynamic import with SSR disabled) rather than guard it with `typeof window` — the listener still has to be installed before the iframe's `load` event.
+
+The host offers the first port on iframe `load`, then retries every 5 seconds until the field answers, up to 4 attempts in total. Retries stop at the 20-second ready deadline. For the first document, that budget starts when the iframe `src` is assigned, so a slow load leaves fewer retries. The host shows a loading error at the deadline but keeps offered ports alive for a late answer. Treat retries as a safety net, not a supported pattern.
+
+### Return from `onInit` quickly
+
+The host's `init()` call doubles as its liveness probe: the SDK invokes your `onInit` callback **synchronously**, and the host counts the field as alive only once that call returns. Slow synchronous work inside `onInit` delays that answer. The host shows a loading error after the 20-second ready budget, but keeps offered ports alive so a late answer from the same document can restore the field.
+
+```typescript
+// ✅ Store what you need, return, then do the slow part.
+field.onInit(payload => {
+  applyTheme(payload.theme);
+  void loadCatalog().then(render); // async — does not hold up the ack
+});
+
+// ❌ A slow synchronous body holds the ack open.
+field.onInit(payload => {
+  const rows = parseHugeDatasetSynchronously(payload.properties.data);
+  renderEverything(rows);
+});
+```
+
+Starting async work is fine — only synchronous work inside the callback counts.
+
+### Budget your cold load
+
+The host allows 20 seconds from the start of the iframe load to the `init()` answer. A deployed field was measured at 10.5 seconds cold on a heavily throttled device, so the margin is not large: keep the bundle small and do not block the boot path on external fetches.
+
 ## Init Payload
 
 The `onInit` callback receives a `FieldInitPayload` object with everything your field needs:
@@ -118,7 +168,7 @@ field.onValueSet((value) => {
 | Maximum value size | 64 KB (JSON-serialized) |
 | Debounce interval | 50 ms |
 
-Rapid `setValue()` calls within 50ms are debounced — only the last value is saved.
+Rapid `setValue()` calls within 50ms are debounced — only the last value is saved. The host flushes pending values on cleanup and before and after RPC validation.
 
 ## Validation
 
@@ -175,14 +225,18 @@ Call `setHeight()` whenever your content changes size — after initialization, 
 
 | Limit | Value |
 |-------|-------|
-| Height range | 0–5000 px |
+| Height range | 0–50000 px |
 | Throttle interval | 100 ms |
 
-Values outside the 0–5000 range are clamped. Rapid calls within 100ms are throttled.
+Values outside the 0–50000 range are clamped. Rapid calls within 100ms are throttled.
 
 ## File Uploads
 
 Custom fields can upload binary data through the host:
+
+<Callout type="warning" title="uploadBlob is not implemented on the host yet">
+Do not call `uploadBlob()` yet. The call throws a runtime error. The example below shows the intended use.
+</Callout>
 
 ```typescript
 // Example: upload a canvas signature as PNG
@@ -312,6 +366,10 @@ field.reportError({
 ```
 
 The `message` is truncated to 500 characters on the host side.
+
+<Callout type="warning" title="recoverable: false is one-way">
+The host removes the field from the page and it cannot come back — a later recovery inside your iframe will never be shown. Use it only when the field truly cannot continue for this respondent. For anything retryable (a failed lookup, a transient network error) send `recoverable: true`, which shows a notice above the field and leaves it running.
+</Callout>
 
 ## Complete Lifecycle Summary
 

@@ -35,6 +35,56 @@ host calls init(payload) ──── your onInit callback fires
 Field is ready for interaction
 ```
 
+## 핸드셰이크 계약
+
+연결 과정 자체는 자동이지만, 필드는 세 가지 계약을 지켜야 합니다. 호스트는 `init()` 응답을 생존 신호로 사용합니다. 응답이 20초 ready 예산을 넘기면 정상 동작하는 필드에도 로딩 오류가 표시됩니다. 호스트는 전달한 포트를 유지하므로, 늦게라도 응답한 필드는 복구됩니다.
+
+| 제한 | 값 |
+|------|-----|
+| 포트 재전송 간격 | 5초 (최대 4회) |
+| 필드 ready 예산 | 20초 |
+
+### `WallaField`는 모듈 최상위에서 생성하세요
+
+호스트는 iframe의 `load` 이벤트에 맞춰 `MessagePort`를 전달합니다. `postMessage`는 나중에 등록된 리스너에게 **재배달되지 않으므로**, 프레임워크 마운트 훅(React `useEffect`, Vue `onMounted`) 안에서 SDK를 생성하면 포트를 놓칠 수 있습니다.
+
+```tsx
+// ✅ 문서가 파싱되는 동안 실행됩니다 — load 이벤트 전에 리스너가 준비됩니다
+const field = new WallaField();
+createRoot(el).render(<App field={field} />);
+
+// ❌ 첫 렌더 커밋 이후에 실행되므로 load 이벤트보다 늦을 수 있습니다
+useEffect(() => { const field = new WallaField(); }, []);
+```
+
+생성자가 `window.location`을 읽고 `message` 리스너를 등록하므로 **브라우저 전용**입니다. SSR을 하는 프레임워크로 필드를 만든다면 이 모듈이 서버 렌더에 들어가지 않게 해야 합니다(client 전용 엔트리, SSR 끈 동적 import). `typeof window` 가드로 미루는 건 안 됩니다 — 리스너는 iframe `load` 이전에 붙어야 합니다.
+
+호스트는 첫 전달을 포함해 최대 4회까지 5초 간격으로 시도하며, 필드가 응답하거나 20초 ready 마감에 도달하면 재시도를 멈춥니다. 첫 문서의 예산은 iframe의 `src`를 지정할 때 시작하므로 로드가 느릴수록 재시도 횟수가 줄어듭니다. 마감에는 로딩 오류를 표시하지만, 늦은 응답으로 복구할 수 있도록 전달한 포트는 유지합니다. 재시도는 안전망일 뿐 권장 패턴이 아닙니다.
+
+### `onInit`은 빨리 반환하세요
+
+호스트의 `init()` 호출은 생존 확인을 겸합니다. SDK가 `onInit` 콜백을 **동기로** 호출하고, 그 호출이 반환해야 호스트가 필드를 살아있다고 판정합니다. `onInit` 안의 느린 **동기** 작업은 응답을 지연시킵니다. 20초 ready 예산이 지나면 호스트가 로딩 오류를 표시하지만, 같은 문서가 뒤늦게 응답하면 회복할 수 있도록 전달한 포트는 유지합니다.
+
+```typescript
+// ✅ 필요한 값만 저장하고 반환한 뒤, 느린 작업은 그다음에
+field.onInit(payload => {
+  applyTheme(payload.theme);
+  void loadCatalog().then(render); // 비동기 — ack를 붙잡지 않습니다
+});
+
+// ❌ 느린 동기 본문이 ack를 붙잡습니다
+field.onInit(payload => {
+  const rows = parseHugeDatasetSynchronously(payload.properties.data);
+  renderEverything(rows);
+});
+```
+
+비동기 작업을 시작하는 것은 무방합니다 — 콜백 안의 동기 작업만 문제입니다.
+
+### 콜드 로드 예산
+
+호스트는 iframe 로드 시작부터 `init()` 응답까지 20초를 줍니다. 실제 배포된 필드가 강하게 스로틀된 기기에서 콜드 로드 10.5초로 측정된 적이 있어 여유가 크지 않습니다 — 번들을 작게 유지하고 부팅 경로에서 외부 fetch를 기다리지 마세요.
+
 ## Init 페이로드
 
 `onInit` 콜백은 필드에 필요한 모든 정보가 담긴 `FieldInitPayload` 객체를 수신합니다:
@@ -118,7 +168,7 @@ field.onValueSet((value) => {
 | 최대 값 크기 | 64 KB (JSON 직렬화 기준) |
 | 디바운스 간격 | 50 ms |
 
-50ms 이내의 연속 `setValue()` 호출은 디바운스되어 마지막 값만 저장됩니다.
+50ms 이내의 연속 `setValue()` 호출은 디바운스되어 마지막 값만 저장됩니다. 대기 중인 값은 정리 시와 RPC 검증 전후에 반영됩니다.
 
 ## 유효성 검사
 
@@ -175,14 +225,18 @@ field.setHeight(document.body.scrollHeight);
 
 | 제한 | 값 |
 |------|-----|
-| 높이 범위 | 0–5000 px |
+| 높이 범위 | 0–50000 px |
 | 스로틀 간격 | 100 ms |
 
-0–5000 범위를 벗어나는 값은 범위 내로 제한됩니다. 100ms 이내의 연속 호출은 스로틀됩니다.
+0–50000 범위를 벗어나는 값은 범위 내로 제한됩니다. 100ms 이내의 연속 호출은 스로틀됩니다.
 
 ## 파일 업로드
 
 커스텀 필드는 호스트를 통해 바이너리 데이터를 업로드할 수 있습니다:
+
+<Callout type="warning" title="uploadBlob은 현재 호스트에 미구현 상태입니다">
+`uploadBlob()`은 아직 호출하지 마세요. 호출하면 런타임 에러가 발생합니다. 아래 예제는 의도된 사용법을 보여줍니다.
+</Callout>
 
 ```typescript
 // Example: upload a canvas signature as PNG
@@ -312,6 +366,10 @@ field.reportError({
 ```
 
 `message`는 호스트 측에서 500자로 잘립니다.
+
+<Callout type="warning" title="recoverable: false는 되돌릴 수 없습니다">
+호스트가 필드를 화면에서 제거하고 다시 살아나지 않습니다 — iframe 안에서 나중에 복구되더라도 그 결과는 응답자에게 표시되지 않습니다. 이 응답자에게 정말로 계속할 수 없을 때만 쓰세요. 재시도 가능한 문제(조회 실패, 일시적 네트워크 오류)는 `recoverable: true`로 보내면 필드 위에 안내만 뜨고 필드는 계속 동작합니다.
+</Callout>
 
 ## 전체 라이프사이클 요약
 

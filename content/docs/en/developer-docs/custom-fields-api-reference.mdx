@@ -28,6 +28,8 @@ The constructor automatically:
 - Listens for the host's `MessagePort` transfer
 - Establishes a Cap'n Web RPC session when the port is received
 
+Construct `WallaField` **at module scope**. The host transfers the port when the iframe fires its `load` event. `postMessage` is not redelivered. If you construct the SDK inside a mount hook such as `useEffect` or `onMounted`, the field can miss the port (see [Lifecycle & Communication → Handshake Contract](./custom-fields-lifecycle)). The constructor is browser-only. If you use an SSR framework, exclude this module from the server render. Do not use a `typeof window` guard.
+
 ## Callbacks
 
 Register callbacks to respond to host events. All callbacks are optional. Each is single-registration — calling the same method again replaces the previous callback.
@@ -47,6 +49,9 @@ field.onInit(({ properties, value, theme, locale, fieldInfo, formContext, mode }
   field.setHeight(document.body.scrollHeight);
 });
 ```
+
+- The SDK invokes this callback **synchronously**, and its return is what sends the `init` ack to the host
+- Slow synchronous work in the callback delays the ack. If the 20-second ready budget expires, the host shows a loading error. If the ack arrives after that, the field recovers. Async work is not a problem.
 
 ### onValidate
 
@@ -160,7 +165,7 @@ field.setHeight(height: number): void
 
 Request the host to resize the iframe to the specified height in pixels.
 
-- Range: 0–5000 px (values outside this range are clamped)
+- Range: 0–50000 px (values outside this range are clamped)
 - Throttled: rapid calls within 100ms are throttled
 
 ```typescript
@@ -178,6 +183,10 @@ field.uploadBlob(
 ```
 
 Upload binary data through the host. Returns a promise that resolves with the uploaded file's URL.
+
+<Callout type="warning" title="uploadBlob is not implemented on the host yet">
+Do not call `uploadBlob()` yet. The call throws a runtime error. The example below shows the intended use.
+</Callout>
 
 ```typescript
 const canvas = document.getElementById('signature');
@@ -206,6 +215,10 @@ field.reportError({
   recoverable: true,
 });
 ```
+
+<Callout type="warning" title="recoverable: false is one-way">
+The host removes the field from the page and it cannot come back — a later recovery inside your iframe will never be shown. Use it only when the field truly cannot continue for this respondent. For anything retryable (a failed lookup, a transient network error) send `recoverable: true`, which shows a notice above the field and leaves it running.
+</Callout>
 
 ### destroy
 
@@ -478,11 +491,13 @@ interface HostRpcApi {
 | Operation | Limit | Description |
 |-----------|-------|-------------|
 | `setValue` size | 64 KB | Maximum JSON-serialized value size |
-| `setValue` debounce | 50 ms | Rapid calls are batched |
-| `setHeight` range | 0–5000 px | Height is clamped to this range |
+| `setValue` debounce | 50 ms | Pending values are flushed on cleanup and before/after RPC validation |
+| `setHeight` range | 0–50000 px | Height is clamped to this range |
 | `setHeight` throttle | 100 ms | Rapid calls are throttled |
 | `reportError` message | 500 chars | Message is truncated |
 | `validate` timeout | 10 sec | Host times out if no response |
+| Port re-post interval | 5 sec | Up to 4 offers; retries stop at the ready deadline, offered ports stay alive until one answers |
+| Field ready budget | 20 sec | From iframe load start to the `init` ack |
 
 ## Exported Members
 

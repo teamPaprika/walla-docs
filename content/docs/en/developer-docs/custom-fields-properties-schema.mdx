@@ -352,6 +352,10 @@ A signature pad field with configurable pen settings and structured output:
 
 ### Field Implementation
 
+<Callout type="warning" title="uploadBlob is not implemented on the host yet">
+Do not call `uploadBlob()` yet. The call throws a runtime error. The example below shows the intended use.
+</Callout>
+
 ```typescript
 import { WallaField } from '@wallaform/custom-field-sdk';
 
