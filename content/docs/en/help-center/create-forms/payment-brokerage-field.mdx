@@ -1,0 +1,108 @@
+---
+title: Payment Brokerage Field
+description: Configure products and prices so respondents can pay directly in a form, then manage transactions and settlements.
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+The payment brokerage field lets you accept card and wallet payments in a form without entering separate Toss Payments merchant credentials. Proceeds are paid to your registered settlement account.
+
+<Callout type="warning" title="A seller can be registered to only one team">
+Once you complete seller registration for one team using the same identity-verification details, you cannot register that seller for another team. Check which team will operate payments before registering.
+</Callout>
+
+<Steps>
+  <Step>
+    ### Register as a payment seller
+    A team owner or admin should open `Team settings` → `Payment brokerage` and complete seller registration.
+
+    - Choose an individual or business seller type.
+    - Complete NICE identity verification.
+    - Business sellers also enter their business information.
+    - Enter and verify the bank account that will receive settlements.
+    - You can enter a customer-support email that will be shown to respondents. If you add one, enter the code sent to that address within 5 minutes to verify it.
+
+    Confirm that the seller status is `Active`. A form containing this field cannot be published until seller registration is complete and the seller is active.
+  </Step>
+  <Step>
+    ### Add the payment brokerage field
+    Add a `Payment brokerage` field in the project editor.
+
+    Only team owners and admins can change this field's payment settings.
+  </Step>
+  <Step>
+    ### Configure the product and amount
+    Select `Payment settings` on the field and enter the following information.
+
+    - Product name
+    - Product description
+    - Payment amount
+    - Sale start date and time *(optional)*
+
+    The minimum payment amount is KRW 100. If you set a sale start time, respondents cannot pay before that time. The sale start time cannot be changed after the form is published.
+  </Step>
+  <Step>
+    ### Review the estimated settlement and save
+    Review the estimated settlement after Walla and card (PG) fees, then save the settings.
+
+    - The Walla fee varies by the team's plan at the time of payment.
+    - Card (PG) fees may vary by payment method and business tier.
+    - Actual settlements may differ from the estimate depending on refunds and transaction history.
+  </Step>
+  <Step>
+    ### Publish and manage payments
+    Publish the form after saving the settings. The buyer's email is collected during payment.
+
+    Open `Team settings` → `Payment brokerage` to view transactions, issue refunds, and review scheduled and completed settlements.
+  </Step>
+</Steps>
+
+## Respondent payment flow
+
+<Steps>
+  <Step>
+    ### Enter the buyer email
+    The respondent enters a buyer email in the payment field and selects `Pay`. This email is used for payment confirmation, refunds, and customer support.
+  </Step>
+  <Step>
+    ### Select a payment method
+    In the Payple payment window, they choose an app card, Naver Pay, Kakao Pay, or a card issuer and complete authentication.
+  </Step>
+  <Step>
+    ### Confirm payment preparation
+    After authentication, they return to the form and confirm that payment preparation is complete.
+  </Step>
+  <Step>
+    ### Submit the response
+    They must select `Submit response` in the form within 10 minutes to complete the payment.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Submit the response after payment">
+Completing authentication in the payment window does not finish the payment. The respondent must select `Submit response` in the form within 10 minutes.
+</Callout>
+
+## View the seller page
+
+Open `Team management` → `Payment brokerage` from the workspace menu. The page is organized into `Seller`, `Transactions`, and `Settlement` tabs.
+
+- `Seller`: Check seller and KYC status, registered account, settlement account, contact email, verification documents, and field-review history.
+- `Transactions`: Review the current month's transaction amount and limit, search by order number or form ID, inspect payment and buyer details, issue eligible refunds, and download transaction history.
+- `Settlement`: Review unsettled orders, gross sales, cancellations and refunds, Walla fees, card (PG) fees, VAT, and the final settlement amount. You can also filter and download settlement history.
+
+When the settlement date arrives, Walla reviews and pays the amount to the registered bank account. No separate settlement request is required.
+
+<Callout type="warning" title="Payments of KRW 500,000 or more">
+During the beta period, a payment brokerage field with a per-payment amount of KRW 500,000 or more cannot be published.
+</Callout>
+
+<Callout title="Refunds and settlements">
+- Buyers can request a refund within 3 days of payment.
+- Sellers can issue a refund within 14 days of payment.
+- Proceeds are settled on the 15th of the month following the payment month.
+</Callout>
+
+<Callout type="warning" title="Prohibited products">
+You may not sell illegal goods, counterfeit products, drugs or psychotropic substances, weapons or imitation firearms, obscene material, alcohol, tobacco and other youth-harmful products, prescription medicines, gambling products, other people's personal information, or anything prohibited by applicable law.
+</Callout>

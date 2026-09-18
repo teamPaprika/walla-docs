@@ -1,0 +1,108 @@
+---
+title: Campo de intermediación de pagos
+description: Configura productos y precios para que las personas paguen directamente en el formulario y gestiona las transacciones y liquidaciones.
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+El campo de intermediación de pagos permite aceptar tarjetas y pagos digitales en un formulario sin introducir credenciales de comercio de Toss Payments. Los fondos se abonan en la cuenta de liquidación registrada.
+
+<Callout type="warning" title="Un vendedor solo puede registrarse en un equipo">
+Después de completar el registro del vendedor en un equipo con los mismos datos de verificación de identidad, no es posible registrarlo de nuevo en otro equipo. Confirma qué equipo gestionará los pagos antes de registrarte.
+</Callout>
+
+<Steps>
+  <Step>
+    ### Registrar un vendedor de pagos
+    Una persona propietaria o administradora del equipo debe ir a `Configuración del equipo` → `Intermediación de pagos` y completar el registro.
+
+    - Elige un tipo de vendedor individual o empresarial.
+    - Completa la verificación de identidad de NICE.
+    - Los vendedores empresariales también deben introducir los datos de la empresa.
+    - Introduce y verifica la cuenta bancaria que recibirá las liquidaciones.
+    - Puedes añadir un correo de atención al cliente que se mostrará a las personas encuestadas. Si lo añades, introduce dentro de 5 minutos el código enviado a esa dirección para verificarla.
+
+    Confirma que el estado del vendedor sea `Activo`. No se puede publicar un formulario con este campo hasta completar el registro y activar al vendedor.
+  </Step>
+  <Step>
+    ### Añadir el campo de intermediación de pagos
+    Añade un campo `Intermediación de pagos` en el editor del proyecto.
+
+    Solo las personas propietarias y administradoras del equipo pueden cambiar la configuración de pago del campo.
+  </Step>
+  <Step>
+    ### Configurar el producto y el importe
+    Selecciona `Configuración de pago` e introduce lo siguiente.
+
+    - Nombre del producto
+    - Descripción del producto
+    - Importe del pago
+    - Fecha y hora de inicio de la venta *(opcional)*
+
+    El importe mínimo es de 100 KRW. Si defines una hora de inicio, no será posible pagar antes de ese momento. La hora de inicio no se puede cambiar después de publicar el formulario.
+  </Step>
+  <Step>
+    ### Revisar la liquidación estimada y guardar
+    Revisa la liquidación estimada después de las comisiones de Walla y de tarjeta (PG), y guarda la configuración.
+
+    - La comisión de Walla varía según el plan del equipo en el momento del pago.
+    - Las comisiones de tarjeta (PG) pueden variar según el método de pago y el tipo de empresa.
+    - La liquidación real puede diferir de la estimación debido a reembolsos e historial de transacciones.
+  </Step>
+  <Step>
+    ### Publicar y gestionar los pagos
+    Publica el formulario después de guardar. Durante el pago se recopila el correo electrónico del comprador.
+
+    Ve a `Configuración del equipo` → `Intermediación de pagos` para consultar transacciones, emitir reembolsos y revisar las liquidaciones programadas y completadas.
+  </Step>
+</Steps>
+
+## Proceso de pago para las personas encuestadas
+
+<Steps>
+  <Step>
+    ### Introducir el correo del comprador
+    La persona introduce el correo del comprador en el campo de pago y selecciona `Pagar`. Este correo se utiliza para confirmar el pago, gestionar reembolsos y atender consultas.
+  </Step>
+  <Step>
+    ### Seleccionar el método de pago
+    En la ventana de Payple, elige una tarjeta de aplicación, Naver Pay, Kakao Pay o una entidad emisora y completa la autenticación.
+  </Step>
+  <Step>
+    ### Confirmar la preparación del pago
+    Tras autenticarse, vuelve al formulario y confirma que la preparación del pago se ha completado.
+  </Step>
+  <Step>
+    ### Enviar la respuesta
+    Debe seleccionar `Enviar respuesta` en el formulario dentro de los 10 minutos siguientes para completar el pago.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Envía la respuesta después del pago">
+Completar la autenticación en la ventana de pago no finaliza el cobro. Es necesario seleccionar `Enviar respuesta` en el formulario dentro de los 10 minutos siguientes.
+</Callout>
+
+## Ver la página del vendedor
+
+Abre `Gestión del equipo` → `Intermediación de pagos` desde el menú del espacio de trabajo. La página se divide en las pestañas `Vendedor`, `Transacciones` y `Liquidación`.
+
+- `Vendedor`: consulta el estado del vendedor y de KYC, la cuenta registrada, la cuenta de liquidación, el correo de contacto, los documentos de verificación y el historial de revisión de campos.
+- `Transacciones`: consulta el importe y el límite del mes, busca por número de pedido o ID de formulario, revisa los pagos y compradores, emite reembolsos elegibles y descarga el historial.
+- `Liquidación`: consulta pedidos no liquidados, ventas brutas, cancelaciones y reembolsos, comisiones de Walla, comisiones de tarjeta (PG), IVA e importe final. También puedes filtrar y descargar el historial.
+
+En la fecha de liquidación, Walla revisa y abona el importe en la cuenta bancaria registrada. No es necesario solicitar la liquidación por separado.
+
+<Callout type="warning" title="Pagos de 500.000 KRW o más">
+Durante la fase beta no se puede publicar un campo cuyo importe por pago sea de 500.000 KRW o más.
+</Callout>
+
+<Callout title="Reembolsos y liquidaciones">
+- Las personas compradoras pueden solicitar un reembolso dentro de los 3 días posteriores al pago.
+- Los vendedores pueden emitir un reembolso dentro de los 14 días posteriores al pago.
+- Los fondos se liquidan el día 15 del mes siguiente al mes del pago.
+</Callout>
+
+<Callout type="warning" title="Productos prohibidos">
+No se pueden vender productos ilegales, falsificaciones, drogas o sustancias psicotrópicas, armas o imitaciones, material obsceno, alcohol, tabaco u otros productos perjudiciales para menores, medicamentos con receta, productos de apuestas, datos personales ajenos ni ningún producto prohibido por la legislación aplicable.
+</Callout>

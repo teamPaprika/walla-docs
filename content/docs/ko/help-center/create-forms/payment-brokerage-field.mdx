@@ -1,0 +1,182 @@
+---
+title: 간편결제 필드
+description: 응답자가 폼에서 바로 결제할 수 있도록 상품과 금액을 설정하고, 거래와 정산까지 관리할 수 있는 필드예요.
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+간편결제 필드를 사용하면 별도의 토스페이먼츠 상점 정보를 입력하지 않고도 폼에서 카드와 간편결제를 받을 수 있어요. 결제 대금은 등록한 정산 계좌로 지급됩니다.
+
+## 셀러 등록하기
+
+<Callout type="warning" title="셀러는 한 팀에만 등록할 수 있어요">
+동일한 본인인증 정보로 한 팀에 셀러 등록을 완료하면 다른 팀에는 중복으로 등록할 수 없습니다. 간편결제를 운영할 팀을 확인한 뒤 등록해주세요.
+</Callout>
+
+<Steps>
+  <Step>
+    ### 간편결제 필드 추가
+    프로젝트 편집 화면에서 필드 추가 버튼을 누른 뒤, `Payments` 영역의 `간편결제` 필드를 선택해주세요.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-add-field.png" alt="필드 추가 화면의 Payments 영역에서 간편결제 필드를 선택하는 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 셀러 등록 화면 열기
+    간편결제 셀러가 등록되지 않은 팀에서는 필드에 등록 안내가 표시됩니다. `등록하기`를 누르면 `팀 관리` → `간편결제` 화면으로 이동해요.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-seller-registration-required.png" alt="간편결제 필드에 셀러 등록이 필요하다는 안내와 등록하기 버튼이 표시된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    셀러 등록과 간편결제 필드 설정은 팀 소유자 또는 관리자만 진행할 수 있습니다.
+  </Step>
+  <Step>
+    ### 본인인증
+    셀러 등록의 첫 단계에서 `본인인증`을 눌러 NICE 본인확인을 완료해주세요.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-identity-verification.png" alt="간편결제 셀러 등록의 본인인증 단계와 본인인증 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/payment-brokerage-nice-verification.png" alt="NICE 본인확인에서 이용 중인 통신사를 선택하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 정산 계좌 등록
+    본인인증이 끝나면 셀러 구분을 선택하고 정산받을 계좌를 등록해주세요.
+
+    - 사업자: 사업자등록번호, 상호, 업종, 은행, 계좌번호를 입력합니다.
+    - 개인: 은행과 본인 명의의 계좌번호를 입력합니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-business-account.png" alt="사업자 셀러의 사업자 정보와 정산 계좌를 입력하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/payment-brokerage-personal-account.png" alt="개인 셀러의 은행과 계좌번호를 입력하고 계좌 인증을 진행하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    정보를 입력한 뒤 `계좌 인증`을 눌러 예금주를 확인해주세요.
+  </Step>
+  <Step>
+    ### 연락처 등록
+    등록 계정을 확인하고, 결제 화면에서 구매자에게 공개할 `고객 문의 이메일`을 입력할 수 있어요.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-contact.png" alt="간편결제 셀러 등록의 연락처 단계에서 고객 문의 이메일을 입력하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    고객 문의 이메일을 입력했다면 `인증하기`를 누른 뒤, 이메일로 전송된 인증코드를 입력하고 `인증번호 확인`을 눌러주세요. 인증코드의 유효시간은 5분입니다. 이메일을 비워두면 로그인 계정 이메일이 구매자에게 표시됩니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-email-verification.png" alt="고객 문의 이메일로 받은 인증코드를 입력하고 인증번호 확인을 누르는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/payment-brokerage-registration-complete.png" alt="고객 문의 이메일 인증을 마치고 셀러 등록하기 버튼이 활성화된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    마지막으로 `등록하기`를 누르면 셀러 등록이 완료됩니다.
+  </Step>
+</Steps>
+
+## 간편결제 필드 설정하기
+
+<Steps>
+  <Step>
+    ### 결제 설정 열기
+    셀러 등록을 마치고 프로젝트 편집 화면으로 돌아오면 간편결제 필드에 `결제 설정` 버튼이 표시됩니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-field-editor.png" alt="프로젝트 편집 화면에 추가된 간편결제 필드와 결제 설정 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 상품 정보 입력
+    `상품명`과 구매자에게 보여줄 `상품 설명`을 입력해주세요. 결제 시 구매자의 이메일이 함께 수집됩니다.
+    <Callout type="warning" title="판매할 수 없는 상품">
+불법·위법 물품, 위조상품, 마약·향정신성물질, 무기·모의총포, 음란물, 주류·담배 등 청소년유해품목, 처방 의약품, 도박, 타인의 개인정보 등 관계 법령을 위반하는 상품은 판매할 수 없습니다.
+</Callout>
+
+    <img src="/images/guides/manage-forms/payment-brokerage-product-settings.png" alt="간편결제 필드 설정에서 상품명과 상품 설명을 입력하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 금액과 판매 시작 일시 설정
+    결제 금액을 입력하고, 필요한 경우 `판매 시작 일시`를 지정해주세요.
+
+    - 최소 결제 금액은 100원입니다.
+    - 설정 화면에서 왈라 수수료와 카드(PG) 수수료를 반영한 예상 정산액을 확인할 수 있어요.
+    - 판매 시작 일시 전에는 응답자에게 `판매 예정`으로 표시되어 결제할 수 없습니다.
+    - 판매 시작 일시를 비워두면 저장 후 바로 판매할 수 있어요.
+    - 폼을 게시한 뒤에는 판매 시작 일시를 변경할 수 없습니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-policy-settings.png" alt="간편결제 필드 설정의 결제 금액, 예상 정산액, 판매 시작 일시와 상품 판매 규정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    상품 판매 규정을 확인한 뒤 `저장하기`를 눌러주세요.
+  </Step>
+  <Step>
+    ### 설정 결과 확인
+    저장이 완료되면 편집 화면에서 상품명, 금액, 상품 설명을 확인할 수 있습니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-configured-field.png" alt="상품명, 금액과 설명이 적용된 간편결제 필드" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## 응답자 결제 과정
+
+<Steps>
+  <Step>
+    ### 구매자 이메일 입력
+    응답자는 간편결제 필드에 구매자 이메일을 입력하고 `결제하기`를 누릅니다. 이 이메일은 결제 확인과 환불·고객 문의에 사용됩니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-buyer-email.png" alt="응답자가 간편결제 필드에 구매자 이메일을 입력하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 결제 수단 선택
+    페이플 결제창에서 앱카드, 네이버페이, 카카오페이 또는 카드사를 선택하고 결제를 진행합니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-payment-methods.png" alt="페이플 결제창에서 앱카드, 네이버페이, 카카오페이와 카드사를 선택하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 결제 준비 완료 확인
+    결제 수단 인증을 마치면 폼으로 돌아와 `결제 준비가 완료되었습니다!`라는 안내를 확인합니다.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-payment-ready.png" alt="결제 준비가 완료되었으며 10분 이내에 응답을 제출해야 한다는 안내 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 응답 제출
+    10분 이내에 폼의 `응답 제출`을 눌러야 결제가 완료됩니다.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="결제 후 응답 제출">
+결제창에서 인증을 마친 것만으로는 결제가 완료되지 않습니다. 반드시 10분 이내에 폼의 `응답 제출` 버튼을 눌러주세요.
+</Callout>
+
+## 셀러 페이지 보기
+
+워크스페이스 왼쪽 메뉴에서 `팀 관리` → `간편결제`를 누르면 셀러 페이지로 이동할 수 있습니다.
+
+<img src="/images/guides/manage-forms/payment-brokerage-navigation.png" alt="워크스페이스 왼쪽 팀 관리 메뉴에서 간편결제를 선택하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+셀러 페이지는 `셀러`, `거래`, `정산` 탭으로 구성됩니다.
+
+### 셀러 탭
+
+셀러 상태와 KYC 인증 상태, 등록 계정, 고객 문의 이메일을 확인하거나 수정할 수 있습니다. 필요한 경우 검증 서류를 업로드하고 필드 심사 이력을 확인할 수도 있어요.
+
+<img src="/images/guides/manage-forms/payment-brokerage-seller-page.png" alt="간편결제 셀러 탭에서 셀러 상태, 고객 문의 연락처, 검증 서류와 필드 심사 이력을 확인하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### 거래 탭
+
+이번 달 거래액과 월 한도를 확인하고, 주문번호·폼 ID로 거래를 검색할 수 있습니다. 결제 건별 구매자 이메일, 결제액, 예상 정산액, 정산 예정일과 상태를 확인하고 환불 가능한 거래를 처리할 수 있어요. 거래 내역은 파일로 다운로드할 수 있습니다.
+
+<img src="/images/guides/manage-forms/payment-brokerage-transactions.png" alt="간편결제 거래 탭에서 이번 달 거래액, 거래 내역과 환불 버튼을 확인하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### 정산 탭
+
+미정산 주문, 총 판매액, 취소·환불액, 왈라 수수료, 카드(PG) 수수료, 부가세와 최종 정산액을 확인할 수 있습니다. 정산 내역은 기간별로 조회하거나 파일로 다운로드할 수 있어요.
+
+<img src="/images/guides/manage-forms/payment-brokerage-settlement.png" alt="간편결제 정산 탭의 정산 명세서와 정산 내역 다운로드 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+정산 예정일이 되면 왈라가 확인한 뒤 등록된 계좌로 지급합니다. 별도로 정산을 신청할 필요는 없어요.
+
+<Callout title="수수료 안내">
+- 왈라 수수료는 결제 시점의 팀 플랜에 따라 달라집니다.
+- 카드(PG) 수수료는 결제수단과 사업자 등급에 따라 달라질 수 있어요.
+- 실제 정산액은 환불과 거래 내역 등에 따라 예상 금액과 달라질 수 있습니다.
+</Callout>
+
+<Callout title="환불 및 정산 안내">
+- 구매자는 결제 후 3일 이내에 환불할 수 있습니다.
+- 셀러는 결제 후 14일 이내에 환불을 처리할 수 있습니다.
+- 결제 대금은 결제월의 다음 달 15일에 정산됩니다.
+</Callout>
+
+<Callout type="warning" title="50만원 이상 결제">
+현재 베타 기간에는 한 건의 결제 금액이 50만원 이상인 간편결제 필드를 게시할 수 없습니다.
+</Callout>

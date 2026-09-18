@@ -24,6 +24,7 @@
     "geolocation-field",
     "file-upload-field",
     "payment-field-toss-payment",
+    "payment-brokerage-field",
     "rejection-field",
     "ending-field",
     "response-validation",

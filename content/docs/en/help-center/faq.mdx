@@ -100,6 +100,40 @@ If you always want to go to one particular ending field with no conditions, just
 
 </Accordions>
 
+## Payment fields
+
+<Accordions>
+
+  <Accordion title="What is the difference between the payment brokerage field and the Toss Payments field?">
+    The payment brokerage field lets you accept payments after seller registration without entering separate Toss Payments merchant credentials. The Toss Payments field connects merchant information that the seller already holds with Toss Payments. See [Payment Brokerage Field](/en/docs/help-center/create-forms/payment-brokerage-field) for setup instructions.
+  </Accordion>
+
+  <Accordion title="What do I need to use the payment brokerage field?">
+    A team owner or admin must complete seller registration under `Team management → Payment brokerage`. Complete NICE identity verification, settlement-account verification, and customer-support email verification before configuring the field. The same identity-verification details can be registered to only one team, so confirm which team will operate payments first.
+  </Accordion>
+
+  <Accordion title="Are there payment amount or method limits?">
+    The minimum payment amount is KRW 100. During the beta period, a payment brokerage field with a per-payment amount of KRW 500,000 or more cannot be published. Respondents can choose an app card, Naver Pay, Kakao Pay, or a supported card issuer in the Payple window.
+  </Accordion>
+
+  <Accordion title="Is payment complete as soon as authentication finishes?">
+    No. After authentication in the payment window, the respondent must return to the form and select `Submit response` within 10 minutes. Both payment and response submission are completed only after this step.
+  </Accordion>
+
+  <Accordion title="Where can I check fees and the estimated settlement?">
+    Enter the amount under the field's `Payment settings` to see an estimated settlement after Walla and card (PG) fees. The Walla fee depends on the team's plan at the time of payment, while card (PG) fees may vary by payment method and business tier.
+  </Accordion>
+
+  <Accordion title="When are payments settled, and how long are refunds available?">
+    Proceeds are paid to the registered settlement account on the 15th of the month following the payment month, with no separate settlement request required. Buyers can request a refund within 3 days of payment, and sellers can issue a refund within 14 days.
+  </Accordion>
+
+  <Accordion title="Where can I review payment transactions and settlements?">
+    Open `Team management → Payment brokerage` in the workspace. Use `Transactions` to review payment status and buyer details and to issue eligible refunds. Use `Settlement` to review unsettled orders, fees, final settlement amounts, and downloadable settlement history.
+  </Accordion>
+
+</Accordions>
+
 ## Managing Projects
 <Accordions>
 
