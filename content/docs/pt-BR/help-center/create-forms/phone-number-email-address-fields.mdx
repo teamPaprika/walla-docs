@@ -12,29 +12,29 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 - Permite que o usuário informe um número de telefone.
 - Clique no ícone de bandeira para alterar o formato do telefone para outro país.
-- Use o [editor de texto](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
-- Use o [comando de barra (/)](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
-- O padrão é o formato de celular da Coreia do Sul (010-0000-0000).
+- Use o [editor de texto](/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+- Use o [comando de barra (/)](/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+- Você pode definir o país padrão no editor ou usar `Detectar automaticamente (localização do respondente)`. Na detecção automática, o país é definido pela localização do respondente ou pelo idioma do navegador; se essas informações não estiverem disponíveis, será usada a Coreia do Sul.
 - Opções disponíveis
   - Preenchimento obrigatório
-  - Limite de comprimento da resposta
-  - A resposta deve conter / não deve conter
+  - Limite de tamanho da resposta
+  - A resposta deve incluir / A resposta não pode incluir
   - Expressão regular (Regex)
-  - Exigir verificação do telefone
+  - Exigir verificação de telefone
   - Mascaramento de dados
-  - Exclusão automática de respostas
+  - Excluir respostas automaticamente
 
-### Exigir verificação do telefone
+### Exigir verificação de telefone
 
-- Ative 'Exigir verificação do telefone' para coletar apenas números verificados.
+- Ative 'Exigir verificação de telefone' para coletar apenas números verificados.
 - O respondente precisa verificar o telefone com um código enviado por SMS antes de enviar o formulário.
 - Para realizar a verificação, o número de telefone é enviado ao provedor de SMS (Twilio Inc., Estados Unidos).
 
 <Steps>
   <Step>
-    #### Ative Exigir verificação do telefone
+    #### Ative Exigir verificação de telefone
 
-    <img src="/images/guides/create-forms/phone-verification-enable.png" alt="Opção Exigir verificação do telefone ativada no painel de configurações do campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/create-forms/phone-verification-enable.png" alt="Opção Exigir verificação de telefone ativada no painel de configurações do campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     #### Ao responder, informe o telefone e clique em Verificar
@@ -59,16 +59,16 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 - Permite que o usuário informe um endereço de e-mail.
 - O endereço deve seguir o formato `~~~@~~~.~~~`. Se o formato estiver incorreto, não será possível enviar o formulário.
-- Use o [editor de texto](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
-- Use o [comando de barra (/)](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+- Use o [editor de texto](/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+- Use o [comando de barra (/)](/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
 - Clique no ícone de lápis para editar o texto de exemplo.
 - Opções disponíveis
   - Preenchimento obrigatório
-  - Limite de comprimento da resposta
-  - A resposta deve conter / não deve conter
+  - Limite de tamanho da resposta
+  - A resposta deve incluir / A resposta não pode incluir
   - Expressão regular (Regex)
   - Mascaramento de dados
-  - Exclusão automática de respostas
+  - Excluir respostas automaticamente
 
 ## Campo de endereço
 
@@ -78,7 +78,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 - Opções disponíveis
   - Preenchimento obrigatório
   - Mascaramento de dados
-  - Exclusão automática de respostas
+  - Excluir respostas automaticamente
 
 <Callout title="Dica">
 Para proteger dados pessoais, recomendamos usar o mascaramento de dados e a exclusão automática de respostas nos campos de telefone, e-mail e endereço.

@@ -59,8 +59,8 @@ export default function DefaultSearchDialog(props: SharedProps) {
       <SearchDialogContent>
         <SearchDialogHeader>
           <SearchDialogIcon />
-          <SearchDialogInput />
-          <SearchDialogClose />
+          <SearchDialogInput aria-label={locale === 'pt-BR' ? 'Buscar na documentação' : undefined} />
+          <SearchDialogClose aria-label={locale === 'pt-BR' ? 'Fechar busca' : undefined} />
         </SearchDialogHeader>
         <SearchDialogList items={query.data !== 'empty' ? query.data : null} />
       </SearchDialogContent>

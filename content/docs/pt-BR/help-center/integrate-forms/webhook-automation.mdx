@@ -8,8 +8,8 @@ plan:
 Depois de criar a automação, abra a tela de edição detalhada para configurações mais avançadas.
 <Steps>
   <Step>
-    ### Acesse a página Conectar
-    Na parte superior da edição do projeto, clique em `Conectar`.
+    ### Acesse a aba Integrar
+    Na parte superior da edição do projeto, clique em `Integrar`.
 
     <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
@@ -70,7 +70,7 @@ Depois de criar a automação, abra a tela de edição detalhada para configura�
   </Step>
     <Step>
     ### Inclua valores de campos ocultos (opcional)
-	    Nas configurações avançadas, ative `Incluir valores de campos ocultos` para enviar também os valores coletados por [Rastreamento (campos ocultos)](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields). Use isso para enviar a serviços externos dados como origem do acesso ou grupo de clientes. Quando desativado, apenas as respostas sem campos ocultos são enviadas.
+	    Nas configurações avançadas, ative `Incluir valores de campos ocultos` para enviar também os valores coletados por [Rastreamento (campos ocultos)](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields). Use isso para enviar a serviços externos dados como origem do acesso ou grupo de clientes. Quando desativado, os valores dos campos ocultos são omitidos; os demais valores das respostas continuam sendo enviados.
 
     <img src="/images/guides/integrate/automation-hidden-fields.png" alt="Configuração para incluir valores de campos ocultos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
@@ -121,8 +121,8 @@ Depois de criar a automação, abra a tela de edição detalhada para configura�
     <img src="/images/guides/integrate/slack-06-copy-webhook-url.png" alt="Cópia da Webhook URL" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 <Step>
-    ### Acesse a página Conectar
-    Na parte superior da edição do projeto, clique em `Conectar`.
+    ### Acesse a aba Integrar
+    Na parte superior da edição do projeto, clique em `Integrar`.
 
     <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
@@ -176,8 +176,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     <img src="/images/guides/integrate/discord-02-new-webhook.png" alt="Criação do webhook e cópia da URL" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 <Step>
-    ### Acesse a página Conectar
-    Na parte superior da edição do projeto, clique em `Conectar`.
+    ### Acesse a aba Integrar
+    Na parte superior da edição do projeto, clique em `Integrar`.
 
     <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
@@ -217,8 +217,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 <Steps>
   <Step>
-    ### Acesse a página Conectar
-    Na parte superior da edição do projeto, clique em `Conectar`.
+    ### Acesse a aba Integrar
+    Na parte superior da edição do projeto, clique em `Integrar`.
 
     <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
   </Step>
@@ -272,7 +272,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
     <Step>
     ### Inclua valores de campos ocultos (opcional)
-	    Nas configurações avançadas, ative `Incluir valores de campos ocultos` para incluir no e-mail os valores coletados por [Rastreamento (campos ocultos)](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields). Quando desativado, apenas as respostas sem campos ocultos são usadas.
+	    Nas configurações avançadas, ative `Incluir valores de campos ocultos` para incluir no e-mail os valores coletados por [Rastreamento (campos ocultos)](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields). Quando desativado, os valores dos campos ocultos são omitidos; os demais valores das respostas continuam sendo usados.
 	    <Callout type="warning" title="Atenção">
     Campos ocultos podem conter dados que o participante não digitou, como origem do acesso e identificadores de clientes. Antes de ativar essa opção em e-mails enviados a participantes ou outros destinatários externos, confira quais valores serão incluídos.
     </Callout>
@@ -295,7 +295,7 @@ Antes de ativar o webhook, faça um envio de teste para verificar se ele funcion
 
 ### 1. Testar com uma resposta existente
 <img src="/images/guides/integrate/test-01-dropdown.png" alt="Abrir o menu de teste" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
-- Clique na `seta para baixo` ao lado de `Testar` para testar o webhook com respostas já enviadas. Selecione a resposta desejada e clique em `Executar teste`.
+- Clique na `seta para baixo` ao lado de `Execução de teste` para testar o webhook com respostas já enviadas. Selecione a resposta desejada e clique em `Executar teste`.
 <img src="/images/guides/integrate/test-02-existing-response.png" alt="Execução do teste com uma resposta existente" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
 <Callout type="warning" title="Atenção">
 Se o destinatário da automação do Gmail for definido por um campo de e-mail, recomendamos testar com uma resposta existente para confirmar o recebimento corretamente.
@@ -304,7 +304,7 @@ Se o destinatário da automação do Gmail for definido por um campo de e-mail, 
 
 ### 2. Testar com valores de exemplo
 <img src="/images/guides/integrate/test-03-random-value.png" alt="Teste com valores de exemplo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
-- Se ainda não houver respostas enviadas, clique em `Testar` para testar o webhook com valores de exemplo.
+- Se ainda não houver respostas enviadas, clique em `Execução de teste` para testar o webhook com valores de exemplo.
 
 ## Reenviar um webhook (após falha no envio)
 
@@ -315,5 +315,5 @@ Se o destinatário da automação do Gmail for definido por um campo de e-mail, 
 	- Por exemplo, na automação do Gmail, 'At least one 'to' recipient is required' indica que nenhum destinatário foi informado, impedindo o envio.
 	- 'Webhook failed with status: 400' indica que o servidor recebeu a solicitação, mas a rejeitou como inválida (Bad Request), por um erro no formato dos dados enviados.
 ### Como reenviar
-- **Tentar novamente com as configurações originais**: usa as configurações salvas no momento da execução. É útil para repetir nas mesmas condições, sem alterar configurações. Use essa opção se a falha foi causada por um erro temporário no servidor.
-- **Reenviar com as configurações atuais**: usa a configuração de automação salva atualmente. É útil depois de salvar alterações. Se o erro foi causado por um destinatário ausente ou por formato de dados inválido, corrija o problema e clique nessa opção.
+- **Tentar novamente com a configuração original**: usa as configurações salvas no momento da execução. É útil para repetir nas mesmas condições, sem alterar configurações. Use essa opção se a falha foi causada por um erro temporário no servidor.
+- **Tentar novamente com a configuração atual**: usa a configuração de automação salva atualmente. É útil depois de salvar alterações. Se o erro foi causado por um destinatário ausente ou por formato de dados inválido, corrija o problema e clique nessa opção.

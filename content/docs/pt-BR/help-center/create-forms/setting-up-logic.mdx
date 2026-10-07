@@ -9,7 +9,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 ## O que é lógica?
 
 - A lógica define "qual será a próxima pergunta conforme a resposta".
-- O caminho padrão representa o fluxo comum por onde passam os respondentes. (É um conceito diferente de 'resposta obrigatória'.)
+- O destino padrão define o caminho seguido quando nenhuma condição de lógica é atendida. (É um conceito diferente de 'resposta obrigatória'.)
 
 <img src="/images/guides/create-forms/logic-concept.png" alt="Comparação entre um formulário comum sem lógica e um formulário Walla com lógica configurada" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
@@ -61,22 +61,22 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 | Condição | Significado | Exemplo | Exemplo de resposta |
 | ------ | -------------- | ---------------- | ----------------- |
-| É igual a | O valor é exatamente igual | Se a resposta for `Seul` | Seul |
-| Não é igual a | O valor é diferente | Se a resposta não for `Seul` | Incheon |
+| Igual a | O valor é exatamente igual | Se a resposta for `Seul` | Seul |
+| Diferente de | O valor é diferente | Se a resposta não for `Seul` | Incheon |
 | Começa com | Começa com o valor especificado | Se a resposta começar com `010` | 010-1234-5678 |
 | Termina com | Termina com o valor especificado | Se a resposta terminar com `.com` | example<span>@</span>walla.com |
-| Contém texto | Inclui o texto especificado | Se a resposta contiver `Empresa` | Empresa Paprika Data Lab |
-| Não contém texto | Não inclui o texto especificado | Se a resposta não contiver `maçã` | Suco de uva |
+| Contém | Inclui o texto especificado | Se a resposta contiver `Empresa` | Empresa Paprika Data Lab |
+| Não contém | Não inclui o texto especificado | Se a resposta não contiver `maçã` | Suco de uva |
 
 ### Comparação de opções
 Use para verificar quais opções foram selecionadas em perguntas como múltipla escolha e caixas de seleção.
 
 | Condição | Significado | Exemplo |
 | -------- | --------------------- | ----------------------- |
-| Contém todas | Todas as opções especificadas foram selecionadas | Se `A` e `B` foram selecionadas |
-| Contém pelo menos uma | Pelo menos uma das opções especificadas foi selecionada | Se `A` ou `B` foi selecionada |
-| Não contém nenhuma | Nenhuma das opções especificadas foi selecionada | Se nem `A` nem `B` foram selecionadas |
-| Falta pelo menos uma | Pelo menos uma das opções especificadas não foi selecionada | Se faltar pelo menos uma entre `A` e `B` |
+| Contém todos | Todas as opções especificadas foram selecionadas | Se `A` e `B` foram selecionadas |
+| Contém qualquer um | Pelo menos uma das opções especificadas foi selecionada | Se `A` ou `B` foi selecionada |
+| Não contém nenhum | Nenhuma das opções especificadas foi selecionada | Se nem `A` nem `B` foram selecionadas |
+| Não contém todos | Pelo menos uma das opções especificadas não foi selecionada | Se faltar pelo menos uma entre `A` e `B` |
 
 
 ### Comparação de números
@@ -92,35 +92,35 @@ Use para verificar quais opções foram selecionadas em perguntas como múltipla
 
 | Condição | Significado | Exemplo |
 | -------- | ----------------------- | --------------------- |
-| Antes de | Anterior à data de referência, sem incluí-la | Se for antes de `2026-01-01` |
-| Antes ou na data | Igual ou anterior à data de referência, incluindo-a | Se for em `2026-01-01` ou antes |
-| Depois de | Posterior à data de referência, sem incluí-la | Se for depois de `2026-01-01` |
-| Depois ou na data | Igual ou posterior à data de referência, incluindo-a | Se for em `2026-01-01` ou depois |
+| Anterior a | Anterior à data de referência, sem incluí-la | Se for antes de `2026-01-01` |
+| Anterior ou igual a | Igual ou anterior à data de referência, incluindo-a | Se for em `2026-01-01` ou antes |
+| Posterior a | Posterior à data de referência, sem incluí-la | Se for depois de `2026-01-01` |
+| Posterior ou igual a | Igual ou posterior à data de referência, incluindo-a | Se for em `2026-01-01` ou depois |
 
 ## Configurar a lógica usando nós
 
 <Steps>
   <Step>
     ### Conheça os nós e as conexões
-    Na tela de lógica, cada pergunta aparece como um nó, e as linhas entre os nós mostram o fluxo. `Caminho padrão` indica o fluxo comum, enquanto ramificações numeradas, como `Lógica #1` e `Lógica #2`, indicam caminhos que dependem das condições.
+    Na tela de lógica, cada pergunta aparece como um nó, e as linhas entre os nós mostram o fluxo. `Destino padrão` indica o caminho seguido quando nenhuma condição é atendida, enquanto ramificações numeradas, como `Lógica #1` e `Lógica #2`, indicam caminhos que dependem das condições.
 
-    <img src="/images/guides/create-forms/logic-node-overview.png" alt="Tela de nós da lógica com destaque para Caminho padrão e conexões de Lógica #1, #2 e #3" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/create-forms/logic-node-overview.png" alt="Tela de nós da lógica com destaque para Destino padrão e conexões de Lógica #1, #2 e #3" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### Configure o caminho padrão
-    Clique no rótulo `Caminho padrão` do nó para abrir a lista `Próximo campo`. Pesquise um campo ou selecione-o na lista para definir o destino de quem não atender às condições.
+    ### Configure o destino padrão
+    Clique no rótulo `Destino padrão` do nó para abrir a lista `Próximo campo`. Pesquise um campo ou selecione-o na lista para definir o destino de quem não atender às condições.
 
-    <img src="/images/guides/create-forms/logic-node-default-move.png" alt="Lista de seleção e busca de Próximo campo aberta a partir do nó Caminho padrão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/create-forms/logic-node-default-move.png" alt="Lista de seleção e busca de Próximo campo aberta a partir do nó Destino padrão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Edite as condições no nó de lógica
-    Clique em um rótulo de ramificação numerado, como `Lógica #1` ou `Lógica #2`, para expandir as condições. Edite a pergunta de referência, a condição de inclusão e as opções diretamente no nó, ou adicione uma `Nova condição`.
+    Clique em um rótulo de ramificação numerado, como `Lógica #1` ou `Lógica #2`, para expandir as condições. Edite a pergunta de referência, a condição de inclusão e as opções diretamente no nó, ou clique em `Adicionar nova condição`.
 
     <img src="/images/guides/create-forms/logic-node-condition.png" alt="Edição da pergunta de referência e das opções na área expandida do nó Lógica #3" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Clique na conexão para editar diretamente
-    Depois de selecionar um campo, você também pode clicar diretamente na linha entre os nós para editar o fluxo, sem precisar clicar nos rótulos `Lógica` ou `Caminho padrão`.
+    Depois de selecionar um campo, você também pode clicar diretamente na linha entre os nós para editar o fluxo, sem precisar clicar nos rótulos `Lógica` ou `Destino padrão`.
 
     <img src="/images/guides/create-forms/logic-node-line-edit.png" alt="Edição direta de um fluxo ao clicar na conexão entre nós, com o rótulo Lógica #1 destacado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
@@ -136,12 +136,13 @@ Use para verificar quais opções foram selecionadas em perguntas como múltipla
 
 - #### Exemplo 1. Ramificação por consentimento para uso de dados pessoais
   - Condição: `Campo de consentimento para coleta de dados pessoais` = "Concordo"
-  - Ir para: a pergunta posterior às `perguntas de coleta de dados pessoais (como o campo de telefone)`
+  - Ir para: a primeira `pergunta de coleta de dados pessoais (como o campo de telefone)`
+  - Para a resposta "Não concordo", configure outro caminho para o campo `Rejeitar`, sem coletar a resposta.
 - #### Exemplo 2. Desqualificação por idade
-  - Condição: `Pergunta de idade (múltipla escolha ou lista suspensa)`, Não é igual a, "10 a 19 anos"
+  - Condição: `Pergunta de idade (múltipla escolha ou lista suspensa)`, Diferente de, "10 a 19 anos"
   - Ir para: `Campo de desqualificação`
 - #### Exemplo 3. Direcionar para uma pergunta quando houver uma palavra-chave
-  - Condição: `Campo de texto curto ou longo`, Contém texto, "maçã"
+  - Condição: `Campo de texto curto ou longo`, Contém, "maçã"
   - Ir para: `Campo de pagamento para venda de suco de maçã`
 
 ## Outras configurações e cuidados

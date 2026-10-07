@@ -13,7 +13,7 @@ A Walla Open API é RESTful e oferece os seguintes recursos.
 
 - **Gerenciamento de espaços de trabalho**: consulte informações dos espaços de trabalho.
 - **Gerenciamento de formulários**: consulte dados e configurações dos formulários.
-- **Envio de formulários**: envie formulários por e-mail ou SMS.
+- **Envio de formulários**: envie formulários por e-mail; SMS está disponível somente em ambientes com esse canal habilitado e configurado.
 - **Acompanhamento de respostas**: consulte e monitore respostas e dados de envio.
 
 ## Hierarquia dos recursos
@@ -44,7 +44,7 @@ https://api.walla.my/open-api/v1
 <Cards>
   <Card title="Autenticação" href="/pt-BR/docs/developer-docs/authentication" />
   <Card title="Guia de início rápido" href="/pt-BR/docs/developer-docs/quick-start" />
-  <Card title="Referência da API" href="/en/docs/developer-docs/workspaces" />
+  <Card title="Referência da API (em inglês)" href="/en/docs/developer-docs/workspaces" />
   <Card title="Códigos de erro" href="/pt-BR/docs/developer-docs/error-codes" />
 </Cards>
 
@@ -57,7 +57,7 @@ Liste todos os espaços de trabalho acessíveis e consulte os detalhes de cada u
 Consulte listas de formulários, configurações, quantidade de envios e outros dados.
 
 ### Envio de formulários
-Envie formulários por e-mail ou SMS a vários destinatários e acompanhe o status de envio e a participação.
+Envie formulários por e-mail a vários destinatários e acompanhe o status de envio e a participação. No SaaS, cada destinatário precisa ter um endereço de e-mail. O envio por SMS exige que esse canal esteja habilitado e configurado no ambiente.
 
 ### Coleta de respostas
 Use a API de consulta de respostas com paginação para conferir dados detalhados, como chave do cliente e horário do envio.

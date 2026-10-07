@@ -1,33 +1,33 @@
 ---
-title: "Campo de pagamento simplificado"
+title: "Campo de intermediação de pagamentos"
 description: "Configure produtos e valores para que os respondentes paguem diretamente no formulário e gerencie transações e repasses."
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-O campo de pagamento simplificado permite receber pagamentos por cartão e carteiras digitais no formulário sem inserir dados de uma loja do Toss Payments. Os valores são repassados para a conta bancária cadastrada.
+O campo de intermediação de pagamentos permite receber pagamentos por cartão e carteiras digitais no formulário sem inserir dados de uma loja do Toss Payments. Os valores são repassados para a conta bancária cadastrada.
 
 ## Cadastrar um vendedor
 
 <Callout type="warning" title="Um vendedor só pode ser cadastrado em uma equipe">
-Após concluir o cadastro de vendedor em uma equipe com os mesmos dados de verificação de identidade, não é possível cadastrá-lo novamente em outra equipe. Confira em qual equipe deseja operar os pagamentos simplificados antes de se cadastrar.
+Após concluir o cadastro de vendedor em uma equipe com os mesmos dados de verificação de identidade, não é possível cadastrá-lo novamente em outra equipe. Confira em qual equipe deseja operar a intermediação de pagamentos antes de se cadastrar.
 </Callout>
 
 <Steps>
   <Step>
-    ### Adicione o campo de pagamento simplificado
-    No editor do projeto, clique em adicionar campo e selecione `Pagamento simplificado` na seção `Payments`.
+    ### Adicione o campo de intermediação de pagamentos
+    No editor do projeto, clique em adicionar campo e selecione `Intermediação de pagamentos` na seção `Payments`.
 
-    <img src="/images/guides/manage-forms/payment-brokerage-add-field.png" alt="Seleção do campo Pagamento simplificado na seção Payments da tela de adição de campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/manage-forms/payment-brokerage-add-field.png" alt="Seleção do campo Intermediação de pagamentos na seção Payments da tela de adição de campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Abra a tela de cadastro de vendedor
-    Se a equipe ainda não tiver um vendedor cadastrado, o campo exibirá uma orientação de cadastro. Clique em `Cadastrar` para acessar `Gerenciar equipe` → `Pagamento simplificado`.
+    Se a equipe ainda não tiver um vendedor cadastrado, o campo exibirá uma orientação de cadastro. Clique em `Cadastrar` para acessar `Configurações da equipe` → `Intermediação de pagamentos`.
 
-    <img src="/images/guides/manage-forms/payment-brokerage-seller-registration-required.png" alt="Campo de pagamento simplificado com aviso de cadastro de vendedor necessário e botão Cadastrar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/manage-forms/payment-brokerage-seller-registration-required.png" alt="Campo de intermediação de pagamentos com aviso de cadastro de vendedor necessário e botão Cadastrar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
-    Apenas o proprietário ou um administrador da equipe pode cadastrar vendedores e configurar o campo de pagamento simplificado.
+    Apenas o proprietário ou um administrador da equipe pode cadastrar vendedores e configurar o campo de intermediação de pagamentos.
   </Step>
   <Step>
     ### Verifique sua identidade
@@ -52,7 +52,7 @@ Após concluir o cadastro de vendedor em uma equipe com os mesmos dados de verif
   </Step>
   <Step>
     ### Cadastre as informações de contato
-    Confira a conta cadastrada e, se desejar, informe um `E-mail de atendimento ao cliente` para exibir aos compradores na tela de pagamento.
+    Confira a conta cadastrada e, se desejar, informe um `E-mail para dúvidas de clientes (opcional)` para exibir aos compradores na tela de pagamento.
 
     <img src="/images/guides/manage-forms/payment-brokerage-contact.png" alt="Etapa de contato do cadastro de vendedor com campo de e-mail de atendimento ao cliente" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
@@ -66,14 +66,14 @@ Após concluir o cadastro de vendedor em uma equipe com os mesmos dados de verif
   </Step>
 </Steps>
 
-## Configurar o campo de pagamento simplificado
+## Configurar o campo de intermediação de pagamentos
 
 <Steps>
   <Step>
     ### Abra as configurações de pagamento
-    Após concluir o cadastro e voltar ao editor do projeto, o botão `Configurações de pagamento` aparecerá no campo de pagamento simplificado.
+    Após concluir o cadastro e voltar ao editor do projeto, o botão `Configurar pagamento` aparecerá no campo de intermediação de pagamentos.
 
-    <img src="/images/guides/manage-forms/payment-brokerage-field-editor.png" alt="Campo de pagamento simplificado no editor do projeto com botão Configurações de pagamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/manage-forms/payment-brokerage-field-editor.png" alt="Campo de intermediação de pagamentos no editor do projeto com botão Configurar pagamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Insira as informações do produto
@@ -82,7 +82,7 @@ Após concluir o cadastro de vendedor em uma equipe com os mesmos dados de verif
 Não é permitido vender produtos que violem a legislação aplicável, incluindo itens ilegais, falsificados, drogas e substâncias psicotrópicas, armas e réplicas de armas, pornografia, produtos prejudiciais a menores como álcool e tabaco, medicamentos sujeitos a receita, jogos de azar e dados pessoais de terceiros.
 </Callout>
 
-    <img src="/images/guides/manage-forms/payment-brokerage-product-settings.png" alt="Configurações do pagamento simplificado com campos de nome e descrição do produto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/manage-forms/payment-brokerage-product-settings.png" alt="Configurações da intermediação de pagamentos com campos de nome e descrição do produto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Defina o valor e o início das vendas
@@ -102,7 +102,7 @@ Não é permitido vender produtos que violem a legislação aplicável, incluind
     ### Confira a configuração
     Após salvar, você poderá conferir o nome, o valor e a descrição do produto no editor.
 
-    <img src="/images/guides/manage-forms/payment-brokerage-configured-field.png" alt="Campo de pagamento simplificado com nome, valor e descrição do produto configurados" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/manage-forms/payment-brokerage-configured-field.png" alt="Campo de intermediação de pagamentos com nome, valor e descrição do produto configurados" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
@@ -111,9 +111,9 @@ Não é permitido vender produtos que violem a legislação aplicável, incluind
 <Steps>
   <Step>
     ### Informe o e-mail do comprador
-    O respondente informa seu e-mail no campo de pagamento simplificado e clica em `Pagar`. Esse e-mail será usado para confirmação do pagamento, reembolsos e atendimento.
+    O respondente informa seu e-mail no campo de intermediação de pagamentos e clica em `Pagar`. Esse e-mail será usado para confirmação do pagamento, reembolsos e atendimento.
 
-    <img src="/images/guides/manage-forms/payment-brokerage-buyer-email.png" alt="Tela em que o respondente informa o e-mail do comprador no campo de pagamento simplificado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/manage-forms/payment-brokerage-buyer-email.png" alt="Tela em que o respondente informa o e-mail do comprador no campo de intermediação de pagamentos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Selecione o método de pagamento
@@ -139,9 +139,9 @@ A autenticação na janela de pagamento não conclui a cobrança. É obrigatóri
 
 ## Acessar a página do vendedor
 
-No menu à esquerda do espaço de trabalho, clique em `Gerenciar equipe` → `Pagamento simplificado` para abrir a página do vendedor.
+No menu à esquerda do espaço de trabalho, clique em `Configurações da equipe` → `Intermediação de pagamentos` para abrir a página do vendedor.
 
-<img src="/images/guides/manage-forms/payment-brokerage-navigation.png" alt="Seleção de Pagamento simplificado no menu Gerenciar equipe à esquerda do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+<img src="/images/guides/manage-forms/payment-brokerage-navigation.png" alt="Seleção de Intermediação de pagamentos no menu Configurações da equipe à esquerda do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 A página do vendedor tem as abas `Vendedor`, `Transações` e `Repasses`.
 
@@ -161,7 +161,7 @@ Confira o volume de transações do mês e o limite mensal, ou pesquise transaç
 
 Confira pedidos ainda não repassados, total de vendas, cancelamentos e reembolsos, taxas do Walla e do processamento de cartão (PG), imposto sobre valor agregado e valor final do repasse. Consulte o histórico por período ou baixe-o como arquivo.
 
-<img src="/images/guides/manage-forms/payment-brokerage-settlement.png" alt="Demonstrativo e download do histórico na aba Repasses do pagamento simplificado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+<img src="/images/guides/manage-forms/payment-brokerage-settlement.png" alt="Demonstrativo e download do histórico na aba Repasses da intermediação de pagamentos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 Na data prevista, o Walla verifica os valores e faz o pagamento na conta cadastrada. Não é necessário solicitar o repasse separadamente.
 
@@ -178,5 +178,5 @@ Na data prevista, o Walla verifica os valores e faz o pagamento na conta cadastr
 </Callout>
 
 <Callout type="warning" title="Pagamentos de 500.000 KRW ou mais">
-Durante o período beta, não é possível publicar campos de pagamento simplificado com valor igual ou superior a 500.000 won sul-coreanos por transação.
+Durante o período beta, não é possível publicar campos de intermediação de pagamentos com valor igual ou superior a 500.000 won sul-coreanos por transação.
 </Callout>

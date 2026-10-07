@@ -19,14 +19,14 @@ Alterações serão disponibilizadas em novas versões.
 ### Gerar uma chave de API
 
 - Entre na Walla.
-- Acesse o visualizador de chaves de API ([https://app.walla.my/open-api/doc](https://app.walla.my/)).
+- Acesse o visualizador de chaves de API ([app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)).
 - Gere uma chave de API e guarde-a em um local seguro.
 ### Método de autenticação
 
 A API da Walla usa autenticação por chave de API. Inclua o cabeçalho abaixo em todas as solicitações.
 
 ```
-X-WALLA-API-KEY: {발급받은 API 키}
+X-WALLA-API-KEY: your_api_key
 ```
 
 ### URL base
@@ -132,7 +132,7 @@ GET /open-api/v1/forms/{formId}/fields
 {
   "success": true,  "data": {    "fields": [      {        "id": "field_001",        "label": "이름을 입력해주세요",
         "fieldType": "SHORT_TEXT",        "outputType": "string"      },      {        "id": "field_002",        "label": "만족도를 선택해주세요",
-        "fieldType": "RADIO",        "outputType": "string"      }    ]  }}
+        "fieldType": "RADIO",        "outputType": "array"      }    ]  }}
 ```
 
 #### Consultar detalhes de um campo
@@ -180,7 +180,7 @@ GET /open-api/v1/forms/{formId}/responses
 ```
 {
   "success": true,  "data": {    "responses": [      {        "responseId": "resp_abc123",        "customerKey": "customer_001",        "submittedAt": "2024-01-20T14:30:00Z",        "field_001": "홍길동",
-        "field_002": "매우 만족",
+        "field_002": ["매우 만족"],
         "hidden-field_utm": "facebook"      }    ],    "pagination": {      "page": 1,      "limit": 20,      "totalCount": 150,      "totalPages": 8    }  }}
 ```
 
@@ -210,12 +210,12 @@ GET /open-api/v1/forms/{formId}/responses/{responseId}
 ```
 {
   "success": true,  "data": {    "responseId": "resp_abc123",    "formId": "form_abc123",    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "response": {      "field_001": "홍길동",
-      "field_002": "매우 만족",
+      "field_002": ["매우 만족"],
       "hidden-field_utm": "facebook"    },    "submittedAt": "2024-01-20T14:30:00Z",    "customerKey": "customer_001",    "startedAt": "2024-01-20T14:25:00Z"  }}
 ```
 
 ### Form Delivery (envio)
-> **Observação:** Form Delivery está disponível apenas no ambiente ONPREM. Não está disponível no ambiente SaaS.
+> **Observação:** No ambiente SaaS, o Form Delivery envia formulários por e-mail; cada destinatário precisa ter um endereço de e-mail. O envio por SMS depende de esse canal estar habilitado e configurado no ambiente.
 #### Enviar um formulário
 
 Envia um projeto específico (formulário publicado) aos destinatários. Formulários não publicados não podem ser enviados.
@@ -243,8 +243,8 @@ POST /open-api/v1/forms/{formId}/delivery
 | --- | --- | --- |
 | recipients | Sim | Lista de destinatários (array) |
 | recipients[].customerKey | Sim | Chave de identificação do cliente |
-| recipients[].email | Não | Endereço de e-mail |
-| recipients[].phoneNumber | Não | Número de telefone |
+| recipients[].email | No SaaS | Endereço de e-mail do destinatário |
+| recipients[].phoneNumber | Não | Número de telefone; o envio por SMS exige um canal habilitado e configurado |
 | subject | Não | Assunto do e-mail (padrão: "설문이 도착했습니다.", que significa "Você recebeu um formulário.") |
 | message | Não | Mensagem de envio |
 #### Listar destinatários
@@ -356,25 +356,31 @@ Se uma solicitação à API falhar, serão retornados um código de status HTTP 
 ### 2. Listar respostas de um formulário
 
 ```
-curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \  -H "X-WALLA-API-KEY: your_api_key"
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \
+  -H "X-WALLA-API-KEY: your_api_key"
 ```
 
 ### 3. Consultar uma resposta específica
 
 ```bash
-curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \  -H "X-WALLA-API-KEY: your_api_key"
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \
+  -H "X-WALLA-API-KEY: your_api_key"
 ```
 
 ### 4. Filtrar respostas por customerKey
 
 ```bash
-curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \  -H "X-WALLA-API-KEY: your_api_key"
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \
+  -H "X-WALLA-API-KEY: your_api_key"
 ```
 
 ### 5. Enviar um formulário com Form Delivery
 
 ```bash
-curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X-WALLA-API-KEY: your_api_key" \  -H "Content-Type: application/json" \  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "고객 만족도 조사",
+curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \
+  -H "X-WALLA-API-KEY: your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "고객 만족도 조사",
     "message": "소중한 의견을 남겨주세요."
   }'
 ```
