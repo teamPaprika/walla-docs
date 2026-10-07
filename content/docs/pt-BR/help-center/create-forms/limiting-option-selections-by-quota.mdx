@@ -1,0 +1,48 @@
+---
+title: "Encerrar opções por ordem de chegada"
+description: "Em perguntas de múltipla escolha, caixas de seleção e lista suspensa, você pode limitar quantas vezes uma opção pode ser selecionada. Útil para inscrições por ordem de chegada e limites por opção."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Como configurar
+
+<Steps>
+  <Step>
+    ### Ative o recurso
+    Selecione a pergunta e ative 'Limitar respostas por opção'.
+
+    <img src="/images/guides/manage-forms/quota-enable-toggle.png" alt="Opção Limitar respostas por opção no painel à direita da pergunta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Informe o número máximo de respostas
+    Clique em 'Configurar' e informe o número máximo de respostas para cada opção.
+
+    <img src="/images/guides/manage-forms/quota-set-max-responses.png" alt="Janela Limitar respostas por opção com campos de quantidade máxima para cada alternativa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Publique
+    Após a publicação, o total de seleções de cada opção não poderá ultrapassar o limite definido.
+
+    <img src="/images/guides/manage-forms/quota-publish.png" alt="Botão Publicar no canto superior direito" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atenção">
+- Se você excluir ou alterar uma opção, a configuração de limite dessa opção será redefinida.
+- O limite de respostas passa a valer após a publicação do formulário.
+</Callout>
+
+## Como aparece para o respondente
+
+1. **Se a opção já atingiu o limite** → Ela fica desativada e não pode ser selecionada.
+
+   <img src="/images/guides/manage-forms/quota-option-disabled.png" alt="Tela de resposta com opção encerrada e desativada" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+2. **Se a opção atingir o limite durante o preenchimento** → Ao clicar em `Enviar resposta`, será exibido o erro "O limite de envios de uma pergunta foi excedido."
+
+   <img src="/images/guides/manage-forms/quota-error-message.png" alt="Mensagem de erro de limite de envios excedido no canto superior direito da tela de resposta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Callout title="Observação">
+Use o limite de respostas por opção para evitar que inscrições ou reservas ultrapassem a quantidade disponível e receber respostas de forma justa, por ordem de chegada.
+</Callout>

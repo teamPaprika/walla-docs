@@ -1,0 +1,67 @@
+---
+title: "Autenticação de dois fatores"
+description: "A autenticação de dois fatores protege as contas com uma etapa adicional de verificação ao entrar. Recomendamos ativá-la para reduzir os riscos de vazamento de senhas e acessos externos."
+plan: enterprise
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Configurar a autenticação de dois fatores para a equipe
+
+<img src="/images/guides/security/two-factor-team.png" alt="Configuração da autenticação de dois fatores para a equipe" style={{ width: "100%", borderRadius: "8px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+<Steps>
+  <Step>
+    ### Acesse a aba Segurança
+    Vá para Configurações da equipe → aba [Segurança].
+  </Step>
+  <Step>
+    ### Ative a autenticação de dois fatores (MFA)
+    Ao ativar 'Autenticação de dois fatores (MFA)', a autenticação de dois fatores passa a ser obrigatória para os membros que acessam a equipe.
+  </Step>
+  <Step>
+    ### Exija a verificação para toda a equipe
+    Essa configuração torna a autenticação de dois fatores obrigatória para toda a equipe.
+    - Cada usuário também pode configurá-la por conta própria em Ícone de perfil → Configurações pessoais de autenticação de dois fatores. Porém, quando a exigência é definida para a equipe, todos os membros precisam passar pela verificação.
+  </Step>
+</Steps>
+
+## Definir uma senha (para quem usa login social)
+- Para usar a autenticação de dois fatores, primeiro é necessário definir uma senha para a conta.
+- Contas criadas com login social (como Google ou Naver) também podem entrar com e-mail e senha após cadastrar uma senha adicional.
+- A senha pode ser definida em Minha conta, pelo ícone de perfil. Se ainda não houver uma, também é possível cadastrá-la na página de autenticação de dois fatores.
+
+<img src="/images/guides/security/two-factor-password.png" alt="Alteração de senha" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+## Usar a autenticação de dois fatores
+
+<img src="/images/guides/security/two-factor-mfa-setup.png" alt="Configuração da autenticação de dois fatores" style={{ width: "100%", borderRadius: "8px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+<Steps>
+  <Step>
+    ### Instale um aplicativo autenticador
+    Instale um aplicativo compatível com TOTP, como Google Authenticator, Microsoft Authenticator ou Authy.
+  </Step>
+  <Step>
+    ### Leia o código QR ou digite a chave de autenticação
+    No aplicativo, leia o código QR. Se isso não for possível, digite manualmente a chave fornecida.
+  </Step>
+  <Step>
+    ### Digite o código de 6 dígitos
+    Digite o código de 6 dígitos exibido no aplicativo para concluir a verificação.
+  </Step>
+  <Step>
+    ### Opção de confiar no dispositivo
+    Ao selecionar a opção de confiar no navegador atual por 30 dias, não será solicitada uma nova verificação nesse dispositivo durante 30 dias.
+  </Step>
+  <Step>
+    ### Guarde os códigos de recuperação
+    Armazene os códigos de recuperação em um local seguro.
+    - Guarde os códigos em um local seguro para casos de perda do celular ou falta de acesso ao aplicativo autenticador.
+    - Cada código pode ser usado uma única vez, como alternativa de emergência para entrar sem o aplicativo autenticador.
+    - Recomendamos clicar em `Baixar` para salvá-los em um arquivo de texto.
+  </Step>
+</Steps>
+
+<Callout title="Dica">
+Exigir autenticação de dois fatores para toda a equipe faz com que todos os membros passem pela verificação, reduzindo consideravelmente os riscos de acesso externo às contas e vazamento de informações.
+</Callout>

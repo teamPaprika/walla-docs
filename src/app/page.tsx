@@ -18,6 +18,8 @@ function getPreferredLang(): string {
   // 번체 중국어는 지역 코드까지 봐야 간체와 갈린다. zh-CN 등은 매칭시키지 않는다.
   const browserLang = navigator.language;
   if (langs.includes(browserLang)) return browserLang;
+  // 브라질 포르투갈어를 포르투갈어 계열 브라우저의 기본 번역으로 제공한다.
+  if (/^pt(?:-|$)/i.test(browserLang)) return 'pt-BR';
   if (/^zh-(TW|HK|MO|Hant)/i.test(browserLang)) return 'zh-TW';
 
   const base = browserLang.split('-')[0];

@@ -1,0 +1,34 @@
+---
+title: "Validar respostas"
+description: "A validação permite que o respondente avance apenas quando o preenchimento ou a seleção atender às condições definidas. Configure diferentes regras conforme o tipo de pergunta."
+plan:
+---
+
+## Validação de respostas
+
+<img src="/images/guides/manage-forms/response-validation-panel.png" alt="Seção de validação de respostas no painel à direita da pergunta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+| Regra de validação | Descrição |
+|---|---|
+| Preenchimento obrigatório | A pergunta precisa ser respondida. |
+| Limite de tamanho da resposta | Define o número mínimo ou máximo de caracteres. |
+| A resposta deve incluir | Exibe um erro se a resposta não contiver o texto especificado. |
+| A resposta não pode incluir | Exibe um erro se a resposta contiver o texto especificado. |
+| Limite de intervalo numérico | Define os valores mínimo e máximo permitidos. |
+| Configuração da quantidade de seleções | Define a quantidade mínima, máxima ou exata de opções selecionadas. |
+| Incluir opções | Exige que uma opção específica seja selecionada. |
+| Excluir opções | Impede a seleção de uma opção específica. |
+| Limitar respostas por opção | Limita quantas vezes uma opção pode ser selecionada no total de respostas. Útil para inscrições por ordem de chegada ou limites de vagas e quantidades. |
+| Expressão regular (Regex) | Permite definir um padrão para validar o formato com precisão. |
+
+<Callout title="Exemplos de expressões regulares">
+- Somente caracteres coreanos: `^[가-힣]+$`
+- Somente letras do alfabeto inglês: `^[A-Za-z]+$`
+- Formato de URL: `^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$`
+- Formato de número de registro de residente sul-coreano (com hífen): `^\d{6}-\d{7}$`
+- Código postal sul-coreano (5 dígitos): `^\d{5}$`
+</Callout>
+
+<Callout type="warning" title="Cuidados ao coletar números de registro de residente sul-coreano">
+A coleta de números de registro de residente sul-coreano está sujeita a restrições legais. Ao coletá-los, ative os recursos de **mascaramento de dados** e **exclusão automática de respostas**.
+</Callout>

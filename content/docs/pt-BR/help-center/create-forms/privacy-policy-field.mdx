@@ -1,0 +1,50 @@
+---
+title: "Campo de consentimento para coleta de dados pessoais"
+description: "Use este campo para obter consentimento para coletar dados pessoais e compartilhá-los com terceiros. Apresente os avisos legais necessários e registre o consentimento dos respondentes."
+plan:
+---
+
+## Campo de consentimento para coleta de dados pessoais
+
+<img src="/images/guides/manage-forms/privacy-policy-field-example.png" alt="Campo de consentimento com dados coletados, uso, período de retenção, aviso sobre recusa e opções Concordo e Não concordo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Use o [editor de texto](/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+- Use o [comando de barra (/)](/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+- No menu de campos, selecione `Política de Privacidade`. Por padrão, o campo inclui as seguintes informações:
+  - Coleta e uso de dados pessoais
+    - Dados coletados
+    - Finalidade da coleta e do uso
+    - Período de retenção
+
+  - Tratamento de dados sensíveis
+    - Dados tratados
+    - Finalidade da coleta
+    - Período de retenção
+
+  - Compartilhamento de dados pessoais com terceiros
+    - Destinatários
+    - Finalidade do compartilhamento
+    - Dados compartilhados
+    - Período de retenção
+
+- Clique no botão `…` (Mais opções) no canto inferior direito para acessar os recursos abaixo.
+  - Adicionar opções em massa: insira várias opções de uma vez. *(Separe as opções com Enter.)*
+  - Definir valores das opções: atribua um valor a cada opção. (Exemplo: definir a primeira opção como '1' → ela aparecerá como 1 na planilha de respostas.)
+
+## Usar com lógica
+
+<img src="/images/guides/manage-forms/privacy-policy-logic-example.png" alt="Configuração de lógica que direciona para Enviar ao selecionar Não concordo no campo de consentimento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- O campo de consentimento pode ser usado de forma mais eficaz com regras de lógica.
+- Por exemplo:
+  - Selecionou "Não concordo" → Direcione para um campo de desqualificação para impedir a coleta da resposta.
+  - Selecionou "Concordo" → Continue para as próximas perguntas de coleta de dados pessoais.
+Dessa forma, você controla o fluxo conforme a escolha do respondente.
+
+<Callout title="Dica">
+Com a lógica, você pode organizar o formulário para que apenas quem selecionar "Concordo" avance para a próxima pergunta.
+</Callout>
+
+<Callout type="warning" title="Atenção">
+O campo de consentimento deve incluir os avisos legais necessários e ser adaptado à finalidade real da coleta. Os dados pessoais coletados devem ser excluídos após o período de retenção informado. Experimente o recurso de exclusão automática de respostas!
+</Callout>

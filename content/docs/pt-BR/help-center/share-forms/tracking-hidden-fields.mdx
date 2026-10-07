@@ -1,0 +1,82 @@
+---
+title: "Rastreamento (campos ocultos)"
+description: "Identifique a origem das respostas com o rastreamento. Esse recurso é útil para separar respostas por canal de publicidade, grupo de clientes e outros critérios."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Adicionar um item de rastreamento (campo oculto)
+
+<Steps>
+  <Step>
+    ### Abra o gerenciamento de rastreamento
+    Na página de compartilhamento, clique em `Gerenciar`.
+
+    <img src="/images/guides/share-forms/tracking-01-manage.png" alt="Abrir o gerenciamento de rastreamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Informe o item de rastreamento
+    Digite o nome de rastreamento (nome do campo oculto) e pressione Enter para criar o item.
+
+    <img src="/images/guides/share-forms/tracking-02-input.png" alt="Entrada do item de rastreamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Salve
+    Clique em `Salvar`.
+
+    <img src="/images/guides/share-forms/tracking-03-save.png" alt="Salvar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Use os campos
+    Os campos ocultos cadastrados funcionam como categorias para identificar a origem do acesso.
+    - ① Identificar a rede social de origem → use `SNS` como nome do campo oculto (por exemplo, Instagram ou YouTube).
+    - ② Separar por grupo de clientes → use `customer` como nome do campo oculto.
+
+    <img src="/images/guides/share-forms/tracking-04-fields.png" alt="Campos ocultos cadastrados" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+## Criar uma URL com campos ocultos
+
+Depois de configurar os campos ocultos, adicione-os manualmente ao link (URL) do formulário.
+
+<Steps>
+  <Step>
+    ### Prepare a URL base do formulário
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4
+    ```
+  </Step>
+  <Step>
+    ### Adicione o nome do campo oculto
+    Adicione-o no formato `?nome_do_campo=`.
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=
+    ```
+  </Step>
+  <Step>
+    ### Informe o valor do campo
+    Exemplo de acesso pelo YouTube:
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?source=youtube
+    ```
+  </Step>
+  <Step>
+    ### Compartilhe um link para cada canal
+    Ao compartilhar cada link no canal correspondente, a planilha de respostas mostrará a origem do acesso, como YouTube ou Instagram.
+  </Step>
+</Steps>
+## Usar vários campos ocultos
+
+- Para adicionar vários campos ocultos à URL, use '&' para conectar os seguintes, em vez de '?'.
+```
+https://walla.my/v/QA9S0imWeo232fSbd4?source=instagram&media=video
+```
+→ Isso indica um acesso por anúncio em vídeo no Instagram.
+<Callout type="warning" title="Atenção">
+- Pressione Enter ao cadastrar um item de rastreamento para salvá-lo.
+- Recomendamos usar apenas letras sem acentos (A–Z, a–z), números e sublinhado (_) nos nomes dos campos ocultos.
+</Callout>
+<Callout title="Dica">
+Para criar muitas URLs com campos ocultos, faça uma cópia do [modelo de gerador de links no Google Sheets](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing).
+</Callout>

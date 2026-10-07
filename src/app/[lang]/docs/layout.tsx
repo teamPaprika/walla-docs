@@ -13,6 +13,7 @@ export default async function Layout({
 }) {
   const { lang } = await params;
   const isKo = lang === 'ko';
+  const isPtBr = lang === 'pt-BR';
 
   return (
     <DocsLayout
@@ -21,8 +22,8 @@ export default async function Layout({
       sidebar={{
         tabs: [
           {
-            title: isKo ? '헬프센터' : 'Help Center',
-            description: isKo ? '사용법 및 FAQ' : 'Guides & FAQ',
+            title: isKo ? '헬프센터' : isPtBr ? 'Central de ajuda' : 'Help Center',
+            description: isKo ? '사용법 및 FAQ' : isPtBr ? 'Guias e perguntas frequentes' : 'Guides & FAQ',
             url: `/${lang}/docs/help-center`,
             icon: (
               <div className="size-full rounded-md flex items-center justify-center" style={{ backgroundColor: 'rgba(254, 138, 182, 0.15)' }}>
@@ -32,8 +33,8 @@ export default async function Layout({
             props: { style: { '--color-fd-primary': '#FE8AB6' } as React.CSSProperties },
           },
           {
-            title: isKo ? '개발자 문서' : 'Developer Docs',
-            description: isKo ? 'REST API 연동 가이드' : 'REST API Integration',
+            title: isKo ? '개발자 문서' : isPtBr ? 'Documentação para desenvolvedores' : 'Developer Docs',
+            description: isKo ? 'REST API 연동 가이드' : isPtBr ? 'Integração com a API REST' : 'REST API Integration',
             url: `/${lang}/docs/developer-docs`,
             icon: (
               <div className="size-full rounded-md flex items-center justify-center" style={{ backgroundColor: 'rgba(23, 207, 180, 0.15)' }}>

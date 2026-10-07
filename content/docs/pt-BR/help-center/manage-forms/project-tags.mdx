@@ -1,0 +1,216 @@
+---
+title: "Etiquetas de projetos"
+description: "Novos recursos de etiquetas, filtros, modos de visualização e seleção múltipla ajudam a gerenciar projetos com mais eficiência no espaço de trabalho."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Etiquetas de projetos
+
+Adicione etiquetas aos projetos para classificá-los e gerenciá-los.
+
+<img src="/images/guides/manage-forms/project-tags-overview.png" alt="Cartões de projetos com etiquetas coloridas organizados nas colunas Rascunho, Publicado e Encerrado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### O que mudou em relação aos antigos emblemas de emoji
+
+- O sistema de etiquetas substitui os emblemas de cada projeto (emoji + cor de fundo)
+- Na atualização, os emblemas existentes são convertidos automaticamente em etiquetas
+- Não é mais possível definir emblemas de emoji para projetos individuais
+
+<Callout type="warning" title="Atenção">
+Os nomes das etiquetas são gerados a partir do emoji. Projetos que usavam o mesmo emoji são reunidos em uma única etiqueta, mesmo com cores de fundo diferentes.
+</Callout>
+
+## Criar etiquetas
+
+### Método 1. Criar pelo gerenciamento de etiquetas
+
+<Steps>
+  <Step>
+    ### Selecione Gerenciamento de etiquetas
+    Selecione `Gerenciamento de etiquetas` no espaço de trabalho.
+
+    <img src="/images/guides/manage-forms/tag-management-button.png" alt="Botão Gerenciamento de etiquetas destacado no canto superior direito do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Crie uma etiqueta
+    Clique em Criar etiqueta.
+
+    <img src="/images/guides/manage-forms/tag-create-button.png" alt="Botão Criar etiqueta destacado no canto superior direito da janela de gerenciamento de etiquetas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Digite o nome
+    Digite um nome. (Por exemplo, Marketing, Urgente, Concluído)
+
+    <img src="/images/guides/manage-forms/tag-name-input.png" alt="Seletor de cor, campo de nome e botão de confirmação na linha de nova etiqueta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Escolha a cor e salve
+    Selecione uma cor e salve.
+
+    <img src="/images/guides/manage-forms/tag-color-picker.png" alt="Paleta com 20 cores aberta abaixo da linha de criação de etiqueta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+### Método 2. Criar diretamente no projeto
+
+<Steps>
+  <Step>
+    ### Clique em Adicionar etiqueta
+    Clique em `+ Adicionar etiqueta` no cartão ou na lista de projetos.
+
+    <img src="/images/guides/manage-forms/tag-add-from-card.png" alt="Botão + Adicionar etiqueta destacado ao lado das etiquetas existentes no cartão do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Clique em Criar etiqueta
+    Clique em Criar etiqueta no seletor de etiquetas.
+
+    <img src="/images/guides/manage-forms/tag-create-from-popover.png" alt="Botão + Criar etiqueta destacado na parte inferior do seletor de etiquetas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Informe nome e cor e salve
+    Informe o nome e a cor e salve.
+
+    <img src="/images/guides/manage-forms/tag-create-inline.png" alt="Nova linha de etiqueta no seletor com cor, nome e botão de confirmação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atenção">Os nomes das etiquetas devem ser únicos dentro do espaço de trabalho.</Callout>
+
+## Adicionar etiquetas aos projetos
+
+### Adicionar ao criar um projeto
+
+- É possível selecionar etiquetas durante a criação
+- Crie rapidamente pelo botão Adicionar (+) no cabeçalho da coluna
+  - Coluna de status: a criação só é possível na coluna Rascunho
+  - Coluna de etiqueta: a etiqueta é aplicada automaticamente ao criar
+
+<img src="/images/guides/manage-forms/tag-on-create-project.png" alt="Seletor de etiquetas aberto pelo botão + do campo Etiquetas na janela de criação de projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Adicionar depois - (1) Individualmente
+
+Clique em `+ Adicionar etiqueta` no cartão ou na lista de projetos
+
+<img src="/images/guides/manage-forms/tag-add-from-card.png" alt="Botão + Adicionar etiqueta destacado ao lado das etiquetas existentes no cartão do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Adicionar depois - (2) Em vários projetos de uma vez
+
+<Steps>
+  <Step>
+    ### Selecione os projetos
+    Use `Shift` para selecionar vários projetos.
+  </Step>
+  <Step>
+    ### Clique em Etiquetas
+    Clique em `Atribuir etiquetas` na barra de ações inferior.
+
+    <img src="/images/guides/manage-forms/tag-bulk-action-bar.png" alt="Vários projetos selecionados e barra inferior com Atribuir etiquetas, Mover de espaço de trabalho, Arquivar e Excluir, com Atribuir etiquetas destacado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Adicione ou remova etiquetas
+    Adicione ou remova as etiquetas.
+  </Step>
+</Steps>
+
+## Mesclar etiquetas
+
+Você pode reunir etiquetas semelhantes em uma só.
+
+<Steps>
+  <Step>
+    ### Abra o gerenciamento de etiquetas
+    Abra Gerenciamento de etiquetas.
+
+    <img src="/images/guides/manage-forms/tag-management-button.png" alt="Botão Gerenciamento de etiquetas destacado no canto superior direito do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione as etiquetas para mesclar
+    Selecione as etiquetas que deseja mesclar. (A seleção múltipla com Shift não é compatível)
+  </Step>
+  <Step>
+    ### Clique em Mesclar
+    Clique em Mesclar.
+
+    <img src="/images/guides/manage-forms/tag-merge-button.png" alt="Etiquetas Clube de leitura e Registro de leitura selecionadas, com o botão Mesclar em Clube de leitura destacado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Mesclagem concluída
+    As etiquetas são reunidas na última etiqueta selecionada.
+  </Step>
+</Steps>
+
+Exemplo: `Marketing / MKT / Equipe de marketing → Marketing`
+
+## Filtros de projetos
+
+### Filtrar por status
+
+- Rascunho: ainda não foi publicado
+- Publicado: recebendo respostas
+- Encerrado: projeto finalizado
+
+### Filtrar por etiquetas
+
+- Várias etiquetas selecionadas: mostra projetos que tenham pelo menos uma delas
+- Opção `Nenhuma etiqueta` selecionada: mostra apenas projetos sem etiquetas
+
+### Combinar filtros
+
+Ao selecionar status + etiqueta, aparecem apenas projetos que **atendem aos dois critérios**.
+- Exemplo: `Publicado + Marketing` → projetos publicados com a etiqueta Marketing
+
+## Modos de visualização
+
+### Visualização em cartões / lista
+
+| Cartões | Lista |
+| --- | --- |
+| Formato de cartões | Formato de lista |
+| Informações de relance | Mais projetos na tela |
+| Configuração padrão | Estrutura simples |
+
+### Agrupar a visualização
+
+#### Colunas (grupos)
+
+- Por status
+- Por etiqueta
+
+#### Linhas (subgrupos)
+
+- Sem agrupamento
+- Por status
+- Por etiqueta
+
+### Critérios de ordenação
+
+- Data de modificação
+- Data de criação
+- Número de respostas
+  (Alternância entre ordem crescente e decrescente)
+
+### Salvar configurações de visualização
+
+- Salvas automaticamente por espaço de trabalho
+- Mantidas após atualizar a página
+- O botão Redefinir restaura os valores padrão
+
+
+## Exemplos de uso
+
+1. Gestão por equipe (criar etiquetas com nomes de equipes → filtrar os projetos de cada equipe)
+1. Usar como um quadro Kanban (visualização: colunas = status → arrastar para alterar o status)
+1. Organizar projetos concluídos (filtro Encerrado → seleção múltipla → mover para o arquivo)
+2. Organizar etiquetas duplicadas (Gerenciamento de etiquetas → Mesclar)
+
+## Termos principais
+
+| Termo | Descrição |
+| --- | --- |
+| Etiqueta | Rótulo para classificar projetos |
+| Filtro | Visualização de projetos por critérios |
+| Agrupamento | Organização por categoria |
+| Ação em lote | Operação em vários projetos ao mesmo tempo |
+| Arquivo | Local para guardar projetos inativos |

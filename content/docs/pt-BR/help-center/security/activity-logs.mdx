@@ -1,0 +1,79 @@
+---
+title: "Logs de atividades"
+description: "Todas as principais atividades da equipe são registradas automaticamente nos logs. Veja quem fez o quê e quando, facilitando a gestão de segurança e o acompanhamento do histórico de operações."
+plan: enterprise
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<img src="/images/guides/security/activity-logs.png" alt="Página de logs de atividades" style={{ width: "100%", borderRadius: "8px", marginBottom: "24px", border: "1px solid var(--border)"}} />
+
+## Como consultar os logs
+
+<Steps>
+  <Step>
+    ### Acesse a aba Logs de atividades
+    Na página de configurações da equipe → acesse a aba 'Logs de atividades'.
+  </Step>
+  <Step>
+    ### Consulte o histórico de ações
+    Confira em ordem as principais ações realizadas na equipe.
+  </Step>
+  <Step>
+    ### Veja os detalhes do log
+    Cada log registra o responsável, o horário e a ação realizada. Nos logs de atividades da equipe, você também pode consultar o IP de acesso. O registro de auditoria se aplica a todos os domínios.
+  </Step>
+</Steps>
+## Principais eventos registrados
+
+### Team Actions (7 ações)
+
+| Action | Descrição |
+| --- | --- |
+| team:leave | Sair da equipe |
+| team:member.invite | Convidar membro para a equipe |
+| team:member.invite.cancel | Cancelar convite para a equipe |
+| team:member.delete | Remover membro da equipe |
+| team:member.role.assign | Alterar função de membro da equipe |
+| team:security.update | Alterar configurações de segurança da equipe |
+| team:audit.log.download | Baixar logs de auditoria |
+
+### Workspace Actions (11 ações)
+
+| Action | Descrição |
+| --- | --- |
+| workspace:create | Criar espaço de trabalho |
+| workspace:update | Renomear espaço de trabalho |
+| workspace:delete | Excluir espaço de trabalho |
+| workspace:leave | Sair do espaço de trabalho |
+| workspace:member.create | Convidar membro para o espaço de trabalho |
+| workspace:member.delete | Remover membro do espaço de trabalho |
+| workspace:member.role.assign | Alterar função de membro do espaço de trabalho |
+| workspace:role.create | Criar função |
+| workspace:role.update | Editar função |
+| workspace:role.delete | Excluir função |
+| workspace:permission.update | Editar permissões |
+
+### Project Actions (19 ações)
+
+| Action | Descrição |
+| --- | --- |
+| project:read | Visualizar projeto |
+| project:create | Criar projeto |
+| project:update | Editar projeto |
+| project:delete | Excluir projeto |
+| project:copy | Copiar projeto |
+| project:archive | Arquivar projeto |
+| project:move_to_workspace | Mover para espaço de trabalho |
+| project:publish | Publicar projeto |
+| project:privacy.field_masking.update | Alterar mascaramento de campo |
+| project:privacy.auto_delete.update | Alterar exclusão automática |
+| project:privacy.auto_delete.execute | Executar exclusão automática |
+| project:automation.create | Criar automação |
+| project:automation.update | Editar automação |
+| project:automation.delete | Excluir automação |
+| project:response.read | Visualizar resposta |
+| project:response.delete | Excluir resposta |
+| project:response.download | Baixar respostas |
+| project:response.unmask | Remover mascaramento |
+| project:response.field_file_download | Baixar arquivo de campo |

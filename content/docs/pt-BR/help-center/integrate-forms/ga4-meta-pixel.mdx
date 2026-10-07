@@ -1,0 +1,41 @@
+---
+title: "Conectar GA4 e Meta Pixel"
+description: "Conecte Google Analytics 4 (GA4) e Meta Pixel para rastrear visualizações do formulário e envios de respostas como eventos de conversão. Use esses dados para medir anúncios e fazer retargeting."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Como conectar
+
+<Steps>
+  <Step>
+    ### Abra as configurações do formulário
+    Na edição do formulário, clique no botão de configurações (engrenagem) no canto superior direito.
+
+    <img src="/images/guides/integrate/ga4-pixel-01-settings.png" alt="Botão de configurações do formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Acesse a aba Rastreamento externo
+    Na janela de configurações, selecione 'Rastreamento externo' no menu à esquerda.
+
+    <img src="/images/guides/integrate/ga4-pixel-02-external-tracking.png" alt="Aba Rastreamento externo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Informe o ID de medição
+    Informe o ID da plataforma que deseja rastrear. O valor é salvo automaticamente.
+    - ID do Meta Pixel: por exemplo, 123456789012345
+    - ID de medição do GA4: por exemplo, G-XXXXXXXXXX
+
+    <img src="/images/guides/integrate/ga4-pixel-03-ids.png" alt="Campos para o ID do Meta Pixel e o ID de medição do GA4" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Eventos enviados
+
+Depois de conectar, os seguintes eventos padrão são enviados a cada plataforma conforme as ações do participante.
+
+- Ao visualizar o formulário: PageView (Meta) / page_view (GA4)
+- Ao concluir o envio: Lead (Meta) / generate_lead (GA4)
+
+Os eventos de conversão incluem os parâmetros walla_response_id e walla_customer_key. Ao configurar uma meta de conversão de anúncios, selecione os nomes de eventos padrão acima.

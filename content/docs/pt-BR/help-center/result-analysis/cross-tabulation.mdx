@@ -1,0 +1,64 @@
+---
+title: "Tabulação cruzada"
+description: "Compare respostas segundo um critério para identificar diferenças entre grupos. Por exemplo, analise diferenças de satisfação por ocupação ou de intenção de recomendação por faixa etária."
+plan: enterprise
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Estrutura básica da tabulação cruzada
+
+A tabulação cruzada é composta por dois elementos.
+
+#### Variável de referência
+É o campo usado como critério de comparação (por exemplo, gênero, faixa etária ou ocupação). → Define “quais grupos comparar?”.
+#### Variável de análise
+É o campo comparado conforme a variável de referência (por exemplo, satisfação com o preço, finalidade de uso ou intenção de recomendação). → Define “o que comparar?”.
+## Como configurar
+
+<img src="/images/guides/result-analysis/cross-tabulation.png" alt="Configuração de tabulação cruzada" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Steps>
+  <Step>
+    ### Defina a variável de referência
+    Arraste o campo que será o critério de comparação da lista à esquerda para a área `Critérios`.
+    - Exemplo: ocupação
+  </Step>
+  <Step>
+    ### Adicione variáveis de análise
+    Adicione os campos que deseja comparar à área `Variável de análise`.
+    - Exemplos: finalidade de uso do serviço, satisfação com o preço e intenção de recomendar a outras pessoas
+  </Step>
+</Steps>
+
+## Como interpretar os resultados
+
+### Exemplo
+(Variável de referência: ocupação; variável de análise: satisfação com o preço)
+
+| Ocupação | Percentual de satisfação |
+| --- | --- |
+| Empregados | 78% |
+| Estudantes | 60% |
+| Autônomos | 82% |
+
+→ É possível observar uma satisfação relativamente menor com o preço no grupo de estudantes.
+
+Assim, a tabulação cruzada ajuda a identificar diferenças entre grupos.
+
+## Como usar Maior / Menor
+
+Use os botões Maior / Menor na parte superior dos resultados
+
+para identificar rapidamente grupos acima ou abaixo da média geral.
+
+- Maior: destaca grupos acima da média geral
+- Menor: destaca grupos abaixo da média geral
+
+Isso ajuda a encontrar rapidamente os principais insights ao preparar relatórios.
+
+## Observações
+
+- Cada grupo precisa ter respostas suficientes para permitir uma comparação precisa.
+- Se um grupo tiver poucas respostas, interprete os resultados com cuidado.
+- A tabulação cruzada mostra diferenças; investigar suas causas exige uma análise adicional.

@@ -1,0 +1,52 @@
+---
+title: "Importar do Google Forms"
+description: "Importe formulários criados no Google Forms para usá-los no Walla."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Importar um formulário do Google Forms
+
+<Steps>
+  <Step>
+    ### Clique em Criar projeto
+    Na tela do espaço de trabalho, clique no botão `Criar projeto`.
+
+    <img src="/images/guides/manage-forms/team-template-create-project.png" alt="Botão Criar projeto no canto superior direito do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione Importar do Google Forms
+    Selecione `Importar do Google Forms`.
+
+    <img src="/images/guides/manage-forms/import-google-forms-select.png" alt="Opção Importar do Google Forms na janela de criação de um novo projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Insira o link de resposta do Google Forms e importe
+    Cole o link de resposta do Google Forms (`https://docs.google.com/forms/d/...`) no campo e clique no botão `Importar`.
+
+    <img src="/images/guides/manage-forms/import-google-forms-dialog.png" alt="Janela de importação do Google Forms com o campo de link e o botão Importar destacados, além dos avisos, dos itens incompatíveis e da opção de receber respostas no Google Forms" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <Callout type="warning" title="Atenção">
+    Em Google Forms → Configurações → Respostas, desative as opções que exigem login.
+    Os cabeçalhos de seção serão importados como campos de descrição do Walla.
+    </Callout>
+
+    <Callout type="warning" title="Itens que não podem ser importados">
+    - Imagens de fundo e imagens das perguntas definidas no Google Forms
+    - Perguntas de upload de arquivos configuradas no Google Forms
+    </Callout>
+  </Step>
+  <Step>
+    ### Conclua a importação
+    Um novo projeto será criado com base no link do Google Forms informado.
+
+    <img src="/images/guides/manage-forms/import-google-forms-result.png" alt="Lista de campos e conteúdo do formulário no editor do projeto Walla criado a partir do Google Forms" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+### Receber respostas no Google Forms
+
+- Ao selecionar `Enviar respostas para o Google Forms`, uma automação personalizada será criada.
+- As respostas recebidas no Walla também serão enviadas ao Google Forms. Essa automação é configurada apenas uma vez. Se você editar e publicar novamente o formulário no Google Forms ou no Walla, a automação será **interrompida** e **as respostas deixarão de ser recebidas no Google Forms.**
+- Recomendamos concluir todas as edições no Google Forms antes de importar o formulário para o Walla.
+- Não é possível receber respostas que incluam a opção 'Outro (digitar resposta)' em perguntas de múltipla escolha ou caixas de seleção.

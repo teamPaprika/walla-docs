@@ -1,0 +1,68 @@
+---
+title: "Enviar vales-presente digitais"
+description: "Envie vales-presente digitais (recompensas) aos participantes dos formulários na Walla. Depois de comprar as recompensas, você pode enviá-las aos participantes."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Etapas para enviar recompensas
+
+<Steps>
+  <Step>
+    ### Acesse o gerenciamento de recompensas
+    Acesse a página `Recompensas`.
+
+    <img src="/images/guides/reward/send-step-01-reward-management.png" alt="Página de gerenciamento de recompensas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Clique em Enviar recompensa
+    Em 'Recompensas disponíveis', clique em `Enviar recompensa`.
+
+    <img src="/images/guides/reward/send-step-02-send-button.png" alt="Botão Enviar recompensa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Selecione os participantes
+    Selecione a pergunta que contém os dados dos participantes (campo de telefone). Escolha os destinatários manualmente ou clique em `Seleção aleatória` para sorteá-los.
+
+    <img src="/images/guides/reward/send-step-03-respondent-select.png" alt="Seleção dos participantes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+
+    <Callout type="warning" title="Atenção">
+    Não é possível enviar recompensas a participantes cujo telefone esteja em formato inválido.
+    </Callout>
+  </Step>
+  <Step>
+    ### Verifique quem pode receber
+    Revise a lista selecionada e, se desejar, exclua participantes que já receberam recompensas.
+    - Confira rapidamente quem recebeu cada recompensa e quantas vezes.
+    - Você também pode voltar à etapa anterior para selecionar outros participantes.
+
+    <img src="/images/guides/reward/send-step-04-availability-check.png" alt="Verificação dos destinatários elegíveis" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Escreva a mensagem
+    Escreva a mensagem que acompanhará a recompensa.
+    - Título: até 40 bytes
+    - Conteúdo: até 200 caracteres
+
+    A mensagem será exibida quando o participante receber a recompensa.
+
+    <img src="/images/guides/reward/send-step-05-message.png" alt="Redação da mensagem" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+
+    <Callout type="warning" title="Atenção">
+    - As recompensas são enviadas ao celular informado no campo de telefone.
+    - Depois do envio, não é possível cancelar ou recuperar a recompensa.
+    - Ao clicar em Enviar recompensa, você concorda com todas as condições.
+    </Callout>
+  </Step>
+  <Step>
+    ### Conclua o envio das recompensas
+    Clique em `Enviar recompensa` na parte inferior para enviá-las imediatamente aos participantes selecionados e concluir o processo.
+
+    <img src="/images/guides/reward/send-step-06-send-complete.png" alt="Botão Enviar recompensa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+
+    Os participantes recebem a recompensa em uma mensagem como a mostrada abaixo.
+
+    <img src="/images/guides/reward/send-step-06-recipient-message.png" alt="Mensagem recebida pelo participante" style={{ width: "300px", maxWidth: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+</Steps>

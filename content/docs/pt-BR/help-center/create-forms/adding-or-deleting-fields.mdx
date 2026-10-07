@@ -1,0 +1,50 @@
+---
+title: "Adicionar e excluir campos"
+description: "No editor do projeto, você pode adicionar, excluir e duplicar campos para montar seu formulário. Ajuste livremente a posição e a estrutura dos campos para facilitar o gerenciamento."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Adicionar campos
+
+### Clique no ícone '+' na lista de campos à esquerda
+Selecione o campo desejado para adicioná-lo. Se um campo já estiver selecionado, o novo campo será inserido automaticamente logo abaixo dele.
+
+<img src="/images/guides/manage-forms/add-field-plus-icon.png" alt="Painel de adição de campos exibido ao clicar no ícone + no topo da lista de campos à esquerda" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Adicione no meio do editor
+Ao passar o cursor entre dois campos, o botão `Adicionar` aparece.
+Clique nele para inserir um novo campo nessa posição.
+
+<img src="/images/guides/manage-forms/add-field-between.png" alt="Botão Adicionar exibido ao passar o cursor entre campos no editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Adicione dentro de um grupo de campos
+Ao passar o cursor na parte inferior de um grupo de campos, o botão `Adicionar` aparece. Clique nele para adicionar uma pergunta ao grupo.
+
+<img src="/images/guides/manage-forms/add-field-group.png" alt="Botão Adicionar exibido ao passar o cursor na parte inferior de um grupo de campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Excluir ou duplicar campos
+### Exclua ou duplique diretamente no editor
+Use os ícones à direita do campo para excluir ou duplicar o campo selecionado.
+<img src="/images/guides/manage-forms/field-action-icons.png" alt="Ícones de configurações, duplicação e exclusão no canto superior direito do campo no editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Exclua ou duplique pela lista de campos
+<Steps>
+  <Step>
+    ### Localize o ícone de mais opções
+    Ao passar o mouse sobre um campo na lista à esquerda, o ícone `...` (Mais opções) aparece à direita dele.
+
+    <img src="/images/guides/manage-forms/field-more-icon.png" alt="Ícone de mais opções à direita de um campo na lista à esquerda" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione Excluir ou Duplicar
+    Clique no ícone e selecione `Excluir campo` ou `Duplicar campo`.
+
+    <img src="/images/guides/manage-forms/field-more-menu.png" alt="Menu de mais opções com Duplicar campo, Salvar como modelo de campo e Excluir campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atenção">
+Ao excluir um campo, os dados das respostas desse campo também serão excluídos. Faça uma cópia dos dados necessários antes de excluí-lo.
+</Callout>

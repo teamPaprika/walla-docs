@@ -20,7 +20,9 @@ export default async function LangLayout({
       search={{ SearchDialog }}
     >
       <LangCookie lang={lang} />
-      {children}
+      <div lang={lang} className="contents">
+        {children}
+      </div>
     </RootProvider>
   );
 }

@@ -20,7 +20,9 @@ const localeMap = Object.fromEntries(
   ]),
 );
 
-const { staticGET } = createFromSource(source, { localeMap });
+const { staticGET } = createFromSource(source, {
+  localeMap: { ...localeMap, 'pt-BR': { language: 'portuguese' } },
+});
 
 /**
  * 로케일별로 쪼개 내보낸다. 정적 검색 클라이언트는 받은 파일을 통째로 파싱해

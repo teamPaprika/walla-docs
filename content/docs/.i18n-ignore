@@ -27,3 +27,12 @@ es/developer-docs/responses/*
 zh-TW/help-center/style.mdx
 ja/help-center/style.mdx
 es/help-center/style.mdx
+
+# 브라질 포르투갈어도 기존 추가 언어와 같은 범위의 영어 폴백을 사용한다.
+pt-BR/developer-docs/custom-fields-*
+pt-BR/developer-docs/delivery.mdx
+pt-BR/developer-docs/field-schemas.mdx
+pt-BR/developer-docs/forms.mdx
+pt-BR/developer-docs/workspaces.mdx
+pt-BR/developer-docs/responses/*
+pt-BR/help-center/style.mdx
