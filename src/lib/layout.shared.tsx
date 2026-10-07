@@ -4,6 +4,19 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { NavLogo } from '@/components/nav-logo';
 
 export const i18nUI = defineI18nUI(i18n, {
+  'pt-BR': {
+    displayName: 'Português (Brasil)',
+    search: 'Buscar',
+    searchNoResult: 'Nenhum resultado encontrado',
+    toc: 'Nesta página',
+    tocNoHeadings: 'Nenhum título nesta página',
+    editOnGithub: 'Editar no GitHub',
+    lastUpdate: 'Última atualização',
+    nextPage: 'Próxima página',
+    previousPage: 'Página anterior',
+    chooseLanguage: 'Escolher idioma',
+    chooseTheme: 'Escolher tema',
+  },
   en: {
     displayName: 'English',
   },

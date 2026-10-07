@@ -1,0 +1,88 @@
+---
+title: "Ações que exigem aprovação"
+description: "Exija aprovação de um administrador para ações sensíveis, como convidar membros, baixar respostas, remover mascaramento ou excluir formulários. Tudo fica registrado, incluindo quem aprovou cada ação e quando."
+plan: enterprise
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Aprovar ações dos membros
+
+<Steps>
+  <Step>
+    ### Ative as ações que exigem aprovação
+
+    Em Gerenciar equipe → `Segurança` → `Ações que exigem aprovação`, ative as opções desejadas e clique em `Salvar alterações`.
+
+    <img src="/images/guides/security/approval-policy-toggles.png" alt="Cartão Ações que exigem aprovação na página de segurança da equipe" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+    | Ação | Validade da aprovação |
+    | --- | --- |
+    | Convidar membro | Um convite para o endereço de e-mail solicitado |
+    | Baixar respostas | Permissão para baixar respostas do formulário por um período limitado |
+    | Remover mascaramento de respostas | Permissão para remover o mascaramento do formulário por um período limitado |
+    | Excluir formulário | Uma exclusão |
+
+    Administradores (admin) e funções superiores podem realizar essas ações sem aprovação. A exigência se aplica aos membros com funções inferiores. Para alterar a configuração, é necessário ter permissão de segurança da equipe.
+  </Step>
+  <Step>
+    ### O membro solicita aprovação
+
+    Quando um membro tenta realizar uma ação que exige aprovação, uma janela de solicitação aparece. Ele informa o motivo, escolhe o administrador que receberá a notificação e envia a solicitação.
+
+    - O administrador selecionado recebe uma notificação e um e-mail.
+    - A solicitação expira automaticamente após 7 dias.
+    - Se já houver uma solicitação para a mesma ação e o mesmo alvo, ela será reunida à existente, sem criar outra.
+  </Step>
+  <Step>
+    ### O administrador aprova ou rejeita
+
+    Acesse Gerenciar equipe → `Aprovações`. Na aba `Pendentes`, confira solicitante, ação, alvo, motivo, horário e vencimento, e clique em `Aprovar` ou `Rejeitar`. O menu mostra a quantidade de solicitações pendentes. Não é permitido aprovar a própria solicitação.
+
+    <img src="/images/guides/security/approval-pending-list.png" alt="Lista de solicitações e botões Aprovar e Rejeitar na aba Pendentes da página de aprovações" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Defina o período de aprovação
+
+    A aprovação para baixar respostas e remover mascaramento tem prazo definido. Ao clicar em `Aprovar`, escolha o período em que o membro poderá repetir a ação.
+
+    <img src="/images/guides/security/approval-grant-duration.png" alt="Menu do botão Aprovar com períodos de 1 hora, 1 dia, 3 dias e 7 dias" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+    Convites de membros e exclusões de formulários são aprovações de **uso único**, sem período de validade de acesso. Ao realizar a ação uma vez, a aprovação é marcada como utilizada.
+  </Step>
+  <Step>
+    ### Aprovação concluída
+
+    O solicitante recebe o resultado por e-mail. Após a aprovação, pode realizar a ação solicitada. Aprovações por período valem durante o prazo definido, e aprovações de uso único valem até a ação ser realizada uma vez.
+
+    Se a solicitação for rejeitada, a ação continua bloqueada. Se necessário, o membro pode informar um novo motivo e solicitar novamente.
+  </Step>
+</Steps>
+
+<Callout title="Observação">
+Só é possível ativar novas exigências de aprovação no plano Enterprise. Configurações já ativadas continuam válidas independentemente do plano e podem ser desativadas a qualquer momento.
+</Callout>
+
+## Consultar o histórico
+
+- A aba `Histórico` mostra todas as solicitações processadas. Você pode filtrar e ordenar por status, ação e solicitante.
+- Os status são Aprovada, Rejeitada, Utilizada, Revogada, Cancelada e Expirada.
+- Aprovações por período também mostram até quando são válidas.
+- Membros veem apenas suas próprias solicitações; administradores veem todas as solicitações da equipe.
+
+<img src="/images/guides/security/approval-history.png" alt="Lista de solicitações processadas na aba Histórico da página de aprovações" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+
+
+## Revogar aprovações
+
+- Você pode revogar imediatamente uma aprovação já concedida. Isso vale para aprovações de uso único ainda não utilizadas e aprovações por período ainda válidas.
+- A revogação invalida a aprovação imediatamente, impedindo a ação mesmo durante o prazo restante. Apenas administradores podem revogar aprovações.
+
+
+<img src="/images/guides/security/approval-revoke-modal.png" alt="Janela de confirmação de revogação com campo para informar o motivo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
+
+
+<Callout title="Observação">
+As solicitações e decisões de aprovação também ficam nos [Logs de atividade](/pt-BR/docs/help-center/security/activity-logs). Os registros de downloads ou remoção de mascaramento realizados ficam vinculados à aprovação utilizada.
+</Callout>

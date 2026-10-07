@@ -32,7 +32,7 @@ function initOrama(locale?: string) {
   }
   return create({
     schema: { _: 'string' },
-    language: 'english',
+    language: locale === 'pt-BR' ? 'portuguese' : 'english',
   });
 }
 

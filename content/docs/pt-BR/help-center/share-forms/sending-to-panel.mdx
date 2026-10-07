@@ -1,0 +1,62 @@
+---
+title: "Enviar pesquisas a um painel de participantes"
+description: "Envie formulários por e-mail usando a lista de participantes cadastrados no espaço de trabalho. Envie para grupos ou selecione participantes específicos."
+plan: enterprise
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Preparar o envio ao painel
+
+Antes de enviar o formulário, os destinatários devem estar cadastrados na aba **Painéis de respondentes** do espaço de trabalho. Veja como importar participantes em [Gerenciar o painel](/pt-BR/docs/help-center/team-workspace/workspace-panel).
+
+## Como enviar
+
+<Steps>
+  <Step>
+    ### Acesse a página Compartilhar
+    Na parte superior da edição do projeto, acesse `Compartilhar` e role até a seção `Enviar pesquisa`.
+
+    <img src="/images/guides/share-forms/sending-to-panel-share-page.png" alt="Seção Enviar pesquisa na aba Compartilhar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Sem participantes cadastrados — clique em Importar dados
+    Se não houver participantes cadastrados ou se você quiser enviar o projeto a pessoas fora do painel, clique em `Importar dados`. Linhas inválidas ou com erros serão excluídas da importação.
+
+    <img src="/images/guides/share-forms/sending-to-panel-upload.png" alt="Botão Importar dados na seção Enviar pesquisa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/share-forms/sending-to-panel-upload-popup.png" alt="Prévia e importação do arquivo na janela de importação de clientes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Com participantes cadastrados — clique em Importar do painel de respondentes
+    Se já houver participantes cadastrados, clique em `Importar do painel de respondentes`.
+
+    <img src="/images/guides/share-forms/sending-to-panel-from-panel.png" alt="Botão Importar do painel de respondentes na seção Enviar pesquisa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/share-forms/sending-to-panel-from-panel-popup.png" alt="Seleção de destinatários na janela Importar do painel de respondentes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Escreva o conteúdo do envio
+    Clique em Enviar pesquisa e informe a conta remetente e a mensagem que acompanhará o formulário.
+
+    <img src="/images/guides/share-forms/sending-to-panel-send-button.png" alt="Botão Enviar pesquisa na seção de envio" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/share-forms/sending-to-panel-compose.png" alt="Remetente, assunto e mensagem na janela Enviar pesquisa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Envie
+    Após o envio, confira os resultados nas colunas `Status`, `Número de envios` e `Último envio` de cada linha.
+
+    <img src="/images/guides/share-forms/sending-to-panel-status.png" alt="Colunas de status, número de envios e horário do último envio" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    Cada participante recebe um link exclusivo, e a resposta é registrada na planilha com a CUSTOMER Key cadastrada no painel.
+
+    <img src="/images/guides/share-forms/sending-to-panel-individual-link.png" alt="Links exclusivos de formulário e IDs de cliente por participante" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Exemplo de e-mail recebido
+    Formulários enviados por 'Enviar pesquisa' são entregues como no exemplo abaixo.
+
+    <img src="/images/guides/share-forms/sending-to-panel-email-preview.png" alt="Exemplo de e-mail de formulário enviado aos participantes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>

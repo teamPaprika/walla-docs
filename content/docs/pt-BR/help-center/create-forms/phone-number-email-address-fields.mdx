@@ -1,0 +1,85 @@
+---
+title: "Campos de telefone, e-mail e endereço"
+description: "Use estes campos para coletar informações de contato no formulário. Conheça as características e as opções de cada campo 👇"
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Campo de telefone
+
+<img src="/images/guides/manage-forms/phone-number-field-example.png" alt="Campo de telefone com seletor de país e texto de exemplo 010-2000-0000" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Permite que o usuário informe um número de telefone.
+- Clique no ícone de bandeira para alterar o formato do telefone para outro país.
+- Use o [editor de texto](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+- Use o [comando de barra (/)](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+- O padrão é o formato de celular da Coreia do Sul (010-0000-0000).
+- Opções disponíveis
+  - Preenchimento obrigatório
+  - Limite de comprimento da resposta
+  - A resposta deve conter / não deve conter
+  - Expressão regular (Regex)
+  - Exigir verificação do telefone
+  - Mascaramento de dados
+  - Exclusão automática de respostas
+
+### Exigir verificação do telefone
+
+- Ative 'Exigir verificação do telefone' para coletar apenas números verificados.
+- O respondente precisa verificar o telefone com um código enviado por SMS antes de enviar o formulário.
+- Para realizar a verificação, o número de telefone é enviado ao provedor de SMS (Twilio Inc., Estados Unidos).
+
+<Steps>
+  <Step>
+    #### Ative Exigir verificação do telefone
+
+    <img src="/images/guides/create-forms/phone-verification-enable.png" alt="Opção Exigir verificação do telefone ativada no painel de configurações do campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Ao responder, informe o telefone e clique em Verificar
+
+    <img src="/images/guides/create-forms/phone-verification-start.png" alt="Tela de resposta com número de telefone preenchido e botão Verificar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Envie o código de verificação
+
+    <img src="/images/guides/create-forms/phone-verification-send-code.png" alt="Botão Enviar código na janela de verificação do telefone" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Confira a conclusão da verificação
+
+    <img src="/images/guides/create-forms/phone-verification-complete.png" alt="Tela de resposta com a indicação de verificação concluída abaixo do campo de telefone" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Campo de e-mail
+
+<img src="/images/guides/manage-forms/email-field-example.png" alt="Campo de e-mail com texto de exemplo example@email.com" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Permite que o usuário informe um endereço de e-mail.
+- O endereço deve seguir o formato `~~~@~~~.~~~`. Se o formato estiver incorreto, não será possível enviar o formulário.
+- Use o [editor de texto](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+- Use o [comando de barra (/)](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+- Clique no ícone de lápis para editar o texto de exemplo.
+- Opções disponíveis
+  - Preenchimento obrigatório
+  - Limite de comprimento da resposta
+  - A resposta deve conter / não deve conter
+  - Expressão regular (Regex)
+  - Mascaramento de dados
+  - Exclusão automática de respostas
+
+## Campo de endereço
+
+<img src="/images/guides/manage-forms/address-field-example.png" alt="Campo de endereço de entrega com busca de endereço" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Aceita apenas endereços da Coreia do Sul. Após buscar o endereço, o usuário pode informar o complemento.
+- Opções disponíveis
+  - Preenchimento obrigatório
+  - Mascaramento de dados
+  - Exclusão automática de respostas
+
+<Callout title="Dica">
+Para proteger dados pessoais, recomendamos usar o mascaramento de dados e a exclusão automática de respostas nos campos de telefone, e-mail e endereço.
+</Callout>

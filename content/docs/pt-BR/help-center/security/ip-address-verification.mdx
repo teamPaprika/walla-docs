@@ -1,0 +1,16 @@
+---
+title: "Verificação de endereço IP"
+description: "Restrinja o acesso ao projeto a endereços IP ou intervalos de rede específicos."
+plan: enterprise
+---
+
+<img src="/images/guides/security/ip-verification.png" alt="Verificação de endereço IP" style={{ width: "100%", borderRadius: "8px", marginBottom: "24px", border: "1px solid var(--border)"}} />
+
+## Ativar a verificação de endereço IP
+- Ative 'Verificação de endereço IP' nas configurações do projeto para permitir acesso ao formulário apenas pelos IPs cadastrados.
+- Com a verificação ativa, é obrigatório cadastrar pelo menos um endereço IP.
+## Gerenciar endereços e intervalos de IP permitidos
+- Cadastre endereços ou intervalos de IP em um dos formatos abaixo.
+  - IP individual: `192.168.1.1`
+  - Intervalo CIDR: `192.168.1.0/24` (192.168.1.0 ~ 192.168.1.255)
+  - Curinga: `192.168.*.*` (192.168.0.0 ~ 192.168.255.255)

@@ -1,0 +1,88 @@
+---
+title: "Modelos de perguntas"
+description: "Salve conjuntos de perguntas frequentes como modelos. Reduza tarefas repetitivas ao criar formulários e compartilhe um formato consistente com sua equipe. Com modelos de perguntas, todos podem criar rapidamente formulários padronizados."
+plan: enterprise
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Criar um modelo de perguntas no editor do projeto
+
+Você pode salvar imediatamente como modelo as perguntas do formulário em que está trabalhando.
+
+- Salvar uma pergunta: na lista de campos, abra o menu `...` (Mais opções) da pergunta desejada e selecione `Salvar como modelo de perguntas`.
+
+  <img src="/images/guides/manage-forms/field-template-save-single.png" alt="Opção Salvar como modelo de perguntas no menu de mais opções de um campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Salvar várias perguntas de uma vez:
+
+<Steps>
+  <Step>
+    ### Selecione as perguntas e salve
+    Mantenha `Shift` pressionado para selecionar as perguntas que deseja incluir no modelo e clique em `Salvar como modelo de perguntas`.
+
+    <img src="/images/guides/manage-forms/field-template-bulk-button.png" alt="Botão Salvar como modelo de perguntas no modo de edição em lote" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Insira o nome do modelo
+    Na janela que abrir, insira o nome do modelo e crie-o.
+
+    <img src="/images/guides/manage-forms/field-template-name-dialog.png" alt="Campo de nome na janela Criar modelo de perguntas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atenção">
+Alguns campos que exigem a verificação do espaço de trabalho, como 'Toss Payments', podem ter restrições para serem salvos como modelo.
+</Callout>
+
+## Editar diretamente na biblioteca de modelos de perguntas
+
+Você pode editar modelos salvos na biblioteca ou criar um novo modelo do zero diretamente nela.
+
+- Acessar os modelos: no lado esquerdo do painel, vá para \[Biblioteca da equipe\] > \[Modelos de perguntas\].
+
+  <img src="/images/guides/manage-forms/field-template-inventory.png" alt="Menu Biblioteca da equipe > Modelos de perguntas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Configurar propriedades detalhadas:
+
+<Steps>
+  <Step>
+    ### Clique na pergunta
+    Clique na pergunta que deseja editar. No painel `Opções` à direita, você pode alterar o título do campo, a validação da resposta (como preenchimento obrigatório) e as configurações de segurança.
+  </Step>
+  <Step>
+    ### Confira as alterações
+    Quando houver alterações, o aviso 'Alterações não salvas' aparecerá na parte superior.
+  </Step>
+  <Step>
+    ### Salve o modelo
+    Após terminar a edição, clique em `Salvar modelo` no canto superior direito para aplicar as alterações.
+
+    <img src="/images/guides/manage-forms/field-template-save-button.png" alt="Botão Salvar modelo no canto superior direito do editor de modelos de perguntas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Carregar um modelo salvo
+
+Ao criar um novo projeto, carregue perguntas pré-configuradas com um clique.
+
+<img src="/images/guides/manage-forms/field-template-load.png" alt="Seção Modelos na parte inferior da janela de adição de campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Steps>
+  <Step>
+    ### Localize a seção Modelos
+    A seção `Modelos` aparece na parte inferior da janela central de adição de campos do editor.
+  </Step>
+  <Step>
+    ### Selecione o modelo
+    Clique no modelo que deseja usar, como 'Informações de contato' ou 'Exemplo 2'.
+  </Step>
+  <Step>
+    ### Conclua a aplicação
+    Todas as perguntas e configurações do modelo serão aplicadas imediatamente ao formulário.
+  </Step>
+</Steps>
+
+<Callout title="Dica">
+Mesmo que você adapte o conteúdo ao projeto após carregar um modelo, o modelo original na biblioteca permanecerá inalterado.
+</Callout>

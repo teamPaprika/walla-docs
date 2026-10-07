@@ -1,0 +1,415 @@
+---
+title: "API de respostas"
+description: "Consulte e gerencie formulários e respostas com a Walla Open API."
+plan: enterprise
+---
+
+## Guia da Walla Open API
+
+Use a Walla Open API para consultar e gerenciar dados de formulários e respostas programaticamente.
+
+## Informações de versão
+
+- **Versão atual da API:** v1
+- **Documentação Swagger:** [https://app.walla.my/open-api/doc](https://app.walla.my/open-api/doc)
+
+Alterações serão disponibilizadas em novas versões.
+
+## Configurar a autenticação da API
+### Gerar uma chave de API
+
+- Entre na Walla.
+- Acesse o visualizador de chaves de API ([https://app.walla.my/open-api/doc](https://app.walla.my/)).
+- Gere uma chave de API e guarde-a em um local seguro.
+### Método de autenticação
+
+A API da Walla usa autenticação por chave de API. Inclua o cabeçalho abaixo em todas as solicitações.
+
+```
+X-WALLA-API-KEY: {발급받은 API 키}
+```
+
+### URL base
+
+```
+https://app.walla.my/open-api/v1
+```
+
+## Endpoints da API
+### Espaços de trabalho
+#### Listar espaços de trabalho
+
+Retorna todos os espaços de trabalho aos quais você tem acesso.
+
+```
+GET /open-api/v1/workspaces
+```
+
+**Exemplo de resposta:**
+
+```
+{
+  "success": true,  "data": [    {      "id": "workspace_abc123",      "name": "마케팅팀 워크스페이스",
+      "teamId": "team_xyz789",      "createdAt": "2024-01-15T09:00:00Z",      "updatedAt": "2024-01-20T14:30:00Z"    }  ]}
+```
+
+#### Consultar detalhes de um espaço de trabalho
+
+Retorna os detalhes de um espaço de trabalho específico.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| workspaceId | Caminho | Sim | ID do espaço de trabalho |
+### Formulários (projetos)
+#### Listar todos os formulários
+
+Retorna os formulários de todos os espaços de trabalho aos quais você tem acesso.
+
+```
+GET /open-api/v1/forms
+```
+
+#### Listar formulários de um espaço de trabalho
+
+Retorna os formulários de um espaço de trabalho específico.
+
+```
+GET /open-api/v1/workspaces/{workspaceId}/forms
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| workspaceId | Caminho | Sim | ID do espaço de trabalho |
+#### Consultar detalhes de um formulário
+
+Retorna os detalhes de um formulário específico.
+
+```
+GET /open-api/v1/forms/{formId}
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| formId | Caminho | Sim | ID do formulário |
+
+**Exemplo de resposta:**
+
+```
+{
+  "success": true,  "data": {    "id": "form_abc123",    "title": "고객 만족도 조사",
+    "description": "서비스 이용 후 만족도를 평가해주세요",
+    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "creator": "user_123",    "isDeleted": false,    "createdAt": "2024-01-15T09:00:00Z",    "updatedAt": "2024-01-20T14:30:00Z"  }}
+```
+
+### Campos
+#### Listar campos de um formulário
+
+Retorna os campos publicados de um formulário específico.
+
+```
+GET /open-api/v1/forms/{formId}/fields
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| formId | Caminho | Sim | ID do formulário (ID do formulário publicado) |
+
+**Exemplo de resposta:**
+
+```
+{
+  "success": true,  "data": {    "fields": [      {        "id": "field_001",        "label": "이름을 입력해주세요",
+        "fieldType": "SHORT_TEXT",        "outputType": "string"      },      {        "id": "field_002",        "label": "만족도를 선택해주세요",
+        "fieldType": "RADIO",        "outputType": "string"      }    ]  }}
+```
+
+#### Consultar detalhes de um campo
+
+Retorna os detalhes de um campo específico, incluindo propriedades, regras de validação e esquema de saída.
+
+```
+GET /open-api/v1/forms/{formId}/fields/{fieldId}
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| formId | Caminho | Sim | ID do formulário |
+| fieldId | Caminho | Sim | ID do campo |
+#### Consultar esquemas de saída dos campos
+
+Retorna o mapeamento dos esquemas de saída por tipo de campo. Você pode verificar o formato dos dados retornados por cada tipo.
+
+```
+GET /open-api/v1/field-output-schemas
+```
+
+### Dados de respostas
+#### Listar respostas
+
+Retorna uma lista paginada de respostas de um formulário específico. Use o parâmetro `customerKey` para filtrar as respostas de um cliente.
+
+```
+GET /open-api/v1/forms/{formId}/responses
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| formId | Caminho | Sim | ID do formulário |
+| customerKey | Consulta | Não | Filtrar pela chave do cliente (somente respostas com esse customerKey) |
+| page | Consulta | Não | Número da página (a partir de 1; padrão: 1) |
+| limit | Consulta | Não | Respostas por página (máximo: 100; padrão: 20) |
+
+**Exemplo de resposta:**
+
+```
+{
+  "success": true,  "data": {    "responses": [      {        "responseId": "resp_abc123",        "customerKey": "customer_001",        "submittedAt": "2024-01-20T14:30:00Z",        "field_001": "홍길동",
+        "field_002": "매우 만족",
+        "hidden-field_utm": "facebook"      }    ],    "pagination": {      "page": 1,      "limit": 20,      "totalCount": 150,      "totalPages": 8    }  }}
+```
+
+**Exemplo de filtro por customerKey:**
+
+```
+GET /open-api/v1/forms/{formId}/responses?customerKey=customer_001
+```
+
+#### Consultar uma resposta
+
+Retorna os detalhes de uma resposta específica.
+
+```
+GET /open-api/v1/forms/{formId}/responses/{responseId}
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| formId | Caminho | Sim | ID do formulário |
+| responseId | Caminho | Sim | ID da resposta |
+
+**Exemplo de resposta:**
+
+```
+{
+  "success": true,  "data": {    "responseId": "resp_abc123",    "formId": "form_abc123",    "teamId": "team_xyz789",    "workspaceId": "workspace_abc123",    "response": {      "field_001": "홍길동",
+      "field_002": "매우 만족",
+      "hidden-field_utm": "facebook"    },    "submittedAt": "2024-01-20T14:30:00Z",    "customerKey": "customer_001",    "startedAt": "2024-01-20T14:25:00Z"  }}
+```
+
+### Form Delivery (envio)
+> **Observação:** Form Delivery está disponível apenas no ambiente ONPREM. Não está disponível no ambiente SaaS.
+#### Enviar um formulário
+
+Envia um projeto específico (formulário publicado) aos destinatários. Formulários não publicados não podem ser enviados.
+
+```
+POST /open-api/v1/forms/{formId}/delivery
+```
+
+**Parâmetros:**
+
+| Nome | Local | Obrigatório | Descrição |
+| --- | --- | --- | --- |
+| formId | Caminho | Sim | ID do formulário |
+
+**Corpo da solicitação:**
+
+```
+{
+  "recipients": [    {      "customerKey": "customer_001",      "email": "user@example.com",      "phoneNumber": "010-1234-5678"    }  ],  "subject": "설문이 도착했습니다.",
+  "message": "설문 링크를 확인하세요."
+}
+```
+
+| Campo | Obrigatório | Descrição |
+| --- | --- | --- |
+| recipients | Sim | Lista de destinatários (array) |
+| recipients[].customerKey | Sim | Chave de identificação do cliente |
+| recipients[].email | Não | Endereço de e-mail |
+| recipients[].phoneNumber | Não | Número de telefone |
+| subject | Não | Assunto do e-mail (padrão: "설문이 도착했습니다.", que significa "Você recebeu um formulário.") |
+| message | Não | Mensagem de envio |
+#### Listar destinatários
+
+Retorna todos os destinatários de um projeto específico.
+
+```
+GET /open-api/v1/forms/{formId}/delivery
+```
+
+#### Consultar o status dos destinatários
+
+Retorna o andamento de destinatários específicos.
+
+```
+POST /open-api/v1/forms/{formId}/delivery/status
+```
+
+**Corpo da solicitação:**
+
+```
+{
+  "customerKeys": ["customer_001", "customer_002"]}
+```
+
+**Exemplo de resposta:**
+
+```
+{
+  "success": true,  "data": [    {      "id": "delivery_abc123",      "formId": "form_abc123",      "customerKey": "customer_001",      "email": "user@example.com",      "status": "RESPONDED",      "lastSentAt": "2024-01-20T10:00:00Z",      "createdAt": "2024-01-19T09:00:00Z"    }  ]}
+```
+
+**Valores do status de envio:**
+
+| Status | Descrição |
+| --- | --- |
+| NOT_SENT | Ainda não enviado |
+| SENT | Enviado |
+| OPENED | Link aberto |
+| RESPONDED | Resposta concluída |
+### Estrutura dos dados de resposta
+#### Formato das respostas por tipo de campo
+
+O formato de cada valor depende do tipo de campo.
+
+| Tipo de campo | Formato de saída | Exemplo |
+| --- | --- | --- |
+| SHORT_TEXT, LONG_TEXT | string | `"홍길동"` |
+| DATE, NUMBER | string | `"2024-01-20"`, `"42"` |
+| EMAIL, PHONE_NUMBER, ADDRESS | string | `"user@example.com"` |
+| FILE_UPLOAD, IMAGE_UPLOAD, VIDEO_UPLOAD | string | `"https://...file1.pdf"` |
+| RADIO, DROPDOWN | string[] | `["옵션1"]` |
+| CHECKBOX, DROPDOWN_MULTI, PICTURE_CHOICE, LINEAR | string[] | `["옵션1", "옵션2"]` |
+| RADIO_GRID, CHECKBOX_GRID | Record&lt;string, string[]&gt; | `{ "행1": ["열1"] }` |
+| GEOLOCATION | object | `{ "latitude": "37.5665", "longitude": "126.9780" }` |
+| TABLE | object | `{ "행1": { "열1": "값1" } }` |
+| CUSTOM | Conforme o `outputSchema` da versão do campo personalizado | `{ "score": 85 }` |
+
+Consulte a API `GET /open-api/v1/field-output-schemas` para obter os esquemas de saída detalhados.
+
+#### Campos ocultos
+
+Os campos ocultos são incluídos nos dados da resposta com chaves no formato `hidden-{ID do campo}`.
+
+```
+{
+  "hidden-field_abc123": "facebook",  "hidden-field_xyz789": "spring_campaign"}
+```
+
+Os valores dos campos ocultos são passados por parâmetros de URL.
+
+```
+https://walla.my/v/{formId}?utm_source=facebook&utm_campaign=spring_campaign
+```
+
+#### customerKey
+
+O `customerKey` é gerado automaticamente pelo Form Delivery para identificar cada destinatário.
+
+- É usado para rastrear o status do envio (enviado → aberto → respondido).
+- Pode ser usado para filtrar os dados de respostas.
+- Pode ficar vazio quando o Form Delivery não é utilizado.
+## Respostas de erro
+
+Se uma solicitação à API falhar, serão retornados um código de status HTTP e uma mensagem de erro.
+
+| Código de status | Descrição |
+| --- | --- |
+| 400 | Solicitação inválida (erro de parâmetros, por exemplo) |
+| 401 | Falha na autenticação (chave de API ausente ou inválida) |
+| 403 | Sem permissão (acesso ao recurso negado) |
+| 404 | Recurso não encontrado |
+| 500 | Erro do servidor |
+
+**Exemplo de resposta de erro:**
+
+```
+{
+  "error": "Form not found or not published"}
+```
+
+## Exemplos de uso
+### 1. Integração de respostas usando customerKey
+
+
+- Use o ID do cliente no sistema externo como `customerKey` da Walla.
+- Consulte as respostas desse cliente com `GET /forms/{formId}/responses?customerKey={customerKey}`.
+- Se `totalCount` for maior que 0, há respostas.
+### 2. Listar respostas de um formulário
+
+```
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?page=1&limit=50" \  -H "X-WALLA-API-KEY: your_api_key"
+```
+
+### 3. Consultar uma resposta específica
+
+```bash
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses/{responseId}" \  -H "X-WALLA-API-KEY: your_api_key"
+```
+
+### 4. Filtrar respostas por customerKey
+
+```bash
+curl -X GET "https://app.walla.my/open-api/v1/forms/{formId}/responses?customerKey=customer_001" \  -H "X-WALLA-API-KEY: your_api_key"
+```
+
+### 5. Enviar um formulário com Form Delivery
+
+```bash
+curl -X POST "https://app.walla.my/open-api/v1/forms/{formId}/delivery" \  -H "X-WALLA-API-KEY: your_api_key" \  -H "Content-Type: application/json" \  -d '{    "recipients": [      {        "customerKey": "customer_001",        "email": "user@example.com"      }    ],    "subject": "고객 만족도 조사",
+    "message": "소중한 의견을 남겨주세요."
+  }'
+```
+
+## Tipos de campo
+| Tipo | Nome |
+| --- | --- |
+| RADIO | Múltipla escolha |
+| CHECKBOX | Múltipla escolha (seleção múltipla) |
+| PICTURE_CHOICE | Escolha por imagem |
+| DROPDOWN | Lista suspensa |
+| DROPDOWN_MULTI | Lista suspensa (seleção múltipla) |
+| LINEAR | Escala linear |
+| RADIO_GRID | Grade de múltipla escolha |
+| CHECKBOX_GRID | Grade de múltipla escolha (seleção múltipla) |
+| PRIVACY_POLICY_INFORMATION | Coleta de dados pessoais |
+| SHORT_TEXT | Texto curto |
+| LONG_TEXT | Texto longo |
+| NUMBER | Número |
+| TABLE | Tabela |
+| SECRETS | Informações confidenciais |
+| DESCRIPTION | Descrição |
+| WEBSITE_LINK | Incorporação |
+| DATE | Data |
+| TIME | Horário |
+| EMAIL | E-mail |
+| ADDRESS | Endereço |
+| PHONE_NUMBER | Número de telefone |
+| FILE_UPLOAD | Upload de arquivo |
+| IMAGE_UPLOAD | Captura de foto |
+| VIDEO_UPLOAD | Captura de vídeo |
+| GEOLOCATION | Registro de localização |
+| TOSS_PAYMENTS | Toss Payments |
+| CUSTOM | Campo personalizado |
+| REJECT | Desqualificação |
+| ENDING_DESCRIPTION | Campo final (página de encerramento) |
+| ENDING_REDIRECT | Campo final (redirecionamento para URL) |
+| SUBMIT | Enviar |

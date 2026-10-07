@@ -1,0 +1,319 @@
+---
+title: "Automação (webhooks)"
+description: "A automação envia dados imediatamente para serviços externos, como webhooks, Slack, Discord e Gmail, assim que uma resposta é enviada ao seu formulário."
+plan:
+---
+## Criar um webhook personalizado
+
+Depois de criar a automação, abra a tela de edição detalhada para configurações mais avançadas.
+<Steps>
+  <Step>
+    ### Acesse a página Conectar
+    Na parte superior da edição do projeto, clique em `Conectar`.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Adicione uma automação
+    Na seção 'Minhas automações', clique em `Nova automação` para começar.
+
+    <img src="/images/guides/integrate/automation-new-custom.png" alt="Adicionar uma automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Crie a automação
+    Na janela, preencha o nome e as demais informações, selecione o tipo de gatilho e clique em `Criar`.
+	    - **Nome da automação**: um nome para identificar a automação.
+	    - **Tipo de gatilho**: condição que inicia a automação, como envio do formulário ou desqualificação do participante. O tipo de gatilho não pode ser alterado após a criação.
+
+    <img src="/images/guides/integrate/automation-create-custom.png" alt="Criar uma automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Configure os caminhos (lógica)
+    Defina filtros para enviar notificações em condições específicas, como uma resposta de múltipla escolha igual a A ou um texto curto contendo B.
+	    - Clique em `+` no canto superior direito para criar vários caminhos. Se nenhum módulo de automação for conectado individualmente a cada caminho, será usado o caminho padrão, com notificações para todos os envios de respostas.
+	    - Clique em `+ Adicionar condição` abaixo de cada caminho para configurar condições combinadas.
+
+    <img src="/images/guides/integrate/automation-route-custom.png" alt="Configuração dos caminhos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Informe o endereço do webhook
+    **Endereço do webhook**: endereço do servidor que receberá os dados.
+
+    <img src="/images/guides/integrate/automation-webhook-url.png" alt="Endereço do webhook" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Defina o formato de envio do webhook
+	    Escolha entre o formato automático (corpo padrão do webhook) e um corpo personalizado. No automático, salve e ative para começar a usar. No personalizado, continue nas próximas etapas.
+	    - **Automático (padrão)**: os dados de resposta do formulário são incluídos automaticamente no payload. Abra `Prévia` para conferir o formato exato que será enviado.
+	    - **Personalizado**: defina o método da solicitação, os Headers e o Body.
+
+    <img src="/images/guides/integrate/automation-webhook-format.png" alt="Formato de envio do webhook" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Configure o método e os Headers
+	    - **Método da solicitação**: POST / GET / PUT etc.
+	    - **Configurações de Headers**: adicione `Content-Type`, token de autenticação e outros cabeçalhos, se necessário.
+
+    <img src="/images/guides/integrate/automation-headers.png" alt="Configuração do método da solicitação e dos Headers" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+    <Step>
+    ### Edite o Body
+	    Personalize o texto da mensagem ou insira valores de resposta (`{{responseKey}}`) como variáveis.
+
+    <img src="/images/guides/integrate/automation-body.png" alt="Edição do Body" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Configure a autenticação (opcional)
+    Para proteger o webhook, escolha um método de autenticação como `Bearer Token`, `Basic Auth` ou `API Key`.
+
+    <img src="/images/guides/integrate/automation-auth.png" alt="Configuração da autenticação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Inclua valores de campos ocultos (opcional)
+	    Nas configurações avançadas, ative `Incluir valores de campos ocultos` para enviar também os valores coletados por [Rastreamento (campos ocultos)](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields). Use isso para enviar a serviços externos dados como origem do acesso ou grupo de clientes. Quando desativado, apenas as respostas sem campos ocultos são enviadas.
+
+    <img src="/images/guides/integrate/automation-hidden-fields.png" alt="Configuração para incluir valores de campos ocultos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Salve e ative
+    Salve as alterações e ative a automação para que o webhook funcione.
+
+    <img src="/images/guides/integrate/automation-save-activate.png" alt="Salvar alterações e ativar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+## Integração com Slack — notificações ao enviar respostas
+
+<Steps>
+ <Step>
+    ### Clique em Create New App
+    Em [https://api.slack.com/apps](https://api.slack.com/apps), clique em 'Create New App'.
+
+    <img src="/images/guides/integrate/slack-01-create-app.png" alt="Create an App" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione From scratch
+    Selecione 'From scratch'.
+
+    <img src="/images/guides/integrate/slack-02-from-scratch.png" alt="Seleção de From scratch" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Defina o nome do app e o espaço de trabalho
+    Em 'App Name', informe o nome do aplicativo e selecione o espaço de trabalho em que ele funcionará.
+
+    <img src="/images/guides/integrate/slack-03-name-workspace.png" alt="Nome do app e espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Ative Incoming Webhooks
+    Ative 'Incoming Webhooks' e clique em 'Add New Webhook'.
+
+    <img src="/images/guides/integrate/slack-04-incoming-webhooks.png" alt="Ativação de Incoming Webhooks" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione o canal
+    Selecione o canal do espaço de trabalho em que o webhook será usado.
+
+    <img src="/images/guides/integrate/slack-05-select-channel.png" alt="Seleção do canal" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Copie a Webhook URL
+    Em 'Install App', copie a Webhook URL.
+
+    <img src="/images/guides/integrate/slack-06-copy-webhook-url.png" alt="Cópia da Webhook URL" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+<Step>
+    ### Acesse a página Conectar
+    Na parte superior da edição do projeto, clique em `Conectar`.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Adicione uma automação do Slack
+    Na seção 'Minhas automações', clique em `Slack` para começar.
+
+    <img src="/images/guides/integrate/slack-07-automation-page.png" alt="Adicionar uma automação do Slack" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Crie a automação
+    Na janela, preencha o nome e as demais informações, selecione o tipo de gatilho e clique em `Criar`.
+	    - **Nome da automação**: um nome para identificar a automação.
+	    - **Tipo de gatilho**: condição que inicia a automação, como envio do formulário ou desqualificação do participante. O tipo de gatilho não pode ser alterado após a criação.
+	    - **URL do webhook**: endereço do servidor do Slack que receberá os dados. Veja como configurar a URL do webhook do Slack [aqui](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/).
+	    - **Body Preset**: define o formato das notificações do webhook no Slack.
+
+    <img src="/images/guides/integrate/slack-09-create.png" alt="Criação de uma automação de notificações do Slack" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Configure os caminhos (lógica)
+    Defina filtros para enviar notificações em condições específicas, como uma resposta de múltipla escolha igual a A ou um texto curto contendo B.
+	    - Clique em `+` no canto superior direito para criar vários caminhos. Se nenhum módulo de automação for conectado individualmente a cada caminho, será usado o caminho padrão, com notificações para todos os envios de respostas.
+	    - Clique em `+ Adicionar condição` abaixo de cada caminho para configurar condições combinadas.
+
+    <img src="/images/guides/integrate/slack-10-route.png" alt="Configuração dos caminhos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Salve e ative
+    Salve as alterações e ative a automação para que o webhook funcione.
+
+    <img src="/images/guides/integrate/slack-11-save-activate.png" alt="Salvar alterações e ativar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Integração com Discord — notificações ao enviar respostas
+
+<Steps>
+ <Step>
+    ### Abra a edição do canal no Discord
+    Clique na engrenagem à direita do nome do canal.
+
+    <img src="/images/guides/integrate/discord-01-edit-channel.png" alt="Edição do canal do Discord" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Crie um webhook e copie a URL
+    Na aba de integrações, clique em `Novo webhook` para criá-lo e depois em `Copiar URL do webhook`.
+
+    <img src="/images/guides/integrate/discord-02-new-webhook.png" alt="Criação do webhook e cópia da URL" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+<Step>
+    ### Acesse a página Conectar
+    Na parte superior da edição do projeto, clique em `Conectar`.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Adicione uma automação do Discord
+    Na seção 'Minhas automações', clique em `Discord` para começar.
+
+    <img src="/images/guides/integrate/discord-04-automation-page.png" alt="Adicionar uma automação do Discord" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Crie a automação
+    Na janela, preencha o nome e as demais informações, selecione o tipo de gatilho e clique em `Criar`.
+	    - **Nome da automação**: um nome para identificar a automação.
+	    - **Tipo de gatilho**: condição que inicia a automação, como envio do formulário ou desqualificação do participante. O tipo de gatilho não pode ser alterado após a criação.
+	    - **URL do webhook**: endereço do servidor do Discord que receberá os dados.
+	    - **Body Preset**: define o formato das notificações do webhook no Discord.
+
+    <img src="/images/guides/integrate/discord-05-create.png" alt="Criação de uma automação de notificações do Discord" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Configure os caminhos (lógica)
+    Defina filtros para enviar notificações em condições específicas, como uma resposta de múltipla escolha igual a A ou um texto curto contendo B.
+	    - Clique em `+` no canto superior direito para criar vários caminhos. Se nenhum módulo de automação for conectado individualmente a cada caminho, será usado o caminho padrão, com notificações para todos os envios de respostas.
+	    - Clique em `+ Adicionar condição` abaixo de cada caminho para configurar condições combinadas.
+
+    <img src="/images/guides/integrate/discord-06-route.png" alt="Configuração dos caminhos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Salve e ative
+    Salve as alterações e ative a automação para que o webhook funcione.
+
+    <img src="/images/guides/integrate/discord-07-save-activate.png" alt="Salvar alterações e ativar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Integração com Gmail — e-mails ao enviar respostas
+
+<Steps>
+  <Step>
+    ### Acesse a página Conectar
+    Na parte superior da edição do projeto, clique em `Conectar`.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)"}} />
+  </Step>
+  <Step>
+    ### Adicione uma automação
+    Na seção 'Minhas automações', clique em `Gmail` para começar.
+
+    <img src="/images/guides/integrate/gmail-02-automation-page.png" alt="Adicionar uma automação do Gmail" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Crie a automação
+    Na janela, preencha o nome e as demais informações, selecione o tipo de gatilho e clique em `Criar`.
+	    - **Nome da automação**: um nome para identificar a automação.
+	    - **Tipo de gatilho**: condição que inicia a automação, como envio do formulário ou desqualificação do participante. O tipo de gatilho não pode ser alterado após a criação.
+	    - **Remetente**: conta Google usada para enviar pelo Gmail. Selecione uma conta já conectada ao espaço de trabalho ou entre com uma nova conta Google.
+
+    <img src="/images/guides/integrate/gmail-03-create.png" alt="Criação de uma automação de envio pelo Gmail" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Configure os caminhos (lógica)
+    Defina filtros para enviar notificações em condições específicas, como uma resposta de múltipla escolha igual a A ou um texto curto contendo B.
+	    - Clique em `+` no canto superior direito para criar vários caminhos. Se nenhum módulo de automação for conectado individualmente a cada caminho, será usado o caminho padrão, com notificações para todos os envios de respostas.
+	    - Clique em `+ Adicionar condição` abaixo de cada caminho para configurar condições combinadas.
+
+    <img src="/images/guides/integrate/gmail-04-route.png" alt="Configuração dos caminhos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Defina o remetente
+	    Selecione a conta Google usada para o envio e informe o nome do remetente.
+
+    <img src="/images/guides/integrate/gmail-05-sender.png" alt="Definição do remetente" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Defina os destinatários
+	    - Informe as contas que receberão o e-mail.
+	    - Digite os endereços diretamente ou use referências a valores (@) para defini-los dinamicamente.
+	    - Para adicionar vários endereços, separe-os por vírgula (,), espaço ou Enter.
+	    - Algumas referências predefinidas, como responseKey e timestamp, não podem ser usadas como endereços de e-mail.
+	    - Recomendamos usar um campo de e-mail como referência. Um formato inválido pode causar falha no envio.
+
+    <img src="/images/guides/integrate/gmail-06-recipient.png" alt="Definição dos destinatários" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Defina Cc, Cco e o e-mail de resposta
+	    - Informe as contas que receberão cópias, cópias ocultas ou respostas.
+	    - Digite os endereços diretamente ou use referências a valores (@) para defini-los dinamicamente.
+	    - Para adicionar vários endereços, separe-os por vírgula (,), espaço ou Enter.
+	    - Algumas referências predefinidas, como responseKey e timestamp, não podem ser usadas como endereços de e-mail.
+
+    <img src="/images/guides/integrate/gmail-07-cc-bcc.png" alt="Configuração de Cc, Cco e e-mail de resposta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Inclua valores de campos ocultos (opcional)
+	    Nas configurações avançadas, ative `Incluir valores de campos ocultos` para incluir no e-mail os valores coletados por [Rastreamento (campos ocultos)](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields). Quando desativado, apenas as respostas sem campos ocultos são usadas.
+	    <Callout type="warning" title="Atenção">
+    Campos ocultos podem conter dados que o participante não digitou, como origem do acesso e identificadores de clientes. Antes de ativar essa opção em e-mails enviados a participantes ou outros destinatários externos, confira quais valores serão incluídos.
+    </Callout>
+
+    <img src="/images/guides/integrate/gmail-09-hidden-fields.png" alt="Configuração para incluir valores de campos ocultos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+
+  </Step>
+    <Step>
+    ### Salve e ative
+    Salve as alterações e ative a automação para que o webhook funcione.
+
+    <img src="/images/guides/integrate/gmail-08-save-activate.png" alt="Salvar alterações e ativar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Testar um webhook
+
+Antes de ativar o webhook, faça um envio de teste para verificar se ele funciona corretamente.
+
+### 1. Testar com uma resposta existente
+<img src="/images/guides/integrate/test-01-dropdown.png" alt="Abrir o menu de teste" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+- Clique na `seta para baixo` ao lado de `Testar` para testar o webhook com respostas já enviadas. Selecione a resposta desejada e clique em `Executar teste`.
+<img src="/images/guides/integrate/test-02-existing-response.png" alt="Execução do teste com uma resposta existente" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+<Callout type="warning" title="Atenção">
+Se o destinatário da automação do Gmail for definido por um campo de e-mail, recomendamos testar com uma resposta existente para confirmar o recebimento corretamente.
+</Callout>
+
+
+### 2. Testar com valores de exemplo
+<img src="/images/guides/integrate/test-03-random-value.png" alt="Teste com valores de exemplo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+- Se ainda não houver respostas enviadas, clique em `Testar` para testar o webhook com valores de exemplo.
+
+## Reenviar um webhook (após falha no envio)
+
+<img src="/images/guides/integrate/webhook-resend.png" alt="Reenvio de webhook" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+- Se o envio do webhook falhar, você pode reenviá-lo.
+- Confira o motivo da falha no resumo do erro.
+	- Por exemplo, na automação do Gmail, 'At least one 'to' recipient is required' indica que nenhum destinatário foi informado, impedindo o envio.
+	- 'Webhook failed with status: 400' indica que o servidor recebeu a solicitação, mas a rejeitou como inválida (Bad Request), por um erro no formato dos dados enviados.
+### Como reenviar
+- **Tentar novamente com as configurações originais**: usa as configurações salvas no momento da execução. É útil para repetir nas mesmas condições, sem alterar configurações. Use essa opção se a falha foi causada por um erro temporário no servidor.
+- **Reenviar com as configurações atuais**: usa a configuração de automação salva atualmente. É útil depois de salvar alterações. Se o erro foi causado por um destinatário ausente ou por formato de dados inválido, corrija o problema e clique nessa opção.

@@ -1,0 +1,43 @@
+---
+title: "Campo de desqualificação"
+description: "Use o campo de desqualificação para encerrar o formulário sem coletar respostas que correspondam a determinadas condições. Ele facilita a filtragem de participantes e o controle do fluxo."
+plan:
+---
+
+<img src="/images/guides/manage-forms/rejection-field-example.png" alt="Exemplo de campo de desqualificação configurado no editor do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Características do campo de desqualificação
+
+- Quando o campo de desqualificação é exibido, a resposta não é salva.
+- Use o [editor de texto](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+- Use o [comando de barra (/)](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+- Útil para identificar quem deve ser excluído da coleta de respostas.
+  - Exemplos: pessoa fora do público-alvo ou prazo de resposta encerrado.
+
+## Como posicionar
+
+- Ao adicionar um campo de desqualificação, **é obrigatório configurar a lógica.**
+  - Na visualização padrão, todas as perguntas aparecem em uma página. Se o campo de desqualificação estiver no meio do formulário sem lógica, a pessoa poderá ser desqualificada assim que abrir a página.
+  - Na visualização por grupo, se ele estiver no início, a pessoa também poderá ser desqualificada assim que começar.
+  - Confira se a ramificação está configurada como no exemplo abaixo.
+
+<img src="/images/guides/manage-forms/rejection-field-logic.png" alt="Exemplo de lógica configurada para direcionar ao campo de desqualificação conforme uma condição" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Recomendamos adicionar uma `Quebra de página` antes do campo de desqualificação.
+
+## Exemplos de uso
+
+#### Exemplo 1. Selecionar o público por faixa etária
+  - **Condição**: `Pergunta de faixa etária` `Não é igual a` `10 a 19 anos`
+  - **Destino**: `Campo de desqualificação`
+  - **Resultado**: o formulário é encerrado imediatamente se a pessoa não tiver entre 10 e 19 anos.
+#### Exemplo 2. Avisar que o formulário está encerrado
+  - Para exibir seu próprio aviso de encerramento em vez da página padrão, mova o campo de desqualificação para a **primeira pergunta**.
+  - **Exemplo**: "Este formulário foi encerrado."
+
+<Callout type="warning" title="Atenção">
+- Não confunda o campo de desqualificação com o campo de encerramento.
+  - **Campo de encerramento**: exibe uma página ou redireciona para uma URL **após** o envio da resposta.
+  - **Campo de desqualificação**: encerra o formulário **durante** o preenchimento, sem coletar o registro.
+- Respostas desqualificadas não podem ser consultadas nem recuperadas. Revise as condições com cuidado.
+</Callout>

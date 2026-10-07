@@ -1,0 +1,154 @@
+---
+title: "Configurar a lógica"
+description: "A lógica controla quais perguntas aparecem a seguir com base nas respostas. Em vez de seguir apenas uma sequência fixa, o formulário pode levar o respondente por diferentes caminhos conforme as condições."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## O que é lógica?
+
+- A lógica define "qual será a próxima pergunta conforme a resposta".
+- O caminho padrão representa o fluxo comum por onde passam os respondentes. (É um conceito diferente de 'resposta obrigatória'.)
+
+<img src="/images/guides/create-forms/logic-concept.png" alt="Comparação entre um formulário comum sem lógica e um formulário Walla com lógica configurada" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Adicionar lógica
+
+<Steps>
+  <Step>
+    ### Acesse as configurações de lógica
+    No editor do projeto, clique no botão `Lógica` para abrir a tela de configuração.
+
+    <img src="/images/guides/create-forms/logic-button.png" alt="Botão Lógica no canto superior direito do editor do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Entenda as condições e o destino
+    A lógica é composta por duas partes: 'Condição' e 'Ir para'.
+
+    <img src="/images/guides/create-forms/logic-condition-action.png" alt="Áreas de condição e destino da lógica" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Defina a condição
+    1. **Selecione a pergunta de referência** – Escolha a pergunta cuja resposta será usada como base.
+    2. **Selecione a condição** – Escolha o tipo de condição. As condições incluem comparações de texto/valor, opções, números e datas. Veja os detalhes em [Tipos de condição](#tipos-de-condição) abaixo.
+    3. **Selecione a opção ou resposta** – Defina quais respostas acionam a condição.
+       - Você pode selecionar várias respostas ao mesmo tempo.
+
+    <img src="/images/guides/create-forms/logic-condition.png" alt="Área de condição com seleção da pergunta de referência, da condição e das opções" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Adicione várias condições
+    - Clique em `+ Adicionar nova condição` para combinar condições.
+    - Ao combinar condições, escolha uma das opções abaixo.
+      - **AND**: a lógica é acionada apenas se ambas as condições forem atendidas.
+      - **OR**: a lógica é acionada se pelo menos uma das condições for atendida.
+
+    <img src="/images/guides/create-forms/logic-condition-multiple.png" alt="Adição de nova condição e seleção de combinação AND/OR" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Defina o destino
+    - Depois de configurar as condições, selecione o campo para o qual o respondente será direcionado.
+    - Com a configuração concluída, quem atender às condições irá diretamente para a pergunta definida.
+
+    <img src="/images/guides/create-forms/logic-action.png" alt="Seleção do campo de destino na área Ir para da lógica" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Tipos de condição
+
+### Comparação de texto ou valor
+
+| Condição | Significado | Exemplo | Exemplo de resposta |
+| ------ | -------------- | ---------------- | ----------------- |
+| É igual a | O valor é exatamente igual | Se a resposta for `Seul` | Seul |
+| Não é igual a | O valor é diferente | Se a resposta não for `Seul` | Incheon |
+| Começa com | Começa com o valor especificado | Se a resposta começar com `010` | 010-1234-5678 |
+| Termina com | Termina com o valor especificado | Se a resposta terminar com `.com` | example<span>@</span>walla.com |
+| Contém texto | Inclui o texto especificado | Se a resposta contiver `Empresa` | Empresa Paprika Data Lab |
+| Não contém texto | Não inclui o texto especificado | Se a resposta não contiver `maçã` | Suco de uva |
+
+### Comparação de opções
+Use para verificar quais opções foram selecionadas em perguntas como múltipla escolha e caixas de seleção.
+
+| Condição | Significado | Exemplo |
+| -------- | --------------------- | ----------------------- |
+| Contém todas | Todas as opções especificadas foram selecionadas | Se `A` e `B` foram selecionadas |
+| Contém pelo menos uma | Pelo menos uma das opções especificadas foi selecionada | Se `A` ou `B` foi selecionada |
+| Não contém nenhuma | Nenhuma das opções especificadas foi selecionada | Se nem `A` nem `B` foram selecionadas |
+| Falta pelo menos uma | Pelo menos uma das opções especificadas não foi selecionada | Se faltar pelo menos uma entre `A` e `B` |
+
+
+### Comparação de números
+
+| Condição | Significado | Exemplo |
+| ----- | ------------ | ------------------------ |
+| Maior que | Maior que o valor de referência, sem incluí-lo | Se a idade for maior que `19` |
+| Maior ou igual a | Igual ou maior que o valor de referência | Se a idade for igual ou maior que `19` |
+| Menor que | Menor que o valor de referência, sem incluí-lo | Se a pontuação for menor que `60` |
+| Menor ou igual a | Igual ou menor que o valor de referência | Se a pontuação for igual ou menor que `60` |
+
+### Comparação de datas
+
+| Condição | Significado | Exemplo |
+| -------- | ----------------------- | --------------------- |
+| Antes de | Anterior à data de referência, sem incluí-la | Se for antes de `2026-01-01` |
+| Antes ou na data | Igual ou anterior à data de referência, incluindo-a | Se for em `2026-01-01` ou antes |
+| Depois de | Posterior à data de referência, sem incluí-la | Se for depois de `2026-01-01` |
+| Depois ou na data | Igual ou posterior à data de referência, incluindo-a | Se for em `2026-01-01` ou depois |
+
+## Configurar a lógica usando nós
+
+<Steps>
+  <Step>
+    ### Conheça os nós e as conexões
+    Na tela de lógica, cada pergunta aparece como um nó, e as linhas entre os nós mostram o fluxo. `Caminho padrão` indica o fluxo comum, enquanto ramificações numeradas, como `Lógica #1` e `Lógica #2`, indicam caminhos que dependem das condições.
+
+    <img src="/images/guides/create-forms/logic-node-overview.png" alt="Tela de nós da lógica com destaque para Caminho padrão e conexões de Lógica #1, #2 e #3" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Configure o caminho padrão
+    Clique no rótulo `Caminho padrão` do nó para abrir a lista `Próximo campo`. Pesquise um campo ou selecione-o na lista para definir o destino de quem não atender às condições.
+
+    <img src="/images/guides/create-forms/logic-node-default-move.png" alt="Lista de seleção e busca de Próximo campo aberta a partir do nó Caminho padrão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Edite as condições no nó de lógica
+    Clique em um rótulo de ramificação numerado, como `Lógica #1` ou `Lógica #2`, para expandir as condições. Edite a pergunta de referência, a condição de inclusão e as opções diretamente no nó, ou adicione uma `Nova condição`.
+
+    <img src="/images/guides/create-forms/logic-node-condition.png" alt="Edição da pergunta de referência e das opções na área expandida do nó Lógica #3" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Clique na conexão para editar diretamente
+    Depois de selecionar um campo, você também pode clicar diretamente na linha entre os nós para editar o fluxo, sem precisar clicar nos rótulos `Lógica` ou `Caminho padrão`.
+
+    <img src="/images/guides/create-forms/logic-node-line-edit.png" alt="Edição direta de um fluxo ao clicar na conexão entre nós, com o rótulo Lógica #1 destacado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Arraste para conectar os nós
+    Arraste o ponto de conexão na parte inferior de um nó até o nó de outra pergunta para ligar as duas e criar o fluxo. Ao desenhar uma nova conexão, o respondente seguirá esse caminho.
+
+    <img src="/images/guides/create-forms/logic-node-connect.png" alt="Criação de uma conexão ao arrastar o ponto de um nó até outra pergunta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Exemplos de uso da lógica
+
+- #### Exemplo 1. Ramificação por consentimento para uso de dados pessoais
+  - Condição: `Campo de consentimento para coleta de dados pessoais` = "Concordo"
+  - Ir para: a pergunta posterior às `perguntas de coleta de dados pessoais (como o campo de telefone)`
+- #### Exemplo 2. Desqualificação por idade
+  - Condição: `Pergunta de idade (múltipla escolha ou lista suspensa)`, Não é igual a, "10 a 19 anos"
+  - Ir para: `Campo de desqualificação`
+- #### Exemplo 3. Direcionar para uma pergunta quando houver uma palavra-chave
+  - Condição: `Campo de texto curto ou longo`, Contém texto, "maçã"
+  - Ir para: `Campo de pagamento para venda de suco de maçã`
+
+## Outras configurações e cuidados
+
+- Se o fluxo for interrompido no meio, é provável que **haja um campo de desqualificação nessa posição ou uma regra incorreta em uma pergunta anterior**.
+
+  <img src="/images/guides/create-forms/logic-broken-conflict.png" alt="Conflito causado por uma regra que direciona para uma opção não encontrada" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Cada pergunta dentro de um grupo também pode ter sua própria lógica. Ao direcionar para uma pergunta específica, o formulário exibirá o grupo que contém essa pergunta.
+- Clique em `Redefinir` para excluir todas as regras de lógica da pergunta.

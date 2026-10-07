@@ -1,0 +1,57 @@
+---
+title: "Campo de encerramento"
+description: "O campo de encerramento é a última tela exibida após o envio da resposta. Personalize a página final do formulário ou configure um redirecionamento para um site."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Tipos de campo de encerramento
+
+### Página de encerramento
+   - Uma tela final personalizada exibida após o envio da resposta.
+   - Assim como no campo de descrição, você pode adicionar textos, imagens, tabelas e outros conteúdos.
+	   - Use o [editor de texto](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+	   - Use o [comando de barra (/)](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+   - Exemplos:
+     - "Seu formulário foi enviado. Se tiver dúvidas, entre em contato pelo e-mail [cs@walla.my](mailto:cs@walla.my)."
+     - "Código promocional exclusivo para respondentes: WALLA10"
+
+<img src="/images/guides/manage-forms/ending-page-example.png" alt="Menu de adição de campos de encerramento à esquerda e editor com a página de encerramento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+### Redirecionar para URL
+   - Direcione o respondente a uma página da web após o envio da resposta.
+   - Nas configurações do campo de encerramento no editor, insira a URL de destino.
+
+<img src="/images/guides/manage-forms/ending-url-redirect.png" alt="Menu de campos de encerramento à esquerda e campo de URL de destino no editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Como usar com lógica
+
+Para direcionar o respondente ao campo de encerramento após o envio, é necessário configurar a lógica.
+
+<Steps>
+  <Step>
+    ### Clique em Enviar
+    Na página de lógica, clique no botão 'Enviar'.
+
+    <img src="/images/guides/manage-forms/ending-logic-submit-click.png" alt="Botão Enviar selecionado na página de lógica" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Defina o campo de encerramento
+    Selecione o campo de encerramento de destino conforme as condições.
+
+    <img src="/images/guides/manage-forms/ending-logic-select-ending.png" alt="Seleção do campo de encerramento de destino na lista de busca de campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Publique
+    As regras só serão aplicadas ao formulário após clicar em `Publicar`.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atenção">
+Se você adicionar um campo de encerramento sem configurar a lógica, a página final padrão ("Sua resposta foi enviada com sucesso.") será exibida automaticamente.
+</Callout>
+
+<Callout title="Dicas">
+- Use campos de encerramento para agradecer, apresentar orientações adicionais ou divulgar promoções ao final do formulário.
+- Em campanhas de marca ou pesquisas de marketing, use o redirecionamento por URL para levar o respondente ao site ou à página de um evento.
+</Callout>

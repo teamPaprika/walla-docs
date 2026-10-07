@@ -1,0 +1,82 @@
+---
+title: "Aceitar apenas respondentes verificados"
+description: "Os respondentes não precisam criar uma conta Walla. Basta digitar uma senha compartilhada previamente ou um código de verificação recebido por e-mail ou telefone para começar a responder."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+
+## Proteção por senha
+
+<img src="/images/guides/manage-forms/logged-in-password-protection.png" alt="Proteção por senha ativada na aba Respondentes das configurações do formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+- Ao ativar a proteção e definir uma senha, os participantes precisarão digitar a senha compartilhada previamente para acessar o formulário (somente uma senha comum a todos é permitida).
+
+## Verificação do usuário
+<Steps>
+  <Step>
+    ### Abra as configurações do formulário
+    Clique no ícone `⚙️` no canto superior direito do editor para abrir as configurações do formulário.
+
+    <img src="/images/guides/manage-forms/duplicate-response-settings.png" alt="Botão de configurações do formulário no canto superior direito do editor do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+
+  <Step>
+    ### Acesse a aba de respostas
+    Selecione `Respondentes` na lista de abas à esquerda.
+
+    <img src="/images/guides/manage-forms/logged-in-response-tab.png" alt="Aba Respondentes destacada nas configurações do formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+
+  <Step>
+    ### Ative a verificação do usuário
+    Ative `Verificação do usuário` na seção `Verificação`. As opções de método de verificação aparecerão.
+
+    <img src="/images/guides/manage-forms/logged-in-user-authentication.png" alt="Verificação do usuário ativada na aba Respondentes das configurações do formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    |Método de verificação|Etapas para o respondente|
+|---|---|
+|`E-mail`|Digitar o endereço de e-mail → digitar o código recebido por e-mail|
+|`Telefone`|Digitar o número de telefone → digitar o código recebido por SMS|
+  </Step>
+
+  <Step>
+    ### Configuração concluída
+    Apenas pessoas que concluíram a verificação podem acessar o formulário.
+  </Step>
+</Steps>
+
+## Permitir apenas respondentes específicos
+<img src="/images/guides/manage-forms/logged-in-specific-respondents.png" alt="Configuração para permitir apenas e-mails e domínios específicos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+### Permitir e-mails e domínios
+- Ative `Permitir e-mails ou domínios específicos` e preencha o campo.
+
+	- Para permitir um endereço específico: `user@example.com`
+	- Para permitir um domínio inteiro: `@example.com`
+		- O formato de domínio é útil para formulários destinados a todos os funcionários de uma empresa.
+
+	- Se o campo ficar vazio, todos os e-mails serão permitidos.
+### Permitir números de telefone
+- Ative `Permitir números de telefone específicos` e digite os números com o código do país.
+- Se o campo ficar vazio, todos os números serão permitidos.
+
+## Alterar a mensagem da tela de verificação
+- Uma mensagem padrão aparece na tela de verificação do respondente. Para escrever a sua, ative `Aviso na tela de verificação` no topo da aba Respondentes.
+- Se a opção estiver desativada, será exibida a mensagem padrão.
+- A mensagem aparece neste local.
+
+<img src="/images/guides/manage-forms/logged-in-auth-screen-message.png" alt="Aviso na tela de verificação ativada na aba Respondentes das configurações do formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/manage-forms/logged-in-email-verification-screen.png" alt="Tela exibida ao respondente informando que a verificação por e-mail é necessária" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+
+## Aceitar uma resposta por usuário verificado
+- A verificação, por si só, permite que a mesma pessoa responda várias vezes. Para aceitar apenas uma resposta por pessoa, ative também `Uma resposta por usuário verificado` na seção `Respostas duplicadas`.
+- Cada e-mail ou telefone verificado poderá responder uma única vez.
+- Saiba mais em [Limitar respostas duplicadas](https://docs.walla.my/pt-BR/docs/help-center/manage-forms/preventing-duplicate-responses).
+
+<img src="/images/guides/manage-forms/logged-in-once-per-user.png" alt="Verificação do usuário e Uma resposta por usuário verificado ativadas juntas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Callout title="Saiba mais">
+Se você ativar `Uma resposta por usuário verificado` sem um método de verificação, a verificação por e-mail também será ativada. Ao desativar `Verificação do usuário`, `Uma resposta por usuário verificado` também é desativada. Se desativar e reativar a verificação, confira se a restrição de duplicidade continua ativa.
+</Callout>

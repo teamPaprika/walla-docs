@@ -1,0 +1,61 @@
+---
+title: "Campo de upload de arquivos"
+description: "Permita que o respondente envie arquivos do próprio dispositivo. Útil para receber fotos, documentos, vídeos e outros tipos de arquivo."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<img src="/images/guides/manage-forms/file-upload-field-example.png" alt="Editor de formulário de candidatura a uma vaga com um campo de upload de arquivos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Como usar o campo de upload de arquivos
+
+<Steps>
+  <Step>
+    ### Selecione o arquivo
+    O respondente clica em `Selecionar arquivo` e escolhe o arquivo que deseja enviar.
+  </Step>
+  <Step>
+    ### Conclua o upload
+    Após selecionar o arquivo, é necessário clicar em `Enviar este arquivo` para concluir o upload.
+  </Step>
+  <Step>
+    ### Envie a resposta
+    O arquivo só será salvo definitivamente após o envio da resposta. Portanto, depois de concluir o upload, o respondente também precisa enviar o formulário.
+  </Step>
+</Steps>
+
+## Limites de tamanho do upload
+
+- Plano Free: até 15 MB por campo
+- Plano Pro ou superior: até 500 MB por campo
+- No menu de configurações do canto inferior direito, você também pode definir o tamanho máximo permitido.
+  - O limite pode ser de até 15 MB no plano Free e de até 500 MB no plano Pro ou superior.
+
+## Opções disponíveis
+  - Preenchimento obrigatório
+  - Controle de acesso a arquivos sensíveis
+  - Exclusão automática de dados
+
+## Controle de acesso a arquivos sensíveis
+
+Ao ativar o controle de acesso a arquivos sensíveis, os arquivos ficam privados e podem ser acessados apenas por usuários com as permissões definidas. Cada acesso exige **uma justificativa**, e todos os acessos são registrados automaticamente no registro de atividades.
+
+<img src="/images/guides/manage-forms/sensitive-file-access-control-toggle.png" alt="Ativação do controle de acesso a arquivos sensíveis no campo de upload" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<img src="/images/guides/manage-forms/sensitive-file-access-control.png" alt="Confirmação da ativação do controle de acesso a arquivos sensíveis" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+
+- É necessário informar uma justificativa sempre que visualizar ou baixar um arquivo. A justificativa fica no registro de atividades.
+- Depois de ativado, o recurso não pode ser desativado.
+
+<Callout type="warning" title="Atenção">
+Ao mudar do plano Enterprise para o Free ou Pro, a visualização e o download de arquivos sensíveis ficam restritos.
+</Callout>
+
+- Na planilha de respostas e nas exportações, o link original é substituído por um link seguro de download. Esse campo é excluído do download de arquivos em lote.
+- Arquivos de respostas recebidas antes da ativação também são protegidos automaticamente. (A aplicação pode levar algum tempo.)
+
+<Callout type="warning" title="Atenção">
+Se o respondente concluir o upload, mas não enviar o formulário, o arquivo não será salvo.
+</Callout>

@@ -1,0 +1,153 @@
+---
+title: Gerenciar o painel de participantes
+description: Cadastre os destinatários dos formulários na aba Painéis de respondentes do espaço de trabalho e organize-os em grupos.
+plan: enterprise
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## O que é um painel de participantes?
+
+O painel é a lista de pessoas para quem você enviará formulários. Na aba **Painéis de respondentes** do espaço de trabalho, importe a lista em um arquivo CSV ou Excel e organize os participantes em grupos.
+
+<img src="/images/guides/workspace-panel/panel-overview.png" alt="Lista de participantes e gerenciamento de grupos na aba Painéis de respondentes do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+| Item | Descrição |
+| ---- | ------------------- |
+| Chave do cliente | Chave única que identifica o participante |
+| Nome | Nome do participante (mascarado por padrão) |
+| E-mail | E-mail do participante (mascarado por padrão) |
+| Telefone | Telefone do participante (mascarado por padrão) |
+| Grupos | Grupo ao qual o participante pertence |
+
+<Callout type="info" title="Mascaramento de dados pessoais">
+Os nomes, e-mails e telefones dos participantes são mascarados por padrão para proteger os dados pessoais. Para visualizar os dados completos, é necessário remover o mascaramento.
+</Callout>
+
+## Importar respondentes para o painel
+
+Cadastre vários participantes de uma só vez usando um arquivo CSV ou Excel.
+
+<Steps>
+  <Step>
+    ### Clique em Importar respondentes para o painel
+    Na aba Painéis de respondentes, clique em **Importar respondentes para o painel**.
+
+    <img src="/images/guides/workspace-panel/panel-upload-button.png" alt="Botão Importar respondentes para o painel no canto superior direito da aba Painéis de respondentes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione um grupo
+    **Selecione o grupo** dos participantes que serão importados. Esta etapa é opcional.
+
+    <img src="/images/guides/workspace-panel/panel-upload-group.png" alt="Seleção de grupo na janela de importação de participantes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione o arquivo
+    Clique em **Selecionar arquivo** e escolha um arquivo CSV ou Excel.
+    As linhas com erros no nome, e-mail, telefone ou outros dados serão excluídas da importação.
+
+    <img src="/images/guides/workspace-panel/panel-upload-valid.png" alt="Prévia dos dados válidos na janela de importação de participantes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/workspace-panel/panel-upload-invalid.png" alt="Erros nos dados inválidos na janela de importação de participantes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Conclua a importação
+    Confira os dados válidos e clique em **Importar respondentes para o painel**.
+
+    <img src="/images/guides/workspace-panel/panel-upload-submit.png" alt="Botão Importar respondentes para o painel no canto inferior direito da janela de importação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/workspace-panel/panel-upload-complete.png" alt="Seis participantes exibidos na lista após a importação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout type="warn" title="Formato do arquivo">
+- O nome é obrigatório, e você deve preencher pelo menos o e-mail ou o telefone.
+- Se o zero inicial do telefone desaparecer, formate a coluna como texto ou coloque `'` antes do número.
+- Se o formato do arquivo estiver incorreto, confira os erros na aba Dados inválidos.
+- Se precisar de um modelo, clique em **Baixar modelo**.
+</Callout>
+
+<Callout type="info" title="Método de envio disponível">
+Atualmente, o envio de formulários aos participantes está disponível apenas por e-mail.
+</Callout>
+
+## Gerenciar grupos
+
+Organize os participantes em grupos de acordo com suas necessidades.
+
+<Steps>
+  <Step>
+    ### Abra o gerenciamento de grupos
+    Na aba Painéis de respondentes, clique em `Gerenciar grupos`.
+
+    <img src="/images/guides/workspace-panel/panel-group-manage-button.png" alt="Botão Gerenciar grupos no canto superior direito da aba Painéis de respondentes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confira a lista de grupos
+    Veja os grupos existentes e o número de participantes em cada um.
+
+    <img src="/images/guides/workspace-panel/panel-group-list.png" alt="Lista de grupos e número de participantes na janela de gerenciamento de grupos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Crie ou edite um grupo
+    Clique em `Criar grupo` para adicionar um grupo ou use o botão de edição à direita para alterar o nome.
+
+    <img src="/images/guides/workspace-panel/panel-group-create.png" alt="Campo para digitar o nome de um novo grupo na janela de gerenciamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Exclua grupos
+    Selecione os grupos que deseja excluir e clique em `Excluir selecionados`.
+
+    <img src="/images/guides/workspace-panel/panel-group-delete.png" alt="Grupos selecionados e botão Excluir selecionados na janela de gerenciamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Remover o mascaramento
+
+Para visualizar os dados pessoais dos participantes, como nome, e-mail e telefone, remova o mascaramento.
+
+<Steps>
+  <Step>
+    ### Clique em Remover mascaramento
+    Na parte superior da aba Painéis de respondentes, clique em `Remover mascaramento`.
+
+    <img src="/images/guides/workspace-panel/panel-unmask-button.png" alt="Botão Remover mascaramento com ícone de olho na parte superior da aba Painéis de respondentes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Informe o motivo
+    Digite o motivo para remover o mascaramento.
+
+    <img src="/images/guides/workspace-panel/panel-unmask-reason.png" alt="Campo de justificativa na janela de remoção do mascaramento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confirme a remoção do mascaramento
+    Clique em `Remover mascaramento`.
+
+    <img src="/images/guides/workspace-panel/panel-unmask-submit.png" alt="Botão Remover mascaramento após preencher a justificativa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+Ao remover o mascaramento, a busca também é ativada.
+
+<Callout type="warn" title="Cuidados ao remover o mascaramento">
+A justificativa da remoção é salva nos registros de atividades. Evite acessar dados pessoais sem necessidade.
+</Callout>
+
+### Filtros e opções de visualização
+
+- **Filtrar**: veja apenas os participantes de um grupo específico.
+- **Exibição**: configure a ordem da lista e as informações exibidas.
+- **Ordenar**: por data de criação, em ordem crescente ou decrescente.
+- **Colunas**: ative ou desative a exibição de chave do cliente, nome, e-mail, telefone e grupo.
+
+## Enviar formulários aos participantes
+
+<a href="/pt-BR/docs/help-center/share-forms/sending-to-panel" className="not-prose group block rounded-2xl border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-6 no-underline hover:border-[hsl(193,100%,50%)]/40 transition-colors">
+  <div className="flex items-center justify-between gap-4">
+    <div>
+      <div className="text-lg font-bold text-[#1A2C5C] mb-1">Enviar formulários aos participantes →</div>
+      <div className="text-[#76809D] text-sm">Saiba como enviar formulários por e-mail aos participantes cadastrados.</div>
+    </div>
+  </div>
+</a>

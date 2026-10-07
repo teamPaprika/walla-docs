@@ -1,0 +1,49 @@
+---
+title: "Criar uma URL personalizada"
+description: "Na página de compartilhamento, personalize o link do formulário e defina o título, a descrição e a miniatura exibidos na prévia do link."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Criar uma URL personalizada
+
+- Por padrão, o link tem o formato `walla.my/a/parte-personalizada`.
+- A URL deve seguir as regras abaixo.
+
+### Como configurar
+
+<img src="/images/guides/share-forms/custom-url.png" alt="Personalização do link" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Steps>
+  <Step>
+    ### Acesse Personalização do link
+    Na página de compartilhamento, acesse a seção `Personalização do link`.
+  </Step>
+  <Step>
+    ### Informe e salve a URL personalizada
+    Informe a URL personalizada desejada e salve.
+  </Step>
+  <Step>
+    ### Selecione o modo de visualização
+    Escolha primeiro entre visualização padrão e agrupada e salve. A configuração é aplicada imediatamente, sem precisar clicar em Publicar.
+  </Step>
+</Steps>
+
+### Regras da URL personalizada
+
+- De 0 a 30 caracteres
+- Não pode conter barra (`/`)
+- Não pode conter apenas um ponto (`.`) ou dois pontos consecutivos (`..`)
+- Não são permitidos textos que correspondam à expressão regular `__.*__`
+
+## Configurar a prévia de compartilhamento
+
+<img src="/images/guides/share-forms/share-preview.png" alt="Configuração da prévia de compartilhamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Abaixo da URL personalizada, defina o título, a descrição e a miniatura do projeto.
+- As alterações entram em vigor ao salvar, sem necessidade de publicar novamente.
+- Se você não adicionar uma miniatura, será exibida uma imagem padrão com o título e o tema do projeto.
+<Callout type="warning" title="Atenção">
+Se um aplicativo como KakaoTalk ou Slack ainda mostrar o título ou a imagem antiga após a alteração, isso se deve ao cache do aplicativo ou navegador salvo durante os testes. Quem receber o link pela primeira vez verá a prévia atualizada normalmente.
+</Callout>

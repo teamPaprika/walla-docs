@@ -1,0 +1,79 @@
+---
+title: "Conectar com o Zapier"
+description: "A Walla se integra automaticamente a diversos serviços pelo Zapier. Siga as etapas abaixo para configurar 👇"
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Como configurar a integração
+
+<Steps>
+  <Step>
+    ### Selecione o Zapier e entre
+    No menu 'Conectar', selecione Zapier e entre na sua conta.
+
+    <img src="/images/guides/integrate/zapier-01-select.png" alt="Seleção do Zapier" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione Walla Form
+    Na etapa App & event, selecione 'Walla Form'.
+
+    <img src="/images/guides/integrate/zapier-02-walla-form.png" alt="Seleção de Walla Form" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Configure o evento
+    Defina Event como 'New Response'.
+
+    <img src="/images/guides/integrate/zapier-03-trigger-event.png" alt="Configuração do evento de gatilho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Entre na sua conta Walla
+    Em Account, entre na sua conta Walla.
+
+    <img src="/images/guides/integrate/zapier-04-account.png" alt="Login na conta Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione o projeto
+    Selecione a equipe, o espaço de trabalho e o projeto, nessa ordem, para definir de qual projeto deseja receber notificações de respostas.
+
+    <img src="/images/guides/integrate/zapier-05-project.png" alt="Seleção do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Selecione uma resposta para teste
+    Para testar o Zapier, selecione uma das respostas já coletadas e clique em `Continue with selected account`.
+
+    <img src="/images/guides/integrate/zapier-06-test-record.png" alt="Seleção de uma resposta para teste" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Conecte um serviço externo
+    Na próxima etapa Account, selecione o serviço externo que deseja conectar, como Google Sheets ou Slack.
+
+    <img src="/images/guides/integrate/zapier-06-external-service.png" alt="Conexão com um serviço externo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Configure as opções detalhadas
+    Configure as opções de envio do serviço externo, como Gmail ou Google Sheets.
+
+    <img src="/images/guides/integrate/zapier-08-details.png" alt="Configuração das opções detalhadas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Faça um teste
+    Clique em `Test Step` para testar ou em `Skip Test` para pular o teste.
+
+    <img src="/images/guides/integrate/zapier-09-test.png" alt="Teste da integração" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Salve
+    Depois do teste, clique em `Publish` para salvar.
+
+    <img src="/images/guides/integrate/zapier-10-publish.png" alt="Salvar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/integrate/zapier-10-published.png" alt="Zap publicado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+
+<Callout type="warning" title="Atenção ao integrar com o Google Sheets">
+Para conectar ao Google Sheets pelo Zapier, a primeira linha da planilha deve conter cabeçalhos (nomes das colunas). Esses cabeçalhos são necessários para registrar as respostas corretamente.
+</Callout>

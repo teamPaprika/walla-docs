@@ -1,0 +1,243 @@
+---
+title: "Configurar acesso apenas por incorporação"
+description: "Saiba como restringir o acesso direto pelo link do formulário e receber respostas apenas pelo formulário incorporado em um site."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+## Como configurar
+
+<Steps>
+  <Step>
+    ### Acesse a aba Incorporar
+    Clique no ícone `⚙️` no canto superior direito do editor para abrir as configurações do formulário e selecione `Incorporar` na lista de abas à esquerda.
+
+    <img src="/images/guides/manage-forms/embed-only-step-1.png" alt="Aba Incorporar destacada nas configurações do formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  </Step>
+
+  <Step>
+    ### Ative o acesso apenas por incorporação
+    Ao ativar `Acesso apenas por incorporação`, você pode escolher entre três modos.
+
+|Modo|O que bloqueia|O que é necessário|Plano|
+|---|---|---|---|
+|Apenas sites permitidos|Incorporação em sites fora da lista permitida e acesso direto pelo link|Origin permitido|Pro|
+|Token assinado pelo site hospedeiro|O anterior + solicitações fora do navegador|Origin permitido, segredo de assinatura e integração com o servidor host|Enterprise|
+|Token assinado com identidade do membro|O anterior + respostas duplicadas por membro|O anterior + ID do membro no token|Enterprise|
+
+#### 1. Apenas sites permitidos
+
+Bloqueia a incorporação em sites não permitidos e o acesso direto pelo navegador. É a configuração mais simples.
+Porém, solicitações entre servidores podem imitar os mesmos cabeçalhos. Se precisar identificar quem está respondendo, use um dos modos com assinatura abaixo.
+
+<img src="/images/guides/manage-forms/embed-only-mode-allowed-sites.png" alt="Modo Apenas sites permitidos selecionado no acesso apenas por incorporação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+#### 2. Token assinado pelo site hospedeiro
+
+O formulário só abre com um token assinado pelo servidor. Isso também vale para solicitações fora do navegador. Imitar cabeçalhos não permite passar pela verificação.
+
+<img src="/images/guides/manage-forms/embed-only-mode-signed-token.png" alt="Modo Token assinado pelo site hospedeiro selecionado no acesso apenas por incorporação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+#### 3. Token assinado com identidade do membro
+
+Usa também o ID do membro presente no token para impedir respostas duplicadas por membro.
+Nesse modo, o resumo de respostas duplicadas na aba `Respondentes` também mostra o "ID de membro externo" como critério. Assim, cada membro pode responder uma única vez sem precisar de uma verificação separada por e-mail ou telefone.
+
+<img src="/images/guides/manage-forms/embed-only-mode-member-id.png" alt="Modo Token assinado pelo site hospedeiro e identificação de membro selecionado no acesso apenas por incorporação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Informe o origin permitido
+    Digite o endereço do site onde o formulário será incorporado.
+
+<img src="/images/guides/manage-forms/embed-only-origin.png" alt="Campo de origin permitido nas configurações de acesso apenas por incorporação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Informe apenas o esquema e o host. `https://your-site.com`
+- Não inclua uma barra no final nem um caminho. `https://your-site.com/survey` é inválido.
+
+<Callout type="warning" title="Atenção">
+No modo `Apenas sites permitidos`, é necessário adicionar pelo menos um origin para ativar a restrição. Se a lista estiver vazia, não haverá restrição. Confira esse ponto.
+</Callout>
+
+  </Step>
+  <Step>
+    ### Gere o segredo de assinatura
+    Ao selecionar um modo com assinatura, a seção `Segredo de assinatura` aparece. Esse é o valor que o servidor host usa para assinar os tokens.
+
+<img src="/images/guides/manage-forms/embed-only-secret.png" alt="Seção de segredo de assinatura nas configurações de acesso apenas por incorporação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+#### 1. Ao gerar pela primeira vez
+
+Ao clicar em `Gerar segredo`, o valor aparece na tela uma única vez. Clique imediatamente em `Copiar` e guarde-o em um local seguro, como uma variável de ambiente do servidor host.
+
+<Callout type="warning" title="Cuidado">
+Esse valor não será exibido novamente. Se não conseguir copiá-lo, será necessário gerar outro. Ao fazer isso, os tokens existentes deixarão de funcionar imediatamente.
+</Callout>
+
+#### 2. Ao gerar um novo segredo
+
+Se já houver um segredo, o botão muda para `Gerar novo segredo`. Ao clicar, uma janela de confirmação aparece.
+A geração de um novo segredo tem os seguintes efeitos.
+
+- Tokens assinados com o segredo atual são rejeitados imediatamente.
+- Você deve atualizar o segredo em todos os hosts que assinam tokens de incorporação.
+- Sessões já abertas continuam válidas até expirar (no máximo 2 horas).
+
+Prepare a implantação do servidor host antes de gerar o novo segredo. Se a ordem estiver incorreta, os respondentes poderão ficar sem acesso ao formulário durante a transição.
+  </Step>
+
+
+
+</Steps>
+
+
+## Integração com o servidor host
+
+Nos modos com assinatura, o servidor host deve gerar um token JWT de curta duração para cada visitante e passá-lo à incorporação.
+
+|Termo|Significado|
+|---|---|
+|**Segredo de assinatura**|Um valor gerado para cada formulário. O servidor host usa esse valor para assinar tokens.|
+|**Token**|Um JWT de curta duração criado e assinado pelo servidor host para cada visitante.|
+
+### Armazenar o segredo de assinatura
+
+Salve o segredo copiado em uma variável de ambiente do servidor host.
+
+```bash
+WALLA_EMBED_SECRET=여기에_복사한_값
+```
+
+<Callout type="warning" title="Atenção">
+Não coloque o segredo de assinatura no pacote do navegador, no código do frontend ou no repositório. Se o valor for exposto, qualquer pessoa poderá falsificar tokens. Como cada formulário tem seu próprio segredo, armazene-os separadamente ao incorporar vários formulários.
+</Callout>
+
+### Assinar o token
+
+O servidor deve assinar um novo token sempre que um visitante abrir a página. Veja um exemplo com `jose`.
+
+```js
+import { SignJWT } from 'jose';
+
+const secret = new TextEncoder().encode(process.env.WALLA_EMBED_SECRET);
+
+const token = await new SignJWT({ email: user.email })
+  .setProtectedHeader({ alg: 'HS256' })
+  .setSubject(user.id)          // Obrigatório no modo de identificação de membro
+  .setAudience('{formId}')      // ID do formulário Walla
+  .setExpirationTime('5m')
+  .sign(secret);
+```
+
+No modo `Token assinado pelo site hospedeiro`, `.setSubject(...)` não é necessário. No modo `Token assinado com identidade do membro`, é obrigatório incluir o ID do membro em `sub`.
+
+### Regras do token
+
+|Item|Requisito|
+|---|---|
+|`alg`|Somente `HS256` é aceito.|
+|Chave de assinatura|Use os bytes UTF-8 da string do segredo de assinatura.|
+|`aud`|Deve corresponder ao ID do formulário. Se for um array, deve conter esse ID.|
+|`exp`|Obrigatório, com validade máxima de 10 minutos a partir de agora. A duração recomendada é de 5 minutos.|
+|`sub`|Obrigatório no modo de identificação de membro, com no máximo 255 caracteres.|
+|`email`|Opcional.|
+|Codificação|Use caracteres base64url (`A-Za-z0-9_-`).|
+
+## Passar o token para o iframe
+
+Copie o código básico de incorporação em **Compartilhar → Incorporar código** no painel.
+
+### Modos com assinatura
+
+Passe o token pelo fragmento da URL (`#`).
+
+```html
+<iframe
+  src="https://폼주소/f/{formId}#embedToken=서명한_토큰"
+  width="100%"
+  height="500"
+  style="border:0"
+  loading="lazy">
+</iframe>
+```
+
+<Callout type="warning" title="Atenção">
+Não envie o token como parâmetro de consulta (`?embedToken=`). Esses parâmetros podem ficar registrados nos logs de acesso do servidor e no cabeçalho Referer. Use sempre o fragmento (`#embedToken=`).
+</Callout>
+
+### Modo Apenas sites permitidos
+
+Esse modo não exige token.
+
+```html
+<iframe
+  src="https://폼주소/f/{formId}"
+  width="100%"
+  height="500"
+  style="border:0"
+  loading="lazy">
+</iframe>
+```
+
+No origin permitido, informe apenas o esquema e o host, como `https://your-site.com`. Não inclua barra no final nem caminho.
+
+### Sessão após a verificação
+
+Depois de passar pela verificação, a autorização permanece válida por 2 horas. Durante esse período, o respondente pode atualizar a página sem um novo token.
+
+## Fluxo de integração
+
+Nos modos com assinatura, o formulário é aberto na seguinte ordem.
+
+1. Verifique se o usuário está conectado ao seu serviço.
+2. Assine o token com o segredo de assinatura gerado. No modo de identificação de membro, inclua também o ID do membro.
+3. Abra o formulário passando o token assinado no fragmento da URL.
+4. A Walla verifica a assinatura do token e o origin antes de exibir o formulário.
+
+
+## Solução de problemas
+
+<Accordions>
+  <Accordion title="O site é permitido, mas o formulário não abre">
+    **Causa** O origin permitido contém um caminho ou uma barra no final. **Solução** Mantenha apenas o esquema e o host e salve novamente.
+  </Accordion>
+
+  <Accordion title="A restrição parece não funcionar">
+    **Causa** O modo `Apenas sites permitidos` está ativo, mas a lista de origins está vazia. **Solução** Cadastre pelo menos um origin.
+  </Accordion>
+
+  <Accordion title="O acesso foi bloqueado após gerar um novo segredo">
+    **Causa** O servidor host ainda está assinando com o segredo anterior. **Solução** Atualize o segredo no host e implante novamente. Sessões já abertas permanecem válidas por até 2 horas; após esse período, todos os acessos serão bloqueados.
+  </Accordion>
+
+  <Accordion title="Enviei o token, mas ele continua sendo rejeitado">
+    O token pode estar nos parâmetros de consulta, ter expirado ou conter uma assinatura ou `aud` inválido. Verifique se ele foi passado pelo fragmento (`#embedToken=`) e confira o segredo de assinatura, `aud` e `exp` no servidor host.
+  </Accordion>
+
+  <Accordion title="O ID do membro não é considerado na verificação de respostas duplicadas">
+    Verifique se o modo selecionado é `Token assinado pelo site hospedeiro`. Para limitar respostas por membro, use `Token assinado com identidade do membro` e inclua o ID do membro em `sub` no token.
+  </Accordion>
+
+  <Accordion title="Gerei um novo segredo, mas a resposta ainda usa os dados do membro anterior">
+    Uma sessão anterior pode ainda estar ativa. Sessões aprovadas permanecem válidas por até 2 horas. Após esse período, verifique novamente com um novo token.
+  </Accordion>
+</Accordions>
+
+## Checklist antes da implantação
+
+- [ ] Confirmei que o modo desejado está disponível no plano atual.
+- [ ] Informei apenas o esquema e o host no origin permitido.
+- [ ] Armazenei o segredo de assinatura somente nas variáveis de ambiente do servidor host.
+- [ ] Gero um novo token a cada solicitação, com validade de 5 minutos.
+- [ ] Incluí o ID correto do formulário em `aud`.
+- [ ] Incluí `sub` no token do modo de identificação de membro.
+- [ ] O iframe passa o token pelo fragmento (`#embedToken=`).
+- [ ] Confirmei que o formulário abre e pode ser enviado normalmente na página onde está incorporado.
+
+<Callout title="Quando usar">
+- Quando o formulário está incorporado em um portal interno ou página de membros e você quer impedir o acesso por links compartilhados externamente
+- Quando apenas membros do seu serviço devem poder responder
+- Quando cada membro deve responder uma única vez, sem precisar de uma verificação adicional por e-mail
+</Callout>

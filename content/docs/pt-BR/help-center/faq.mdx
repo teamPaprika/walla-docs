@@ -1,0 +1,258 @@
+---
+title: "Perguntas frequentes"
+description: "Reunimos as perguntas mais frequentes."
+icon: CircleQuestionMark
+plan:
+---
+
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+## Equipes e espaços de trabalho
+
+<Accordions>
+
+  <Accordion title="Ao acessar a Walla, vejo a tela de cadastro em vez do login.">
+    Isso pode acontecer após um longo período sem acessar a conta: as etapas de verificação do cliente e aceitação dos termos reaparecem para proteger sua conta. Não indica um erro ou problema na conta. Entre novamente e conclua as etapas exibidas para continuar usando o serviço. Seus formulários e dados coletados permanecem preservados.
+  </Accordion>
+
+  <Accordion title="Equipes no plano Free podem convidar membros?">
+    Sim, a Walla oferece um plano gratuito. Mesmo nesse plano, você pode usar recursos essenciais, como criação de formulários e coleta de respostas. Se precisar de mais recursos, confira os planos pagos.
+  </Accordion>
+
+  <Accordion title="Convidei alguém para a equipe, mas a pessoa não consegue ver o projeto.">
+    A pessoa parece ter sido convidada para a equipe, mas ainda não foi adicionada ao espaço de trabalho. Clique na engrenagem na parte superior do espaço de trabalho e adicione-a em [Gerenciar membros]. Depois disso, ela poderá acessar o espaço de trabalho para o qual foi convidada.
+  </Accordion>
+
+  <Accordion title="Quero permitir que apenas determinados membros vejam as respostas.">
+    Ajuste as permissões dos membros do espaço de trabalho. Clique na engrenagem na parte superior e, em [Funções e permissões], defina os recursos disponíveis para cada função.
+
+    ※ Esse recurso está disponível somente no plano Enterprise.
+  </Accordion>
+
+  <Accordion title="Quero transferir a propriedade da equipe para outra conta.">
+    A transferência de equipes normalmente não é oferecida. O procedimento disponível exige que o proprietário pague diretamente pelo plano Pro, solicite a 'Transferência de propriedade' e depois peça o reembolso ao atendimento. Em situações excepcionais em que não seja possível contatar o proprietário anterior, podemos ajudar apenas após confirmar, pelos procedimentos de segurança e proteção de dados, que a solicitação é oficial e pertence à mesma organização (empresa/domínio). Para detalhes, entre em contato pelo [cs@walla.my](mailto:cs@walla.my).
+  </Accordion>
+
+</Accordions>
+
+## Assinaturas e pagamentos
+
+<Accordions>
+
+  <Accordion title="Posso usar a Walla gratuitamente?">
+    Sim. A Walla permite criar formulários ilimitados, coletar respostas ilimitadas e consultar estatísticas e respostas gratuitamente.
+  </Accordion>
+
+  <Accordion title="Não usei recursos pagos após pagar. Posso receber um reembolso?">
+    Além de criar projetos, o uso da Walla inclui compartilhar links, coletar respostas, consultar análises e manter recursos pagos aplicados a projetos existentes. Pela natureza do serviço, pode haver uso sem um registro específico de atividade. Por isso, não é possível avaliar o uso apenas com base na alegação de que nenhum recurso foi utilizado.
+  </Accordion>
+
+  <Accordion title="Como cancelar minha assinatura?">
+    Em 'Configurações da equipe → Gerenciar equipe', clique em `Gerenciar plano` para abrir a página de cobrança. Depois, clique em `Cancelar assinatura`. Veja os detalhes em [Cancelar um plano](https://docs.walla.my/pt-BR/docs/help-center/getting-started/starting-or-changing-subscription#cancelar-um-plano).
+  </Accordion>
+
+  <Accordion title="Posso cancelar e receber um reembolso?">
+    A possibilidade de reembolso depende da data do pagamento e do plano. Em assinaturas mensais, após 24 horas do pagamento, o serviço é considerado utilizado e não há reembolso. Em assinaturas anuais, o cancelamento em até 14 dias permite reembolso integral; depois desse prazo, há dedução de parte do valor. Para solicitar um reembolso, entre em contato com [cs@walla.my](mailto:cs@walla.my). Consulte os detalhes na [política de reembolso](https://home.walla.my/ko/policy/refund-latest).
+  </Accordion>
+
+  <Accordion title="O valor cobrado é diferente do informado na página de preços.">
+    A Walla usa um processador de pagamentos do exterior. Na assinatura de planos e compra de vales-presente, o emissor do cartão pode cobrar taxas por transações internacionais.
+  </Accordion>
+
+</Accordions>
+
+## Criar projetos
+
+<Accordions>
+
+  <Accordion title="Posso adicionar imagens ao formulário?">
+    Em qualquer campo, digite uma barra (/) na área de título ou descrição da pergunta para inserir uma imagem. Você pode escrever a descrição antes da imagem ou inserir a imagem primeiro e arrastá-la para ajustar a posição. [Saiba mais sobre comandos com barra (/) →](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text)
+  </Accordion>
+
+  <Accordion title="Posso traduzir textos como Enviar resposta?">
+    Os textos padrão do formulário, como preenchimento obrigatório, envio de resposta, mensagens de erro e confirmação de envio, são traduzidos automaticamente conforme o idioma do navegador do participante para coreano, inglês, japonês, chinês simplificado, vietnamita, tailandês e outros idiomas.
+  </Accordion>
+
+  <Accordion title="Qual é a diferença entre um campo de desqualificação e um campo final?">
+      O campo de desqualificação interrompe o formulário quando a pessoa não pertence ao público desejado. Respostas direcionadas a esse campo não são salvas. Para exibir uma mensagem após o envio, use um campo final. Recomendamos excluir o campo de desqualificação ou ajustar a lógica para que ele não seja acessado pelas perguntas anteriores.
+  </Accordion>
+
+  <Accordion title="Quero exibir várias perguntas em uma página.">
+    Na visualização padrão, todas as perguntas aparecem em uma página e o participante avança rolando a tela. Adicione `Quebras de página` entre as perguntas para dividir a tela como desejar. Na visualização agrupada, use grupos de campos para reunir várias perguntas na mesma tela.
+  </Accordion>
+
+  <Accordion title="Abri o formulário, mas não consigo avançar para a próxima pergunta.">
+    A lógica da pergunta está referenciando um campo que não foi encontrado. Ajuste a lógica e tente novamente. Corrija os itens marcados como 'Campo/opção não encontrado' e publique.
+  </Accordion>
+
+  <Accordion title="Posso direcionar os participantes para perguntas diferentes conforme suas respostas?">
+    Sim. Use a [configuração de lógica](https://docs.walla.my/pt-BR/docs/help-center/create-forms/setting-up-logic) para exibir ou ocultar perguntas conforme as escolhas do participante.
+  </Accordion>
+
+
+  <Accordion title="Adicionei um campo final, mas só aparece a tela padrão de encerramento.">
+    Se você adicionar um campo final sem configurar a lógica, a página padrão de encerramento ('Sua resposta foi enviada com sucesso.') será exibida automaticamente. Para direcionar para outro campo final após o envio:
+1. Na página de lógica, clique no botão 'Enviar'.
+2. Defina o campo final de destino conforme a condição.
+
+Para sempre direcionar para um campo final específico, sem condições adicionais, altere o destino padrão para esse campo final.
+  </Accordion>
+
+</Accordions>
+
+## Campos de pagamento
+
+<Accordions>
+
+  <Accordion title="Qual é a diferença entre o campo de pagamento simplificado e o campo Toss Payments?">
+    O campo de pagamento simplificado permite receber pagamentos no formulário apenas com o cadastro de vendedor, sem informar dados de uma loja Toss Payments. Já o campo Toss Payments conecta diretamente os dados da loja Toss Payments do vendedor. Veja a configuração no [guia do campo de pagamento simplificado](/pt-BR/docs/help-center/create-forms/payment-brokerage-field).
+  </Accordion>
+
+  <Accordion title="O que preciso para usar o campo de pagamento simplificado?">
+    O proprietário ou administrador da equipe deve concluir o cadastro de vendedor em `Gerenciar equipe → Pagamento simplificado`. Após verificar a identidade pelo NICE, a conta de repasse e o e-mail de atendimento ao cliente, o campo pode ser configurado. Apenas uma equipe pode cadastrar um vendedor com a mesma identidade verificada, então confirme primeiro qual equipe gerenciará os pagamentos.
+  </Accordion>
+
+  <Accordion title="Há limites de valor ou de formas de pagamento no pagamento simplificado?">
+    O valor mínimo é de 100 won coreanos. Durante o beta, não é possível publicar campos de pagamento simplificado com valor por transação igual ou superior a 500.000 won coreanos. Na janela da Payple, o participante pode escolher cartão via aplicativo, Naver Pay, Kakao Pay ou uma das operadoras de cartão disponíveis.
+  </Accordion>
+
+  <Accordion title="O pagamento é concluído assim que eu autentico na janela de pagamento?">
+    Não. Após autenticar, volte ao formulário e clique em `Enviar resposta` em até 10 minutos para concluir o pagamento e o envio da resposta. Se sair da tela de preparação do pagamento ou não enviar a resposta dentro do prazo, o pagamento não será concluído.
+  </Accordion>
+
+  <Accordion title="Onde consulto as taxas e o valor estimado de repasse do pagamento simplificado?">
+    Ao informar o valor nas `Configurações de pagamento` do campo, você verá o repasse estimado após as taxas da Walla e do cartão (processador de pagamentos). A taxa da Walla depende do plano da equipe no momento do pagamento. A taxa do cartão pode variar conforme a forma de pagamento e a categoria da empresa.
+  </Accordion>
+
+  <Accordion title="Quando recebo os repasses e qual é o prazo para reembolso?">
+    Os valores são depositados na conta de repasse cadastrada no dia 15 do mês seguinte ao pagamento, sem necessidade de solicitação. O comprador pode solicitar reembolso em até 3 dias após o pagamento, e o vendedor pode processá-lo em até 14 dias após o pagamento.
+  </Accordion>
+
+  <Accordion title="Onde consulto transações e repasses do pagamento simplificado?">
+    No espaço de trabalho, acesse `Gerenciar equipe → Pagamento simplificado`. Na aba `Transações`, consulte o status dos pagamentos, os dados dos compradores e processe reembolsos. Na aba `Repasses`, consulte ou baixe pedidos pendentes de repasse, taxas, valor final e histórico de repasses.
+  </Accordion>
+
+</Accordions>
+
+## Gerenciar projetos
+<Accordions>
+
+  <Accordion title="Não encontro um projeto que criei.">
+      Se o projeto não foi excluído, você pode estar acessando outra conta, equipe ou espaço de trabalho. Confira primeiro se está no mesmo ambiente em que criou o projeto.
+
+#### 1. Como verificar a conta atual
+
+Clique no ícone de perfil no canto superior direito para conferir a conta atual. Para entrar com outra conta, clique em 'Sair'.
+
+<img src="/images/guides/faq/check-account.png" alt="Verificação da conta atual" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+#### 2. Como verificar a equipe atual
+
+Confira a equipe atual na lista de equipes no canto superior esquerdo.
+
+<img src="/images/guides/faq/check-team.png" alt="Verificação da equipe atual" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+#### 3. Como verificar o espaço de trabalho atual
+
+Confira o espaço de trabalho atual na lista abaixo das equipes.
+
+<img src="/images/guides/faq/check-workspace.png" alt="Verificação do espaço de trabalho atual" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Accordion>
+
+  <Accordion title="Excluí um formulário ou uma resposta por engano. Posso recuperar?">
+      Para priorizar a privacidade e a segurança dos dados, formulários e respostas excluídos são removidos permanentemente e de imediato, sem possibilidade de recuperação. Configure permissões por função no espaço de trabalho para evitar exclusões acidentais. No plano Enterprise, você pode consultar registros como data da exclusão e conta responsável.
+  </Accordion>
+
+  <Accordion title="Posso agendar o início e o encerramento do formulário?">
+      Sim. Agende a abertura ou o encerramento automático para um horário específico. Com o [agendamento](https://docs.walla.my/pt-BR/docs/help-center/manage-forms/scheduling-survey-start-end-times), o formulário abre e fecha conforme o cronograma, sem alterações manuais.
+  </Accordion>
+
+</Accordions>
+
+## Integrar projetos
+
+<Accordions>
+
+  <Accordion title="Posso receber notificações quando uma resposta for enviada?">
+    Sim. Na página 'Conectar', configure notificações pelo Slack, Discord, Gmail e outros serviços. Você também pode configurar um webhook para receber notificações em outra plataforma.
+  </Accordion>
+
+  <Accordion title="Posso enviar uma cópia da resposta ao participante?">
+    Use a automação do Gmail. Selecione Gmail nas configurações e associe o campo que coleta o e-mail do participante ao destinatário (To). Depois de configurar, sempre que uma pessoa enviar o formulário com seu e-mail, o conteúdo da resposta será enviado automaticamente para esse endereço.
+  </Accordion>
+
+  <Accordion title="Posso acompanhar as respostas em tempo real no Google Sheets?">
+    Sim. Ao conectar ao Google Sheets, uma nova planilha é criada na conta Google conectada. A cada nova resposta coletada, uma linha é adicionada automaticamente à planilha.
+  </Accordion>
+
+</Accordions>
+
+## Compartilhar projetos
+
+<Accordions>
+
+  <Accordion title="A miniatura ou o título do link compartilhado no KakaoTalk ou em redes sociais não muda.">
+    Ao compartilhar uma URL novamente após alterar a miniatura ou o título, aplicativos como KakaoTalk podem exibir a versão anterior. Eles armazenam em cache URLs já enviadas pelo dispositivo para reduzir o tempo de carregamento. Para reduzir esse efeito, [limpe o cache aqui](https://developers.kakao.com/tool/debugger/sharing). Em dispositivos sem histórico de envio dessa URL, a miniatura e o título aparecem normalmente.
+  </Accordion>
+
+  <Accordion title="Qual é a diferença entre a visualização padrão e agrupada?">
+    Na visualização padrão, todas as perguntas aparecem em uma página. Na visualização agrupada, cada página mostra uma pergunta ou um grupo de campos.
+  </Accordion>
+
+  <Accordion title="Posso registrar a origem dos acessos ao projeto?">
+    Configure o rastreamento (campos ocultos), adicione parâmetros à URL e compartilhe com os participantes. Depois de coletar respostas, confira a origem de cada participante na planilha de respostas e na tela de estatísticas.
+  </Accordion>
+   <Accordion title="Posso usar a miniatura e a URL da minha marca ao compartilhar um projeto?">
+    Sim. Na página 'Compartilhar', personalize a imagem de prévia e o link conforme sua marca e salve. A miniatura e a URL definidas serão usadas no compartilhamento.
+  </Accordion>
+     <Accordion title="Já tenho uma lista de participantes. Posso convidá-los a responder e acompanhar quem enviou a resposta?">
+    Sim. Importe a lista em um arquivo CSV ou XLSX para cadastrá-la como painel e envie o formulário a esses participantes em cada projeto. Após o envio, você também pode acompanhar quem já respondeu.
+  </Accordion>
+
+</Accordions>
+
+## Consultar resultados das respostas
+<Accordions>
+  <Accordion title="Posso baixar as análises de acesso?">
+    Não é possível baixar as análises de acesso. Elas só podem ser consultadas na aba 'Analytics' de cada formulário.
+</Accordion>
+  <Accordion title="Posso recuperar respostas excluídas?">
+    As respostas são excluídas imediatamente quando solicitado e não podem ser recuperadas. Em 'Registros de atividade', você pode verificar a conta e o IP responsáveis pela exclusão.
+</Accordion>
+  <Accordion title="Posso usar um valor predefinido no customerKey da resposta?">
+    Importe uma lista de participantes em CSV ou XLSX com os valores de customerKey predefinidos e cadastre-a como painel. Depois, envie o formulário a esse painel em cada projeto. O customerKey na planilha de respostas usará o valor predefinido.
+</Accordion>
+
+</Accordions>
+
+## Enviar recompensas
+
+<Accordions>
+
+  <Accordion title="Como envio recompensas?">
+    Primeiro, adicione um campo de telefone (recomendado) ao formulário para coletar os números dos participantes. Depois, compre as recompensas, selecione os destinatários e envie. Veja os detalhes em [Enviar recompensas](/pt-BR/docs/help-center/reward/sending-gifticons).
+  </Accordion>
+   <Accordion title="Posso enviar recompensas sem ter coletado o telefone dos participantes?">
+    Sem coletar os telefones, é difícil enviar as recompensas. Certifique-se de coletar no formulário as informações necessárias ao envio, como o número de telefone.
+  </Accordion>
+     <Accordion title="Posso enviar vales-presente de marcas que não estão na Walla?">
+    Sim. Envie para cs@walla.my a marca desejada ou a faixa de preço e a quantidade. Após avaliação, ajudaremos a disponibilizar a compra na loja de recompensas da Walla.
+  </Accordion>
+       <Accordion title="Posso oferecer recompensas da minha própria marca, como pontos da minha loja?">
+    Sim. Esse recurso está disponível apenas a partir do plano personalizado. Entre em contato com cs@walla.my para mais informações.
+  </Accordion>
+
+</Accordions>
+
+
+
+
+<div className="not-prose mt-10 rounded-2xl border border-[hsl(193,100%,50%)]/20 bg-gradient-to-br from-[hsl(193,100%,50%)]/10 via-[hsl(193,100%,60%)]/5 to-transparent p-6 text-center">
+  <span className="block text-lg font-bold text-[#1A2C5C] mb-1">Não encontrou a resposta que procurava?</span>
+  <span className="block text-[#76809D] text-sm mb-4">A equipe Walla responderá em breve.</span>
+  <div className="flex justify-center">
+    <a href="https://walla.my/survey/9Z04inEDzv9XKqVC7d14?source=helpcenter-faq" className="inline-flex items-center justify-center rounded-full bg-[hsl(193,100%,50%)] px-5 py-2 text-sm font-bold text-white hover:opacity-90 transition-opacity no-underline">
+      Fale com a gente →
+    </a>
+  </div>
+</div>

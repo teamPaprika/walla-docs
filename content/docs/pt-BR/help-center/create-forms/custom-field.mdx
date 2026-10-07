@@ -1,0 +1,64 @@
+---
+title: "Criar campos personalizados"
+description: "Use o Walla MCP para criar campos personalizados."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## O que é um campo personalizado?
+Um campo personalizado permite criar, a partir de uma descrição em linguagem natural, formas de entrada que não estão disponíveis nos tipos padrão do Walla, como múltipla escolha, texto curto ou lista suspensa.
+Nos criadores de formulários tradicionais, não é possível criar um tipo de entrada que não esteja na lista de campos. Os campos personalizados eliminam essa limitação. Basta descrever o que você precisa, como "Crie um campo para coletar assinaturas", e um campo funcional será criado com base no pedido.
+
+
+## Limites por plano
+
+Os campos personalizados estão disponíveis em todos os planos. O plano limita apenas **quantos tipos de campo personalizado a equipe pode criar**.
+
+| Plano | Quantidade de campos personalizados que podem ser criados |
+| --- | --- |
+| Free | 1 |
+| Pro | 5 |
+| Enterprise | Ilimitada |
+
+- O limite se aplica apenas à **criação de novos tipos**. Campos já criados podem continuar sendo adicionados aos formulários, recebendo respostas e sendo editados, independentemente do limite.
+- Ao atingir o limite, apenas a criação de novos campos fica bloqueada. Confira o uso atual (por exemplo, 1/1) na aba `Campos personalizados` do editor.
+- Se precisar de mais campos personalizados, [mude para um plano superior](https://docs.walla.my/pt-BR/docs/help-center/getting-started/starting-or-changing-subscription).
+
+<Callout type="info" title="Ao mudar para um plano inferior">
+Mesmo que a quantidade de campos existentes ultrapasse o limite do novo plano, eles não serão excluídos nem deixarão de funcionar. Apenas a criação de novos tipos ficará restrita.
+</Callout>
+
+
+<Steps>
+  <Step>
+    ### Instale o [Walla MCP](https://docs.walla.my/pt-BR/docs/help-center/getting-started/installing-walla-mcp)
+    Acesse [claude.ai](https://claude.ai/) ou [chatgpt.com](https://chatgpt.com/plugins/plugin_asdk_app_6a546b49885c819190fa2806412b2bf2?open_in_app) e instale o Walla MCP.
+
+    <img src="/images/guides/getting-started/mcp-06-connected.png" alt="Lista de ferramentas e permissões do conector Walla Form após a conexão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Dê uma instrução à IA
+    Descreva à IA o campo que deseja criar.
+
+    <img src="/images/guides/create-forms/custom-field-star-rating.png" alt="Campo personalizado de avaliação por estrelas criado a partir de uma solicitação ao Claude" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confira a prévia e aprove
+    Confira a prévia e solicite os ajustes necessários. Quando o campo estiver como você deseja, aprove a criação.
+
+    <img src="/images/guides/create-forms/custom-field-approve.png" alt="Após conferir e aprovar a prévia, o tipo de campo personalizado é registrado na equipe" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Adicione o campo personalizado ao formulário
+    Ao adicionar um campo no editor, selecione a aba `Campos personalizados` para escolher um dos campos criados.
+
+    <img src="/images/guides/create-forms/custom-field-add-to-form.png" alt="Seleção de um campo criado na aba Campos personalizados do editor de formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Use o campo personalizado
+    O campo selecionado será adicionado ao formulário. Edite a pergunta e a descrição como em um campo comum, publique e comece a receber respostas.
+
+    <img src="/images/guides/create-forms/custom-field-in-form.png" alt="Campo personalizado de avaliação por estrelas adicionado ao formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>

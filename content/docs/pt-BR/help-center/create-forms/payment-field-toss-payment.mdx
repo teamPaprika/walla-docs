@@ -1,0 +1,70 @@
+---
+title: "Campo de pagamento: Toss Payments"
+description: "Use o campo de pagamento para permitir que os respondentes paguem diretamente no formulário."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+<Steps>
+  <Step>
+    ### Cadastre uma nova loja no Toss Payments
+    Cadastre uma nova loja no Toss Payments.
+
+    - Consulte os links abaixo para mais detalhes.
+      - [Guia de cadastro de loja do Toss Payments](https://tosspublic.notion.site/b99d2cb71d29401c82eecb64ae6f712c)
+      - [Taxas do Toss Payments](https://www.tosspayments.com/about/fee)
+    - Se você já tiver uma conta, avance para a próxima etapa.
+  </Step>
+  <Step>
+    ### Adicione um campo de pagamento
+    Adicione um campo de pagamento no editor do projeto.
+
+    <img src="/images/guides/manage-forms/toss-payment-add-field.png" alt="Campo de pagamento adicionado ao editor do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Insira as informações de pagamento
+
+    <img src="/images/guides/manage-forms/toss-payment-info.avif" alt="Tela de preenchimento das informações do campo de pagamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    Preencha as informações necessárias para o pagamento.
+
+    #### Chave de variante
+    - É um valor exclusivo que identifica a interface de pagamento. Consulte-o em `Ver chave de variante da interface de pagamento`, no campo de pagamento.
+    - A interface de produção realiza cobranças reais, enquanto a interface de teste não realiza cobranças. Confira qual delas está usando ao inserir a chave.
+    - Se estiver começando, clique em `Adicionar interface` para configurar as interfaces de pagamento.
+    - Após clicar em `Adicionar interface`, selecione `Pagamento padrão nacional` (Coreia do Sul).
+
+    <img src="/images/guides/manage-forms/toss-payment-variant-key.avif" alt="Tela de consulta da chave de variante da interface de pagamento do Toss Payments" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <Callout type="warning" title="Contas virtuais não são compatíveis">
+    Não é possível usar contas virtuais. No editor da interface de pagamento, acesse [Recursos] → [Lista de métodos de pagamento] e **desmarque** as contas virtuais. O Walla registra o pagamento como concluído quando a resposta é enviada após a solicitação de pagamento. Como contas virtuais não são pagas imediatamente, a planilha poderia indicar pagamento concluído sem que o depósito tivesse sido realizado.
+
+    <img src="/images/guides/manage-forms/toss-payment-virtual-account.avif" alt="Opção de conta virtual desmarcada no editor da interface de pagamento do Toss Payments" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    </Callout>
+
+    #### Chave de cliente / chave secreta
+    - Encontre as chaves em 'Minhas informações de desenvolvimento' no [Centro de desenvolvedores do Toss Payments](https://developers.tosspayments.com/). Selecione a loja à esquerda e copie a chave de cliente e a chave secreta correspondentes.
+
+    <img src="/images/guides/manage-forms/toss-payment-client-secret-key.avif" alt="Chave de cliente e chave secreta em Minhas informações de desenvolvimento no Toss Payments" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    #### ID do pedido
+    - Valor exclusivo que identifica o pagamento do pedido, exibido no formato 'ID do pedido\_chave aleatória\_horário'. Exemplos: bolinho coreano de feijão-vermelho → `redbean`; bolinho coreano de creme → `chouxcream`.
+
+    #### Nome do produto / preço do produto
+    - Informe o nome e o preço do produto que o respondente comprará.
+  </Step>
+  <Step>
+    ### Conclua o formulário de pedido
+    Agora você pode criar um formulário de pedido com o campo de pagamento.
+
+    <img src="/images/guides/manage-forms/toss-payment-settings-dialog.png" alt="Janela de configurações com áreas de interface de pagamento, integração do widget e configuração do pedido" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/toss-payment-widget-add.png" alt="Janela Adicionar widget de pagamento com campos de chave de cliente e chave secreta" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    - Insira a chave de variante na interface de pagamento e as chaves de cliente e secreta no widget de pagamento.
+    - Informe o ID do pedido, o nome do produto, o preço e os demais dados. Salve para concluir.
+    - A interface de teste não realiza cobranças reais. Diferencie-a da interface de produção ao configurar.
+    - Use a lógica para exibir campos de pagamento diferentes conforme a opção selecionada.
+  </Step>
+</Steps>

@@ -1,0 +1,182 @@
+---
+title: "Campo de pagamento simplificado"
+description: "Configure produtos e valores para que os respondentes paguem diretamente no formulário e gerencie transações e repasses."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+O campo de pagamento simplificado permite receber pagamentos por cartão e carteiras digitais no formulário sem inserir dados de uma loja do Toss Payments. Os valores são repassados para a conta bancária cadastrada.
+
+## Cadastrar um vendedor
+
+<Callout type="warning" title="Um vendedor só pode ser cadastrado em uma equipe">
+Após concluir o cadastro de vendedor em uma equipe com os mesmos dados de verificação de identidade, não é possível cadastrá-lo novamente em outra equipe. Confira em qual equipe deseja operar os pagamentos simplificados antes de se cadastrar.
+</Callout>
+
+<Steps>
+  <Step>
+    ### Adicione o campo de pagamento simplificado
+    No editor do projeto, clique em adicionar campo e selecione `Pagamento simplificado` na seção `Payments`.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-add-field.png" alt="Seleção do campo Pagamento simplificado na seção Payments da tela de adição de campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Abra a tela de cadastro de vendedor
+    Se a equipe ainda não tiver um vendedor cadastrado, o campo exibirá uma orientação de cadastro. Clique em `Cadastrar` para acessar `Gerenciar equipe` → `Pagamento simplificado`.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-seller-registration-required.png" alt="Campo de pagamento simplificado com aviso de cadastro de vendedor necessário e botão Cadastrar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    Apenas o proprietário ou um administrador da equipe pode cadastrar vendedores e configurar o campo de pagamento simplificado.
+  </Step>
+  <Step>
+    ### Verifique sua identidade
+    Na primeira etapa do cadastro, clique em `Verificar identidade` e conclua a verificação pelo serviço sul-coreano NICE.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-identity-verification.png" alt="Etapa de verificação de identidade no cadastro de vendedor com o botão Verificar identidade" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/payment-brokerage-nice-verification.png" alt="Tela de seleção da operadora de telefonia na verificação de identidade NICE" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Cadastre a conta para repasses
+    Após verificar a identidade, selecione o tipo de vendedor e cadastre a conta bancária para receber os repasses.
+
+    - Empresa: informe o número de registro empresarial sul-coreano, nome da empresa, setor de atividade, banco e número da conta.
+    - Pessoa física: informe o banco e o número de uma conta em seu próprio nome.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-business-account.png" alt="Tela de dados empresariais e conta de repasse de um vendedor do tipo empresa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/payment-brokerage-personal-account.png" alt="Tela de banco, número de conta e verificação bancária de um vendedor pessoa física" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    Após preencher os dados, clique em `Verificar conta` para confirmar o titular.
+  </Step>
+  <Step>
+    ### Cadastre as informações de contato
+    Confira a conta cadastrada e, se desejar, informe um `E-mail de atendimento ao cliente` para exibir aos compradores na tela de pagamento.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-contact.png" alt="Etapa de contato do cadastro de vendedor com campo de e-mail de atendimento ao cliente" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    Se informar um e-mail de atendimento, clique em `Verificar`, digite o código enviado por e-mail e clique em `Confirmar código`. O código é válido por 5 minutos. Se deixar o campo vazio, o e-mail da conta usada para login será exibido aos compradores.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-email-verification.png" alt="Tela para inserir o código recebido no e-mail de atendimento e clicar em Confirmar código" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/manage-forms/payment-brokerage-registration-complete.png" alt="Botão Cadastrar vendedor habilitado após a verificação do e-mail de atendimento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    Por fim, clique em `Cadastrar` para concluir o cadastro do vendedor.
+  </Step>
+</Steps>
+
+## Configurar o campo de pagamento simplificado
+
+<Steps>
+  <Step>
+    ### Abra as configurações de pagamento
+    Após concluir o cadastro e voltar ao editor do projeto, o botão `Configurações de pagamento` aparecerá no campo de pagamento simplificado.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-field-editor.png" alt="Campo de pagamento simplificado no editor do projeto com botão Configurações de pagamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Insira as informações do produto
+    Preencha o `Nome do produto` e a `Descrição do produto` que serão exibidos ao comprador. O e-mail do comprador também será coletado durante o pagamento.
+    <Callout type="warning" title="Produtos cuja venda é proibida">
+Não é permitido vender produtos que violem a legislação aplicável, incluindo itens ilegais, falsificados, drogas e substâncias psicotrópicas, armas e réplicas de armas, pornografia, produtos prejudiciais a menores como álcool e tabaco, medicamentos sujeitos a receita, jogos de azar e dados pessoais de terceiros.
+</Callout>
+
+    <img src="/images/guides/manage-forms/payment-brokerage-product-settings.png" alt="Configurações do pagamento simplificado com campos de nome e descrição do produto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Defina o valor e o início das vendas
+    Informe o valor do pagamento e, se necessário, defina a `Data e hora de início das vendas`.
+
+    - O valor mínimo do pagamento é de 100 won sul-coreanos (KRW).
+    - A tela de configuração mostra o repasse estimado após as taxas do Walla e do processamento de cartão (PG).
+    - Antes do início das vendas, o respondente verá `Venda em breve` e não poderá pagar.
+    - Se deixar a data de início vazia, a venda poderá começar assim que você salvar.
+    - Após publicar o formulário, não será possível alterar a data e hora de início das vendas.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-policy-settings.png" alt="Configurações com valor do pagamento, repasse estimado, data de início das vendas e regras de venda de produtos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    Confira as regras de venda de produtos e clique em `Salvar`.
+  </Step>
+  <Step>
+    ### Confira a configuração
+    Após salvar, você poderá conferir o nome, o valor e a descrição do produto no editor.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-configured-field.png" alt="Campo de pagamento simplificado com nome, valor e descrição do produto configurados" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## Processo de pagamento do respondente
+
+<Steps>
+  <Step>
+    ### Informe o e-mail do comprador
+    O respondente informa seu e-mail no campo de pagamento simplificado e clica em `Pagar`. Esse e-mail será usado para confirmação do pagamento, reembolsos e atendimento.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-buyer-email.png" alt="Tela em que o respondente informa o e-mail do comprador no campo de pagamento simplificado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione o método de pagamento
+    Na janela de pagamento do Payple, selecione o aplicativo do cartão, Naver Pay, Kakao Pay ou a emissora do cartão e prossiga com o pagamento.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-payment-methods.png" alt="Janela de pagamento do Payple com opções de aplicativo do cartão, Naver Pay, Kakao Pay e emissoras de cartão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confira se o pagamento está pronto
+    Após autenticar o método de pagamento, o respondente volta ao formulário e vê a mensagem `O pagamento está pronto para ser concluído!`.
+
+    <img src="/images/guides/manage-forms/payment-brokerage-payment-ready.png" alt="Aviso de que o pagamento está pronto e a resposta deve ser enviada em até 10 minutos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Envie a resposta
+    Para concluir o pagamento, é necessário clicar em `Enviar resposta` no formulário em até 10 minutos.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Envie a resposta para concluir o pagamento">
+A autenticação na janela de pagamento não conclui a cobrança. É obrigatório clicar em `Enviar resposta` no formulário em até 10 minutos.
+</Callout>
+
+## Acessar a página do vendedor
+
+No menu à esquerda do espaço de trabalho, clique em `Gerenciar equipe` → `Pagamento simplificado` para abrir a página do vendedor.
+
+<img src="/images/guides/manage-forms/payment-brokerage-navigation.png" alt="Seleção de Pagamento simplificado no menu Gerenciar equipe à esquerda do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+A página do vendedor tem as abas `Vendedor`, `Transações` e `Repasses`.
+
+### Aba Vendedor
+
+Confira ou edite o status do vendedor, o status de verificação KYC, a conta cadastrada e o e-mail de atendimento. Se necessário, envie documentos de verificação e consulte o histórico de análise dos campos.
+
+<img src="/images/guides/manage-forms/payment-brokerage-seller-page.png" alt="Aba Vendedor com status, contato de atendimento, documentos de verificação e histórico de análise dos campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Aba Transações
+
+Confira o volume de transações do mês e o limite mensal, ou pesquise transações pelo número do pedido ou ID do formulário. Para cada pagamento, veja o e-mail do comprador, valor pago, repasse estimado, data prevista de repasse e status, e processe os reembolsos disponíveis. O histórico pode ser baixado como arquivo.
+
+<img src="/images/guides/manage-forms/payment-brokerage-transactions.png" alt="Aba Transações com volume do mês, histórico de transações e botão de reembolso" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Aba Repasses
+
+Confira pedidos ainda não repassados, total de vendas, cancelamentos e reembolsos, taxas do Walla e do processamento de cartão (PG), imposto sobre valor agregado e valor final do repasse. Consulte o histórico por período ou baixe-o como arquivo.
+
+<img src="/images/guides/manage-forms/payment-brokerage-settlement.png" alt="Demonstrativo e download do histórico na aba Repasses do pagamento simplificado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+Na data prevista, o Walla verifica os valores e faz o pagamento na conta cadastrada. Não é necessário solicitar o repasse separadamente.
+
+<Callout title="Informações sobre taxas">
+- A taxa do Walla depende do plano da equipe no momento do pagamento.
+- A taxa de processamento de cartão (PG) pode variar conforme o método de pagamento e a categoria do estabelecimento.
+- O valor real do repasse pode diferir da estimativa devido a reembolsos e ao histórico de transações.
+</Callout>
+
+<Callout title="Informações sobre reembolsos e repasses">
+- O comprador pode solicitar reembolso em até 3 dias após o pagamento.
+- O vendedor pode processar reembolsos em até 14 dias após o pagamento.
+- Os pagamentos são repassados no dia 15 do mês seguinte ao mês do pagamento.
+</Callout>
+
+<Callout type="warning" title="Pagamentos de 500.000 KRW ou mais">
+Durante o período beta, não é possível publicar campos de pagamento simplificado com valor igual ou superior a 500.000 won sul-coreanos por transação.
+</Callout>

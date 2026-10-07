@@ -1,0 +1,68 @@
+---
+title: "Limitar respostas duplicadas"
+description: "Use a prevenção de respostas duplicadas para impedir que a mesma pessoa responda várias vezes ao mesmo formulário."
+plan: pro
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Limitar respostas duplicadas
+Use a restrição de respostas duplicadas para impedir que a mesma pessoa responda várias vezes ao mesmo formulário.
+Há duas formas de restrição, que podem ser ativadas juntas.
+
+|Método|Critério|Características|
+|---|---|---|
+|Impedir respostas duplicadas por navegador|Navegador do respondente|Fácil de configurar, mas permite responder novamente em outro navegador ou no modo anônimo|
+|Uma resposta por usuário verificado|E-mail, telefone verificado ou ID de membro externo|A restrição permanece mesmo ao trocar de dispositivo|
+
+## Como configurar
+
+<Steps>
+  <Step>
+    ### Acesse a aba Respondentes
+    Clique no ícone `⚙️` no canto superior direito do editor para abrir as configurações e selecione `Respondentes` na lista de abas à esquerda.
+
+    <img src="/images/guides/manage-forms/duplicate-response-settings.png" alt="Botão de configurações do formulário no canto superior direito do editor do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+
+  <Step>
+    ### Escolha o método de restrição
+    Ative a opção desejada na seção `Respostas duplicadas`. O resumo no topo da seção mostra a configuração atual.
+
+
+|Configuração|Resumo exibido|
+|---|---|
+|Nenhuma opção ativada|A mesma pessoa pode responder várias vezes|
+|`Uma resposta por usuário verificado` ativada|Cada e-mail ou telefone verificado ou ID de membro externo pode responder uma única vez|
+
+
+
+### 1. Impedir respostas duplicadas por navegador
+
+<img src="/images/guides/manage-forms/duplicate-response-browser.png" alt="Prevenção de respostas duplicadas pelo navegador ativada na aba Respondentes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Quem já respondeu no mesmo navegador não pode responder novamente.
+- Depois do envio, o formulário não abre mais e uma mensagem informa que a resposta já foi enviada.
+- Ainda é possível responder em outro navegador, dispositivo ou no modo anônimo.
+
+<img src="/images/guides/manage-forms/duplicate-blocked.png" alt="Aviso de restrição de respostas duplicadas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+### 2. Uma resposta por usuário verificado
+
+<img src="/images/guides/manage-forms/duplicate-response-authenticated-user.png" alt="Uma resposta por usuário verificado ativada na aba Respondentes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Cada e-mail ou telefone verificado ou ID de membro externo pode responder uma única vez. A restrição permanece mesmo ao trocar de dispositivo ou navegador, tornando a prevenção de duplicidade mais precisa.
+
+- É necessário um método de identificação do respondente para ativar essa opção. Se nenhum estiver configurado, a verificação por e-mail será ativada junto.
+
+- O critério de identificação depende da configuração.
+	- Verificação por e-mail na aba `Respondentes` → endereço de e-mail verificado
+	- Verificação por telefone na aba `Respondentes` → número de telefone verificado
+	- Token assinado com identidade do membro na aba `Incorporar` → ID de membro externo contido no token
+
+<Callout title="Saiba mais">
+Ao desativar `Verificação do usuário`, `Uma resposta por usuário verificado` também é desativada. Se desativar e reativar a verificação, confira se a restrição de duplicidade continua ativa.
+</Callout>
+
+  </Step>
+</Steps>

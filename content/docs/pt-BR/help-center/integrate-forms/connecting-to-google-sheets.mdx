@@ -1,0 +1,61 @@
+---
+title: "Conectar ao Google Sheets"
+description: "A integração com o Google Sheets registra respostas automaticamente em tempo real. Cada nova resposta adiciona uma linha à planilha escolhida, facilitando o gerenciamento sem precisar baixar os dados."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Como conectar
+
+<Steps>
+  <Step>
+    ### Acesse a aba Automação
+    Na tela de edição do projeto, acesse a aba 'Automação'.
+
+    <img src="/images/guides/integrate/automation-page.png" alt="Página de integrações de automação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Clique em Conectar
+    Na opção 'Google Sheets', clique em `Conectar`.
+
+    <img src="/images/guides/integrate/sheets-02-connect.png" alt="Botão Conectar do Google Sheets" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Entre na sua conta Google
+    Clique em `Entrar com Google` para entrar na sua conta Google.
+    - Todas as contas Google que podem ser conectadas neste espaço de trabalho são exibidas.
+    - Selecione uma conta existente ou entre com uma nova.
+
+    <img src="/images/guides/integrate/sheets-03-account.png" alt="Login da conta Google" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione a planilha
+    Escolha entre conectar uma planilha existente ou criar uma nova.
+
+    <img src="/images/guides/integrate/sheets-04-spreadsheet-select.png" alt="Seleção da planilha" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Conclua a criação da planilha
+    Após a conexão, a Walla cria automaticamente uma planilha do Google Sheets, de sua propriedade e salva no seu Drive. Copie o link da planilha para acessá-la.
+
+    <img src="/images/guides/integrate/sheets-05-created.png" alt="Criação da planilha concluída" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Desconecte, se necessário
+    Para encerrar a integração, clique em `Desconectar`.
+
+    <img src="/images/guides/integrate/sheets-06-disconnect.png" alt="Desconectar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+## Como funciona
+- A cada nova resposta enviada, os campos são mapeados automaticamente para as colunas (Column) da planilha e registrados.
+- Os dados são sincronizados em tempo real e podem ser consultados imediatamente, sem exportação manual.
+
+<img src="/images/guides/integrate/sheets-how-it-works.png" alt="Funcionamento do Google Sheets" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+<Callout type="warning" title="Atenção">
+A conta Google conectada precisa ter permissão de edição (Edit access) na planilha. Verifique essa permissão também em planilhas compartilhadas.
+</Callout>
+<Callout type="warning" title="Atenção">
+Colunas com mascaramento de dados também aparecem criptografadas na integração com o Google Sheets. Consulte as colunas E e F da imagem de exemplo.
+</Callout>

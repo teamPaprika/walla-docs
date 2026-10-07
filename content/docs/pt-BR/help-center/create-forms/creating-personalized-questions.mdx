@@ -1,0 +1,47 @@
+---
+title: "Criar perguntas personalizadas para o respondente"
+description: "A inserção de respostas anteriores permite exibir perguntas personalizadas com base no que o respondente já informou. Reutilize as respostas nas perguntas seguintes para criar formulários mais naturais e personalizados."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Exemplos de uso da inserção de respostas
+
+- Se a pessoa digitar "João" na pergunta de nome, você pode exibir "Olá, João!" na pergunta seguinte.
+- Também é possível exibir uma resposta novamente em uma pergunta de confirmação, como "Confira estas informações".
+
+## Como configurar
+
+<Steps>
+  <Step>
+    ### Acesse o campo de texto
+    No editor do projeto, vá para o campo de título ou descrição de uma pergunta.
+
+    <img src="/images/guides/manage-forms/piping-field-title-input.png" alt="Campo de título da pergunta no painel direito do editor do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Digite '@'
+    Ao digitar '@', uma lista das perguntas adicionadas anteriormente aparece abaixo.
+
+    <img src="/images/guides/manage-forms/piping-at-symbol.png" alt="Lista suspensa de perguntas exibida ao digitar @ no campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione a pergunta
+    Selecione a pergunta cuja resposta deseja inserir. O nome do campo será adicionado como uma etiqueta azul.
+
+    <img src="/images/guides/manage-forms/piping-select-field.png" alt="Campo com a pergunta selecionada inserida como etiqueta azul" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confira no formulário
+    Quando o formulário for exibido, a etiqueta será substituída automaticamente pela resposta daquela pergunta.
+    - Exemplo: se a pergunta contiver "Olá, `@Pergunta de nome`!" e a pessoa informar 'Ana', o formulário exibirá "Olá, Ana!".
+
+    <img src="/images/guides/manage-forms/piping-actual-response.png" alt="Tela do formulário com a etiqueta substituída pelo valor informado pelo respondente" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout title="Dicas">
+- A inserção de respostas pode aumentar o envolvimento e a personalização da experiência. Use nome, região, serviço selecionado ou outras informações do respondente nas perguntas seguintes.
+- Só é possível inserir respostas de perguntas já existentes. Por isso, posicione a pergunta de origem antes da pergunta que usará a resposta.
+</Callout>

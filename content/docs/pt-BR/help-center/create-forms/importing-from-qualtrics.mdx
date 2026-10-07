@@ -1,0 +1,48 @@
+---
+title: "Importar no formato simples do Qualtrics"
+description: "Importe para o Walla um arquivo .txt no formato simples do Qualtrics."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Importar no formato simples do Qualtrics
+
+<Steps>
+  <Step>
+    ### Clique em Criar projeto
+    Na tela do espaço de trabalho, clique no botão `Criar projeto`.
+
+    <img src="/images/guides/manage-forms/team-template-create-project.png" alt="Botão Criar projeto no canto superior direito do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione Importar no formato simples do Qualtrics
+    Selecione `Importar no formato simples do Qualtrics`.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-select.png" alt="Opção Importar do Qualtrics na janela de criação de um novo projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione o arquivo
+    Clique no botão `Procurar` e selecione o arquivo `.txt` ou `.docx` exportado do Qualtrics.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-file-select.png" alt="Prévia das perguntas convertidas após selecionar um arquivo na janela de importação do Qualtrics" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+    <Step>
+    ### Confira os campos ignorados
+    Após selecionar o arquivo, as perguntas serão convertidas automaticamente. Os resultados serão divididos nas abas `Convertidas`, `Conversão aproximada` e `Ignoradas`. Na aba `Ignoradas`, você pode ver as perguntas que não foram importadas porque seus tipos não são compatíveis com o Walla. Como apenas a posição dessas perguntas é indicada, recrie-as manualmente no editor depois de criar o formulário.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-skipped-fields.png" alt="Lista de tipos de pergunta incompatíveis na aba Ignoradas da janela de importação do Qualtrics" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Insira o nome do projeto e crie o formulário
+    Preencha o `Nome do projeto` e adicione tags, se necessário. Confira o formulário convertido na prévia à direita e clique em `Criar formulário` para concluir a importação.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-create-form.png" alt="Tela para inserir o nome do projeto e clicar em Criar formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Conclua a importação
+    Um novo projeto será criado com base no arquivo enviado.
+
+    <img src="/images/guides/manage-forms/import-qualtrics-complete.png" alt="Formulário convertido exibido no editor após a conclusão da importação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>

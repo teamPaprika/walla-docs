@@ -1,0 +1,116 @@
+---
+title: "Campos de descrição e incorporação"
+description: "Use os campos de descrição e incorporação para exibir orientações, imagens, tabelas e páginas da web junto ao formulário."
+plan:
+---
+
+## Campo de descrição
+
+<img src="/images/guides/manage-forms/description-field-example.png" alt="Exemplo de descrição com título, cartaz, data, local, número de participantes, taxa de inscrição e avisos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Adicione conteúdos livres, como capa do formulário, divisões de seção e orientações.
+- Use o [editor de texto](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
+- Use o [comando de barra (/)](https://docs.walla.my/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
+
+<Callout title="Dica">
+Use campos de descrição para separar a estrutura do formulário e adicionar orientações que ajudem os participantes a entender o conteúdo.
+</Callout>
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Campo de incorporação
+
+<img src="/images/guides/manage-forms/embed-field-example.png" alt="Exemplo de campo de incorporação com um vídeo do YouTube pronto para reprodução no formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+- Cole a URL de um site para exibir a página diretamente no formulário Walla.
+
+### Incorporar um vídeo do YouTube
+
+Cole o link de compartilhamento ou o código de incorporação do vídeo no campo para reproduzi-lo diretamente no formulário.
+
+<Steps>
+  <Step>
+    ### Clique em Compartilhar no YouTube
+    Abra o vídeo desejado no YouTube e clique no botão Compartilhar abaixo dele.
+
+    <img src="/images/guides/manage-forms/yt-embed-1-share-button.png" alt="Botão Compartilhar destacado abaixo do vídeo no YouTube" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione Incorporar na janela de compartilhamento
+    Na janela de compartilhamento, clique na opção Incorporar, à esquerda.
+
+    <img src="/images/guides/manage-forms/yt-embed-2-embed-option.png" alt="Opção Incorporar destacada na janela de compartilhamento do YouTube" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Copie apenas a URL do código de incorporação
+    Selecione e copie apenas a URL que começa com https://www.youtube.com/embed/... no atributo src, em vez de copiar toda a tag iframe.
+
+    <img src="/images/guides/manage-forms/yt-embed-3-copy-url.png" alt="URL do atributo src destacada no código iframe da janela de incorporação do vídeo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Clique em Incorporar URL no campo do Walla
+    Adicione um campo de incorporação no editor do projeto Walla e clique no botão Incorporar URL dentro dele.
+
+    <img src="/images/guides/manage-forms/yt-embed-4-walla-url-embed.png" alt="Botão Incorporar URL destacado no campo de incorporação do editor Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Cole a URL e clique em Incorporar
+    Cole a URL de incorporação do YouTube no campo e clique em Incorporar.
+
+    <img src="/images/guides/manage-forms/yt-embed-5-paste-url.png" alt="URL do YouTube inserida no campo e botão Incorporar destacado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confira o resultado
+    O vídeo do YouTube aparecerá no formulário, pronto para reprodução.
+
+    <img src="/images/guides/manage-forms/yt-embed-6-result.png" alt="Vídeo do YouTube incorporado ao campo do Walla, com o player visível" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+### Incorporar o Google Calendar
+
+Cole a URL de compartilhamento do Google Calendar no campo de incorporação para mostrar informações de agenda e reservas diretamente no formulário.
+
+<Steps>
+  <Step>
+    ### Abra as opções de compartilhamento no Google Calendar
+    Clique no evento ou agendamento que deseja incorporar. No menu `⋮` (Mais opções) da janela, selecione `Mais opções de compartilhamento`.
+
+    <img src="/images/guides/manage-forms/gcal-embed-1-share-options.png" alt="Menu de mais opções de um evento do Google Calendar com Mais opções de compartilhamento destacado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Abra Incorporar em um site → Página de agendamento inline
+    Na parte superior da janela, selecione a aba `Incorporar em um site`. Em seguida, expanda a opção `Página de agendamento inline` abaixo.
+
+    <img src="/images/guides/manage-forms/gcal-embed-2-inline-page.png" alt="Aba Incorporar em um site e opção Página de agendamento inline destacadas na janela de compartilhamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Copie apenas a URL do código de incorporação
+    Na área `Código de incorporação`, selecione e copie apenas a URL que começa com `https://calendar.google.com/...` dentro de `src="..."`, em vez de copiar toda a tag iframe.
+
+    <img src="/images/guides/manage-forms/gcal-embed-3-copy-url.png" alt="Somente a URL do atributo src selecionada em azul no código iframe" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Clique em Incorporar URL no campo do Walla
+    Adicione um campo de incorporação no editor do projeto Walla e clique no botão `Incorporar URL` dentro dele.
+
+    <img src="/images/guides/manage-forms/gcal-embed-4-walla-url-embed.png" alt="Botão Incorporar URL destacado no campo de incorporação do editor Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Cole a URL e clique em Incorporar
+    Cole a URL do Google Calendar no campo e clique em `Incorporar`.
+
+    <img src="/images/guides/manage-forms/gcal-embed-5-paste-url.png" alt="URL do Google Calendar inserida no campo e botão Incorporar destacado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Confira o resultado
+    A tela de seleção de horários de agendamento será exibida diretamente no formulário.
+
+    <img src="/images/guides/manage-forms/gcal-embed-6-result.png" alt="Página de agendamento do Google Calendar incorporada ao Walla, com seleção de horários" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atenção">
+- A incorporação pode não aparecer devido às políticas de segurança ou às configurações de HTTPS do site externo.
+- Se uma URL comum exibir a mensagem "... recusou a conexão", tente novamente com o link específico de incorporação fornecido pelo site.
+</Callout>

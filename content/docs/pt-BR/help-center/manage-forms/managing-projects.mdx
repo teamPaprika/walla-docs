@@ -1,0 +1,80 @@
+---
+title: "Gerenciar projetos"
+description: "Você pode mover, excluir, restaurar, duplicar e editar as informações dos projetos. Organize-os de acordo com a estrutura do espaço de trabalho para facilitar a gestão."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Alterar o título do projeto
+### Alterar o título exibido no espaço de trabalho
+
+1. No espaço de trabalho, clique em `...` (Mais) no cartão do projeto para alterar o título
+
+   <img src="/images/guides/manage-forms/rename-project-menu.png" alt="Editar informações do projeto no menu Mais do cartão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+2. No espaço de trabalho, clique no ícone `✏️` do cartão do projeto para alterar o título
+
+   <img src="/images/guides/manage-forms/rename-project-pencil.png" alt="Clique no ícone de lápis do cartão do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+3. Dentro do projeto, clique no nome no canto superior esquerdo para alterá-lo
+
+   <img src="/images/guides/manage-forms/rename-project-inside.png" alt="Nome do projeto no canto superior esquerdo da tela do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+### Alterar o título exibido ao compartilhar
+
+<img src="/images/guides/manage-forms/share-preview-title.png" alt="Campo de título do link nas configurações de prévia de compartilhamento" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Steps>
+  <Step>
+    ### Acesse a página de compartilhamento do projeto
+    Acesse a página de compartilhamento do projeto.
+  </Step>
+  <Step>
+    ### Encontre as configurações de prévia de compartilhamento
+    Localize 'Configurações de prévia de compartilhamento'.
+  </Step>
+  <Step>
+    ### Digite o título
+    Digite o título desejado no campo correspondente para concluir a configuração.
+  </Step>
+</Steps>
+
+<Callout type="warning" title="Atenção">
+Se nenhum título for definido, o título padrão "Walla Form" será exibido automaticamente ao compartilhar.
+</Callout>
+
+## Mover projetos
+
+- Projetos só podem ser movidos entre espaços de trabalho da mesma equipe.
+- Não é possível movê-los para espaços de trabalho de outra equipe.
+- No cartão do projeto, clique em `...` (Mais) → 'Mover para espaço de trabalho' e selecione o destino.
+
+<img src="/images/guides/manage-forms/project-move.png" alt="Mover para espaço de trabalho no menu Mais do cartão do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Excluir e restaurar projetos
+
+- No espaço de trabalho → clique em `...` (Mais) no cartão do projeto
+  - **Mover para o arquivo**: o projeto é arquivado e pode ser restaurado posteriormente.
+  - **Excluir**: o projeto é excluído permanentemente.
+    <Callout type="warning" title="Atenção">Projetos arquivados podem ser restaurados para o espaço de trabalho, mas projetos excluídos **não podem ser recuperados em nenhuma hipótese**. Prossiga com cuidado.</Callout>
+
+<img src="/images/guides/manage-forms/project-delete.png" alt="Excluir no menu Mais do cartão do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Duplicar projetos
+
+- Clique em `...` (Mais) → `Duplicar` para criar um projeto com a mesma estrutura.
+- O nome do projeto duplicado recebe automaticamente o prefixo (Copy).
+- O projeto duplicado fica como não publicado. Itens posteriores à publicação, como URL personalizada e configurações de automação, não são copiados.
+
+<img src="/images/guides/manage-forms/project-duplicate.png" alt="Duplicar no menu Mais do cartão do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Editar informações do projeto
+
+- Clique em `Editar informações` no cartão do projeto para alterar nome, ícone e cor.
+
+<img src="/images/guides/manage-forms/rename-project-menu.png" alt="Editar informações do projeto no menu Mais do cartão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Callout title="Dica">
+Para evitar exclusões acidentais, recomendamos primeiro mover o projeto para o arquivo, conferir e só então excluí-lo.
+</Callout>
