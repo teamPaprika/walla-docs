@@ -1,12 +1,12 @@
 # Custom (extension) fields
 
-How to recognize a custom (extension) field when you read it, how to **discover** the custom field types a team already has, and how to **place** one into a form draft. Two things you cannot do through these tools: you cannot author a custom field's input UI or value schema, and you cannot register a new type or version — those are created elsewhere. Here you only discover existing custom field types and add instances of them to a form.
+This reference covers custom field discovery, placement, and type deletion. When build tools are offered in `tools/list`, use them to create and register a type or version. Form editing tools place registered versions into questions.
 
 ## What a custom field is
 
-A **custom field** is an extension field type whose input UI and whose saved-value shape are **defined externally, per custom-field version** — not authored through these tools. From your perspective the field's *internals* are opaque: you can see *that* a field is a custom field, *which* extension type/version it points to, and the JSON Schema describing the value it stores, but you cannot define or change any of that here.
+A **custom field** is an extension field type. Each registered version defines its input UI and saved-value schema. Form editing tools use that version's definitions. To change those definitions, build and register a new version with the custom field build tools when available.
 
-What you *can* do: list the custom field types a team already has (so you can find a real `customFieldTypeId`), and add an instance of one to a form's draft. You never invent a type or version — you bind to one that already exists.
+Listing existing types remains available when custom field creation is disabled. List the team's types to get a real `customFieldTypeId`. Use `add_field` to place a registered version into a draft. Use `delete_custom_field_type` only when the user asks to remove the reusable type, including all versions.
 
 ## How it appears in a field object
 
@@ -125,6 +125,20 @@ You can change a placed custom field's per-instance `properties` later with an `
 
 See `walla://reference/editing-contract` for the full `add_field` op shape and the field placement options shared with built-in fields.
 
+## Deleting a reusable type (`delete_custom_field_type`)
+
+`delete_custom_field_type({ teamId, customFieldTypeId })` permanently deletes one private type and all its versions. Get the type ID from `list_custom_field_types`.
+
+Only members of the owning team can delete its private types. The caller must be the type's creator or have the team's field template delete permission. Team owners and admins have this permission by default. Team permission overrides can change this permission. MCP callers also need `project:write` and the team's MCP write capability. Public, global, and other teams' types cannot be deleted.
+
+Before calling, explain the effect on existing questions. Existing questions and saved answers remain, but those questions can no longer use the deleted type. New render-data reads cannot resolve its versions. Submitting a non-empty value for an affected question fails version validation. Optional empty values keep their existing behavior. This does not mean all submissions to the form are blocked. Validation remains active when custom field creation is disabled. A value is rejected if deletion commits before its response save. A prior validation result does not bypass this check. Responses saved before deletion remain.
+
+Related builds expire, including approved builds. They cannot be approved again to restore the deleted type. The database deletion immediately returns the type's plan limit slot. Tracked backend projects and deployment slugs are removed after commit. Failed resource cleanup keeps its references for background retries. A failure count does not stop cleanup. Cleanup failures produce structured logs.
+
+Success returns `{ "customFieldTypeId": "<deleted type id>", "deleted": true }`. This confirms the database deletion, not completion of external cleanup. Repeating the deletion returns `not_found` without further changes. The deletion cannot be undone.
+
+For one question placement, use `delete_field` instead. To discard an unapproved build, use `cancel_custom_field_build`. Build cancellation does not delete a registered type or free a type limit slot.
+
 ## Limits: `payment_required`
 
 Custom fields are available on **every** plan. What the plan limits is how many custom field types a team may **own**: Free 1, Pro 5, Enterprise unlimited.
@@ -135,7 +149,7 @@ Creating a type past the limit fails with `payment_required` and a short, user-f
 
 ## What you cannot do here
 
-- You cannot create a custom field type or version, nor define its input UI, `properties` schema, or `outputSchema` — those are registered elsewhere, not through these tools.
+- Form editing tools cannot change a registered version's input UI, `properties` schema, or `outputSchema`. Use the build tools for a new version when available.
 - You cannot change which version an existing field is pinned to after the fact (`customFieldVersionId` on a placed field), beyond choosing the version at the time you add it.
 - You cannot author the field's runtime behavior or read its stored response values through this reference.
 

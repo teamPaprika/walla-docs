@@ -8,6 +8,8 @@ A field's **description** is the rich-text **question the respondent actually se
 
 Because of that, **author a real `descriptionHtml` for every field**: the description is where the question text belongs, so write it as a clear, complete question (lead with a heading, e.g. `<h3>How satisfied were you with our service?</h3>`). The `label` is only a short internal name for the same field — if the label already holds the full question you can reuse it verbatim, but don't reduce a description to a terse label echo, and never leave it empty (the respondent would then see no question at all).
 
+For requested draft additions, exact wording is not a prerequisite. If wording is absent, write a short neutral prompt without new facts or commitments. If the answer format or consent meaning is unclear, ask the user first.
+
 **Keep a hierarchy — one heading for the question, blocks for the rest.** The leading heading holds only the concise question itself; put any elaboration, examples, options guidance, or instructions in the following `<p>`, list, or other blocks. Do not cram the whole prompt into the heading, and do not make every sentence its own heading — that flattens the hierarchy the respondent relies on to tell the question from its supporting detail.
 
 ```html

@@ -44,3 +44,32 @@ In a traditional form builder, anything missing from the field list simply could
     <img src="/images/guides/create-forms/custom-field-in-form.png" alt="A star rating custom field added to a form" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
+
+## Delete a custom field
+
+Walla permanently deletes the custom field and all its versions. The deletion reduces the number of custom fields that count toward the plan limit by one.
+
+If you belong to the owning team and created a private custom field, you can delete it. To delete another member's private custom field, you need the team's permission to delete field templates. Team owners and admins have this permission by default. Team permission overrides can change this permission. Public custom fields, global custom fields, and custom fields from other teams have no delete action.
+
+<Callout type="warning" title="CAUTION: Permanent deletion">
+
+Before you delete a custom field, make sure that you understand the effect on existing forms. Existing questions that use this custom field will no longer function. Previously collected responses will remain. You cannot undo this deletion.
+
+</Callout>
+
+Walla rejects responses with a value for the deleted custom field. This also applies to responses in progress. Empty optional questions and skipped questions keep the usual submission rules.
+
+1. In the form editor, open the `Custom Field` tab.
+2. For the custom field, open the `⋯` menu.
+3. Select `Delete custom field`.
+4. Read the deletion notice.
+5. In the confirmation dialog, select `Delete custom field`.
+
+After deletion succeeds, Walla updates the list and usage count. If deletion fails, the custom field remains in the list. The confirmation dialog shows an error.
+
+To restore an affected form:
+
+1. Delete each affected question or replace it with another field.
+2. Publish the form again.
+
+Use Walla MCP to create a custom field or change its code.
