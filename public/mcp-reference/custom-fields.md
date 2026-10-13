@@ -1,12 +1,12 @@
 # Custom (extension) fields
 
-This reference covers custom field discovery, placement, and type deletion. When build tools are offered in `tools/list`, use them to create and register a type or version. Form editing tools place registered versions into questions.
+This reference covers custom field discovery, placement, and type deletion. When build tools are offered in `tools/list`, use them to create and register a type or version. `form_apply_edits` places registered versions into questions.
 
 ## What a custom field is
 
-A **custom field** is an extension field type. Each registered version defines its input UI and saved-value schema. Form editing tools use that version's definitions. To change those definitions, build and register a new version with the custom field build tools when available.
+A **custom field** is an extension field type. Each registered version defines its input UI and saved-value schema. `form_apply_edits` uses that version's definitions. When build tools are available, use them to register a new version with different definitions.
 
-Listing existing types remains available when custom field creation is disabled. List the team's types to get a real `customFieldTypeId`. Use `add_field` to place a registered version into a draft. Use `delete_custom_field_type` only when the user asks to remove the reusable type, including all versions.
+Type discovery remains available when custom field creation is disabled. List the team's types to get a real `customFieldTypeId`. Use `form_apply_edits` with an `add_field` op to place a registered version into a draft. If the user requests type deletion, use `delete_custom_field_type` to delete the reusable type and all its versions.
 
 ## How it appears in a field object
 
@@ -97,10 +97,10 @@ Each entry carries:
 
 | Key | What it tells you |
 |---|---|
-| `customFieldTypeId` | The id you pass to `add_field` to place an instance of this type. |
+| `customFieldTypeId` | The id you pass to the `add_field` op in `form_apply_edits` to place an instance of this type. |
 | `name` | The type's human-readable name. |
 | `description` | A short description of what the type does (may be null). |
-| `latestVersionId` | The id of the type's newest version (may be null if the type has no versions). This is the version `add_field` binds to when you don't pass an explicit `customFieldVersionId`. |
+| `latestVersionId` | The id of the type's newest version (can be null if the type has no versions). If you omit `customFieldVersionId`, the `add_field` op uses this version. |
 | `outputSchema` | The latest version's `outputSchema` — the shape of the value a field of this type saves. |
 
 Notes:
@@ -109,7 +109,7 @@ Notes:
 - Discovery is offered alongside the read tools (it needs read access). Every plan can list and attach custom field types; the plan caps only how many a team may create (see Limits below).
 - Use it before adding a custom field: if a suitable type already exists, reuse it rather than asking for a near-duplicate.
 
-## Adding / placing a custom field (`add_field` with `fieldType: "CUSTOM"`)
+## Adding / placing a custom field (`form_apply_edits` with an `add_field` op)
 
 `form_apply_edits` can add a custom field via an `add_field` op with `fieldType: "CUSTOM"`. You bind it to an already-registered type/version; you do not author its UI or schemas:
 
@@ -137,19 +137,19 @@ Related builds expire, including approved builds. They cannot be approved again 
 
 Success returns `{ "customFieldTypeId": "<deleted type id>", "deleted": true }`. This confirms the database deletion, not completion of external cleanup. Repeating the deletion returns `not_found` without further changes. The deletion cannot be undone.
 
-For one question placement, use `delete_field` instead. To discard an unapproved build, use `cancel_custom_field_build`. Build cancellation does not delete a registered type or free a type limit slot.
+For one question placement, use `form_apply_edits` with a `delete_field` op. To discard an unapproved build, use `cancel_custom_field_build`. Build cancellation does not delete a registered type or free a type limit slot.
 
 ## Limits: `payment_required`
 
 Custom fields are available on **every** plan. What the plan limits is how many custom field types a team may **own**: Free 1, Pro 5, Enterprise unlimited.
 
-That limit binds only when a NEW type is **created** (through the build tools, where the deployment offers them). Listing types with `list_custom_field_types`, attaching one with `add_field`, and using a field already placed on a form are never blocked by it — so a team that is over its limit (after a downgrade, or from types provisioned for it) keeps full use of everything it already has.
+The limit applies only to new types created through the build tools. It does not block `list_custom_field_types`, the `add_field` op in `form_apply_edits`, or fields already placed on a form. A team over its limit keeps use of its existing types.
 
 Creating a type past the limit fails with `payment_required` and a short, user-facing message carrying the current count and the cap. Relay that message to the user; do not retry the same call without an upgrade. (The global error contract is in the server instructions.)
 
 ## What you cannot do here
 
-- Form editing tools cannot change a registered version's input UI, `properties` schema, or `outputSchema`. Use the build tools for a new version when available.
+- `form_apply_edits` cannot change a registered version's input UI, `properties` schema, or `outputSchema`. When build tools are available, use them for a new version.
 - You cannot change which version an existing field is pinned to after the fact (`customFieldVersionId` on a placed field), beyond choosing the version at the time you add it.
 - You cannot author the field's runtime behavior or read its stored response values through this reference.
 

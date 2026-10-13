@@ -4,7 +4,7 @@ The content shapes the `form_apply_edits` tool accepts when adding, updating, de
 
 > **What `form_apply_edits` can edit.** It edits fields and their layout: add / update / delete a field, reorder fields and groups, set a field's rich-text description (as HTML), set / clear a field's branch (skip/jump) logic via the `set_field_logic` / `clear_field_logic` ops — section (b), set the form's visual appearance (colors + next-button) via `set_form_appearance`, and set a group's page-break / label via `set_group` — section (d). A registered **`CUSTOM` (extension) field can also be added** — you bind it to an existing type/version via `customFieldTypeId` (see `walla://reference/custom-fields`), but you cannot author the custom field's input UI or value schema here.
 
-> **Op envelope.** `form_apply_edits` takes `{ formId, ops: [...] }`, where each op is one of `add_field`, `update_field`, `delete_field`, `reorder`, `set_field_logic`, `clear_field_logic`, `set_form_appearance`, `set_group`. A field's content is passed **flattened** into an `add_field` / `update_field` op — its `fieldType`, `label`, `properties`, `validations`, and `descriptionHtml` are op keys, not a nested `field` object. Placement is part of the same `add_field` op (see "Placing the field"); only the standalone `reorder` op carries a whole `formFieldsOrder`; logic is set with `set_field_logic` (see (b)); form-level appearance and a single group's page-break are set with `set_form_appearance` / `set_group` (see (d)).
+> **Op envelope.** `form_apply_edits` takes `{ formId, ops: [...] }`, where each op is one of `add_field`, `update_field`, `delete_field`, `reorder`, `set_field_logic`, `clear_field_logic`, `set_form_appearance`, `set_group`. A field's content is passed **flattened** into an `add_field` / `update_field` op — its `fieldType`, `label`, `properties`, `validations`, and `descriptionHtml` are op keys, not a nested `field` object. Placement is part of the same `add_field` op (see "Placing the field"); only the `reorder` op carries a whole `formFieldsOrder`; logic is set with `set_field_logic` (see (b)); form-level appearance and a single group's page-break are set with `set_form_appearance` / `set_group` (see (d)).
 
 > Cross-links: value catalogs are not repeated here. For the field-type list, per-type `properties` shapes, validation, and the option `id`/`value`/`label` model, see `walla://reference/field-types`. For the branch/condition/operator model, see `walla://reference/branch-logic`. The full document layout (`formFieldsOrder`, field objects, hidden fields) is in `walla://reference/form-model`.
 
@@ -19,28 +19,45 @@ A form has two layers you work with:
 | **Field objects** | One object per question/screen: a server-assigned `id`, `label`, `fieldType`, `properties`, `validations`, and its `logic` (branch/skip rules, read via `get_form`; the raw `branches` array it compiles to is storage-only), … | `add_field` / `update_field`; logic via `set_field_logic` / `clear_field_logic` |
 | **`formFieldsOrder`** | The ordered grouping of field ids into pages/groups + submit + ending | `reorder` op (and `add_field` / `delete_field` update it for you) |
 
-A field's body and its position in `formFieldsOrder` are separate concepts, but you do **not** splice them together by hand when adding or deleting: `add_field` places the new field for you (via an anchor), and `delete_field` removes its id from its group. (`delete_field` rejects the always-present `submit` system field; ending and reject fields can be deleted.) You write `formFieldsOrder` directly only for the standalone `reorder` op.
+A field's body and its position in `formFieldsOrder` are separate concepts, but you do **not** splice them together by hand when adding or deleting: `add_field` places the new field for you (via an anchor), and `delete_field` removes its id from its group. (`delete_field` rejects the always-present `submit` system field; ending and reject fields can be deleted.) You write `formFieldsOrder` directly only for the `reorder` op.
 
 ---
 
-## Individual tools and atomic batches
+## One tool for atomic draft edits
 
-Each editing operation is exposed as a separate tool with its own input schema and annotations. Use an individual tool for one edit. Its input is `{ formId, ...operationKeys }`: the same keys documented below, without the `op` discriminator. For example, call `update_field` with `{ formId, fieldId, descriptionHtml }`.
+`form_apply_edits` is the only tool for draft edits. Each operation has a distinct input schema within `ops`.
 
-| Individual tool | Batch `op` | Effect |
-|---|---|---|
-| `add_field` | `add_field` | Add one field; returns its assigned field/option ids under `added`. |
-| `update_field` | `update_field` | Merge supplied keys into one field; arrays replace. |
-| `delete_field` | `delete_field` | Remove one non-system field and its layout entry. |
-| `reorder_fields` | `reorder` | Replace the complete field/group layout, preserving all fields. |
-| `set_field_logic` | `set_field_logic` | Replace one field's jump rules and default destination. |
-| `clear_field_logic` | `clear_field_logic` | Remove rules and restore the system default destination. |
-| `set_form_appearance` | `set_form_appearance` | Merge supplied colors/next-button settings. |
-| `set_group` | `set_group` | Merge one existing group's page break/label. |
+For one edit, send one operation in `ops`. For related edits, send all operations in one call. For example:
 
-`form_apply_edits` is the atomic batch form of only these operations: use it when related changes must succeed together. Its existing `{ formId, ops }` envelope is unchanged. `tempId` is a batch-only add key; `@tempId`/`@key` aliases resolve only to earlier additions within that same batch. Across separate calls, use the assigned ids returned under `added` or re-read `get_form`.
+```json
+{
+  "formId": "<form id from get_form>",
+  "ops": [
+    { "op": "update_field", "fieldId": "<field id from get_form>", "descriptionHtml": "<h3>Enter your name</h3>" }
+  ]
+}
+```
 
-Both individual tools and batches update the collaborative draft through the same permission checks and domain validation. They do not publish. `publish_form` replaces the live form and can purge removed fields and soft-delete their uploaded files; call it only when the user requests publication.
+| `op` | Effect |
+|---|---|
+| `add_field` | Add one field. Return its assigned field and option ids under `added`. |
+| `update_field` | Merge supplied keys into one field. Arrays replace. |
+| `delete_field` | Remove one non-system field and its layout entry. |
+| `reorder` | Replace the complete field/group layout and preserve all fields. |
+| `set_field_logic` | Replace one field's jump rules and default destination. |
+| `clear_field_logic` | Remove rules and restore the system default destination. |
+| `set_form_appearance` | Merge supplied colors and next-button settings. |
+| `set_group` | Merge one existing group's page break and label. |
+
+If validation or a draft mutation fails before commit, no operation in that batch changes the draft. This guarantee covers one batch only. It does not isolate the batch from edits by other clients.
+
+If persistence confirmation fails or times out, edits can already be applied. This failure does not promise rollback. Read `get_form` before retrying the write.
+
+Do not send parallel write calls for the same form. If another call is necessary, wait for the first result. Then read `get_form` again before the next edit. If a later call fails, separate calls can leave partial changes.
+
+`tempId` names a new field within the batch. The `@tempId` and `@key` aliases resolve only to earlier additions in that batch. Across calls, use the assigned ids returned under `added` or read `get_form` again.
+
+Draft edits do not publish. Publication and external actions are separate from this transaction. `publish_form` replaces the live form and can purge removed fields and soft-delete their uploaded files. When the user requests publication, call `publish_form`.
 
 ## (a) Adding a field
 
@@ -279,7 +296,8 @@ Validation (`invalid_args` / `not_found`):
 `set_group` targets **groups that already exist** at the start of the batch — the server mints group ids (there is no group alias), so to page-break a group you must first read its `groupId` from `get_form`'s `groups` view, then `set_group { groupId, chaining }`.
 
 Batch guard:
-- `set_group` and `reorder` **cannot be combined in one batch** (both rewrite `formFieldsOrder`); use separate calls. This mirrors the existing `add_field` ⊗ `reorder` mutual exclusion.
+- `set_group` and `reorder` **cannot be combined in one batch** because both rewrite `formFieldsOrder`. Use separate sequential calls.
+- `add_field` and `reorder` **cannot be combined in one batch**. Add fields first. Then read `get_form` before a separate reorder call.
 - `set_group` may coexist with `add_field` as long as it targets a group that already existed before the batch (new groups added in the same batch are not yet addressable).
 - `set_form_appearance` composes freely with anything (it is independent of field structure).
 
