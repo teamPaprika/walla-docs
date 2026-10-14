@@ -27,6 +27,10 @@ A field's body and its position in `formFieldsOrder` are separate concepts, but 
 
 `form_apply_edits` is the only tool for draft edits. Each operation has a distinct input schema within `ops`.
 
+Do not combine `reorder` with `add_field` or `set_group` in one batch. If the user requires either combination to be atomic, explain this limit. Do not split that request into separate write calls.
+
+For a new contact question, use the format that the user specifies. If the format is unspecified, ask: phone number, email address, or both. Wait for the reply before you add contact fields.
+
 For one edit, send one operation in `ops`. For related edits, send all operations in one call. For example:
 
 ```json
@@ -296,8 +300,9 @@ Validation (`invalid_args` / `not_found`):
 `set_group` targets **groups that already exist** at the start of the batch — the server mints group ids (there is no group alias), so to page-break a group you must first read its `groupId` from `get_form`'s `groups` view, then `set_group { groupId, chaining }`.
 
 Batch guard:
-- `set_group` and `reorder` **cannot be combined in one batch** because both rewrite `formFieldsOrder`. Use separate sequential calls.
-- `add_field` and `reorder` **cannot be combined in one batch**. Add fields first. Then read `get_form` before a separate reorder call.
+- `set_group` and `reorder` **cannot be combined in one batch** because both rewrite `formFieldsOrder`. If atomicity is not required, use separate sequential calls.
+- `add_field` and `reorder` **cannot be combined in one batch**. If atomicity is not required, add fields first. Then read `get_form` before a separate reorder call.
+- If the user requires either combination to be atomic, explain this limit. Do not split that request into separate write calls.
 - `set_group` may coexist with `add_field` as long as it targets a group that already existed before the batch (new groups added in the same batch are not yet addressable).
 - `set_form_appearance` composes freely with anything (it is independent of field structure).
 

@@ -10,6 +10,8 @@ Because of that, **author a real `descriptionHtml` for every field**: the descri
 
 For requested draft additions, exact wording is not a prerequisite. If wording is absent, write a short neutral prompt without new facts or commitments. If the answer format or consent meaning is unclear, ask the user first.
 
+For a new contact question, use the format that the user specifies. If the format is unspecified, ask: phone number, email address, or both. Wait for the reply before you add contact fields.
+
 **Keep a hierarchy — one heading for the question, blocks for the rest.** The leading heading holds only the concise question itself; put any elaboration, examples, options guidance, or instructions in the following `<p>`, list, or other blocks. Do not cram the whole prompt into the heading, and do not make every sentence its own heading — that flattens the hierarchy the respondent relies on to tell the question from its supporting detail.
 
 ```html

@@ -20,6 +20,12 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 >
 > Practical consequence: renaming a `label` changes the `value` (and therefore the stored answer text and what a branch operand matches) but does **not** change the `id`, so branches stay stable because they anchor on `id`. On `add_field` the server mints option `id`s — you supply none (use a `key` to reference a new option in same-batch logic); only when adding an option via `update_field` do you assign a fresh unique `id` (never a reused one). (Adding an option forces its `value` to equal its `label` — a custom `value` supplied on add is discarded; to store a `value` distinct from `label`, set it when **updating** the field via `form_apply_edits`, which preserves a supplied `value`. The system default is `value === label`.)
 
+## Contact questions
+
+For a new contact question, use the format that the user specifies. If the format is unspecified, ask: phone number, email address, or both. Wait for the reply before you add contact fields.
+
+Use `PHONE_NUMBER` for a phone number and `EMAIL` for an email address. If the user requests both, add separate fields for each format.
+
 ## Field types and groups
 
 ```jsonc

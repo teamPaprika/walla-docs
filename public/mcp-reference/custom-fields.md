@@ -8,6 +8,14 @@ A **custom field** is an extension field type. Each registered version defines i
 
 Type discovery remains available when custom field creation is disabled. List the team's types to get a real `customFieldTypeId`. Use `form_apply_edits` with an `add_field` op to place a registered version into a draft. If the user requests type deletion, use `delete_custom_field_type` to delete the reusable type and all its versions.
 
+## Build approval
+
+Preview review is recommended, not required. An explicit approval request is sufficient even if the user skips the preview.
+
+Before approval, call `get_custom_field_build` for the current state. If the state is `ready_to_review` and the user explicitly requests approval, call `approve_custom_field_build`. Do not require another preview confirmation. A status request alone does not authorize approval. If the state is `approved`, report the existing result.
+
+Approval registers an immutable version. It does not attach a question or publish a form.
+
 ## How it appears in a field object
 
 When you read a form (`get_form` / `get_published_form`), a custom field is just another entry in the fields array, distinguished by its field type. Its identifying shape:
