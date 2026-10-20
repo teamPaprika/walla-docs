@@ -1,6 +1,6 @@
 ---
 title: "Adding or Deleting Fields"
-description: "On the project edit screen, you can add, delete, or duplicate fields to build your survey. Freely adjust field positions and structure to manage your survey more easily."
+description: "On the project edit screen, you can add, delete, or duplicate fields, or change an existing question’s type. Freely adjust field positions and structure to manage your survey more easily."
 plan:
 ---
 
@@ -23,6 +23,27 @@ Click it to insert a new field at that position.
 Hover the cursor at the bottom of a field group to reveal an `Add` button. Click it to add a question inside the group.
 
 <img src="/images/guides/manage-forms/add-field-group.png" alt="The Add button that appears when hovering at the bottom of a field group" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Change an Existing Question's Type
+
+You can change a question you've already created to another compatible type. For example, you can switch between `Multiple Choice` and `Checkboxes`, or between `Dropdown` and `Dropdown (Multi-select)`.
+
+<img src="/images/guides/manage-forms/change-field-type.png" alt="Changing Multiple Choice to Checkboxes from the Field Type menu on the right" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. In the survey editor, select the question whose type you want to change.
+2. Click `Field Type` in the settings panel on the right.
+3. Choose the type you want from those listed.
+4. After changing the type, review related settings such as the number of selections, response validation, and logic, and check how the question works in preview. Publish the survey to apply the changes for respondents.
+
+### If the Type You Want Isn't Listed
+
+- Only types compatible with the current question are listed. If the type you want isn't listed, add a new question of that type.
+- If no other compatible types are available, the `Field Type` menu is disabled.
+- Ranking and Privacy Policy questions cannot be changed to other types.
+
+<Callout type="warning" title="Check stand-alone option settings again">
+Changing a question's type clears the `Stand-alone option` setting on its choices. Switching back to the original type does not automatically restore it, so set it again if needed.
+</Callout>
 
 ## Deleting or Duplicating a Field
 ### Delete or duplicate directly in the editor

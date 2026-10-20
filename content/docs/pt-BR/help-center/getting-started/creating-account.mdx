@@ -1,6 +1,6 @@
 ---
 title: "Criar uma conta Walla"
-description: "Você pode entrar na Walla de duas formas."
+description: "Você pode entrar com seu e-mail ou sua conta Google. Se sua empresa tiver configurado o SSO, também poderá entrar com sua conta corporativa."
 plan:
 ---
 
@@ -17,3 +17,22 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 - Na tela de login, clique em 'Entrar com Google'.
 - Selecione sua conta Google para acessar imediatamente.
+
+## Entrar com o SSO da sua empresa
+
+O SSO (login único) permite entrar na Walla com a conta que você usa na sua empresa. Essa opção está disponível quando sua empresa configura uma conexão SSO com a Walla.
+
+1. Na tela de login da Walla, clique em `Entrar com SSO`.
+2. Informe seu endereço de e-mail corporativo e clique em `Continuar`.
+3. Quando a tela de autenticação da sua empresa abrir, entre com sua conta corporativa. Se uma verificação adicional for necessária, siga as instruções na tela.
+4. Após a autenticação, você voltará para a Walla. Se for seu primeiro acesso, conclua também as etapas de cadastro exibidas.
+
+<Callout type="info" title="Sua empresa precisa configurar o SSO primeiro">
+Ter um endereço de e-mail corporativo não é suficiente para usar o SSO. Consulte o administrador para confirmar se uma conexão SSO foi configurada para o domínio do seu e-mail.
+</Callout>
+
+### Se você não conseguir entrar com SSO
+
+- Confira se o endereço de e-mail corporativo foi digitado corretamente.
+- Se aparecer um aviso de que o SSO não está configurado ou a autenticação da empresa falhar, peça ao administrador para verificar a conexão SSO e as permissões de acesso da sua conta.
+- Se o botão `Entrar com SSO` não aparecer, volte de qualquer outra tela de preenchimento de login para a tela de escolha do método de acesso. Se o botão continuar sem aparecer, pergunte ao administrador se o ambiente que você usa oferece suporte a SSO.

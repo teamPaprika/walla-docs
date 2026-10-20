@@ -1,0 +1,83 @@
+---
+title: "Exportar um formulário"
+description: "Baixe o rascunho atual do formulário como um documento Word para revisar as perguntas e as regras de ramificação ou compartilhar com sua equipe."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+A exportação de formulários permite salvar o formulário que você está editando como um **arquivo Word editável (.docx)**. Use esse recurso para revisar as perguntas ou preparar um documento para aprovação.
+
+## Exportar para Word
+
+<Steps>
+  <Step>
+    ### Abra as configurações do formulário
+    Acesse o **editor** do projeto que deseja exportar e clique no ícone de engrenagem no canto superior direito para abrir `Configurações do formulário`.
+
+    <img src="/images/guides/manage-forms/survey-export-open-settings.png" alt="Ícone de configurações no canto superior direito do editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecione Exportação do formulário
+    No menu à esquerda da janela de configurações, selecione `Exportação do formulário`.
+
+    <img src="/images/guides/manage-forms/survey-export-select-menu.png" alt="Selecionar Exportar formulário no menu de configurações" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Escolha a visualização e o conteúdo
+    Selecione `Visualização padrão` ou `Visualização agrupada`. Nas caixas de seleção abaixo, ative os itens necessários, como números das perguntas, configurações de respostas e regras de ramificação, e desative os que deseja excluir. Cada opção é explicada mais adiante.
+
+    <img src="/images/guides/manage-forms/survey-export-options.png" alt="Escolher o modo de visualização e as opções de exportação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    #### Escolher a visualização
+
+    - **Visualização padrão**: Organiza o formulário com base nas quebras de página definidas no editor. Use essa opção para revisar em sequência as perguntas entre as quebras de página.
+    - **Visualização agrupada**: Coloca cada grupo de perguntas do editor em uma página separada. É útil para revisar o conteúdo de cada grupo separadamente.
+
+    `Visualização padrão` é a opção selecionada inicialmente. A visualização escolhida aqui se aplica ao documento Word exportado e não altera a visualização do formulário on-line compartilhado com os respondentes. Dependendo da quantidade de conteúdo, o Word pode criar quebras de página adicionais.
+
+    #### Opções de exportação
+
+    | Opção | Conteúdo incluído | Padrão |
+    | --- | --- | --- |
+    | Mostrar números das perguntas | Identifica as perguntas com números como Q1 e Q2. | Ativado |
+    | Incluir configurações de respostas | Exibe as configurações de resposta de cada pergunta, como condições de preenchimento e opções em ordem aleatória. | Ativado |
+    | Incluir lógica das perguntas | Exibe o destino de cada pergunta de acordo com suas condições. | Ativado |
+    | Usar números das perguntas na lógica | Identifica por número as perguntas mencionadas nas regras de ramificação. Disponível somente quando `Mostrar números das perguntas` está ativado. | Ativado |
+    | Incluir fluxo do formulário | Resume a ordem das seções e os caminhos de ramificação no início do documento. | Ativado |
+    | Mostrar valores armazenados das opções | Exibe os valores efetivamente armazenados junto ao texto das opções. | Desativado |
+    | Resumir opções de listas suspensas | Em listas suspensas com três ou mais opções, exibe apenas a primeira e a última opção e informa o total de opções. | Desativado |
+
+    <Callout title="A lógica das perguntas e o fluxo do formulário são opções separadas">
+    Se `Incluir fluxo do formulário` estiver ativado, o resumo no início do documento mostrará os caminhos de ramificação mesmo com `Incluir lógica das perguntas` desativado. Para excluir as informações de ramificação do documento, desative as duas opções.
+    </Callout>
+
+    <Callout title="Escolher opções de acordo com a finalidade">
+    - **Revisar perguntas e lógica com a equipe**: Mantenha as opções ativadas por padrão: números das perguntas, configurações de respostas, lógica das perguntas, números das perguntas na lógica e fluxo do formulário. Assim, você pode conferir as condições de cada pergunta e os caminhos de ramificação do formulário em conjunto.
+    - **Imprimir o formulário ou compartilhar principalmente o conteúdo das perguntas**: Mantenha os números das perguntas e desative as configurações de respostas, a lógica das perguntas e o fluxo do formulário que não forem necessários. Antes de imprimir, você pode ajustar as margens e os espaços para respostas no documento Word baixado.
+    - **Revisar o texto das opções e os valores armazenados**: Ative `Mostrar valores armazenados das opções`. Por exemplo, se a opção “Muito satisfeito” estiver configurada para armazenar `5`, você poderá conferir o texto e o valor juntos.
+    - **Encurtar listas suspensas longas**: Ative `Resumir opções de listas suspensas` para reduzir o tamanho do documento. Deixe essa opção desativada se precisar revisar o texto de todas as opções.
+    </Callout>
+  </Step>
+  <Step>
+    ### Baixe o arquivo Word
+    Clique em `Exportar para Word` e aguarde a criação do arquivo. Quando o arquivo `.docx`, com o título do formulário como nome, for baixado, abra-o no Word para conferir e editar as perguntas e a organização das páginas.
+
+    <img src="/images/guides/manage-forms/survey-export-download-word.png" alt="Clicar em Exportar para Word" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout title="A exportação inclui o rascunho atual">
+Não é necessário publicar o formulário antes de exportar. O documento contém o rascunho no momento da exportação, então aguarde a sincronização das alterações mais recentes. A exportação não publica o formulário.
+</Callout>
+
+## Conferir o documento baixado
+
+- O documento organiza o texto das perguntas, as opções e os espaços para escrever respostas.
+- As imagens são substituídas por textos indicativos, links ou referências semelhantes. Vídeos e conteúdos incorporados também não são executados no Word. Acesse o formulário on-line para visualizar o conteúdo original.
+- Recursos de preenchimento on-line, como pagamentos, upload de arquivos e verificação de identidade, não funcionam no documento Word.
+- Alterar o documento não atualiza o formulário original na Walla. Para mudar o formulário, faça as alterações no editor da Walla.
+
+<Callout title="As respostas coletadas não estão incluídas">
+A exportação de formulários salva as perguntas e a estrutura do formulário em um documento. Para baixar as respostas coletadas em CSV ou Excel, consulte [Planilha de respostas](/pt-BR/docs/help-center/result-analysis/response-sheet). Para salvar uma resposta individual em PDF, consulte [Respostas individuais](/pt-BR/docs/help-center/result-analysis/individual-responses).
+</Callout>

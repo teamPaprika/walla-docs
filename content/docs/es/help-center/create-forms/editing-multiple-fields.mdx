@@ -1,0 +1,83 @@
+---
+title: Editar varias preguntas a la vez
+description: Aprende a seleccionar varias preguntas, cambiar juntas sus opciones de respuesta obligatoria y seguridad, y guardarlas como plantilla de campos.
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Si quieres aplicar los mismos ajustes a varias preguntas, selecciónalas juntas para editarlas. La barra lateral derecha muestra los ajustes que se pueden aplicar a todas las preguntas seleccionadas.
+
+## Seleccionar varias preguntas
+
+<Steps>
+  <Step>
+    ### Abrir el editor del formulario
+
+    Abre el formulario que quieras editar y ve a `Crear` en la parte superior.
+  </Step>
+  <Step>
+    ### Seleccionar la primera pregunta
+
+    En la lista `Campos del formulario` de la izquierda, haz clic en la primera pregunta del intervalo que quieras seleccionar.
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-first.png" alt="La primera pregunta que se va a editar seleccionada en la lista de campos de la izquierda" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Seleccionar un intervalo con Shift
+
+    Mantén pulsada la tecla `Shift` y haz clic en la última pregunta. Se seleccionarán todas las preguntas comprendidas entre la primera y la última.
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-range.png" alt="Un intervalo de preguntas seleccionado con Shift en la lista de campos de la izquierda" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Comprobar los ajustes compartidos
+
+    Comprueba las preguntas seleccionadas y busca el ajuste que quieras cambiar en la barra lateral derecha.
+
+    <img src="/images/guides/manage-forms/bulk-edit-common-settings.png" alt="El panel de ajustes compartidos de la derecha tras seleccionar varias preguntas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+Para volver a editar una sola pregunta, haz clic en ella en la lista de la izquierda sin pulsar `Shift`.
+
+## Ajustes que puedes cambiar a la vez
+
+| Ubicación | Ajuste | Qué puedes hacer | Condiciones de visualización y acceso |
+| --- | --- | --- | --- |
+| Validación de respuestas | Campo obligatorio | Definir a la vez si las preguntas seleccionadas requieren respuesta. | Aparece cuando todas las preguntas seleccionadas admiten este ajuste. |
+| Seguridad | Enmascaramiento de datos | Configurar el enmascaramiento de datos de las preguntas seleccionadas. | Aparece cuando todas las preguntas seleccionadas admiten la función. El acceso puede estar limitado por tu plan y tus permisos. |
+| Seguridad | Eliminar respuestas automáticamente | Definir si se eliminan automáticamente las respuestas de las preguntas seleccionadas y el plazo de eliminación. | Aparece cuando todas las preguntas seleccionadas admiten la función. El acceso puede estar limitado por tu plan y tus permisos. |
+| Plantilla de campos | Guardar como plantilla de campos | Guardar la combinación de preguntas seleccionadas como plantilla. | El acceso puede estar limitado por tu plan y tus permisos. |
+
+
+Para más información, consulta [Validación de respuestas](/es/docs/help-center/create-forms/response-validation), [Enmascaramiento de datos](/es/docs/help-center/security/data-masking), [Eliminar respuestas automáticamente](/es/docs/help-center/security/auto-delete-responses) y [Plantillas de campos](/es/docs/help-center/create-forms/field-template).
+
+## Cambiar y comprobar los ajustes
+
+<Steps>
+  <Step>
+    ### Cambiar los ajustes compartidos
+
+    Con las preguntas seleccionadas, cambia el ajuste en la barra lateral derecha. Por ejemplo, activa `Campo obligatorio` en `Validación de respuestas` para exigir una respuesta a las preguntas seleccionadas.
+  </Step>
+  <Step>
+    ### Comprobar cada pregunta
+
+    Selecciona las preguntas una a una para comprobar que se hayan aplicado los ajustes previstos. Sus ajustes anteriores pueden ser distintos, así que revísalos antes y después del cambio.
+  </Step>
+  <Step>
+    ### Revisar la vista previa y publicar
+
+    Comprueba el comportamiento al responder en la vista previa y publica el formulario para aplicar los cambios a los encuestados.
+  </Step>
+</Steps>
+
+Para modificar los títulos, las opciones o la lógica, selecciona cada pregunta y utiliza las funciones de edición correspondientes.
+
+<Callout type="info" title="Si no aparece el ajuste que buscas">
+
+- Comprueba que haya varias preguntas seleccionadas. Si solo seleccionas una, se mostrarán sus ajustes individuales.
+- Comprueba que todos los tipos de pregunta seleccionados admitan la función. Vuelve a seleccionar solo las preguntas necesarias para ver los ajustes que pueden compartir.
+- Si una función está desactivada, revisa primero las indicaciones de la pantalla y las condiciones de las preguntas seleccionadas. Si aparece un aviso del plan, comprueba el plan actual del equipo y tus permisos de edición.
+</Callout>

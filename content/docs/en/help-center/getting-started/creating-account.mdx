@@ -1,6 +1,6 @@
 ---
 title: Creating a Walla Account
-description: You can sign in to Walla in two different ways.
+description: "You can sign in with your email or Google account. If your company has configured SSO, you can also sign in with your company account."
 plan:
 ---
 
@@ -15,3 +15,22 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 - On the login screen, click 'Sign in with Google'.
 - Pick your Google account and you'll be logged in right away.
+
+## Sign In with Company SSO
+
+SSO (single sign-on) lets you sign in to Walla with the account you use at work. You can use it if your company has configured an SSO connection for Walla.
+
+1. On the Walla login screen, click `Sign in with SSO`.
+2. Enter your company email address and click `Continue`.
+3. When your company's authentication screen opens, sign in with your company account. Follow the instructions if additional verification is required.
+4. After authentication, you'll return to Walla. If this is your first visit, complete any registration steps shown.
+
+<Callout type="info" title="Your company needs to configure SSO first">
+Having a company email address alone does not enable SSO. Ask your administrator whether an SSO connection has been configured for your email domain.
+</Callout>
+
+### If You Can't Sign In with SSO
+
+- Check your company email address for typos.
+- If you see a message that SSO is not configured, or your company's authentication fails, ask your administrator to check the SSO connection and your account's access permissions.
+- If you don't see the `Sign in with SSO` button, go back from any other login input screen to the screen where you choose a sign-in method. If the button still doesn't appear, ask your administrator whether SSO is supported in your environment.

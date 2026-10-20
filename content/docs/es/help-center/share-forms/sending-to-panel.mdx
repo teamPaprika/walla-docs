@@ -1,10 +1,11 @@
 ---
 title: "Enviar formularios al panel"
-description: "Puedes enviar formularios por correo usando la lista de panel registrada en tu espacio de trabajo. Se puede enviar a grupos enteros o solo a determinadas personas del panel."
+description: "Envía formularios por correo electrónico usando el panel registrado en tu espacio de trabajo. Selecciona destinatarios, vuelve a enviar a quienes no han respondido o descarga la lista de destinatarios en Excel."
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
 ## Preparativos para enviar al panel
 
@@ -24,6 +25,8 @@ Para enviar un formulario, las personas destinatarias deben estar registradas an
   <Step>
     ### Con panel registrado: pulsa Importar del panel
     Si ya tienes un panel registrado, pulsa `Importar del panel`.
+
+    Si el panel incluye información adicional, como el departamento o el cargo, puedes asignarla a campos ocultos en `Datos del encuestado → Asignación a campos ocultos` dentro de la ventana de importación. Selecciona un campo oculto existente o elige `Crear nuevo campo oculto` e introduce un nombre para vincular esa información al importar el panel.
   </Step>
   <Step>
     ### Redacta el mensaje
@@ -40,3 +43,43 @@ Para enviar un formulario, las personas destinatarias deben estar registradas an
     Los formularios enviados con «Enviar formulario» llegan por correo electrónico.
   </Step>
 </Steps>
+
+## Descargar la lista de destinatarios en Excel
+
+Puedes descargar la lista de destinatarios registrada en `Enviar encuesta` y la información de los envíos como archivo de Excel (.xlsx). Incluye los ID de cliente, nombres, correos electrónicos, teléfonos, estados, número de envíos, enlaces individuales, valores de campos ocultos y marcas de tiempo relacionadas.
+
+<img src="/images/guides/share-forms/sending-to-panel-excel-download.png" alt="Botón de descarga y aviso para mostrar los datos de la lista de destinatarios" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. En la pestaña `Compartir` del proyecto, ve a `Enviar encuesta`.
+2. Si los datos personales están enmascarados, pulsa el icono para mostrarlos situado encima de la lista e indica el motivo. Según la política de tu equipo, puede ser necesaria la aprobación de un administrador.
+3. Pulsa `Descargar` encima de la lista.
+4. Si se te pide un motivo de descarga o solicitar aprobación, completa el proceso antes de descargar el archivo. Si aparece un aviso de que no tienes permiso para descargar, contacta con el administrador del espacio de trabajo.
+
+<Callout type="info" title="La descarga incluye todos los destinatarios">
+Se descarga la lista completa de destinatarios del formulario, independientemente de los filtros de estado o fecha aplicados y de las filas seleccionadas. Si solo necesitas algunos destinatarios, filtra el archivo de Excel descargado. Las horas del archivo están en UTC; ten en cuenta la diferencia de nueve horas al compararlas con la hora de Corea.
+</Callout>
+
+Para descargar las respuestas enviadas al formulario, utiliza [Descargar las respuestas en la hoja de respuestas](/es/docs/help-center/result-analysis/response-sheet#descargar-las-respuestas).
+
+## Filtrar a quienes no han respondido y reenviar a destinatarios seleccionados
+
+Puedes seleccionar a quienes ya recibieron el formulario pero todavía no han respondido y enviarles de nuevo la invitación a participar.
+
+<img src="/images/guides/share-forms/sending-to-panel-filter-resend.png" alt="Filtrar destinatarios por estado y fecha del último envío" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. En `Compartir` → `Enviar encuesta`, pulsa `Filtrar`.
+2. En el estado, selecciona `Enviado` y `Abierto` para localizar a los destinatarios que aún no han respondido. Para incluir a quienes recibirán su primera invitación, selecciona también `Sin enviar`.
+3. Si lo necesitas, usa `Seleccionar intervalo de fechas` en `Último envío` para acotar cuándo se envió el formulario por última vez.
+4. Revisa los resultados del filtro y marca las casillas de la izquierda para seleccionar las filas a las que quieres enviar el formulario.
+5. Pulsa `Enviar encuesta`, comprueba la cuenta remitente, el asunto y el mensaje, y envía el formulario a los destinatarios seleccionados. Después, revisa `Número de envíos` y `Último envío`.
+
+| Estado | Significado |
+| --- | --- |
+| Sin enviar | El formulario todavía no se ha enviado a este destinatario. |
+| Enviado | El formulario se ha enviado y el estado aún no ha cambiado a Abierto o Respondido. |
+| Abierto | El destinatario ha abierto el formulario, pero todavía no ha respondido. |
+| Respondido | El destinatario ha respondido al formulario. No selecciones este estado si quieres excluirlo del reenvío. |
+
+<Callout type="info" title="Vuelve a seleccionar los destinatarios tras cambiar los filtros">
+Cambiar los filtros de estado o fecha, o pulsar `Restablecer`, borra la selección de filas. Aplica primero los filtros y después selecciona las filas a las que quieres enviar. El filtro de fechas usa la hora del último envío, no la fecha de respuesta. Los destinatarios a quienes nunca se ha enviado el formulario no tienen hora de envío y no aparecen cuando se aplica un filtro de fechas.
+</Callout>

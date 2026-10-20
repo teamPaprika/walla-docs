@@ -15,8 +15,16 @@ plan:
 - En `Configurar valores de opción`, abajo a la izquierda, puedes asignar un valor a cada opción. (Ejemplo: definir la primera opción con el valor 1)
 - Con el [editor de texto](/es/docs/help-center/create-forms/editing-field-text) puedes aplicar estilos como color, tamaño y grosor de letra.
 - También puedes insertar imágenes, tablas o títulos fácilmente con los [comandos de barra (/)](/es/docs/help-center/create-forms/editing-field-text).
-- Al pulsar el botón `…` (más) de abajo a la derecha puedes usar esta función.
-  - Limitar columnas repetidas: impide que una misma persona elija la misma columna más de una vez. Con ello puedes diseñar encuestas de ordenación por preferencia (1.ª opción, 2.ª opción, etc.).
+- En `Comportamiento de la pregunta`, en la barra lateral derecha, puedes impedir columnas duplicadas, ordenar aleatoriamente y fijar filas o columnas, y activar `Apilar filas en dispositivos móviles`.
+  - Impedir columnas duplicadas: Activa `Impedir columnas duplicadas` para evitar que una columna seleccionada en una fila vuelva a seleccionarse en otra. Es útil para preguntas de ordenación por preferencia, como primera y segunda opción. Esta función solo está disponible en la cuadrícula de opción múltiple normal.
+  - Ordenar filas o columnas aleatoriamente: Activa `Ordenar filas aleatoriamente` u `Ordenar columnas aleatoriamente` para mostrar los elementos de esa dirección en orden aleatorio al responder. Puedes activar ambas.
+  - Fijar filas o columnas: Al activar la ordenación aleatoria, selecciona los elementos que deban conservar su posición en `Filas que permanecerán fijas` o `Columnas que permanecerán fijas`. Puedes fijar varios elementos y desmarcarlos para dejar de fijarlos. Por ejemplo, si fijas «Otro» en la última columna, seguirá en la última posición aunque se ordenen aleatoriamente las demás.
+
+    <img src="/images/guides/manage-forms/grid-shuffle-pin.png" alt="Comportamiento de la pregunta con la ordenación aleatoria de columnas activada y Autobús y Coche particular seleccionados como columnas fijas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  - Apilar filas en dispositivos móviles: Activa este ajuste para abrir cada fila y responder con las opciones en vertical desde el móvil. En escritorio se conserva el formato de tabla.
+  - Comprueba el orden, las posiciones fijas y la visualización móvil en la vista previa, y publica el formulario para aplicar los cambios a los encuestados.
+
 
 ## Campo de cuadrícula de selección múltiple
 
@@ -24,6 +32,17 @@ plan:
 - También puedes asignar valores a cada opción.
 - La diferencia es que, mientras la cuadrícula normal solo permite elegir una columna por fila, la de selección múltiple permite elegir varias columnas sin límite.
 - Si activas `Respuesta exclusiva` en el menú de una columna, esa columna — como 'Ninguna de las anteriores' — no se podrá elegir junto con las demás. Cuando alguien la selecciona, se desmarcan todas las demás selecciones de esa fila.
+<span id="ordenar-aleatoriamente-y-fijar-filas-o-columnas" />
+
+- En `Comportamiento de la pregunta`, en la barra lateral derecha, puedes ordenar aleatoriamente y fijar filas o columnas, y activar `Apilar filas en dispositivos móviles`.
+  - Ordenar filas o columnas aleatoriamente: Activa `Ordenar filas aleatoriamente` u `Ordenar columnas aleatoriamente` para mostrar los elementos de esa dirección en orden aleatorio al responder. Puedes activar ambas.
+  - Fijar filas o columnas: Al activar la ordenación aleatoria, selecciona los elementos que deban conservar su posición en `Filas que permanecerán fijas` o `Columnas que permanecerán fijas`. Puedes fijar varios elementos y desmarcarlos para dejar de fijarlos. Por ejemplo, si fijas «Otro» en la última columna, seguirá en la última posición aunque se ordenen aleatoriamente las demás.
+
+    <img src="/images/guides/manage-forms/grid-shuffle-pin.png" alt="Comportamiento de la pregunta con la ordenación aleatoria de columnas activada y Autobús y Coche particular seleccionados como columnas fijas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  - Apilar filas en dispositivos móviles: Activa este ajuste para abrir cada fila y responder con las opciones en vertical desde el móvil. En escritorio se conserva el formato de tabla.
+  - Comprueba el orden, las posiciones fijas y la visualización móvil en la vista previa, y publica el formulario para aplicar los cambios a los encuestados.
+
 
 <Callout title="Consejo">
 La cuadrícula de opción múltiple encaja bien en encuestas sobre orden o prioridad, y la de selección múltiple resulta útil en encuestas de comparación y evaluación que admiten varias respuestas.

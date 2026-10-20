@@ -1,0 +1,83 @@
+---
+title: Editar várias perguntas ao mesmo tempo
+description: Saiba como selecionar várias perguntas, alterar suas configurações de preenchimento obrigatório e segurança em conjunto e salvá-las como modelo de campo.
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Para aplicar as mesmas configurações a várias perguntas, selecione-as em conjunto para editar. A barra lateral direita mostra as configurações que podem ser aplicadas a todas as perguntas selecionadas.
+
+## Selecionar várias perguntas
+
+<Steps>
+  <Step>
+    ### Abrir o editor do formulário
+
+    Abra o formulário que deseja editar e acesse `Criar` na parte superior.
+  </Step>
+  <Step>
+    ### Selecionar a primeira pergunta
+
+    Na lista `Campos do formulário`, à esquerda, clique na primeira pergunta do intervalo que deseja selecionar.
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-first.png" alt="A primeira pergunta a editar selecionada na lista de campos à esquerda" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecionar um intervalo com Shift
+
+    Mantenha a tecla `Shift` pressionada e clique na última pergunta. Todas as perguntas entre a primeira e a última serão selecionadas em conjunto.
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-range.png" alt="Um intervalo de perguntas selecionado com Shift na lista de campos à esquerda" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Conferir as configurações em comum
+
+    Confira as perguntas selecionadas e encontre a configuração que deseja alterar na barra lateral direita.
+
+    <img src="/images/guides/manage-forms/bulk-edit-common-settings.png" alt="O painel de configurações em comum à direita após selecionar várias perguntas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+Para voltar a editar uma única pergunta, clique nela na lista à esquerda sem pressionar `Shift`.
+
+## Configurações que você pode alterar em conjunto
+
+| Local | Configuração | O que você pode fazer | Condições de exibição e uso |
+| --- | --- | --- | --- |
+| Validação de respostas | Preenchimento obrigatório | Definir em conjunto se as perguntas selecionadas exigem resposta. | Aparece quando todas as perguntas selecionadas oferecem suporte a essa configuração. |
+| Segurança | Mascaramento de dados | Configurar o mascaramento de dados das perguntas selecionadas. | Aparece quando todas as perguntas selecionadas oferecem suporte ao recurso. O acesso pode ser limitado pelo plano e pelas suas permissões. |
+| Segurança | Excluir respostas automaticamente | Definir se as respostas das perguntas selecionadas serão excluídas automaticamente e o prazo de exclusão. | Aparece quando todas as perguntas selecionadas oferecem suporte ao recurso. O acesso pode ser limitado pelo plano e pelas suas permissões. |
+| Modelo de campo | Salvar como modelo de campo | Salvar a combinação das perguntas selecionadas como modelo. | O acesso pode ser limitado pelo plano e pelas suas permissões. |
+
+
+Para mais detalhes, consulte [Validação de respostas](/pt-BR/docs/help-center/create-forms/response-validation), [Mascaramento de dados](/pt-BR/docs/help-center/security/data-masking), [Excluir respostas automaticamente](/pt-BR/docs/help-center/security/auto-delete-responses) e [Modelos de campos](/pt-BR/docs/help-center/create-forms/field-template).
+
+## Alterar e conferir as configurações
+
+<Steps>
+  <Step>
+    ### Alterar as configurações em comum
+
+    Com as perguntas selecionadas em conjunto, altere a configuração na barra lateral direita. Por exemplo, ative `Preenchimento obrigatório` em `Validação de respostas` para exigir respostas às perguntas selecionadas.
+  </Step>
+  <Step>
+    ### Conferir a aplicação em cada pergunta
+
+    Selecione cada pergunta individualmente para conferir se as configurações desejadas foram aplicadas. As configurações anteriores das perguntas podem ser diferentes, então confira antes e depois da alteração.
+  </Step>
+  <Step>
+    ### Conferir a prévia e publicar
+
+    Verifique o funcionamento das respostas na prévia e publique o formulário para aplicar as alterações aos respondentes.
+  </Step>
+</Steps>
+
+Para modificar os títulos, as opções ou a lógica, selecione cada pergunta e use as funções de edição correspondentes.
+
+<Callout type="info" title="Se a configuração desejada não aparecer">
+
+- Confira se várias perguntas estão selecionadas. Ao selecionar apenas uma, serão exibidas as configurações individuais dela.
+- Confira se todos os tipos de pergunta selecionados oferecem suporte ao recurso. Selecione novamente apenas as perguntas necessárias para ver as configurações que podem ser aplicadas em conjunto.
+- Se o recurso estiver desativado, confira primeiro as orientações na tela e as condições das perguntas selecionadas. Se aparecer um aviso sobre o plano, confira o plano atual da equipe e suas permissões de edição.
+</Callout>

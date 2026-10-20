@@ -17,8 +17,16 @@ plan:
 - Em `Definir valores das opções`, no canto inferior esquerdo, atribua um valor a cada opção. (Exemplo: definir a primeira opção com valor 1.)
 - Use o [editor de texto](/pt-BR/docs/help-center/create-forms/editing-field-text#formatar-o-texto) para aplicar estilos como cor, tamanho e negrito.
 - Use o [comando de barra (/)](/pt-BR/docs/help-center/create-forms/editing-field-text#usar-recursos-adicionais-com-o-comando-de-barra) para inserir imagens, tabelas e títulos com facilidade.
-- Clique no botão `…` (Mais opções) no canto inferior direito para acessar o recurso abaixo.
-  - Restringir colunas duplicadas: impede que o respondente selecione a mesma coluna mais de uma vez. Isso permite criar perguntas de classificação, como primeira e segunda prioridades.
+- Em `Comportamento da pergunta`, na barra lateral direita, você pode restringir colunas duplicadas, embaralhar e fixar linhas ou colunas e ativar `Empilhar linhas no celular`.
+  - Restringir colunas duplicadas: Ative `Restringir colunas duplicadas` para impedir que uma coluna selecionada em uma linha seja selecionada novamente em outra. Isso é útil para perguntas de classificação, como primeira e segunda prioridades. Esse recurso está disponível apenas na grade de múltipla escolha comum.
+  - Embaralhar linhas ou colunas: Ative `Embaralhar linhas` ou `Embaralhar colunas` para exibir os itens dessa direção em ordem aleatória na tela de resposta. Você pode ativar ambos.
+  - Fixar linhas ou colunas: Ao ativar o embaralhamento, selecione os itens que devem manter suas posições em `Linhas que permanecerão fixas` ou `Colunas que permanecerão fixas`. Você pode fixar vários itens e desmarcá-los para deixar de fixá-los. Por exemplo, fixar “Outro” na última coluna mantém essa opção no final, mesmo que as outras colunas sejam embaralhadas.
+
+    <img src="/images/guides/manage-forms/grid-shuffle-pin.png" alt="Comportamento da pergunta com Embaralhar colunas ativado e Ônibus e Carro particular selecionados como colunas fixas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  - Empilhar linhas no celular: Ative essa configuração para abrir cada linha e responder com as opções exibidas na vertical no celular. No desktop, o formato de tabela é mantido.
+  - Confira a ordem, as posições fixas e a exibição no celular na prévia e publique o formulário para aplicar as alterações aos respondentes.
+
 
 ## Campo de grade de caixas de seleção
 
@@ -27,6 +35,17 @@ plan:
 - Assim como na grade de múltipla escolha, você pode adicionar linhas e colunas e digitar os títulos diretamente na tabela.
 - Também é possível atribuir valores às opções.
 - A diferença é que a grade de múltipla escolha permite selecionar apenas uma coluna por linha, enquanto a grade de caixas de seleção permite selecionar várias colunas sem essa restrição.
+<span id="embaralhar-a-ordem-e-fixar-linhas-ou-colunas" />
+
+- Em `Comportamento da pergunta`, na barra lateral direita, você pode embaralhar e fixar linhas ou colunas e ativar `Empilhar linhas no celular`.
+  - Embaralhar linhas ou colunas: Ative `Embaralhar linhas` ou `Embaralhar colunas` para exibir os itens dessa direção em ordem aleatória na tela de resposta. Você pode ativar ambos.
+  - Fixar linhas ou colunas: Ao ativar o embaralhamento, selecione os itens que devem manter suas posições em `Linhas que permanecerão fixas` ou `Colunas que permanecerão fixas`. Você pode fixar vários itens e desmarcá-los para deixar de fixá-los. Por exemplo, fixar “Outro” na última coluna mantém essa opção no final, mesmo que as outras colunas sejam embaralhadas.
+
+    <img src="/images/guides/manage-forms/grid-shuffle-pin.png" alt="Comportamento da pergunta com Embaralhar colunas ativado e Ônibus e Carro particular selecionados como colunas fixas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  - Empilhar linhas no celular: Ative essa configuração para abrir cada linha e responder com as opções exibidas na vertical no celular. No desktop, o formato de tabela é mantido.
+  - Confira a ordem, as posições fixas e a exibição no celular na prévia e publique o formulário para aplicar as alterações aos respondentes.
+
 
 <Callout title="Dica">
 A grade de múltipla escolha é adequada para perguntas sobre classificação e prioridades. A grade de caixas de seleção é útil para comparações e avaliações que permitem várias respostas.
