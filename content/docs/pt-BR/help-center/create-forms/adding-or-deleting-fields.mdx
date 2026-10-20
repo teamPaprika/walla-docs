@@ -1,6 +1,6 @@
 ---
 title: "Adicionar e excluir campos"
-description: "No editor do projeto, você pode adicionar, excluir e duplicar campos para montar seu formulário. Ajuste livremente a posição e a estrutura dos campos para facilitar o gerenciamento."
+description: "No editor do projeto, você pode adicionar, excluir e duplicar campos ou alterar o tipo de uma pergunta existente. Ajuste livremente a posição e a estrutura dos campos para facilitar o gerenciamento do formulário."
 plan:
 ---
 
@@ -23,6 +23,27 @@ Clique nele para inserir um novo campo nessa posição.
 Ao passar o cursor na parte inferior de um grupo de campos, o botão `Adicionar` aparece. Clique nele para adicionar uma pergunta ao grupo.
 
 <img src="/images/guides/manage-forms/add-field-group.png" alt="Botão Adicionar exibido ao passar o cursor na parte inferior de um grupo de campos" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## Alterar o tipo de uma pergunta existente
+
+Você pode alterar uma pergunta já criada para outro tipo compatível. Por exemplo, pode alternar entre `Múltipla escolha` e `Caixas de seleção`, ou entre `Lista suspensa` e `Lista suspensa (seleção múltipla)`.
+
+<img src="/images/guides/manage-forms/change-field-type.png" alt="Alterar de múltipla escolha para caixas de seleção no menu Tipo de campo à direita" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. No editor do formulário, selecione a pergunta cujo tipo deseja alterar.
+2. Clique em `Tipo de campo` no painel de configurações à direita.
+3. Escolha o tipo desejado entre os que aparecem na lista.
+4. Após a alteração, confira as configurações relacionadas, como o número de seleções, a validação de respostas e a lógica, e verifique o funcionamento da pergunta na prévia. Publique o formulário para aplicar as alterações aos respondentes.
+
+### Se o tipo desejado não aparecer
+
+- A lista mostra apenas tipos compatíveis com a pergunta atual. Se o tipo desejado não estiver na lista, adicione uma nova pergunta desse tipo.
+- Se não houver outros tipos compatíveis, o menu `Tipo de campo` ficará desativado.
+- Perguntas de Classificação e Política de Privacidade não podem ser alteradas para outros tipos.
+
+<Callout type="warning" title="Confira novamente a configuração de opção exclusiva">
+Alterar o tipo da pergunta remove a configuração `Opção exclusiva` das alternativas. Voltar ao tipo original não a restaura automaticamente; configure-a novamente, se necessário.
+</Callout>
 
 ## Excluir ou duplicar campos
 ### Exclua ou duplique diretamente no editor

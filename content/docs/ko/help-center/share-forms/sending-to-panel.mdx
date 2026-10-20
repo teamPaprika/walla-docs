@@ -1,10 +1,11 @@
 ---
 title: "패널에게 설문 발송하기"
-description: "워크스페이스에 등록한 패널 명단을 활용해 설문을 이메일로 발송할 수 있어요. 그룹 단위로 보내거나 특정 패널만 골라 발송할 수 있습니다."
+description: "워크스페이스에 등록한 패널 명단을 활용해 설문을 이메일로 발송할 수 있어요. 특정 패널을 골라 발송하고, 미응답자에게 다시 보내거나 발송 대상자 명단을 Excel로 내려받을 수 있습니다."
 plan: enterprise
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
 ## 패널 발송 준비하기
 
@@ -29,7 +30,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
   <Step>
     ### 등록된 패널이 있는 경우 - 패널에서 가져오기 클릭
-    이미 등록한 패널이 있는 경우, `패널에서 가져오기`를 클릭합니다.
+    이미 등록한 패널이 있는 경우, `패널에서 가져오기`를 클릭합니다. 패널에 부서·직급 같은 추가 정보가 등록되어 있다면, 가져오기 팝업의 `패널정보 → 히든필드 매핑`에서 히든필드로 지정할 수 있어요. 기존 히든필드를 선택하거나 `새 히든필드 생성`을 선택해 이름을 입력하면, 패널을 가져올 때 해당 정보도 함께 연결됩니다.
 
     <img src="/images/guides/share-forms/sending-to-panel-from-panel.png" alt="설문 보내기 영역의 패널에서 가져오기 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
@@ -60,3 +61,43 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     <img src="/images/guides/share-forms/sending-to-panel-email-preview.png" alt="패널에게 발송된 설문 이메일 예시" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
+
+## 발송 대상자 명단 Excel 다운로드
+
+`설문 보내기`에 등록된 대상자 명단과 발송 현황을 Excel 파일(.xlsx)로 내려받을 수 있어요. 고객 ID, 이름, 이메일, 전화번호, 발송 상태, 전송횟수, 전용 링크, 히든필드 값과 관련 시각이 포함됩니다.
+
+<img src="/images/guides/share-forms/sending-to-panel-excel-download.png" alt="설문 보내기 목록의 다운로드 버튼과 마스킹 해제 안내" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. 프로젝트의 `공유하기` 탭에서 `설문 보내기` 영역으로 이동합니다.
+2. 개인정보가 마스킹되어 있다면 목록 위의 마스킹 해제 아이콘을 누르고, 사유를 입력해 해제합니다. 팀 정책에 따라 관리자 승인이 필요할 수 있어요.
+3. 목록 위의 `다운로드` 버튼을 누릅니다.
+4. 다운로드 사유 입력이나 승인 요청 안내가 표시되면 절차를 진행한 뒤 파일을 내려받습니다. 다운로드 권한이 없다는 안내가 나오면 워크스페이스 관리자에게 문의해주세요.
+
+<Callout type="info" title="다운로드에는 전체 발송 대상자가 포함돼요">
+현재 목록에 적용한 상태·기간 필터나 선택한 행과 관계없이, 해당 설문의 전체 발송 대상자 명단이 다운로드됩니다. 특정 대상자만 필요하면 내려받은 Excel에서 다시 필터링해주세요. 파일의 시각은 UTC 기준이므로 한국 시각과 비교할 때는 9시간 차이를 확인해주세요.
+</Callout>
+
+설문에 제출된 답변을 내려받으려면 [응답 시트의 응답 다운로드](/ko/docs/help-center/result-analysis/response-sheet#응답-다운로드)를 이용해주세요.
+
+## 미응답자 필터링·선택 재발송
+
+이미 설문을 보냈지만 아직 응답하지 않은 대상자를 골라 참여 안내를 다시 보낼 수 있어요.
+
+<img src="/images/guides/share-forms/sending-to-panel-filter-resend.png" alt="설문 보내기에서 상태와 마지막 전송시간으로 대상자를 필터링하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. `공유하기` → `설문 보내기`에서 `필터`를 누릅니다.
+2. 상태에서 `발송됨`과 `확인함`을 선택해 아직 응답하지 않은 발송 대상자를 추립니다. 처음 안내를 보낼 대상자도 포함하려면 `미발송`을 함께 선택해주세요.
+3. 필요한 경우 `마지막 전송시간`의 `기간 선택`으로 발송 시점을 좁힙니다.
+4. 필터 결과를 확인한 뒤 목록 왼쪽 체크박스로 이번에 발송할 행을 선택합니다.
+5. `설문 보내기`를 눌러 발신 계정, 제목과 메시지를 확인하고 선택한 대상자에게 발송합니다. 발송 후 `전송횟수`와 `마지막 전송시간`을 확인해주세요.
+
+| 상태 | 의미 |
+| --- | --- |
+| 미발송 | 아직 설문을 발송하지 않은 대상자예요. |
+| 발송됨 | 설문이 발송되었고, 확인·응답 상태로 바뀌지 않은 대상자예요. |
+| 확인함 | 설문을 확인했지만 아직 응답하지 않은 대상자예요. |
+| 응답됨 | 설문에 응답한 대상자예요. 재발송에서 제외하려면 이 상태를 선택하지 마세요. |
+
+<Callout type="info" title="필터를 바꾸면 대상자를 다시 선택해주세요">
+상태·기간 필터를 변경하거나 `초기화`하면 기존 행 선택이 해제됩니다. 필터를 먼저 적용한 뒤 발송할 행을 다시 선택해주세요. 기간 필터는 응답일이 아닌 마지막 전송시간 기준이며, 한 번도 발송하지 않아 전송시간이 없는 대상자는 기간 필터를 적용하면 표시되지 않습니다.
+</Callout>

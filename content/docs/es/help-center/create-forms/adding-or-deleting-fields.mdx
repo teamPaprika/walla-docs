@@ -1,6 +1,6 @@
 ---
 title: "Añadir o eliminar campos"
-description: "En la pantalla de edición del proyecto puedes añadir, eliminar o duplicar campos para construir el formulario. Ajusta libremente la posición y la estructura de los campos para gestionarlo con más facilidad."
+description: "En la pantalla de edición del proyecto puedes añadir, eliminar o duplicar campos, o cambiar el tipo de una pregunta existente. Ajusta libremente la posición y la estructura de los campos para gestionar el formulario con más facilidad."
 plan:
 ---
 
@@ -17,6 +17,27 @@ Haz clic para insertar un campo nuevo en esa posición.
 
 ### Añadir dentro de un grupo de campos
 Sitúa el cursor en la parte inferior de un grupo de campos y aparecerá el botón `Añadir`. Haz clic para añadir una pregunta dentro del grupo.
+
+## Cambiar el tipo de una pregunta existente
+
+Puedes cambiar una pregunta que ya has creado a otro tipo compatible. Por ejemplo, puedes alternar entre `Opción múltiple` y `Casillas de verificación`, o entre `Desplegable` y `Desplegable (selección múltiple)`.
+
+<img src="/images/guides/manage-forms/change-field-type.png" alt="Cambiar de opción múltiple a casillas de verificación en el menú Tipo de campo de la derecha" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. En el editor del formulario, selecciona la pregunta cuyo tipo quieres cambiar.
+2. Haz clic en `Tipo de campo` en el panel de configuración de la derecha.
+3. Elige el tipo que quieras entre los que aparecen en la lista.
+4. Tras el cambio, revisa los ajustes relacionados, como el número de selecciones, la validación de respuestas y la lógica, y comprueba la forma de responder en la vista previa. Publica el formulario para aplicar los cambios a los encuestados.
+
+### Si no aparece el tipo que quieres
+
+- Solo se muestran los tipos compatibles con la pregunta actual. Si el tipo que quieres no está en la lista, añade una nueva pregunta de ese tipo.
+- Si no hay otros tipos compatibles, el menú `Tipo de campo` estará desactivado.
+- Las preguntas de Clasificación y Recopilación de datos personales no se pueden cambiar a otros tipos.
+
+<Callout type="warning" title="Revisa los ajustes de opción excluyente">
+Al cambiar el tipo de pregunta se desactiva el ajuste `Opción excluyente` de sus opciones. Volver al tipo original no lo restaura automáticamente, así que vuelve a configurarlo si lo necesitas.
+</Callout>
 
 ## Eliminar o duplicar un campo
 ### Eliminar o duplicar desde la pantalla de edición

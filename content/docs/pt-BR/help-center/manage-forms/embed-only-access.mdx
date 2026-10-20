@@ -227,14 +227,14 @@ Nos modos com assinatura, o formulário é aberto na seguinte ordem.
 
 ## Checklist antes da implantação
 
-- [ ] Confirmei que o modo desejado está disponível no plano atual.
-- [ ] Informei apenas o esquema e o host na origem permitida.
-- [ ] Armazenei o segredo de assinatura somente nas variáveis de ambiente do servidor host.
-- [ ] Gero um novo token a cada solicitação, com validade de 5 minutos.
-- [ ] Incluí o ID correto do formulário em `aud`.
-- [ ] Incluí `sub` no token do modo de identificação de membro.
-- [ ] O iframe passa o token pelo fragmento (`#embedToken=`).
-- [ ] Confirmei que o formulário abre e pode ser enviado normalmente na página onde está incorporado.
+- Confirmei que o modo desejado está disponível no plano atual.
+- Informei apenas o esquema e o host na origem permitida.
+- Armazenei o segredo de assinatura somente nas variáveis de ambiente do servidor host.
+- Gero um novo token a cada solicitação, com validade de 5 minutos.
+- Incluí o ID correto do formulário em `aud`.
+- Incluí `sub` no token do modo de identificação de membro.
+- O iframe passa o token pelo fragmento (`#embedToken=`).
+- Confirmei que o formulário abre e pode ser enviado normalmente na página onde está incorporado.
 
 <Callout title="Quando usar">
 - Quando o formulário está incorporado em um portal interno ou página de membros e você quer impedir o acesso por links compartilhados externamente

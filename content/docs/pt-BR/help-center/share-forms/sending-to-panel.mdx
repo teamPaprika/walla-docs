@@ -1,10 +1,11 @@
 ---
 title: "Enviar pesquisas a um painel de participantes"
-description: "Envie formulários por e-mail usando a lista de participantes cadastrados no espaço de trabalho. Envie para grupos ou selecione participantes específicos."
+description: "Envie formulários por e-mail usando o painel cadastrado no espaço de trabalho. Selecione destinatários, reenvie para quem ainda não respondeu ou baixe a lista de destinatários em Excel."
 plan: enterprise
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
 ## Preparar o envio ao painel
 
@@ -31,6 +32,8 @@ Antes de enviar o formulário, os destinatários devem estar cadastrados na aba 
     ### Com participantes cadastrados — clique em Importar do painel de respondentes
     Se já houver participantes cadastrados, clique em `Importar do painel de respondentes`.
 
+    Se o painel tiver informações adicionais cadastradas, como departamento ou cargo, você poderá associá-las a campos ocultos em `Informações do painel → Mapeamento de campos ocultos`, na janela de importação. Selecione um campo oculto existente ou escolha `Criar novo campo oculto` e informe um nome para vincular essas informações ao importar os participantes.
+
     <img src="/images/guides/share-forms/sending-to-panel-from-panel.png" alt="Botão Importar do painel de respondentes na seção Enviar pesquisa" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
     <img src="/images/guides/share-forms/sending-to-panel-from-panel-popup.png" alt="Seleção de destinatários na janela Importar do painel de respondentes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
@@ -55,8 +58,48 @@ Antes de enviar o formulário, os destinatários devem estar cadastrados na aba 
   </Step>
   <Step>
     ### Exemplo de e-mail recebido
-    Formulários enviados por 'Enviar pesquisa' são entregues como no exemplo abaixo.
+    Os destinatários recebem por e-mail os formulários enviados por 'Enviar pesquisa'.
 
     <img src="/images/guides/share-forms/sending-to-panel-email-preview.png" alt="Exemplo de e-mail de formulário enviado aos participantes" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
+
+## Baixar a lista de destinatários em Excel
+
+Você pode baixar a lista de destinatários cadastrados em `Enviar pesquisa` e as informações dos envios como um arquivo Excel (.xlsx). O arquivo inclui IDs de cliente, nomes, e-mails, telefones, status, número de envios, links individuais, valores de campos ocultos e os horários relacionados.
+
+<img src="/images/guides/share-forms/sending-to-panel-excel-download.png" alt="Botão de download e aviso para remover o mascaramento na lista de destinatários" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. Na aba `Compartilhar` do projeto, acesse `Enviar pesquisa`.
+2. Se os dados pessoais estiverem mascarados, clique no ícone de remoção do mascaramento acima da lista e informe o motivo para exibi-los. Dependendo da política da equipe, pode ser necessária a aprovação de um administrador.
+3. Clique em `Baixar` acima da lista.
+4. Se for solicitado um motivo para o download ou uma aprovação, conclua o processo antes de baixar o arquivo. Se aparecer um aviso de que você não tem permissão para baixar, entre em contato com o administrador do espaço de trabalho.
+
+<Callout type="info" title="O download inclui todos os destinatários">
+O arquivo inclui todos os destinatários cadastrados para o formulário, independentemente dos filtros de status ou período aplicados à lista e das linhas selecionadas. Se precisar apenas de alguns destinatários, filtre o Excel depois de baixá-lo. Os horários do arquivo usam UTC; considere a diferença de nove horas ao compará-los com o horário da Coreia.
+</Callout>
+
+Para baixar as respostas enviadas ao formulário, use [Baixar respostas na planilha de respostas](/pt-BR/docs/help-center/result-analysis/response-sheet#baixar-respostas).
+
+## Filtrar quem não respondeu e reenviar para destinatários selecionados
+
+Você pode selecionar quem já recebeu o formulário, mas ainda não respondeu, e enviar novamente o convite para participar.
+
+<img src="/images/guides/share-forms/sending-to-panel-filter-resend.png" alt="Filtrar destinatários por status e horário do último envio" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. Em `Compartilhar` → `Enviar pesquisa`, clique em `Filtrar`.
+2. Nos status, selecione `Enviado` e `Aberto` para encontrar os destinatários que ainda não responderam. Para incluir quem receberá o primeiro convite, selecione também `Não enviado`.
+3. Se necessário, use `Selecione o intervalo de datas` em `Último envio` para limitar a lista pelo momento do último envio.
+4. Confira os resultados do filtro e use as caixas de seleção à esquerda para selecionar as linhas para as quais deseja enviar.
+5. Clique em `Enviar pesquisa`, confira a conta remetente, o assunto e a mensagem, e envie para os destinatários selecionados. Após o envio, confira `Número de envios` e `Último envio`.
+
+| Status | Significado |
+| --- | --- |
+| Não enviado | O formulário ainda não foi enviado a esse destinatário. |
+| Enviado | O formulário foi enviado e o status ainda não mudou para Aberto ou Respondido. |
+| Aberto | O destinatário abriu o formulário, mas ainda não respondeu. |
+| Respondido | O destinatário respondeu ao formulário. Não selecione esse status para excluí-lo do reenvio. |
+
+<Callout type="info" title="Selecione os destinatários novamente após alterar os filtros">
+Alterar os filtros de status ou período, ou clicar em `Redefinir`, limpa a seleção de linhas. Aplique os filtros primeiro e depois selecione as linhas para o envio. O filtro de período usa o horário do último envio, não a data da resposta. Destinatários que nunca receberam o formulário não têm horário de envio e não aparecem quando um filtro de período é aplicado.
+</Callout>

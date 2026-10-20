@@ -1,0 +1,83 @@
+---
+title: Edit Multiple Questions Together
+description: Learn how to select multiple questions, change their required and security settings together, and save them as a field template.
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+To apply the same settings to multiple questions, select them together for editing. The settings that can apply to all selected questions appear in the right sidebar.
+
+## Select Multiple Questions
+
+<Steps>
+  <Step>
+    ### Open the Survey Editor
+
+    Open the survey you want to edit and go to `Create` at the top.
+  </Step>
+  <Step>
+    ### Select the First Question
+
+    In the `Form Fields` list on the left, click the first question in the range you want to select.
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-first.png" alt="The first question to edit selected in the Form Fields list on the left" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Select a Range with Shift
+
+    Hold `Shift` and click the last question. All questions from the first to the last are selected together.
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-range.png" alt="A range of questions selected with Shift in the field list on the left" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Check Shared Settings
+
+    Check the selected questions and find the setting you want to change in the right sidebar.
+
+    <img src="/images/guides/manage-forms/bulk-edit-common-settings.png" alt="The shared settings panel on the right after selecting multiple questions" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+To return to editing a single question, click a question in the left list without holding `Shift`.
+
+## Settings You Can Change Together
+
+| Location | Setting | What you can do | Display and access conditions |
+| --- | --- | --- | --- |
+| Response Validation | Required Input | Set whether the selected questions require an answer. | Appears when all selected questions support this setting. |
+| Security | Data Masking | Configure data masking for the selected questions. | Appears when all selected questions support this feature. Access may be restricted by your plan and permissions. |
+| Security | Auto Delete Responses | Set whether to automatically delete responses to the selected questions and specify the deletion period. | Appears when all selected questions support this feature. Access may be restricted by your plan and permissions. |
+| Field Template | Save as Field Template | Save the selected combination of questions as a template. | Access may be restricted by your plan and permissions. |
+
+
+For details, see [Response Validation](/en/docs/help-center/create-forms/response-validation), [Data Masking](/en/docs/help-center/security/data-masking), [Auto Delete Responses](/en/docs/help-center/security/auto-delete-responses), and [Field Templates](/en/docs/help-center/create-forms/field-template).
+
+## Change and Check Settings
+
+<Steps>
+  <Step>
+    ### Change Shared Settings
+
+    With the questions selected together, change a setting in the right sidebar. For example, enable `Required Input` under `Response Validation` to require answers to the selected questions.
+  </Step>
+  <Step>
+    ### Check Each Question
+
+    Select each question individually to check that the intended settings were applied. The selected questions may have had different settings, so check them before and after making changes.
+  </Step>
+  <Step>
+    ### Preview and Publish
+
+    Check how responses work in preview, then publish the survey to apply your changes for respondents.
+  </Step>
+</Steps>
+
+To edit question titles, choices, or logic, select each question and use its editing controls.
+
+<Callout type="info" title="If You Can't Find a Setting">
+
+- Check that multiple questions are selected. Selecting only one question displays its individual settings.
+- Check that all selected question types support the feature. Select only the questions you need to see the settings they can share.
+- If a feature is disabled, first check the on-screen guidance and the conditions of the selected questions. If a plan notice appears, check your team's current plan and your editing permissions.
+</Callout>

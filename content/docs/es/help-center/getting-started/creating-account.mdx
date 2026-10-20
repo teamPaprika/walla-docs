@@ -1,6 +1,6 @@
 ---
 title: Crear una cuenta de Walla
-description: Puedes iniciar sesión en Walla de dos maneras.
+description: "Puedes iniciar sesión con tu correo electrónico o tu cuenta de Google. Si tu empresa ha configurado SSO, también puedes acceder con tu cuenta de empresa."
 plan:
 ---
 
@@ -15,3 +15,22 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 - En la pantalla de inicio de sesión, pulsa el botón «Iniciar sesión con Google».
 - Elige tu cuenta de Google y entrarás directamente.
+
+## Iniciar sesión con el SSO de tu empresa
+
+SSO (inicio de sesión único) te permite acceder a Walla con la cuenta que utilizas en tu empresa. Puedes usarlo si tu empresa ha configurado una conexión SSO con Walla.
+
+1. En la pantalla de inicio de sesión de Walla, haz clic en `Iniciar sesión con SSO`.
+2. Introduce tu dirección de correo de empresa y pulsa `Continuar`.
+3. Cuando se abra la pantalla de autenticación de tu empresa, inicia sesión con tu cuenta de empresa. Si se requiere una verificación adicional, sigue las instrucciones que aparezcan.
+4. Una vez completada la autenticación, volverás a Walla. Si es la primera vez que accedes, completa también los pasos de registro que se muestren.
+
+<Callout type="info" title="Tu empresa debe configurar SSO primero">
+Tener una dirección de correo de empresa no basta para usar SSO. Consulta con tu administrador si se ha configurado una conexión SSO para el dominio de tu correo.
+</Callout>
+
+### Si no puedes iniciar sesión con SSO
+
+- Comprueba que tu dirección de correo de empresa no contenga errores.
+- Si aparece un aviso de que SSO no está configurado o falla la autenticación de tu empresa, pide a tu administrador que revise la conexión SSO y los permisos de acceso de tu cuenta.
+- Si no ves el botón `Iniciar sesión con SSO`, vuelve desde cualquier otra pantalla de introducción de datos a la pantalla donde se elige el método de inicio de sesión. Si sigue sin aparecer, consulta con tu administrador si tu entorno admite SSO.

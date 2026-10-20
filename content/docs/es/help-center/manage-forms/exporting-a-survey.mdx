@@ -1,0 +1,83 @@
+---
+title: "Exportar un formulario"
+description: "Descarga el formulario que estás editando como documento de Word para revisar las preguntas y la lógica de ramificación o compartirlo con tu equipo."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+La exportación de formularios permite guardar el formulario que estás editando como **archivo de Word editable (.docx)**. Puedes usarlo para revisar las preguntas o preparar un documento para su aprobación.
+
+## Exportar a Word
+
+<Steps>
+  <Step>
+    ### Abre la configuración del formulario
+    Ve al **editor** del proyecto que quieras exportar y pulsa el icono de engranaje de la esquina superior derecha para abrir `Configuración del formulario`.
+
+    <img src="/images/guides/manage-forms/survey-export-open-settings.png" alt="Icono de configuración en la esquina superior derecha del editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Selecciona la exportación del formulario
+    En el menú izquierdo de la ventana de configuración, selecciona `Exportación del formulario`.
+
+    <img src="/images/guides/manage-forms/survey-export-select-menu.png" alt="Seleccionar Exportar formulario en el menú de configuración" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Elige la vista y el contenido que quieras incluir
+    Selecciona `Vista estándar` o `Vista agrupada`. En las casillas que aparecen debajo, marca los elementos que necesites, como los números de pregunta, la configuración de respuestas y la lógica de ramificación, y desmarca los que quieras excluir. Más abajo encontrarás una explicación de cada opción.
+
+    <img src="/images/guides/manage-forms/survey-export-options.png" alt="Elegir la vista y las opciones de exportación" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    #### Elegir la vista
+
+    - **Vista estándar**: organiza el formulario según los saltos de página definidos en el editor. Úsala para revisar de forma continua las preguntas que quedan entre dos saltos de página.
+    - **Vista agrupada**: separa cada grupo de preguntas del editor en una página distinta. Es útil para revisar el contenido de cada grupo por separado.
+
+    Al principio está seleccionada `Vista estándar`. La vista que elijas aquí se aplica al documento de Word que vas a exportar y no cambia la vista del formulario en línea que has compartido con los participantes. Según la cantidad de contenido, Word puede dividir el documento en más páginas.
+
+    #### Opciones de exportación
+
+    | Opción | Contenido incluido | Configuración predeterminada |
+    | --- | --- | --- |
+    | Mostrar números de pregunta | Muestra números como Q1 y Q2 en las preguntas. | Activada |
+    | Incluir configuración de respuestas | Muestra los ajustes de cada pregunta, como las condiciones de entrada y el orden aleatorio de las opciones. | Activada |
+    | Incluir lógica de preguntas | Muestra las rutas de salto según las condiciones de cada pregunta. | Activada |
+    | Usar números de pregunta en la lógica | Identifica por su número las preguntas a las que hace referencia la lógica. Solo se puede seleccionar si está activada la opción `Mostrar números de pregunta`. | Activada |
+    | Incluir flujo del formulario | Resume el orden de las secciones y las rutas de ramificación al principio del documento. | Activada |
+    | Mostrar valores guardados de las opciones | Muestra el valor que se guarda junto al texto de cada opción. | Desactivada |
+    | Resumir opciones desplegables | En los desplegables con 3 o más opciones, muestra solo la primera y la última e indica el número total de opciones. | Desactivada |
+
+    <Callout title="La lógica y el flujo se configuran por separado">
+    Aunque desactives `Incluir lógica de preguntas`, las rutas de ramificación seguirán apareciendo en el resumen inicial si `Incluir flujo del formulario` está activada. Para excluir las ramificaciones del documento, desactiva ambas opciones.
+    </Callout>
+
+    <Callout title="Elegir las opciones según el uso">
+    - **Para revisar las preguntas y la lógica con tu equipo**: puedes mantener las opciones activadas por defecto: números de pregunta, configuración de respuestas, lógica de preguntas, números de pregunta en la lógica y flujo del formulario. Así podréis revisar las condiciones de cada pregunta junto con todas las ramificaciones.
+    - **Para imprimir o compartir principalmente el contenido de las preguntas**: mantén los números de pregunta y desactiva la configuración de respuestas, la lógica de preguntas y el flujo del formulario si no los necesitas. Después de descargar el documento, puedes ajustar los márgenes y los espacios de respuesta en Word antes de imprimirlo.
+    - **Para revisar los textos de las opciones junto con sus valores guardados**: activa `Mostrar valores guardados de las opciones`. Por ejemplo, si has configurado la opción «Muy satisfecho» para guardar el valor `5`, podrás comprobar el texto y el valor juntos.
+    - **Si la lista de opciones de un desplegable es larga**: activa `Resumir opciones desplegables` para acortar el documento. Déjala desactivada si necesitas revisar el texto de todas las opciones.
+    </Callout>
+  </Step>
+  <Step>
+    ### Descarga el archivo de Word
+    Pulsa `Exportar a Word` y espera a que termine de generarse el archivo. Cuando se descargue el archivo `.docx` con el título del formulario como nombre, puedes abrirlo en Word para revisar y editar las preguntas y la distribución de las páginas.
+
+    <img src="/images/guides/manage-forms/survey-export-download-word.png" alt="Hacer clic en Exportar a Word" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout title="Se incluye el contenido que estás editando">
+No necesitas publicar el formulario antes de exportarlo. La exportación incluye el contenido del editor en ese momento, así que espera a que se sincronicen los últimos cambios. La exportación por sí sola no publica el formulario.
+</Callout>
+
+## Revisar el documento descargado
+
+- El documento reúne el contenido de las preguntas, las opciones y espacios para escribir las respuestas.
+- Las imágenes se sustituyen por textos explicativos, enlaces u otras referencias. Los vídeos y el contenido incrustado tampoco se ejecutan dentro de Word. Consulta el formulario en línea para ver su aspecto real.
+- Las funciones de entrada en línea, como los pagos, la carga de archivos y la verificación de identidad, no funcionan en el documento de Word.
+- Los cambios que hagas en el documento no se reflejan en el formulario original de Walla. Para cambiar el formulario, edítalo desde el editor de Walla.
+
+<Callout title="No se incluyen las respuestas recogidas">
+La exportación guarda las preguntas y la estructura del formulario como documento. Para descargar las respuestas recogidas en un archivo CSV o Excel, consulta [Hoja de respuestas](/es/docs/help-center/result-analysis/response-sheet). Para guardar una respuesta individual como PDF, consulta [Respuestas individuales](/es/docs/help-center/result-analysis/individual-responses).
+</Callout>

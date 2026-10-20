@@ -1,0 +1,83 @@
+---
+title: "匯出問卷"
+description: "將正在編輯的問卷下載為 Word 文件，方便審閱題目與跳轉條件，或分享給團隊成員。"
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+使用匯出問卷功能，可以將目前正在編輯的問卷儲存為**可編輯的 Word 檔案（.docx）**。適合用來審閱題目或準備簽核文件。
+
+## 匯出為 Word
+
+<Steps>
+  <Step>
+    ### 開啟問卷設定
+    前往要匯出專案的**編輯畫面**，點選右上角的齒輪圖示，開啟`問卷設定`。
+
+    <img src="/images/guides/manage-forms/survey-export-open-settings.png" alt="編輯畫面右上角的問卷設定齒輪圖示" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 選擇匯出問卷
+    在設定視窗的左側選單中選擇`匯出問卷`。
+
+    <img src="/images/guides/manage-forms/survey-export-select-menu.png" alt="在設定選單中選擇匯出問卷" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 選擇檢視方式與要包含的內容
+    選擇`標準檢視`或`分組檢視`其中一種。在下方的核取方塊中，勾選要包含的題號、回覆設定、跳轉條件等項目，並取消勾選不需要的項目。各選項的說明可參考下文。
+
+    <img src="/images/guides/manage-forms/survey-export-options.png" alt="選擇檢視方式與匯出選項" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    #### 選擇檢視方式
+
+    - **標準檢視**：依照編輯器中設定的分頁來安排問卷內容。適合連續審閱同一分頁範圍內的題目。
+    - **分組檢視**：將編輯器中的各個題目群組分成不同頁面。適合按群組分開審閱內容。
+
+    一開始會選取`標準檢視`。這裡選擇的檢視方式只套用到匯出的 Word 文件，不會變更分享給填答者的線上問卷檢視方式。依題目內容多寡，Word 可能會再自動分頁。
+
+    #### 匯出選項
+
+    | 選項 | 包含的內容 | 預設設定 |
+    | --- | --- | --- |
+    | 顯示題號 | 在題目上顯示 Q1、Q2 等編號。 | 開啟 |
+    | 包含回覆設定 | 顯示各題的輸入條件、隨機排列選項等回覆設定。 | 開啟 |
+    | 包含各題跳轉條件 | 顯示各題依條件跳轉的路徑。 | 開啟 |
+    | 在跳轉條件中使用題號 | 以題號顯示跳轉條件中引用的題目。需開啟`顯示題號`才能選取此選項。 | 開啟 |
+    | 包含問卷流程 | 在文件前段摘要顯示區段順序與分支路徑。 | 開啟 |
+    | 顯示選項儲存值 | 在選項文字旁顯示實際儲存的值。 | 關閉 |
+    | 縮略下拉式選項 | 當下拉式選單有 3 個以上的選項時，只顯示第一個與最後一個選項，並註明選項總數。 | 關閉 |
+
+    <Callout title="跳轉條件與問卷流程需分別設定">
+    即使關閉`包含各題跳轉條件`，只要`包含問卷流程`仍開啟，文件前段的流程摘要就會顯示分支路徑。若不希望文件中出現分支內容，請將這兩個選項都關閉。
+    </Callout>
+
+    <Callout title="依用途選擇選項">
+    - **與團隊成員審閱題目和邏輯時**：可保留預設開啟的題號、回覆設定、各題跳轉條件、跳轉條件中的題號，以及問卷流程，方便一起檢查各題條件與整體分支。
+    - **列印或以題目內容為主分享時**：可保留題號，並關閉不需要的回覆設定、各題跳轉條件與問卷流程。下載後可在 Word 文件中調整邊界與作答空間，再進行列印。
+    - **一起檢查選項文字與儲存值時**：請開啟`顯示選項儲存值`。例如將「非常滿意」設定為儲存 `5` 時，就能同時確認文字與數值。
+    - **下拉式選項較多時**：開啟`縮略下拉式選項`可縮短文件。若需要逐一檢查所有選項文字，請保持關閉。
+    </Callout>
+  </Step>
+  <Step>
+    ### 下載 Word 檔案
+    點選`匯出為 Word`，並等待檔案建立完成。以問卷標題命名的 `.docx` 檔案下載後，即可使用 Word 開啟，檢查及編輯題目內容與頁面配置。
+
+    <img src="/images/guides/manage-forms/survey-export-download-word.png" alt="點擊匯出為 Word 按鈕" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout title="匯出的是目前正在編輯的內容">
+匯出前不需要先發布問卷。文件包含的是執行匯出時的編輯內容，因此請等最新修改完成同步後再匯出。匯出操作本身不會發布問卷。
+</Callout>
+
+## 檢查下載的文件
+
+- 文件會整理題目內容、選項，以及可填寫回覆的區域。
+- 圖片會以說明文字、連結等方式取代原圖，影片與嵌入內容也不會在 Word 中執行。請在線上問卷中確認實際畫面。
+- 付款、檔案上傳、身分驗證等線上輸入功能，不會在 Word 文件中運作。
+- 修改文件不會影響 Walla 中的原始問卷。若要變更問卷內容，請到 Walla 的編輯畫面修改。
+
+<Callout title="不包含實際回覆資料">
+匯出問卷是將題目與問卷結構儲存為文件的功能。若要將收集到的回覆下載為 CSV、Excel 檔案，請參閱[回覆試算表](/zh-TW/docs/help-center/result-analysis/response-sheet)；若要將單筆回覆儲存為 PDF，請參閱[個別回覆](/zh-TW/docs/help-center/result-analysis/individual-responses)。
+</Callout>

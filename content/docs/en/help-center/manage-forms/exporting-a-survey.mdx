@@ -1,0 +1,83 @@
+---
+title: "Exporting a form"
+description: "Download your current form draft as a Word document to review its questions and branching rules or share it with your team."
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Form export saves the form you are currently editing as an **editable Word file (.docx)**. Use it to review questions or prepare a document for approval.
+
+## Export to Word
+
+<Steps>
+  <Step>
+    ### Open Form Settings
+    Go to the project's **editor**, then click the gear icon in the upper-right corner to open `Form Settings`.
+
+    <img src="/images/guides/manage-forms/survey-export-open-settings.png" alt="Survey settings gear icon at the top right of the editor" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Select Form export
+    Select `Form export` from the menu on the left side of the settings dialog.
+
+    <img src="/images/guides/manage-forms/survey-export-select-menu.png" alt="Select Export survey in the settings menu" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### Choose a view and what to include
+    Select either `Standard view` or `Grouped view`. Use the checkboxes below to turn on the details you need, such as question numbers, response settings, and branching rules, and turn off anything you want to leave out. Each option is explained below.
+
+    <img src="/images/guides/manage-forms/survey-export-options.png" alt="Choose a view mode and export options" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    #### Choose a view
+
+    - **Standard view**: Organizes the form using the page breaks set in the editor. Use it to review questions together between page breaks.
+    - **Grouped view**: Places each question group from the editor on a separate page. Useful for reviewing the content of each group separately.
+
+    `Standard view` is selected by default. The view you choose here applies to the exported Word document and does not change the view of the online form shared with respondents. Word may add more page breaks depending on the amount of content.
+
+    #### Export options
+
+    | Option | What it includes | Default |
+    | --- | --- | --- |
+    | Show question numbers | Labels questions with numbers such as Q1 and Q2. | On |
+    | Include response settings | Shows each question's response settings, such as input requirements and randomized choices. | On |
+    | Include question logic | Shows where each question leads based on its conditions. | On |
+    | Use question numbers in logic | Identifies questions referenced in branching rules by number. Available only when `Show question numbers` is on. | On |
+    | Include form flow | Summarizes section order and branching paths at the beginning of the document. | On |
+    | Show stored choice values | Shows the values actually stored alongside the choice text. | Off |
+    | Condense dropdown choices | For dropdowns with three or more choices, shows only the first and last choices and the total number of choices. | Off |
+
+    <Callout title="Question logic and form flow are separate options">
+    If `Include form flow` is on, the flow summary at the beginning of the document shows branching paths even when `Include question logic` is off. Turn off both options to exclude branching information from the document.
+    </Callout>
+
+    <Callout title="Choose options for your needs">
+    - **Review questions and logic with your team**: Keep the default options on: question numbers, response settings, question logic, question numbers in logic, and form flow. This lets you review each question's conditions alongside the overall branching paths.
+    - **Print the form or share mainly the question content**: Keep question numbers on and turn off any response settings, question logic, and form flow you do not need. You can adjust margins and answer spaces in the downloaded Word document before printing.
+    - **Review choice text alongside stored values**: Turn on `Show stored choice values`. For example, if a choice labeled “Very satisfied” is set to store `5`, you can check both the label and the value.
+    - **Shorten long dropdown lists**: Turn on `Condense dropdown choices` to reduce the document's length. Leave it off if you need to review the text of every choice.
+    </Callout>
+  </Step>
+  <Step>
+    ### Download the Word file
+    Click `Export to Word` and wait for the file to be created. Once the `.docx` file named after the form's title has downloaded, open it in Word to review and edit the questions and page layout.
+
+    <img src="/images/guides/manage-forms/survey-export-download-word.png" alt="Click Export to Word" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+<Callout title="The export includes your current draft">
+You do not need to publish the form before exporting. The document contains the editing draft at the time you export, so wait for your latest changes to synchronize first. Exporting does not publish the form.
+</Callout>
+
+## Review the downloaded document
+
+- The document includes question text, choices, and spaces to write answers.
+- Images appear as placeholder text, links, or similar references instead of the original images. Videos and embedded content also do not run in Word. View the online form to see the actual content.
+- Online inputs such as payments, file uploads, and identity verification do not work in the Word document.
+- Editing the document does not update the original form in Walla. To change the form itself, use the Walla editor.
+
+<Callout title="Collected responses are not included">
+Form export saves the questions and form structure as a document. To download collected responses as a CSV or Excel file, see [Response sheet](/en/docs/help-center/result-analysis/response-sheet). To save a single response as a PDF, see [Individual responses](/en/docs/help-center/result-analysis/individual-responses).
+</Callout>

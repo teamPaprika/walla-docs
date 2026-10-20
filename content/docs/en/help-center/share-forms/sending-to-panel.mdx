@@ -1,10 +1,11 @@
 ---
 title: "Sending Surveys to Panel"
-description: "Send surveys via email using the panel list registered in your workspace. You can send to entire groups or pick specific panel members."
+description: "Send surveys by email using the panel list registered in your workspace. Select recipients, send reminders to people who have not responded, or download the recipient list as an Excel file."
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
 ## Preparing to Send to Panel
 
@@ -30,6 +31,8 @@ To send a survey, your recipients must first be registered under the **Panel** t
   <Step>
     ### Registered panel exists - click Import from Panel
     If you already have a registered panel, click `Import from Panel`.
+
+    If the panel contains additional information such as department or job title, you can map it to hidden fields under `Panel Info → Hidden Field Mapping` in the import dialog. Select an existing hidden field, or choose `Create New Hidden Field` and enter a name to link that information when you import the panel.
 
     <img src="/images/guides/share-forms/sending-to-panel-from-panel.png" alt="The Import from Panel button in the Send Survey section" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
@@ -60,3 +63,43 @@ To send a survey, your recipients must first be registered under the **Panel** t
     <img src="/images/guides/share-forms/sending-to-panel-email-preview.png" alt="An example of the survey email sent to a panel member" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
+
+## Download the Recipient List as Excel
+
+You can download the recipient list registered in `Send Survey` and its delivery information as an Excel file (.xlsx). The file includes customer IDs, names, email addresses, phone numbers, delivery statuses, send counts, individual links, hidden field values, and related timestamps.
+
+<img src="/images/guides/share-forms/sending-to-panel-excel-download.png" alt="Download button and unmasking notice above the survey recipient list" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. Open the project's `Share` tab and go to `Send Survey`.
+2. If personal information is masked, click the unmasking icon above the list and enter a reason to reveal it. Your team's policy may require administrator approval.
+3. Click `Download` above the list.
+4. If prompted to enter a download reason or request approval, complete the process before downloading the file. If you see a message that you don't have download permission, contact your workspace administrator.
+
+<Callout type="info" title="The download includes all recipients">
+The file includes all recipients registered for this survey, regardless of the status or date filters applied to the list or the rows you have selected. To work with specific recipients, filter the downloaded Excel file. File timestamps use UTC, so account for the nine-hour difference when comparing them with Korean time.
+</Callout>
+
+To download answers submitted to the survey, use [Downloading Responses in the response sheet](/en/docs/help-center/result-analysis/response-sheet#downloading-responses).
+
+## Filter Non-Respondents and Resend to Selected Recipients
+
+You can select people who have received the survey but have not yet responded and send them another invitation to participate.
+
+<img src="/images/guides/share-forms/sending-to-panel-filter-resend.png" alt="Filtering survey recipients by status and last sent time" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+1. In `Share` → `Send Survey`, click `Filter`.
+2. Under status, select `Sent` and `Opened` to find recipients who have not responded. To include people receiving their first invitation, also select `Not Sent`.
+3. If needed, use `Select date range` under `Last Sent` to narrow the list by when the survey was last sent.
+4. Review the filtered list, then use the checkboxes on the left to select the rows you want to send to.
+5. Click `Send Survey`, check the sender account, subject, and message, and send to the selected recipients. After sending, check `Send Count` and `Last Sent`.
+
+| Status | Meaning |
+| --- | --- |
+| Not Sent | The survey has not been sent to this recipient. |
+| Sent | The survey has been sent, and the recipient's status has not changed to Opened or Responded. |
+| Opened | The recipient has opened the survey but has not responded. |
+| Responded | The recipient has responded. Leave this status unselected to exclude them from a reminder. |
+
+<Callout type="info" title="Select recipients again after changing filters">
+Changing the status or date filters, or clicking `Reset`, clears your current row selection. Apply filters first, then select the rows to send to. The date filter uses the last sent time, not the response date. Recipients who have never been sent the survey have no sent time and do not appear when a date filter is applied.
+</Callout>

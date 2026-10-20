@@ -13,8 +13,16 @@ plan:
   - Drag and drop to change the order of rows and columns.
   - Click it to open the `Duplicate row` and `Delete row` menu (`Duplicate column` and `Delete column` for columns).
 - Use `Set option values` at the bottom left to assign a value to each option. (e.g., set the first option to value 1)
-- Click the `...` (more) button at the bottom right for these features:
-  - Restrict duplicate columns: Prevent respondents from picking the same column more than once. This lets you design ranking-style questions such as 1st choice, 2nd choice, and so on.
+- Under `Question behavior` in the right sidebar, you can restrict duplicate columns, shuffle and pin rows or columns, and enable `Stack rows on mobile`.
+  - Restrict duplicate columns: Enable `Restrict Duplicate Columns` to prevent a column selected in one row from being selected again in another. This is useful for ranking-style questions such as first and second choices. This feature is available only for regular multiple choice grids.
+  - Shuffle rows or columns: Enable `Shuffle rows` or `Shuffle columns` to display items in that direction in a random order in the response view. You can enable both.
+  - Keep rows or columns in place: When shuffling is enabled, use `Rows to keep in place` or `Columns to keep in place` to select items that should retain their positions. You can pin multiple items; deselect an item to unpin it. For example, pinning “Other” in the last column keeps it last even when the other columns are shuffled.
+
+    <img src="/images/guides/manage-forms/grid-shuffle-pin.png" alt="Question behavior settings with Shuffle columns enabled and Bus and Personal car selected as columns to keep in place" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  - Stack rows on mobile: Enable this setting to open each row and answer with its choices displayed vertically on mobile. On desktop, the question retains its table layout.
+  - Check the order, fixed positions, and mobile display in preview, then publish the survey to apply the changes for respondents.
+
 
 ## Checkbox Grid Field
 
@@ -22,6 +30,17 @@ plan:
 - You can also assign custom values to each option.
 - The difference is that while a regular grid allows only one column per row, the checkbox grid lets respondents select any number of columns.
 - Turn on `Stand-alone answer` in a column menu to make that column — such as 'None of the above' — impossible to pick together with the others. When a respondent selects it, every other selection in that row is cleared.
+<span id="shuffle-order-and-keep-rows-or-columns-in-place" />
+
+- Under `Question behavior` in the right sidebar, you can shuffle and pin rows or columns and enable `Stack rows on mobile`.
+  - Shuffle rows or columns: Enable `Shuffle rows` or `Shuffle columns` to display items in that direction in a random order in the response view. You can enable both.
+  - Keep rows or columns in place: When shuffling is enabled, use `Rows to keep in place` or `Columns to keep in place` to select items that should retain their positions. You can pin multiple items; deselect an item to unpin it. For example, pinning “Other” in the last column keeps it last even when the other columns are shuffled.
+
+    <img src="/images/guides/manage-forms/grid-shuffle-pin.png" alt="Question behavior settings with Shuffle columns enabled and Bus and Personal car selected as columns to keep in place" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+  - Stack rows on mobile: Enable this setting to open each row and answer with its choices displayed vertically on mobile. On desktop, the question retains its table layout.
+  - Check the order, fixed positions, and mobile display in preview, then publish the survey to apply the changes for respondents.
+
 
 <Callout title="Tip">
 Multiple choice grids are great for ranking or priority questions, while checkbox grids are useful for comparative or evaluative surveys that allow multiple answers.

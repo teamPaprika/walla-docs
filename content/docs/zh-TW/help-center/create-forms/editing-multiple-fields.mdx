@@ -1,0 +1,83 @@
+---
+title: 同時編輯多個題目
+description: 說明如何選取多個題目，一起變更必填與安全性設定，並將選取的題目儲存為範本。
+plan:
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+如果想將相同設定套用到多個題目，可以同時選取這些題目來編輯。右側邊欄會顯示可套用到所有已選題目的共同設定。
+
+## 選取多個題目
+
+<Steps>
+  <Step>
+    ### 開啟問卷編輯
+
+    開啟要編輯的問卷，前往上方的 `建立`。
+  </Step>
+  <Step>
+    ### 選取第一個題目
+
+    在左側的 `表單欄位` 清單中，點選要選取範圍的第一個題目。
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-first.png" alt="在左側表單欄位清單中選取第一個要編輯的題目" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 使用 Shift 選取範圍
+
+    按住 `Shift` 鍵，再點選最後一個題目。從第一個到最後一個之間的題目都會一起選取。
+
+    <img src="/images/guides/manage-forms/bulk-edit-select-range.png" alt="使用 Shift 選取多個題目，並在左側清單中顯示選取範圍" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 確認共同設定
+
+    確認已選取的題目，並在右側邊欄尋找要變更的設定。
+
+    <img src="/images/guides/manage-forms/bulk-edit-common-settings.png" alt="選取多個題目後，確認右側的共同設定面板" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+如要回到單一題目的編輯，請不要按住 `Shift` 鍵，直接點選左側清單中的題目。
+
+## 可以一起變更的設定
+
+| 位置 | 項目 | 可以執行的操作 | 顯示與使用條件 |
+| --- | --- | --- | --- |
+| 回應驗證 | 必填輸入 | 一起設定已選題目是否必須作答。 | 所有已選題目都支援此設定時才會顯示。 |
+| 安全性 | 資料遮罩 | 設定已選題目的資料遮罩。 | 所有已選題目都支援此功能時才會顯示。使用可能受到方案與權限的限制。 |
+| 安全性 | 自動刪除回應 | 設定是否自動刪除已選題目的回覆，以及刪除期限。 | 所有已選題目都支援此功能時才會顯示。使用可能受到方案與權限的限制。 |
+| 題目範本 | 儲存為題目範本 | 將選取的題目組合儲存為範本。 | 使用可能受到方案與權限的限制。 |
+
+
+詳細說明請參閱[回覆驗證](/zh-TW/docs/help-center/create-forms/response-validation)、[資料遮罩](/zh-TW/docs/help-center/security/data-masking)、[自動刪除回覆](/zh-TW/docs/help-center/security/auto-delete-responses)及[題目範本](/zh-TW/docs/help-center/create-forms/field-template)。
+
+## 變更並確認設定
+
+<Steps>
+  <Step>
+    ### 變更共同設定
+
+    同時選取題目後，變更右側邊欄的設定。例如，在 `回應驗證` 中啟用 `必填輸入`，即可將已選題目設為必填。
+  </Step>
+  <Step>
+    ### 逐題確認設定是否套用
+
+    逐一選取題目，確認是否已套用預期的設定。已選題目原本的設定可能各不相同，請確認變更前後的狀態。
+  </Step>
+  <Step>
+    ### 確認預覽並發布
+
+    在預覽中確認作答行為，並發布問卷以將變更套用至填答者。
+  </Step>
+</Steps>
+
+如要修改題目標題、選項或邏輯，請選取各題目並使用對應的編輯功能。
+
+<Callout type="info" title="找不到想要的設定時">
+
+- 確認是否同時選取了多個題目。只選取一個題目時，會顯示該題目的個別設定。
+- 確認所有已選題目類型都支援該功能。重新選取需要的題目，即可查看可共同套用的設定。
+- 如果功能已停用，請先查看畫面提示與已選題目的條件。若顯示方案提示，請確認目前團隊的方案與編輯權限。
+</Callout>

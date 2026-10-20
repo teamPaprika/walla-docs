@@ -227,14 +227,14 @@ In the signing modes, the form opens in this order.
 
 ## Pre-launch checklist
 
-- [ ] Confirmed the mode you want is supported on your current plan.
-- [ ] Entered only the scheme and host for allowed origins.
-- [ ] Stored the signing secret only in host server environment variables.
-- [ ] Created a fresh token per request with a 5-minute lifetime.
-- [ ] Put the correct form ID in `aud`.
-- [ ] Included `sub` in tokens for member identification mode.
-- [ ] The iframe passes the token in the fragment (`#embedToken=`).
-- [ ] Verified on the real embed page that the form opens and submits correctly.
+- Confirmed the mode you want is supported on your current plan.
+- Entered only the scheme and host for allowed origins.
+- Stored the signing secret only in host server environment variables.
+- Created a fresh token per request with a 5-minute lifetime.
+- Put the correct form ID in `aud`.
+- Included `sub` in tokens for member identification mode.
+- The iframe passes the token in the fragment (`#embedToken=`).
+- Verified on the real embed page that the form opens and submits correctly.
 
 <Callout title="When to use this">
 - You embedded a survey on an internal portal or member page and want to stop the link from leaking outside
