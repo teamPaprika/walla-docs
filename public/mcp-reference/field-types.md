@@ -60,6 +60,9 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 // One option (RADIO, CHECKBOX, DROPDOWN, DROPDOWN_MULTI, LINEAR, PRIVACY_POLICY_INFORMATION)
 { "id": "aBcDeFgHi", "label": "Yes", "value": "Yes" }
 
+// An exclusive option (CHECKBOX, DROPDOWN_MULTI, or multi-select PICTURE_CHOICE)
+{ "id": "jKlMnOpQr", "label": "None of the above", "value": "None of the above", "isExclusive": true }
+
 // properties.options is an array of these. Optional behavior flags:
 { "options": [ /* … */ ], "shuffle": true, "hasCustomInput": true }
 ```
@@ -122,11 +125,11 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 | Properties shape | Types | Defaults / fields |
 |---|---|---|
 | `{ placeholder? }` | `SHORT_TEXT`, `LONG_TEXT`, `NUMBER`, `EMAIL` | `placeholder: ""` |
-| `{ options[], shuffle?, hasCustomInput? }` | `RADIO`, `CHECKBOX` | starts with one blank option |
-| `{ options[] }` | `DROPDOWN`, `DROPDOWN_MULTI`, `PRIVACY_POLICY_INFORMATION` | dropdowns have no `shuffle`; privacy default = two options `동의합니다` / `동의하지 않습니다` |
-| `{ options[], imageHeight?, multiSelect?, isSingleLineOnMobile?, shuffle? }` | `PICTURE_CHOICE` | `imageHeight: 120` |
+| `{ options[], shuffle?, hasCustomInput? }` | `RADIO`, `CHECKBOX` | starts with one blank option. `CHECKBOX` options apply `isExclusive?` |
+| `{ options[] }` | `DROPDOWN`, `DROPDOWN_MULTI`, `PRIVACY_POLICY_INFORMATION` | dropdowns have no `shuffle`; privacy default = two options `동의합니다` / `동의하지 않습니다`. `DROPDOWN_MULTI` options apply `isExclusive?` |
+| `{ options[], imageHeight?, multiSelect?, isSingleLineOnMobile?, shuffle? }` | `PICTURE_CHOICE` | `imageHeight: 120`. An option takes `isExclusive?` (active only with `multiSelect: true`) |
 | `{ options[], min, max, minLabel, maxLabel }` | `LINEAR` | scale 1..5; **author `min`/`max`/`minLabel`/`maxLabel` only — `options` are derived from `min`/`max`, not supplied** |
-| `{ rows[], columns[], shuffleRows?, shuffleColumns?, isDuplicateColumnLimited? }` | `CHECKBOX_GRID`, `RADIO_GRID`, `TABLE` | one blank row + one blank column |
+| `{ rows[], columns[], shuffleRows?, shuffleColumns?, isDuplicateColumnLimited? }` | `CHECKBOX_GRID`, `RADIO_GRID`, `TABLE` | one blank row + one blank column. A `CHECKBOX_GRID` column applies `isExclusive?` |
 | `{ rows[], columns[], hasCustomInput?, isDuplicateColumnLimited? }` | `RANKING` | rows are rank slots; columns are choices; see RANKING above for add/update rules |
 | `{ defaultCountry? }` | `PHONE_NUMBER` | — |
 | `{ placeholder?, allowPaste?, requireConfirmation? }` | `SECRETS` | `allowPaste: true`, `requireConfirmation: false` |
@@ -137,6 +140,12 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 | `{ workspaceSecretDataId, variantKey, orderIdPrefix, orderName, amount }` | `TOSS_PAYMENTS` | all required |
 
 > `shuffleRows` / `shuffleColumns` exist on the grid shape but are not honored at fill time — only `shuffle` on `RADIO`, `CHECKBOX`, `PICTURE_CHOICE` actually randomizes order.
+
+> `isExclusive` is an optional boolean on an option, not on the field or its validation. `CHECKBOX` and `DROPDOWN_MULTI` apply it to `options`. `PICTURE_CHOICE` applies it to `options` only with `multiSelect: true`. `CHECKBOX_GRID` applies it to `columns`, separately for each row. Other field types do not apply it. Omitted or `false` means a usual option.
+>
+> If a respondent selects an exclusive option, it clears every other selection, including custom input. If they select a usual option, it clears the exclusive selections. Multiple options can carry the flag, but each stands alone. If exclusive and usual options share a `value`, that value behaves as usual.
+>
+> For choice fields, an exclusive answer alone skips `array.min`, `array.max`, `array.exact`, and `array.includes` at fill time. `basic.isRequired` and `array.excludes` still apply. If `PICTURE_CHOICE.multiSelect` becomes `false`, the flags stay stored but have no effect.
 
 ## Validations per type
 
