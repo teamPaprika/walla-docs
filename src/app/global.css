@@ -218,3 +218,8 @@
   background: #fafafa;
   pointer-events: none;
 }
+
+/* The MDX pipeline strips Korean screenshots from translated pages. */
+.statistics-screenshot:not(:has(img)) {
+  display: none;
+}
