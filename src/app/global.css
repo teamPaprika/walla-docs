@@ -199,3 +199,22 @@
   --color-walla-new: hsl(335 98% 77% / 0.2);
   --color-walla-new-foreground: hsl(335 98% 85%);
 }
+
+/* Cover the development issue badge in the statistics guide screenshots. */
+.statistics-screenshot {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-block: 12px;
+}
+
+.statistics-screenshot-cleanup {
+  position: absolute;
+  left: 0.4%;
+  bottom: 0.4%;
+  width: 9%;
+  height: 8%;
+  background: #fafafa;
+  pointer-events: none;
+}

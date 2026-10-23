@@ -4,19 +4,82 @@ description: "The 'Response Statistics' feature visualizes your collected respon
 plan:
 ---
 
-<img src="/images/guides/result-analysis/statistics.png" alt="Response statistics" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+## Statistics
 
-<img src="/images/guides/result-analysis/statistics-pie-chart.png" alt="A pie chart for a multiple choice question on the response statistics screen, with sort, chart type, and PNG download options" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/result-analysis/statistics-bar-chart.png" alt="A linear scale question visualized as a vertical bar chart on the response statistics screen" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/result-analysis/statistics-table.png" alt="Short text responses shown as a table with response ID and response content columns on the response statistics screen" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-- Click `Response Filter` at the top to analyze only responses matching specific conditions (by period, field value match/contains, etc.).
-- Click `Download all questions as PDF` at the top to save every question's statistics as a PDF.
-- Statistics show each question's results as charts (graphs) or tables.
 - An appropriate visualization is automatically applied based on the response type.
-  - Multiple choice: pie chart, vertical bar chart, horizontal bar chart, table
-  - Short text: table, word cloud
+- Click `Response Filter` at the top to analyze only responses matching specific conditions (date range, an exact or partial match for a question’s value, etc.).
+- Click `Download all questions as PDF` at the top to save the statistics for all questions as a PDF.
+- Use the arrow next to `Download` to choose PNG or SVG and save an individual question’s statistics.
 
-- Individual questions can be downloaded as PNG image files.
+### Donut chart
+
+View the response distribution for choice fields with options, such as multiple choice and dropdown fields, as a donut chart.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-donut-chart.png" alt="Multiple choice donut chart with percentage display settings" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Pie chart
+
+View the response distribution for choice fields with options, such as multiple choice and dropdown fields, as a pie chart.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-pie-chart.png" alt="Multiple choice pie chart with percentage display settings" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Bar chart
+
+View the response distribution for choice fields with options, such as multiple choice and dropdown fields, as a vertical bar chart.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-bar-chart.png" alt="Vertical bar chart for a linear scale question" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-ranking-bar-chart.png" alt="Bar chart comparing response counts by rank" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Horizontal bar chart
+
+View the response distribution for choice fields with options, such as multiple choice and dropdown fields, as a horizontal bar chart.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-horizontal-bar-chart.png" alt="Horizontal bar chart for a linear scale question" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Table
+
+View responses to choice fields with options, such as multiple choice and dropdown fields, or text input fields, such as write-in options in multiple choice questions and short text fields, in a table.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-choice-table.png" alt="Table of multiple choice response percentages, counts, and other responses" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-table.png" alt="Short text response table with response IDs and response content" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Rank distribution
+
+View the results for each option in a ranking field as a rank distribution chart.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-ranking-distribution.png" alt="Average ranks and response distribution for a ranking question" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Word cloud
+
+Use a word cloud to see frequently occurring words in short text responses.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics.png" alt="Word cloud showing frequently occurring words in short text responses" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
