@@ -3,20 +3,79 @@ title: "통계"
 description: "‘응답 통계’는 수집된 응답을 차트나 표 형태로 시각화해 보여주는 기능이에요."
 plan:
 ---
+## 통계
 
-<img src="/images/guides/result-analysis/statistics.png" alt="응답 통계" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/result-analysis/statistics-pie-chart.png" alt="응답 통계 화면에서 객관식 문항의 파이 차트와 정렬·차트 타입·PNG 다운로드 옵션이 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/result-analysis/statistics-bar-chart.png" alt="응답 통계 화면에서 선형배율 문항이 세로 막대형 차트로 시각화된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/result-analysis/statistics-table.png" alt="응답 통계 화면에서 단답형 응답이 응답 ID·응답 내용 컬럼의 테이블로 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
+- 응답 유형에 따라 자동으로 적절한 시각화 형태가 적용됩니다.
 - 상단의 `응답 필터` 버튼을 눌러 특정 조건에 맞는 응답만 선택적으로 분석할 수 있습니다. (기간, 특정 문항 값 일치·포함 등)
 - 상단의 `전체 문항 PDF 다운로드`로 모든 문항의 통계를 PDF 파일로 저장할 수 있습니다.
-- 통계는 각 문항의 응답 결과를 차트(그래프) 또는 테이블(표) 형태로 보여줍니다.
-- 응답 유형에 따라 자동으로 적절한 시각화 형태가 적용됩니다.
-  - 객관식: 파이차트, 세로 막대형, 가로 막대형, 테이블
-  - 단답형: 테이블, 워드클라우드
+- 개별 문항은 `다운로드` 버튼 옆 화살표에서 PNG 또는 SVG 형식을 선택해 저장할 수 있습니다.
 
-- 개별 문항은 PNG 이미지 파일로 다운로드할 수 있습니다.
+### 도넛 차트
+
+옵션이 있는 선택형(객관식, 드롭다운 등) 필드의 응답 분포를 도넛 차트로 확인할 수 있어요.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-donut-chart.png" alt="객관식 문항의 도넛 차트와 비율 표시 설정" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### 파이 차트
+
+옵션이 있는 선택형(객관식, 드롭다운 등) 필드의 응답 분포를 파이 차트로 확인할 수 있어요.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-pie-chart.png" alt="객관식 문항의 파이 차트와 비율 표시 설정" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+
+### 바 차트
+옵션이 있는 선택형(객관식, 드롭다운 등) 필드의 응답 분포를 세로 바(막대) 차트로 확인할 수 있어요.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-bar-chart.png" alt="선형배율 문항의 세로 막대형 차트" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-ranking-bar-chart.png" alt="순위형 문항의 순위별 응답 수를 비교하는 바 차트" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+
+### 가로 바 차트
+옵션이 있는 선택형(객관식, 드롭다운 등) 필드의 응답 분포를 가로 바(막대) 차트로 확인할 수 있어요.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-horizontal-bar-chart.png" alt="선형배율 문항의 가로 막대형 차트" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### 테이블
+옵션이 있는 선택형(객관식, 드롭다운 등) 필드나 직접 입력형 (객관식의 직접 입력 옵션, 단답형 등) 필드의 응답을 테이블(표)로 확인할 수 있어요.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-choice-table.png" alt="객관식 응답의 비율·응답 수와 기타 응답을 보여주는 테이블" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-table.png" alt="단답형 응답의 응답 ID·응답 내용을 보여주는 테이블" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### 순위 분포
+
+순위 선택 필드의 옵션별 응답 결과를 순위 분포 차트로 확인할 수 있어요.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-ranking-distribution.png" alt="순위형 문항의 평균 순위와 순위별 응답 분포" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### 워드 클라우드
+
+단답형 응답은 워드 클라우드로 자주 등장하는 단어를 확인할 수 있어요.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics.png" alt="단답형 응답에서 자주 등장하는 단어를 보여주는 워드클라우드" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>

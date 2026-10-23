@@ -4,19 +4,82 @@ description: "As estatísticas de respostas apresentam os dados coletados em gr�
 plan:
 ---
 
-<img src="/images/guides/result-analysis/statistics.png" alt="Estatísticas de respostas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+## Estatísticas
 
-<img src="/images/guides/result-analysis/statistics-pie-chart.png" alt="Gráfico de pizza de uma pergunta de múltipla escolha com opções de ordenação, tipo de gráfico e download em PNG" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/result-analysis/statistics-bar-chart.png" alt="Pergunta de escala linear apresentada em gráfico de barras verticais nas estatísticas de respostas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/result-analysis/statistics-table.png" alt="Respostas curtas exibidas em tabela com colunas de ID da resposta e conteúdo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-- Clique em `Filtrar` no topo para analisar apenas respostas que atendam a critérios específicos (período, valor exato ou conteúdo de um campo etc.).
-- Use `Exportar como PDF` no topo para salvar as estatísticas de todas as perguntas em PDF.
-- As estatísticas mostram os resultados de cada campo em gráficos ou tabelas.
 - O formato de visualização adequado é aplicado automaticamente conforme o tipo de resposta.
-  - Múltipla escolha: gráfico de pizza, barras verticais, barras horizontais e tabela
-  - Resposta curta: tabela e nuvem de palavras
+- Clique em `Filtrar` no topo para analisar apenas respostas que atendam a critérios específicos (período, correspondência exata ou parcial com o valor de uma pergunta etc.).
+- Use `Exportar como PDF` no topo para salvar as estatísticas de todas as perguntas em PDF.
+- Use a seta ao lado de `Baixar` para escolher PNG ou SVG e salvar as estatísticas de uma pergunta.
 
-- Cada campo pode ser baixado como imagem PNG.
+### Gráfico de rosca
+
+Veja a distribuição das respostas de campos de seleção com opções, como múltipla escolha e listas suspensas, em um gráfico de rosca.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-donut-chart.png" alt="Gráfico de rosca de múltipla escolha com configuração de porcentagens" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Gráfico de pizza
+
+Veja a distribuição das respostas de campos de seleção com opções, como múltipla escolha e listas suspensas, em um gráfico de pizza.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-pie-chart.png" alt="Gráfico de pizza de múltipla escolha com configuração de porcentagens" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Gráfico de barras
+
+Veja a distribuição das respostas de campos de seleção com opções, como múltipla escolha e listas suspensas, em um gráfico de barras verticais.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-bar-chart.png" alt="Gráfico de barras verticais para uma pergunta de escala linear" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-ranking-bar-chart.png" alt="Gráfico de barras comparando contagens de respostas por posição" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Gráfico de barras horizontais
+
+Veja a distribuição das respostas de campos de seleção com opções, como múltipla escolha e listas suspensas, em um gráfico de barras horizontais.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-horizontal-bar-chart.png" alt="Gráfico de barras horizontais para uma pergunta de escala linear" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Tabela
+
+Veja em uma tabela as respostas de campos de seleção com opções, como múltipla escolha e listas suspensas, ou de campos de texto, como opções de resposta livre em perguntas de múltipla escolha e campos de resposta curta.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-choice-table.png" alt="Tabela de porcentagens e contagens de múltipla escolha, incluindo outras respostas" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-table.png" alt="Tabela de respostas curtas com IDs e conteúdo das respostas" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Distribuição de posições
+
+Veja os resultados de cada opção de um campo de classificação em um gráfico de distribuição de posições.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics-ranking-distribution.png" alt="Posições médias e distribuição das respostas de uma pergunta de classificação" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
+
+### Nuvem de palavras
+
+Use uma nuvem de palavras para ver os termos mais frequentes nas respostas curtas.
+
+<div className="statistics-screenshot">
+  <img src="/images/guides/result-analysis/statistics.png" alt="Nuvem de palavras com os termos mais frequentes nas respostas curtas" style={{ width: "100%", display: "block", margin: 0 }} />
+  <span className="statistics-screenshot-cleanup" aria-hidden="true" />
+</div>
