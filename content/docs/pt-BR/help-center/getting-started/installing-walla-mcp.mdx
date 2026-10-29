@@ -1,12 +1,12 @@
 ---
 title: "Instalar o MCP da Walla"
-description: "Conecte o MCP da Walla ao Claude como conector personalizado para trabalhar com formulários e respostas diretamente no ChatGPT e no Claude."
+description: Conecte o MCP da Walla ao ChatGPT ou ao Claude para trabalhar com formulários e respostas nas suas conversas com a IA. No Claude, conecte pela página da Walla no diretório.
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-A Walla oferece um servidor MCP (Model Context Protocol). Ao conectar o MCP da Walla ao ChatGPT e ao Claude como conector personalizado, você pode consultar formulários e respostas, criar formulários e criar campos personalizados enquanto conversa com a IA.
+A Walla oferece um servidor MCP (Model Context Protocol). Ao conectar o MCP da Walla ao ChatGPT ou ao Claude, você pode consultar formulários e respostas, criar formulários e criar campos personalizados enquanto conversa com a IA.
 ## Conectar o plugin do ChatGPT
 <Steps>
   <Step>
@@ -36,44 +36,32 @@ A Walla oferece um servidor MCP (Model Context Protocol). Ao conectar o MCP da W
 </Steps>
 
 ## Conectar o conector do Claude
+
+Adicione e conecte a Walla pela [página da Walla no diretório do Claude](https://claude.ai/directory/walla-form).
+
 <Steps>
   <Step>
-    ### Abra as configurações dos conectores
-    Acesse [claude.ai](https://claude.ai), abra `Customize` na barra lateral esquerda e vá para `Connectors`.
+    ### Abra a página da Walla no diretório
+    Abra a [página da Walla no Claude](https://claude.ai/directory/walla-form). Entre no Claude e clique em `Conectar ao Claude`.
 
-    <img src="/images/guides/getting-started/mcp-01-connectors.png" alt="Acesso ao menu Connectors na tela Customize" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-01-connect.png" alt="Clique em Conectar ao Claude na página da Walla no diretório" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### Adicione um conector personalizado
-    No canto superior direito da tela Connectors, clique no botão de adição e selecione `Add custom connector`.
+    ### Entre na sua conta Walla
+    Se a tela de login da Walla aparecer, entre com Google, SSO ou e-mail, conforme sua conta. Se já estiver conectado, continue para a próxima etapa.
 
-    <img src="/images/guides/getting-started/mcp-02-add-custom-connector.png" alt="Seleção de Add custom connector no menu do botão de adição" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
-  </Step>
-  <Step>
-    ### Preencha os dados do conector
-    Na janela `Add custom connector`, informe os dados abaixo e clique em `Add`. Os campos de OAuth podem ficar em branco.
-
-    - Nome (Name): Walla Form (Walla)
-    - Remote MCP server URL: {"https://app.walla.my/api/mcp"}
-
-    <img src="/images/guides/getting-started/mcp-03-connector-info.png" alt="Nome e URL preenchidos na janela Add custom connector antes de clicar em Add" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
-  </Step>
-  <Step>
-    ### Conecte sua conta Walla
-    Selecione o conector Walla Form (Walla) adicionado à lista e clique em `Connect`.
-
-    <img src="/images/guides/getting-started/mcp-04-connect.png" alt="Botão Connect no conector Walla Form" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-02-sign-in.png" alt="Escolha Google, SSO ou e-mail na tela de login da Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Autorize o acesso
-    Na tela 'Solicitação de acesso do aplicativo', confira as permissões solicitadas pelo Claude (ler projetos, ler respostas de projetos, baixar respostas de projetos, gravar projetos e acesso offline) e clique em `Permitir`.
+    Na tela de autorização do aplicativo, confira as permissões solicitadas pelo Claude e clique em `Permitir`.
 
-    <img src="/images/guides/getting-started/mcp-05-authorize.png" alt="Botão Permitir na tela de solicitação de acesso do aplicativo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-03-authorize.png" alt="Clique em Permitir na tela de autorização do Claude" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Verifique a conexão
-    Quando a conexão for concluída, o conector exibirá o status Connected. No painel à direita, você pode conferir as ferramentas e permissões disponíveis para o Claude.
+    Quando a página da Walla no diretório mostrar `Conectado`, a conexão estará concluída. Use as ferramentas da Walla na conversa para consultar formulários ou criar um novo.
 
-    <img src="/images/guides/getting-started/mcp-06-connected.png" alt="Ferramentas e permissões do conector Walla Form após a conexão" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-04-connected.png" alt="A página da Walla no diretório mostra o status Conectado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>

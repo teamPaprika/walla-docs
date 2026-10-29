@@ -1,6 +1,6 @@
 ---
 title: Instalar el MCP de Walla
-description: Conecta el MCP de Walla a ChatGPT o Claude y trabaja con tus formularios y respuestas de Walla directamente desde tu asistente de IA.
+description: Conecta el MCP de Walla a ChatGPT o Claude para trabajar con formularios y respuestas en tus conversaciones con la IA. En Claude, conéctalo desde la página de Walla en el directorio.
 plan:
 ---
 
@@ -38,32 +38,31 @@ Walla ofrece un servidor MCP (Model Context Protocol). Al conectar el MCP de Wal
 
 ## Conecta el conector de Claude
 
+Añade y conecta Walla desde la [página de Walla en el directorio de Claude](https://claude.ai/directory/walla-form).
+
 <Steps>
   <Step>
-    ### Abre los ajustes de conectores
-    Entra en [claude.ai](https://claude.ai), abre el menú `Customize` de la barra lateral izquierda y ve a `Connectors`.
-  </Step>
-  <Step>
-    ### Empieza a añadir un conector personalizado
-    Pulsa el botón «+» de la esquina superior derecha de la pantalla Connectors y selecciona `Add custom connector`.
-  </Step>
-  <Step>
-    ### Introduce los datos del conector
-    Rellena la siguiente información en la ventana `Add custom connector` y pulsa `Add`. Puedes dejar vacíos los campos de OAuth.
+    ### Abre la página de Walla en el directorio
+    Abre la [página de Walla en Claude](https://claude.ai/directory/walla-form). Inicia sesión en Claude y pulsa `Conectar a Claude`.
 
-    - Nombre (Name): Walla Form
-    - Remote MCP server URL: {"https://app.walla.my/api/mcp"}
+    <img src="/images/guides/getting-started/claude-directory-01-connect.png" alt="Pulsa Conectar a Claude en la página de Walla en el directorio" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### Conecta tu cuenta de Walla
-    Selecciona el conector Walla Form que se ha añadido a la lista y pulsa `Connect`.
+    ### Inicia sesión en tu cuenta de Walla
+    Si aparece la pantalla de inicio de sesión de Walla, accede con Google, SSO o correo electrónico, según tu cuenta. Si ya has iniciado sesión, continúa con el siguiente paso.
+
+    <img src="/images/guides/getting-started/claude-directory-02-sign-in.png" alt="Elige Google, SSO o correo electrónico en la pantalla de acceso a Walla" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Concede los permisos
-    En la pantalla de solicitud de permisos, revisa los que pide Claude (leer proyectos, leer respuestas de proyectos, descargar respuestas de proyectos, escribir proyectos y acceso sin conexión) y pulsa «Permitir».
+    En la pantalla de autorización, revisa los permisos solicitados por Claude y pulsa `Permitir`.
+
+    <img src="/images/guides/getting-started/claude-directory-03-authorize.png" alt="Pulsa Permitir en la pantalla de autorización de Claude" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### Comprueba la conexión
-    Una vez conectado, el conector pasa al estado Connected. En el panel derecho verás la lista de herramientas que Claude puede usar y los permisos concedidos.
+    Cuando la página de Walla en el directorio muestre `Conectado`, la conexión estará completa. Usa las herramientas de Walla en la conversación para consultar formularios o crear uno nuevo.
+
+    <img src="/images/guides/getting-started/claude-directory-04-connected.png" alt="La página de Walla en el directorio muestra el estado Conectado" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>

@@ -1,12 +1,12 @@
 ---
 title: 왈라 MCP 설치하기
-description: 왈라 MCP를 Claude에 커스텀 커넥터로 연결하면, Chat GPT와 Claude에서 바로 왈라의 폼과 응답 데이터를 다룰 수 있어요.
+description: 왈라 MCP를 ChatGPT나 Claude에 연결해 AI와 대화하면서 폼과 응답 데이터를 다뤄보세요. Claude는 디렉터리의 Walla 페이지에서 연결할 수 있어요.
 plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-왈라는 MCP(Model Context Protocol) 서버를 제공합니다. Chat GPT와 Claude에 왈라 MCP를 커스텀 커넥터로 연결하면, AI와 대화하면서 바로 왈라의 폼과 응답을 조회하거나 새 폼을 만들거나, 커스텀 필드를 만들 수 있어요.
+왈라는 MCP(Model Context Protocol) 서버를 제공합니다. ChatGPT나 Claude에 왈라 MCP를 연결하면, AI와 대화하면서 바로 왈라의 폼과 응답을 조회하거나 새 폼을 만들거나, 커스텀 필드를 만들 수 있어요.
 ## Chat GPT 플러그인 연결하기
 <Steps>
   <Step>
@@ -36,44 +36,32 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 </Steps>
 
 ## Claude 커넥터 연결하기
+
+Claude는 [디렉터리의 Walla 페이지](https://claude.ai/directory/walla-form)에서 커넥터를 추가해 연결할 수 있어요.
+
 <Steps>
   <Step>
-    ### 커넥터 설정 열기
-    [claude.ai](https://claude.ai) 접속 후, 왼쪽 사이드바에서 `Customize` 메뉴를 연 뒤 `Connectors` 메뉴로 이동합니다.
+    ### Walla 디렉터리 페이지 열기
+    [Claude의 Walla 페이지](https://claude.ai/directory/walla-form)를 엽니다. Claude에 로그인한 뒤 `Claude에 연결` 버튼을 클릭합니다.
 
-    <img src="/images/guides/getting-started/mcp-01-connectors.png" alt="Customize 화면에서 Connectors 메뉴로 이동" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-01-connect.png" alt="Walla 디렉터리 페이지에서 Claude에 연결 버튼 클릭" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### 커스텀 커넥터 추가 시작
-    Connectors 화면 오른쪽 위의 더하기 버튼을 누르고 `Add custom connector`를 선택합니다.
+    ### 왈라 계정으로 로그인
+    왈라 로그인 화면이 나타나면 사용하는 계정에 맞춰 Google, SSO, 이메일 중 하나로 로그인합니다. 이미 로그인되어 있다면 다음 단계로 넘어갑니다.
 
-    <img src="/images/guides/getting-started/mcp-02-add-custom-connector.png" alt="더하기 버튼 메뉴에서 Add custom connector 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
-  </Step>
-  <Step>
-    ### 커넥터 정보 입력
-    `Add custom connector` 창에 아래 정보를 입력한 뒤 `Add` 버튼을 클릭합니다. OAuth 항목은 비워두어도 됩니다.
-
-    - 이름(Name): Walla Form (왈라)
-    - Remote MCP server URL: {"https://app.walla.my/api/mcp"}
-
-    <img src="/images/guides/getting-started/mcp-03-connector-info.png" alt="Add custom connector 창에 이름과 URL 입력 후 Add 클릭" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
-  </Step>
-  <Step>
-    ### 왈라 계정 연결
-    목록에 추가된 Walla Form (왈라) 커넥터를 선택한 뒤 `Connect` 버튼을 클릭합니다.
-
-    <img src="/images/guides/getting-started/mcp-04-connect.png" alt="Walla Form 커넥터에서 Connect 버튼 클릭" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-02-sign-in.png" alt="Walla 로그인 화면에서 Google, SSO, 이메일 로그인 중 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 접근 권한 허용
-    '앱 접근 권한 요청' 화면에서 Claude가 요청하는 권한(프로젝트 읽기, 프로젝트 응답 읽기, 프로젝트 응답 다운로드, 프로젝트 쓰기, 오프라인 접근)을 확인한 뒤 `허용`을 클릭합니다.
+    '앱 접근 권한 요청' 화면에서 Claude가 요청하는 권한을 확인한 뒤 `허용`을 클릭합니다.
 
-    <img src="/images/guides/getting-started/mcp-05-authorize.png" alt="앱 접근 권한 요청 화면에서 허용 클릭" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-03-authorize.png" alt="Claude 앱 접근 권한 요청 화면에서 허용 버튼 클릭" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 연결 확인
-    연결이 완료되면 커넥터가 Connected 상태로 바뀝니다. 오른쪽 패널에서 Claude가 사용할 수 있는 도구 목록과 권한을 확인할 수 있어요.
+    Walla 디렉터리 페이지에 `연결됨`이 표시되면 연결이 완료된 상태입니다. 대화에서 Walla 도구를 사용해 폼을 조회하거나 새 폼을 만들어보세요.
 
-    <img src="/images/guides/getting-started/mcp-06-connected.png" alt="연결 완료 후 Walla Form 커넥터의 도구 목록과 권한" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/getting-started/claude-directory-04-connected.png" alt="Walla 디렉터리 페이지에 연결됨 상태 표시" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>

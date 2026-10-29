@@ -1,6 +1,6 @@
 ---
 title: Walla MCP をインストールする
-description: Walla MCP を ChatGPT または Claude に接続すると、AI アシスタントから直接 Walla のフォームや回答データを扱えます。
+description: Walla MCP を ChatGPT または Claude に接続して、AI との会話でフォームや回答データを扱えます。Claude ではディレクトリの Walla ページから接続できます。
 plan:
 ---
 
@@ -38,32 +38,31 @@ Walla は MCP（Model Context Protocol）サーバーを提供しています。
 
 ## Claude コネクタを接続する
 
+[Claude ディレクトリの Walla ページ](https://claude.ai/directory/walla-form)からコネクタを追加して接続できます。
+
 <Steps>
   <Step>
-    ### コネクタ設定を開く
-    [claude.ai](https://claude.ai) にアクセスし、左サイドバーの `Customize` メニューを開いてから `Connectors` へ移動します。
-  </Step>
-  <Step>
-    ### カスタムコネクタの追加を開始する
-    Connectors 画面の右上にあるプラスボタンを押し、`Add custom connector` を選択します。
-  </Step>
-  <Step>
-    ### コネクタ情報を入力する
-    `Add custom connector` ウィンドウに以下の情報を入力し、`Add` ボタンをクリックします。OAuth の項目は空欄のままで構いません。
+    ### Walla のディレクトリページを開く
+    [Claude の Walla ページ](https://claude.ai/directory/walla-form)を開きます。Claude にログインし、`Claude に接続` ボタンをクリックします。
 
-    - 名前（Name）: Walla Form
-    - Remote MCP server URL: {"https://app.walla.my/api/mcp"}
+    <img src="/images/guides/getting-started/claude-directory-01-connect.png" alt="Walla のディレクトリページで Claude に接続ボタンをクリック" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### Walla アカウントを接続する
-    一覧に追加された Walla Form コネクタを選び、`Connect` ボタンをクリックします。
+    ### Walla アカウントにログインする
+    Walla のログイン画面が表示されたら、アカウントに合った方法（Google、SSO、メール）でログインします。ログイン済みの場合は次の手順に進みます。
+
+    <img src="/images/guides/getting-started/claude-directory-02-sign-in.png" alt="Walla のログイン画面で Google、SSO、メールから選択" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### アクセス権限を許可する
-    アプリのアクセス権限リクエスト画面で、Claude が要求する権限（プロジェクトの読み取り、プロジェクト回答の読み取り、プロジェクト回答のダウンロード、プロジェクトの書き込み、オフラインアクセス）を確認し、「許可」をクリックします。
+    ### アクセスを許可する
+    アプリのアクセス権限リクエスト画面で Claude が要求する権限を確認し、`許可` をクリックします。
+
+    <img src="/images/guides/getting-started/claude-directory-03-authorize.png" alt="Claude のアプリ認可画面で許可ボタンをクリック" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 接続を確認する
-    接続が完了するとコネクタが Connected 状態に変わります。右側のパネルで、Claude が使えるツールの一覧と権限を確認できます。
+    Walla のディレクトリページに `接続済み` と表示されたら、接続は完了です。会話で Walla のツールを使ってフォームを確認したり、新しいフォームを作成したりしてみましょう。
+
+    <img src="/images/guides/getting-started/claude-directory-04-connected.png" alt="Walla のディレクトリページに接続済みと表示" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
