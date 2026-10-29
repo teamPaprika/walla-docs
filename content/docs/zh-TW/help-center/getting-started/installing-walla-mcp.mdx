@@ -1,6 +1,6 @@
 ---
 title: 安裝 Walla MCP
-description: 將 Walla MCP 連接至 ChatGPT 或 Claude，就能直接透過 AI 助理操作 Walla 的表單與回覆資料。
+description: 將 Walla MCP 連接至 ChatGPT 或 Claude，即可在與 AI 對話時操作表單與回覆資料。Claude 可透過目錄中的 Walla 頁面進行連接。
 plan:
 ---
 
@@ -38,32 +38,31 @@ Walla 提供 MCP（Model Context Protocol）伺服器。將 Walla MCP 連接至 
 
 ## 連接 Claude 連接器
 
+你可以從 [Claude 目錄中的 Walla 頁面](https://claude.ai/directory/walla-form)新增並連接 Walla 連接器。
+
 <Steps>
   <Step>
-    ### 開啟連接器設定
-    前往 [claude.ai](https://claude.ai)，在左側邊欄開啟 `Customize` 選單，接著進入 `Connectors`。
-  </Step>
-  <Step>
-    ### 開始新增自訂連接器
-    點選 Connectors 畫面右上角的加號按鈕，選擇 `Add custom connector`。
-  </Step>
-  <Step>
-    ### 輸入連接器資訊
-    在 `Add custom connector` 視窗中填入以下資訊，然後點選 `Add`。OAuth 欄位可以留空。
+    ### 開啟 Walla 目錄頁面
+    開啟 [Claude 的 Walla 頁面](https://claude.ai/directory/walla-form)。登入 Claude 後，點選 `連接至 Claude` 按鈕。
 
-    - 名稱（Name）：Walla Form
-    - Remote MCP server URL：{"https://app.walla.my/api/mcp"}
+    <img src="/images/guides/getting-started/claude-directory-01-connect.png" alt="在 Walla 目錄頁面點選連接至 Claude 按鈕" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### 連結 Walla 帳號
-    選擇清單中新增的 Walla Form 連接器，然後點選 `Connect`。
+    ### 登入 Walla 帳號
+    若出現 Walla 登入畫面，請依照你的帳號選擇 Google、SSO 或電子郵件登入。若已登入，請繼續下一個步驟。
+
+    <img src="/images/guides/getting-started/claude-directory-02-sign-in.png" alt="在 Walla 登入畫面選擇 Google、SSO 或電子郵件登入" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 授權存取權限
-    在應用程式存取權限請求畫面確認 Claude 要求的權限（讀取專案、讀取專案回覆、下載專案回覆、寫入專案、離線存取），接著點選「允許」。
+    在應用程式存取權限請求畫面確認 Claude 要求的權限，接著點選 `允許`。
+
+    <img src="/images/guides/getting-started/claude-directory-03-authorize.png" alt="在 Claude 應用程式授權畫面點選允許" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 確認連線狀態
-    連線完成後，連接器會變成 Connected 狀態。右側面板會顯示 Claude 可使用的工具清單與權限。
+    Walla 目錄頁面顯示 `已連線` 時，即表示連線完成。你可以在對話中使用 Walla 工具查詢表單或建立新表單。
+
+    <img src="/images/guides/getting-started/claude-directory-04-connected.png" alt="Walla 目錄頁面顯示已連線狀態" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
