@@ -55,8 +55,54 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   - 回答の長さ制限
   - 回答に含める／含めない
   - 正規表現（Regex）
+  - メール認証を必須にする
   - データマスキング
   - 回答の自動削除
+
+### メール認証
+
+`メール認証を必須にする` オプションをオンにすると、回答者は入力したメールアドレスに届く6桁の認証コードを確認してから、そのアドレスを回答として送信できます。メールアドレスの形式に加えて、回答者がそのメールボックスを利用できるか確認したいときに使ってください。
+
+<Steps>
+  <Step>
+    #### メール認証をオンにする
+
+    フォーム編集画面でメールアドレスフィールドを選び、右側の設定パネルで `メール認証を必須にする` をオンにします。変更した設定を回答者に適用するには、フォームを公開してください。
+
+    <img src="/images/guides/create-forms/email-verification-enable.png" alt="メールアドレスフィールドの設定パネルでメール認証をオンにする" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### メールアドレスを入力して認証を始める
+
+    回答者はメールアドレスを入力し、入力欄の横にある `認証する` をクリックします。
+
+    <img src="/images/guides/create-forms/email-verification-start.png" alt="メールアドレスを入力して認証ボタンを選択する" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 認証コードを送信する
+
+    メール認証画面でアドレスを確認し、`コードを送信` をクリックします。入力したメールアドレスに6桁の認証コードが送信されます。
+
+    <img src="/images/guides/create-forms/email-verification-send-code.png" alt="メール認証画面でコード送信ボタンを選択する" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 認証コードを入力して完了を確認する
+
+    メールで届いた6桁の認証コードを入力し、`認証する` をクリックします。認証に成功すると、メールアドレスフィールドの下に `認証済み` と表示されます。
+
+    <img src="/images/guides/create-forms/email-verification-enter-code.png" alt="メールで届いた6桁の認証コードを入力する" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/create-forms/email-verification-complete.png" alt="メールアドレスフィールドの下に認証完了が表示された回答画面" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+- **メールアドレスを変更した場合**: 変更後のアドレスでもう一度認証する必要があります。
+- **認証コードが無効または期限切れの場合**: メールアドレスと入力したコードを確認してください。再送信の待機時間が過ぎると、`コードを再送信` を押して新しいコードを受け取れます。
+- **必須入力と組み合わせる**: メールアドレスの入力を必須にしたい場合は、`必須入力` オプションもオンにしてください。メール認証だけをオンにした任意のフィールドは、空欄のまま送信できます。
+
+<Callout type="info" title="公開済みのフォームで確認してください">
+プレビューでは認証メールは送信されません。実際の認証手順を確認するには、公開済みのフォームを開いてください。この機能はメールアドレスフィールドに入力されたアドレスを確認する設定で、フォームへのアクセス権限に関するメール認証とは別のものです。
+</Callout>
 
 ## 住所フィールド
 

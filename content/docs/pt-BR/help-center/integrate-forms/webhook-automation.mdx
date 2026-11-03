@@ -262,6 +262,38 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     <img src="/images/guides/integrate/gmail-06-recipient.png" alt="Definição dos destinatários" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
+    ### Altere o assunto
+    No módulo `Enviar e-mail`, edite o campo `Assunto`. Substitua o assunto atual pelo que preferir, como uma confirmação de recebimento ou de inscrição.
+
+    Digite `@` no assunto para selecionar um campo do formulário na lista de referências a valores. Se incluir uma resposta, como o nome do participante, ela será substituída pelo valor correspondente no momento do envio.
+  </Step>
+  <Step>
+    ### Altere a mensagem
+    No menu `Mensagem`, escolha como escrever o conteúdo do e-mail.
+
+    - **Resumo de respostas padrão**: envia a resposta recebida no formato de resumo padrão.
+    - **Mensagem personalizada**: escreva sua própria mensagem no editor. Disponível a partir do plano Pro.
+
+    Ao escrever uma mensagem personalizada, digite `@` para inserir os valores das respostas dos campos do formulário. Digite `/` para adicionar conteúdo ou selecione um texto para alterar a formatação.
+
+    <Callout type="info" title="Quando a mensagem está vazia">
+    Se deixar a mensagem vazia, o resumo de respostas padrão será enviado, mesmo no modo de mensagem personalizada.
+    </Callout>
+  </Step>
+  <Step>
+    ### Edite o e-mail completo
+    No modo de mensagem personalizada, clique em `Editar e-mail completo` para editar o cabeçalho, a mensagem e o rodapé juntos.
+
+    - **Cabeçalho e rodapé**: escolha se serão exibidos e edite o conteúdo do cabeçalho e o texto do rodapé. Você também pode escolher se o remetente será exibido no rodapé.
+    - **Identidade visual**: defina a cor do tema e as cores de fundo do cabeçalho, do rodapé e da área externa.
+    - **Aplicar**: incorpora as edições às configurações da automação. Depois de clicar em `Aplicar` no editor, clique também em `Salvar alterações` na tela de automação para concluir o salvamento.
+
+  </Step>
+  <Step>
+    ### Confira a prévia
+    Use `Prévia` para conferir a composição do e-mail. A prévia mostra uma resposta de exemplo, e as referências na mensagem aparecem como nomes de campos. Os valores reais das respostas são inseridos no momento do envio. Para conferir o assunto e o conteúdo com valores reais, consulte [Testar com uma resposta existente](#1-testar-com-uma-resposta-existente) abaixo.
+  </Step>
+  <Step>
     ### Defina Cc, Cco e o e-mail de resposta
 	    - Informe as contas que receberão cópias, cópias ocultas ou respostas.
 	    - Digite os endereços diretamente ou use referências a valores (@) para defini-los dinamicamente.
@@ -283,7 +315,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
     <Step>
     ### Salve e ative
-    Salve as alterações e ative a automação para que o webhook funcione.
+    Clique em `Salvar alterações` para salvar as configurações, incluindo o assunto e a mensagem. Se a automação estiver desativada, ative `Ativo` para enviar e-mails quando as respostas forem recebidas.
 
     <img src="/images/guides/integrate/gmail-08-save-activate.png" alt="Salvar alterações e ativar" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>

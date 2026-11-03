@@ -243,13 +243,13 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - 우측 상단의 `+`를 눌러 통해 여러 경로를 생성할 수 있습니다. 이때, 각각의 경로에 별도로 자동화 모듈을 연결하지 않으면 기본 경로(모든 응답 제출에 대한 알림)로 작동합니다.
 	    - 각 경로 하단의 `+ 조건 추가`를 눌러 복합적인 조건을 설정할 수 있습니다.
 
-    <img src="/images/guides/integrate/gmail-04-route.png" alt="경로 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/integrate/gmail-04-route-updated.png" alt="조건과 옵션으로 Gmail 자동화 경로 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 발신자 지정
 	    Gmail을 발신할 구글 계정을 선택하고 발신자 이름을 입력합니다.
 
-    <img src="/images/guides/integrate/gmail-05-sender.png" alt="발신자 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/integrate/gmail-05-sender-updated.png" alt="Gmail 발신 계정 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
     ### 수신자 지정
@@ -259,16 +259,57 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 	    - responseKey, timestamp 와 같은 일부 사전 정의된 참조값은 이메일 주소로 사용할 수 없습니다.
 	    - 이메일 필드를 참조값으로 사용하는것을 권장합니다. 이메일 형식이 맞지 않을경우 전송에 실패할 수 있습니다.
 
-    <img src="/images/guides/integrate/gmail-06-recipient.png" alt="수신자 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/integrate/gmail-06-recipient-updated.png" alt="Gmail 수신 이메일 입력" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
+    ### 제목 변경하기
+    `이메일 발송` 모듈의 `제목` 입력란에서 이메일 제목을 변경합니다. 기존 제목을 지우고 접수 완료 안내, 신청 확인 등 원하는 제목을 입력하세요.
+
+    제목에 `@`를 입력하면 값 참조 목록에서 설문 항목을 선택할 수 있습니다. 이름 등의 응답값을 제목에 넣으면, 실제 발송 시 각 응답자의 값으로 바뀝니다.
+
+    <img src="/images/guides/integrate/gmail-07-subject.png" alt="Gmail 자동화 제목 변경" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 본문 변경하기
+    `본문` 메뉴에서 이메일에 담을 내용의 작성 방식을 선택합니다.
+
+    - **기본 응답 요약**: 제출된 응답을 기본 형식으로 정리하여 발송합니다.
+    - **직접 작성**: 본문 편집기에 원하는 안내 문구를 작성합니다. Pro 요금제 이상에서 사용할 수 있습니다.
+
+    직접 작성 시 `@`를 입력해 설문 항목의 응답값을 넣을 수 있습니다. `/`를 입력하면 콘텐츠를 추가할 수 있고, 텍스트를 선택하면 서식을 변경할 수 있습니다.
+
+    <Callout type="info" title="본문이 비어 있는 경우">
+    직접 작성 모드에서도 본문을 비워 두면 기본 응답 요약으로 발송됩니다.
+    </Callout>
+
+    <img src="/images/guides/integrate/gmail-08-body.png" alt="Gmail 본문 작성 방식 선택" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/integrate/gmail-08-body-editor.png" alt="Gmail 직접 작성 본문과 메일 전체 편집 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 메일 전체 편집
+    직접 작성 모드에서 `메일 전체 편집`을 클릭하면 헤더·본문·푸터를 함께 수정할 수 있습니다.
+
+    - **헤더·푸터**: 표시 여부를 선택하고 헤더 내용과 푸터 문구를 수정합니다. 푸터에는 발신자 표시 여부도 설정할 수 있습니다.
+    - **브랜딩**: 테마색, 헤더·푸터 배경색, 바깥 배경색을 설정합니다.
+    - **적용**: 편집한 내용을 자동화 설정에 반영합니다. 편집 창의 `적용`을 누른 뒤 자동화 화면에서 `변경 사항 저장`도 눌러야 저장이 완료됩니다.
+
+    <img src="/images/guides/integrate/gmail-09-full-editor.png" alt="헤더와 본문, 푸터를 함께 수정하는 메일 전체 편집 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 미리보기로 확인하기
+    `미리보기`로 메일 구성을 확인하세요. 미리보기는 응답 예시이며, 본문의 값 참조는 항목명으로 표시됩니다. 실제 발송 시에는 해당 응답값이 삽입됩니다. 실제 응답값이 반영된 제목과 내용을 확인하려면 아래의 [기존 응답으로 테스트하기](#1-기존-응답으로-테스트하기)를 참고하세요.
+
+    <img src="/images/guides/integrate/gmail-10-preview.png" alt="Gmail 자동화 메일 미리보기" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
     ### 참조, 숨은참조, 회신 이메일 지정
 	    - 이메일을 참조/숨은참조로 수신하거나 회신할 계정을 입력합니다.
 	    - 이메일 주소를 직접 입력하거나, 값 참조(@)를 사용하여 동적으로 설정할 수 있습니다.
 	    - 여러 개의 이메일 주소를 추가하려면 쉼표(,), 공백 또는 엔터 키로 구분하세요.
 	    - responseKey, timestamp 와 같은 일부 사전 정의된 참조값은 이메일 주소로 사용할 수 없습니다.
 
-    <img src="/images/guides/integrate/gmail-07-cc-bcc.png" alt="참조, 숨은참조, 회신 이메일 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/integrate/gmail-11-cc-bcc-updated.png" alt="고급 설정에서 참조, 숨은참조, 회신 이메일 지정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
     ### 히든필드 값 포함 설정 (선택)
@@ -277,15 +318,15 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     히든필드에는 유입 경로, 고객 식별자처럼 응답자가 직접 입력하지 않은 값이 담길 수 있습니다. 응답자 등 외부 수신자에게 발송되는 이메일이라면 어떤 값이 함께 전달되는지 확인한 뒤 활성화 해주세요.
     </Callout>
     
-    <img src="/images/guides/integrate/gmail-09-hidden-fields.png" alt="히든필드 값 포함 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/integrate/gmail-12-hidden-fields-updated.png" alt="히든필드 값 포함 설정" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
 
     
   </Step>
     <Step>
     ### 변경사항 저장 및 활성화
-    변경사항을 저장하고, 활성화를 눌러야 웹훅이 실제로 작동합니다.
+    `변경 사항 저장`을 눌러 제목·본문을 포함한 설정을 저장합니다. 자동화가 꺼져 있다면 `활성화`를 켜야 응답 제출 시 이메일이 발송됩니다.
 
-    <img src="/images/guides/integrate/gmail-08-save-activate.png" alt="변경사항 저장 및 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/integrate/gmail-13-save-activate-updated.png" alt="변경사항 저장 및 활성화" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 

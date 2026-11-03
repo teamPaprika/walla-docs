@@ -55,8 +55,54 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   - 回覆長度限制
   - 必須包含／不可包含的內容
   - 正規表示式（Regex）
+  - 要求電子郵件驗證
   - 資料遮罩
   - 回覆自動刪除
+
+### 電子郵件驗證
+
+開啟 `要求電子郵件驗證` 選項後，填答者必須先確認寄送至所填電子郵件地址的6位數驗證碼，才能將該地址作為回覆送出。除了檢查電子郵件格式，也可以用這項功能確認填答者是否能使用該信箱。
+
+<Steps>
+  <Step>
+    #### 開啟電子郵件驗證
+
+    在問卷編輯畫面選取電子郵件欄位，開啟右側設定面板中的 `要求電子郵件驗證`。若要將變更的設定套用至填答者，請發布問卷。
+
+    <img src="/images/guides/create-forms/email-verification-enable.png" alt="在電子郵件欄位設定面板開啟電子郵件驗證" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 輸入電子郵件並開始驗證
+
+    填答者輸入電子郵件地址後，點選輸入欄旁的 `驗證`。
+
+    <img src="/images/guides/create-forms/email-verification-start.png" alt="輸入電子郵件地址後點選驗證按鈕" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 傳送驗證碼
+
+    在電子郵件驗證視窗確認地址，並點選 `傳送驗證碼`。系統會將6位數驗證碼寄送至輸入的電子郵件地址。
+
+    <img src="/images/guides/create-forms/email-verification-send-code.png" alt="在電子郵件驗證視窗點選傳送驗證碼按鈕" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### 輸入驗證碼並確認完成
+
+    輸入電子郵件中收到的6位數驗證碼，並點選 `驗證`。驗證成功後，電子郵件欄位下方會顯示 `已驗證`。
+
+    <img src="/images/guides/create-forms/email-verification-enter-code.png" alt="輸入電子郵件中收到的6位數驗證碼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/create-forms/email-verification-complete.png" alt="電子郵件欄位下方顯示驗證完成的填答畫面" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+- **變更電子郵件地址時**：必須使用變更後的地址重新驗證。
+- **驗證碼無效或已過期時**：請確認地址與輸入的驗證碼。重新傳送的等待時間結束後，可以點選 `重新傳送` 取得新的驗證碼。
+- **搭配必填設定**：若一定要收集電子郵件地址，請同時開啟 `必填` 選項。只有開啟電子郵件驗證的選填欄位，仍可留空送出。
+
+<Callout type="info" title="請在已發布的問卷中確認">
+預覽模式不會傳送驗證郵件。若要確認實際驗證流程，請開啟已發布的問卷。這項功能用來確認電子郵件欄位中輸入的地址，與問卷存取權限的電子郵件驗證是不同的設定。
+</Callout>
 
 ## 地址欄位
 

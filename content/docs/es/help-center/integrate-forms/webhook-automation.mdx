@@ -227,6 +227,38 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 
   </Step>
     <Step>
+    ### Cambia el asunto
+    En el módulo `Enviar correo`, modifica el campo `Asunto`. Sustituye el asunto actual por el que prefieras, por ejemplo, un aviso de recepción o una confirmación de solicitud.
+
+    Escribe `@` en el asunto para seleccionar un campo del formulario en la lista de referencias a valores. Si incluyes una respuesta, como el nombre de la persona, se sustituirá por su valor correspondiente al enviar el correo.
+  </Step>
+  <Step>
+    ### Cambia el mensaje
+    En el menú `Mensaje`, elige cómo redactar el contenido del correo.
+
+    - **Resumen de respuestas predeterminado**: envía la respuesta recibida con el formato de resumen predeterminado.
+    - **Mensaje personalizado**: escribe tu propio mensaje en el editor. Está disponible a partir del plan Pro.
+
+    Al redactar un mensaje personalizado, escribe `@` para insertar los valores de respuesta de los campos del formulario. Escribe `/` para añadir contenido o selecciona texto para cambiar su formato.
+
+    <Callout type="info" title="Si el mensaje está vacío">
+    Si dejas el mensaje vacío, se enviará el resumen de respuestas predeterminado, incluso en el modo de mensaje personalizado.
+    </Callout>
+  </Step>
+  <Step>
+    ### Edita el correo completo
+    En el modo de mensaje personalizado, haz clic en `Editar correo completo` para modificar juntos el encabezado, el mensaje y el pie de página.
+
+    - **Encabezado y pie de página**: elige si se muestran y modifica su contenido. También puedes elegir si se muestra el remitente en el pie de página.
+    - **Marca**: configura el color del tema y los colores de fondo del encabezado, del pie de página y del área exterior.
+    - **Aplicar**: incorpora las modificaciones a la configuración de la automatización. Después de pulsar `Aplicar` en el editor, pulsa también `Guardar cambios` en la pantalla de automatización para terminar de guardar.
+
+  </Step>
+  <Step>
+    ### Comprueba la vista previa
+    Usa `Vista previa` para comprobar la composición del correo. La vista previa muestra una respuesta de ejemplo y las referencias del mensaje aparecen como nombres de campos. Los valores reales se insertan al enviar el correo. Para comprobar el asunto y el contenido con valores reales, consulta [Probar con una respuesta existente](#1-probar-con-una-respuesta-existente) más abajo.
+  </Step>
+  <Step>
     ### Indica CC, CCO y la dirección de respuesta
 	    - Escribe las cuentas que recibirán el correo en copia o copia oculta, o la dirección de respuesta.
 	    - Puedes escribir la dirección directamente o definirla de forma dinámica con la referencia de valores (@).
@@ -246,7 +278,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
     <Step>
     ### Guarda los cambios y actívalo
-    El webhook solo funciona de verdad cuando guardas los cambios y pulsas activar.
+    Pulsa `Guardar cambios` para guardar la configuración, incluidos el asunto y el mensaje. Si la automatización está desactivada, activa `Activo` para que se envíen correos cuando se reciban respuestas.
 
   </Step>
 </Steps>
