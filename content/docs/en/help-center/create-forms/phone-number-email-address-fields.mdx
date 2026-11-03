@@ -67,8 +67,54 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   - Response length
   - Response include / exclude
   - Regular expression (Regex)
+  - Require email verification
   - Data masking
   - Auto-delete responses
+
+### Email verification
+
+Turn on `Require email verification` to have respondents verify the email address they enter with a 6-digit code before submitting that address as a response. Use it alongside email format validation to check that the respondent can access the mailbox.
+
+<Steps>
+  <Step>
+    #### Turn on email verification
+
+    Select the email field in the form editor, then turn on `Require email verification` in the settings panel on the right. Publish the form to apply the updated setting for respondents.
+
+    <img src="/images/guides/create-forms/email-verification-enable.png" alt="Turn on email verification in the email field settings panel" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Enter an email address and click Verify
+
+    The respondent enters an email address, then clicks `Verify` next to the input.
+
+    <img src="/images/guides/create-forms/email-verification-start.png" alt="Enter an email address and select the verification button" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Send the verification code
+
+    In the email verification dialog, check the address and click `Send code`. A 6-digit verification code is sent to the entered email address.
+
+    <img src="/images/guides/create-forms/email-verification-send-code.png" alt="Select the send-code button in the email verification dialog" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Enter the code and confirm verification
+
+    Enter the 6-digit code received by email and click `Verify`. After successful verification, `Verified` appears below the email field.
+
+    <img src="/images/guides/create-forms/email-verification-enter-code.png" alt="Enter the 6-digit code received by email" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/create-forms/email-verification-complete.png" alt="Verified status displayed below the email field" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+- **If the email address changes**: The new address must be verified again.
+- **If the code is invalid or expired**: Check the email address and the code you entered. Once the resend waiting period has passed, click `Resend code` to receive a new code.
+- **Use with Required**: To collect an email address from every respondent, also turn on `Required`. An optional question with email verification enabled can still be submitted blank.
+
+<Callout type="info" title="Check the published form">
+Verification emails are not sent in preview mode. Open the published form to try the actual verification flow. This setting verifies the address entered in an email field and is separate from email verification for form access permissions.
+</Callout>
 
 ## Address Field
 

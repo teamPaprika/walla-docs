@@ -67,8 +67,54 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   - Limite de tamanho da resposta
   - A resposta deve incluir / A resposta não pode incluir
   - Expressão regular (Regex)
+  - Exigir verificação de e-mail
   - Mascaramento de dados
   - Excluir respostas automaticamente
+
+### Verificação de e-mail
+
+Ative `Exigir verificação de e-mail` para que o respondente verifique o endereço informado com um código de 6 dígitos antes de enviá-lo como resposta. Além de validar o formato do e-mail, essa opção permite confirmar que o respondente consegue acessar a caixa de entrada.
+
+<Steps>
+  <Step>
+    #### Ative a verificação de e-mail
+
+    Selecione o campo de e-mail no editor do formulário e ative `Exigir verificação de e-mail` no painel de configurações à direita. Publique o formulário para aplicar a configuração atualizada aos respondentes.
+
+    <img src="/images/guides/create-forms/email-verification-enable.png" alt="Ativar a verificação de e-mail nas configurações do campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Informe o e-mail e clique em Verify
+
+    O respondente informa um endereço de e-mail e clica em `Verify` ao lado do campo.
+
+    <img src="/images/guides/create-forms/email-verification-start.png" alt="Informar um endereço de e-mail e selecionar o botão de verificação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Envie o código de verificação
+
+    Na janela de verificação de e-mail, confira o endereço e clique em `Send code`. Um código de verificação de 6 dígitos será enviado para o endereço informado.
+
+    <img src="/images/guides/create-forms/email-verification-send-code.png" alt="Selecionar o botão para enviar o código na janela de verificação" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Informe o código e confira a conclusão da verificação
+
+    Informe o código de 6 dígitos recebido por e-mail e clique em `Verify`. Após a verificação, a indicação `Verified` aparecerá abaixo do campo de e-mail.
+
+    <img src="/images/guides/create-forms/email-verification-enter-code.png" alt="Informar o código de 6 dígitos recebido por e-mail" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/create-forms/email-verification-complete.png" alt="Status de verificação concluída abaixo do campo de e-mail" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+- **Se o endereço de e-mail mudar**: o novo endereço deverá ser verificado novamente.
+- **Se o código estiver incorreto ou expirado**: confira o endereço de e-mail e o código informado. Após o tempo de espera para reenvio, clique em `Resend code` para receber um novo código.
+- **Use com Preenchimento obrigatório**: para coletar um endereço de e-mail de cada respondente, ative também `Preenchimento obrigatório`. Uma pergunta opcional com verificação de e-mail ainda pode ser enviada em branco.
+
+<Callout type="info" title="Confira no formulário publicado">
+A prévia não envia e-mails de verificação. Abra o formulário publicado para testar o processo real. Essa opção verifica o endereço informado no campo de e-mail e é independente da verificação de e-mail das permissões de acesso ao formulário.
+</Callout>
 
 ## Campo de endereço
 

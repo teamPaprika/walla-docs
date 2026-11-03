@@ -264,6 +264,38 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     <img src="/images/guides/integrate/gmail-06-recipient.png" alt="Specifying the recipient" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>
     <Step>
+    ### Change the subject
+    In the `Send Email` module, edit the `Subject` field. Replace the existing subject with your own, such as a submission receipt or application confirmation.
+
+    Type `@` in the subject to choose a form field from the value reference list. If you include a response value such as the respondent's name, it is replaced with that respondent's value when the email is sent.
+  </Step>
+  <Step>
+    ### Change the message
+    Choose how to compose the email in the `Message` menu.
+
+    - **Default response summary**: Sends the submitted response in the default summary format.
+    - **Custom message**: Write your own message in the editor. Available on the Pro plan and above.
+
+    When writing a custom message, type `@` to insert response values from form fields. Type `/` to add content, or select text to change its formatting.
+
+    <Callout type="info" title="When the message is empty">
+    An empty message sends the default response summary, even in custom message mode.
+    </Callout>
+  </Step>
+  <Step>
+    ### Edit the full email
+    In custom message mode, click `Edit email` to edit the header, message, and footer together.
+
+    - **Header and footer**: Choose whether to show them, and edit the header content and footer text. You can also choose whether to show the sender in the footer.
+    - **Branding**: Set the theme color and the background colors for the header, footer, and outer area.
+    - **Apply**: Applies your edits to the automation settings. After clicking `Apply` in the editor, click `Save Changes` on the automation screen to finish saving.
+
+  </Step>
+  <Step>
+    ### Check the preview
+    Use `Preview` to check the email layout. The preview shows a sample response, and value references in the message appear as field names. The actual response values are inserted when the email is sent. To check the subject and message with real response values, see [Test with an existing response](#1-test-with-an-existing-response) below.
+  </Step>
+  <Step>
     ### Set CC, BCC, and reply-to
 	    - Enter the email addresses for CC, BCC, or reply-to.
 	    - You can enter email addresses directly, or use value references (@) to set them dynamically.
@@ -285,7 +317,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   </Step>
     <Step>
     ### Save and activate
-    Save your changes and click activate — the webhook only runs once it's turned on.
+    Click `Save Changes` to save the settings, including the subject and message. If the automation is off, turn on `Active` so emails are sent when responses are submitted.
 
     <img src="/images/guides/integrate/gmail-08-save-activate.png" alt="Saving changes and activating" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", border: "1px solid var(--border)" }} />
   </Step>

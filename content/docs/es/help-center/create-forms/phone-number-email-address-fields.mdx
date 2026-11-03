@@ -55,8 +55,54 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   - Longitud de la respuesta
   - Contenido obligatorio o prohibido
   - Expresión regular (Regex)
+  - Requerir verificación de correo electrónico
   - Enmascarado de datos
   - Borrado automático de respuestas
+
+### Verificación de correo electrónico
+
+Activa `Requerir verificación de correo electrónico` para que quien responde verifique la dirección introducida con un código de 6 dígitos antes de enviarla como respuesta. Además de comprobar el formato del correo, esta opción permite confirmar que la persona puede acceder a ese buzón.
+
+<Steps>
+  <Step>
+    #### Activa la verificación de correo electrónico
+
+    Selecciona el campo de correo en el editor del formulario y activa `Requerir verificación de correo electrónico` en el panel de ajustes de la derecha. Publica el formulario para aplicar la configuración actualizada a quienes respondan.
+
+    <img src="/images/guides/create-forms/email-verification-enable.png" alt="Activar la verificación de correo en los ajustes del campo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Introduce el correo y pulsa Verify
+
+    Quien responde introduce una dirección de correo electrónico y pulsa `Verify` junto al campo.
+
+    <img src="/images/guides/create-forms/email-verification-start.png" alt="Introducir una dirección de correo y seleccionar el botón de verificación" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Envía el código de verificación
+
+    En la ventana de verificación, comprueba la dirección y pulsa `Send code`. Se enviará un código de verificación de 6 dígitos a la dirección introducida.
+
+    <img src="/images/guides/create-forms/email-verification-send-code.png" alt="Seleccionar el botón para enviar el código en la ventana de verificación" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    #### Introduce el código y confirma la verificación
+
+    Introduce el código de 6 dígitos recibido por correo y pulsa `Verify`. Cuando la verificación se complete correctamente, aparecerá `Verified` debajo del campo de correo.
+
+    <img src="/images/guides/create-forms/email-verification-enter-code.png" alt="Introducir el código de 6 dígitos recibido por correo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/create-forms/email-verification-complete.png" alt="Estado de verificación completada debajo del campo de correo" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+- **Si cambia la dirección de correo**: es necesario verificar de nuevo la dirección modificada.
+- **Si el código no es válido o ha caducado**: comprueba la dirección de correo y el código introducido. Una vez transcurrido el tiempo de espera para el reenvío, pulsa `Resend code` para recibir un código nuevo.
+- **Combínalo con Obligatorio**: si necesitas recoger una dirección de correo de cada persona, activa también `Obligatorio`. Una pregunta opcional con verificación de correo puede enviarse en blanco.
+
+<Callout type="info" title="Compruébalo en el formulario publicado">
+La vista previa no envía correos de verificación. Abre el formulario publicado para probar el proceso real. Esta opción verifica la dirección introducida en un campo de correo y es independiente de la verificación de correo de los permisos de acceso al formulario.
+</Callout>
 
 ## Campo de dirección
 
