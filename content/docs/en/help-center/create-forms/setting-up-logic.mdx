@@ -31,8 +31,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### Condition
     1. **Select the reference field** – Choose which field's response the logic should be based on.
-       - For a grid, ranking, table, or custom field question, also choose a `Sub-item`. See [Creating Conditions on Sub-items](#creating-conditions-on-sub-items).
-       - You can also choose a hidden field as the reference. See [Creating Conditions with Hidden Fields](#creating-conditions-with-hidden-fields).
+       - For a grid, ranking, table, or custom field question, also choose the part to compare in `Sub-item`. For details, see [Creating Conditions on Sub-items](#creating-conditions-on-sub-items).
+       - You can also use a hidden field value from the link as the reference. For details, see [Creating Conditions with Hidden Fields](#creating-conditions-with-hidden-fields).
     2. **Select a condition** – Pick the type of condition. Conditions fall into text/value, choice, number, and date comparisons — see [Condition Types in Detail](#condition-types-in-detail) below for the full list.
     3. **Select the option/response** – Choose which response triggers the condition.
        - You can select multiple responses at the same time.
@@ -101,24 +101,20 @@ Use this on questions where several items can be picked, such as multiple choice
 
 ## Creating Conditions on Sub-items
 
-Some questions have more than one part in one answer.
-For these questions, choose the reference field first. Then choose the part to compare, one level at a time.
+Some questions, such as a Multiple Choice Grid or a Table, have several parts in one answer. For these questions, choose the reference field, then choose the part to compare.
 
 <Steps>
   <Step>
     ### Choose the reference field
-    Choose the reference field.
-    If the question has sub-items, a `Sub-item` menu appears below it.
+    Choose the reference field. If the question has sub-items, a `Sub-item` menu appears right below it.
   </Step>
   <Step>
     ### Choose the sub-item
-    In `Sub-item`, choose the row, column, or property to compare.
-    If another menu appears, continue until you reach the last menu.
+    In `Sub-item`, choose the row, column, or property to compare. If another menu appears, keep choosing until you reach the last one.
   </Step>
   <Step>
     ### Set the condition and comparison value
-    Choose the condition type and enter the comparison value.
-    The input box for the value changes to match the last part that you chose.
+    Choose the condition type and enter the comparison value. The value input changes to match the last part that you chose. For example, if you chose a cell in a Table, type text. If you chose a row in a Multiple Choice Grid, choose one of the options in that row.
   </Step>
 </Steps>
 
@@ -132,46 +128,45 @@ For these questions, choose the reference field first. Then choose the part to c
 | Table | Row → Column | The text entered in that cell |
 | Custom Field | Property → item position, if necessary | A value that matches the type of that property |
 
-- For Multiple Choice Grid, Checkbox Grid, and Ranking questions, set the comparison value right after you choose the row. You do not choose an item position.
-- In a ranking question, respondents can sometimes type their own options. In this case, choose `Select Options` or `Custom` for the comparison value. In `Custom`, type a value and press Enter.
-- If `This answer cannot be used in a condition` appears, you cannot use that part in a condition. Choose a different sub-item.
+- For Multiple Choice Grid, Checkbox Grid, and Ranking questions, you can set the comparison value as soon as you choose the row (for Ranking, the rank).
+- If respondents can type their own options in a Ranking question, choose `Select Options` or `Custom` for the comparison value. To compare with a value that is not in the list, choose `Custom`, type the value, and press Enter.
+- If a sub-item shows `This answer cannot be used in a condition`, you cannot use that part in a condition. Choose a different sub-item.
 
 ### Sub-items of a custom field
 
-- If the custom field has fixed properties, choose one in `Sub-item`.
-- Some properties accept a key that you type. For these properties, the `Choose property` and `Enter key` buttons appear. If the key is not in the list, click `Enter key` and type the key.
-- If the answer is a list, an `Item position` box appears.
-  - 1 is the first item, and 2 is the second item.
-  - Some custom fields give the whole answer as a list. For these fields, `Item position` is the first box. You must fill in this box.
-- You can leave an `Item position (optional)` box empty.
-  - If the box is empty, the condition compares the whole list.
-  - If you enter a number, the condition compares only that item.
+- If the properties are fixed, choose one from the `Sub-item` list.
+- If a property shows the `Choose property` and `Enter key` buttons, you can type the key yourself. For a key that is not in the list, click `Enter key` and type it.
+- If the answer is a list, an `Item position` box appears. Enter 1 for the first item and 2 for the second item. For a custom field whose whole answer is a list, you must fill in the first `Item position` box.
+- Leave an `Item position (optional)` box empty to compare the whole list, or enter a number to compare only that item.
 
 ### Entering comparison values
 
-- You do not need a special format, such as JSON, for comparison values. Use only the menus and input boxes on the screen.
-- **Values with options** – Choose an option from the list. Some menus let you choose more than one option.
-- **List values that you type** – Type one value and press Enter. The value appears as a small chip. Add each next value the same way.
-- **Numbers** – Type a number. To compare with 0, type `0`. An empty box does not mean 0.
-- **True/false** – Choose `True` or `False`. An empty selection does not mean `False`. In a list box, type `true` or `false` and press Enter.
+Choose or type the comparison value in the menu or input box that matches the last part you chose.
+
+- **Values with options** – Choose an option from the list. Depending on the part, you can choose more than one option.
+- **List values that you type** – Type one value and press Enter to add it as a small chip. Add each next value the same way.
+- **Numbers** – The box starts empty, so type the number to compare. To compare with 0, type `0`.
+- **True/false** – Choose `True` or `False` as the value to compare. In a list box, type `true` or `false` and press Enter.
 
 ### Conditions that are not complete
 
-- If `Check the condition and finish entering its values.` appears below a condition, the condition is not complete.
+If `Check the condition and finish entering its values.` appears below a condition, you have not finished entering it. Check these points to finish it:
+
 - If text stays in an input box, press Enter to add it as a chip.
-- If a value does not match the expected type, the text stays in the box. Then `Enter a value of the expected type.` appears. Correct the value and press Enter again.
-- If `Item position` is empty or out of range, a help message appears. Correct the number as the message tells you.
-- You cannot publish the form in this state. If you try to publish, `Complete or correct the condition input before publishing.` appears.
+- If a value does not match the expected type, the text stays in the box and `Enter a value of the expected type.` appears. Correct the value and press Enter again.
+- If a message says that `Item position` is empty or out of range, correct the number as the message describes.
+
+You cannot publish the form in this state. If you try to publish, `Complete or correct the condition input before publishing.` appears.
 
 ### Conditions that break after you edit a question
 
-- If you delete or change a row, column, or option in a question, a condition can show an error. The error is `Item not found` or `This value is no longer an option. Choose another one.`
-- Choose a different sub-item or value.
-- If a saved condition stays in this state, you cannot publish the form. If you try to publish, `A response-value condition is no longer valid. Check its question, sub-item, and comparison value.` appears.
+If you delete or change a row, column, or option in a question, a condition can show `Item not found` or `This value is no longer an option. Choose another one.` In this case, choose a different sub-item or value.
+
+If a saved condition stays in this state, you cannot publish the form. If you try to publish, `A response-value condition is no longer valid. Check its question, sub-item, and comparison value.` appears.
 
 ## Creating Conditions with Hidden Fields
 
-You can send respondents to different questions based on a hidden field value in the link.
+You can send respondents to different questions based on a hidden field value that you add to the link. For example, you can send only respondents who come from an ad link to questions about the ad.
 First, register the hidden field in Tracking on the Share page. For the steps, see [Tracking (Hidden Fields)](/en/docs/help-center/share-forms/tracking-hidden-fields).
 
 <Steps>
@@ -181,21 +176,17 @@ First, register the hidden field in Tracking on the Share page. For the steps, s
   </Step>
   <Step>
     ### Set the condition and value
-    Choose one of the [text / value comparison](#text--value-comparison) conditions.
-    Type the comparison value as text.
+    Choose one of the [text / value comparison](#text--value-comparison) conditions and type the value to compare as text.
   </Step>
   <Step>
     ### Choose the destination question
-    Choose the question for respondents who meet the condition.
+    Choose the next question to show when the hidden field value meets the condition.
   </Step>
 </Steps>
 
-- Example: hidden field `utm_source`, `Equal`, `ads`
-  - The link `https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?utm_source=ads` meets the condition.
-  - Only respondents who come from the ad go to the selected question.
-- If the link has no value for the hidden field, the value is empty. An empty value meets no condition, including `Not equal`.
-- You cannot choose a hidden field as a destination. You can use it only as the reference of a condition.
-- You cannot delete a hidden field that a logic condition uses. See [Deleting a Hidden Field Used in Logic](/en/docs/help-center/share-forms/tracking-hidden-fields#deleting-a-hidden-field-used-in-logic).
+- Example: if you create a condition with hidden field `utm_source`, `Equal`, and `ads`, only respondents who open `https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?utm_source=ads` go to the selected question.
+- If the link has no value for a hidden field, that hidden field meets no comparison condition, including `Not equal`.
+- You cannot delete a hidden field that a logic condition uses. For the steps to delete it, see [Deleting a Hidden Field Used in Logic](/en/docs/help-center/share-forms/tracking-hidden-fields#deleting-a-hidden-field-used-in-logic).
 
 ## Setting Up Logic with Nodes
 

@@ -101,8 +101,9 @@ A comparison runs only when **both** resolved operands are non-empty. If the ref
 
 ### Sub-answer paths and hidden fields
 
-The editor selects the question first, then each row, column, property, or array position.
-Sub-answer conditions use `FIELD_PATH`. Whole-answer conditions keep `FIELD`.
+Use `FIELD_PATH` to compare one part of an answer: a grid row, a ranking position, a table cell, or a nested custom value.
+In the editor, pick the question first, then each row, column, property, or array position.
+Whole-answer conditions use `FIELD`.
 
 | Answer | `value.path` example | Constant example |
 |---|---|---|
@@ -112,8 +113,7 @@ Sub-answer conditions use `FIELD_PATH`. Whole-answer conditions keep `FIELD`.
 | Nested custom object | `["customer", "orders", "0", "total"]` | `0` |
 
 Each segment is one literal key. Dots and `::` within a key do not split the path.
-Array indices use canonical decimal strings, starting at `"0"`.
-The editor displays positions starting at 1.
+Array indices are canonical decimal strings starting at `"0"`, and the editor shows them starting at 1.
 Custom paths follow the stored output schema.
 Supported containers are declared object properties, typed additionalProperties maps, and homogeneous arrays. These containers can nest.
 Nullable type arrays, anyOf, and oneOf must have one non-null type.
@@ -123,26 +123,22 @@ Path checks do not replace JSON Schema validation of the complete custom answer.
 The editor can select an empty dynamic key with the "Use empty key" button.
 A declared empty key without a title appears as `""`.
 
-`FIELD_PATH` pairs with `CONSTANT` only.
-Constants retain the leaf type: string, number, boolean, or an array of those primitive values.
-Choice grid and ranking constants contain stored choice **values**.
-Whole-answer choice conditions continue to use `CHOICE` option IDs.
-Ordinary option fields (including dropdowns, scales, and consent) do not support `FIELD_PATH`. Use whole-answer `FIELD` with `CHOICE` instead.
+`FIELD_PATH` pairs with `CONSTANT` only, and the constant keeps the leaf type: string, number, boolean, or an array of those primitive values.
+For choice grid and ranking paths, the constant holds stored choice **values**.
+Ordinary option fields (including dropdowns, scales, and consent) do not support `FIELD_PATH`. Compare them with whole-answer `FIELD` and `CHOICE` option IDs.
 Array-level enum and const constraints validate the complete actual array by JSON equality (array order matters).
 Comparison constants can contain a subset or a reordering of the permitted elements.
 Selecting a nested key or index retains ancestor enum and const constraints.
 `FIELD_PATH` array equality ignores order and counts duplicates.
-Existing FIELD conditions retain their original empty-value and set-comparison behavior.
-Missing paths, empty answers, invalid paths, and mismatched constant types evaluate to false, including negative comparisons.
-Numbers equal to zero and boolean false remain valid answers.
+`FIELD` conditions use the empty-value rule above and the set comparisons in §5.
+Missing paths, empty answers, invalid paths, and mismatched constant types evaluate to false, even for negative operators such as `NOT_EQUAL`.
+`0` and `false` count as answers.
 Publishing rejects invalid `FIELD_PATH` references.
 
-Hidden fields use `FIELD` with `value.id = "hidden-<id>"` and a string constant.
-The `<id>` is the hidden field `id`. The URL parameter name is its `label`.
-A missing URL parameter gives an empty value. An empty value matches no operator.
-Hidden-field conditions take no `path`.
-They are condition sources, never jump targets.
-The `HIDDEN` operand type below is a different, unevaluated type.
+To branch on a hidden field, use a `FIELD` operand with `value.id = "hidden-<id>"` and a string `CONSTANT`.
+`<id>` is the hidden field's generated `id`. Its `label` is the URL parameter name and does not identify the field here.
+If the link omits that parameter, the value is empty and no operator matches.
+Hidden-field conditions take no `path`, and a hidden field can never be a jump target.
 
 The friendly MCP condition uses the parent `field`, optional `path`, and typed `value`:
 
@@ -152,7 +148,7 @@ The friendly MCP condition uses the parent `field`, optional `path`, and typed `
 
 For more examples and write restrictions, see `walla://reference/editing-contract` §(b).
 
-Automation JSON Logic rejects `FIELD_PATH`. It has a separate execution contract.
+Automation JSON Logic rejects `FIELD_PATH`.
 
 Include only the `value` fields for the operand type.
 
@@ -283,7 +279,7 @@ Behavior: answer "No" → `branch_q1_no` matches first → jump to `field_q5` (a
 2. Every condition has **exactly 2 operands** (except `ALWAYS`, which has none). Build compound logic from multiple conditions, not extra operands. Remember: prefixes fold left-to-right with no precedence.
 3. Always end the array with an `ALWAYS` default branch (mandatory and tool-owned — `set_field_logic` appends it for you from the op's `otherwise` target, so you never author it). When no conditional branch matches, this trailing default is what fires; keep conditional branches above it in priority order.
 4. Operand 0 = `FIELD`; operand 1 = `CONSTANT` (text/number/date) or `CHOICE` (option ids, with a `FIELD` sibling). Avoid `HIDDEN` / `VARIABLE` — they won't route today.
-   A sub-answer condition uses `FIELD_PATH` with a typed `CONSTANT` instead (see §3).
+   To compare part of an answer, use `FIELD_PATH` with a typed `CONSTANT` (see §3).
 5. Use real, current ids for `target.value` and operand `value.id` / `choiceIds`; never collide with the `"NEXT"` / `"SUBMIT"` sentinels.
 6. On the submit node, branches select endings: `ENDING` targets with `"SUBMIT"` (default screen) or a real ending id.
 

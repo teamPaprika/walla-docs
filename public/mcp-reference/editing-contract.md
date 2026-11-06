@@ -223,9 +223,8 @@ A friendly condition has these keys:
 | `operator` | See `walla://reference/branch-logic` §5. |
 | `connector` | `"and"` or `"or"`. The first condition ignores it. |
 
-A `path` condition compiles to `FIELD_PATH` with a typed `CONSTANT`.
-Without `path`, conditions keep `FIELD` with `CHOICE` or a string `CONSTANT`.
-`get_form` returns `path` and the typed `value` unchanged.
+A condition with `path` compiles to `FIELD_PATH` and a typed `CONSTANT`. A condition without `path` compiles to `FIELD` and either `CHOICE` or a string `CONSTANT`.
+`get_form` returns `path` and the typed `value` as you wrote them.
 
 | Source | `path` | `value` example |
 |---|---|---|
@@ -238,28 +237,26 @@ Without `path`, conditions keep `FIELD` with `CHOICE` or a string `CONSTANT`.
 Path rules:
 
 - Steps follow the field's stored output schema. See `walla://reference/branch-logic` §3.
-- Grid and ranking values are column **values**, not column ids.
-- A grid or ranking row holds an array. Its `value` is an array.
-- A table cell holds a string. Its `value` is a string.
+- A grid row or ranking slot holds an array of column **values**, not column ids, so its `value` is an array such as `["Good"]`.
+- A table cell holds a string, so its `value` is a string such as `"3"`.
 - Array indices are zero-based decimal strings, such as `"0"`.
 - Each step is one literal key. A key with dots, such as `"a.b"`, stays one step.
 - `@<key>` steps resolve for `TABLE` rows and columns and for `RADIO_GRID` / `CHECKBOX_GRID` rows added earlier in the batch.
-- Choice-grid and ranking columns are never path steps. Compare them by `value`.
-- `RANKING` slots use the generated ids `rank-1` to `rank-N`. Write these ids, not row keys.
+- Choice-grid and ranking columns are never path steps. Put the column value in `value`.
+- A `RANKING` step uses a generated slot id, such as `rank-1`.
 - A path has at least one step. A custom answer that is an array at the root starts with an index, such as `["0"]`.
 - Custom steps are literal. A custom key that starts with `@` is not an alias.
 - A path must end at a comparable leaf. A table row or a custom object is rejected.
 - A number leaf takes a JSON number, such as `5`, not the string `"5"`.
-- `0` and `false` are valid values. They are also valid answers.
+- `0` and `false` work as `value` and count as answers.
 
 Fields without paths:
 
-- These option fields take no `path`: `RADIO`, `CHECKBOX`, `DROPDOWN`, `DROPDOWN_MULTI`, `PICTURE_CHOICE`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`.
-- Compare them with `choiceIds` that hold option ids.
+- `RADIO`, `CHECKBOX`, `DROPDOWN`, `DROPDOWN_MULTI`, `PICTURE_CHOICE`, `LINEAR`, and `PRIVACY_POLICY_INFORMATION` take no `path`. Compare them with `choiceIds` that hold option ids.
 - A hidden field takes no `path`. Give it a string `value`.
 - `"hidden-<id>"` must name a hidden field of the form. See `walla://reference/form-model`.
-- Use the hidden field `id`, not its `label`. The `label` is the URL parameter name.
-- Never use `"hidden-<id>"` in a `goTo`. A hidden field is not a jump target.
+- Build it from the hidden field `id`, because the `label` is the URL parameter name. For `{ "id": "k3Xw9Qa", "label": "utm_source" }`, write `"hidden-k3Xw9Qa"`, not `"hidden-utm_source"`.
+- Never use `"hidden-<id>"` in a `goTo`.
 - Automation route conditions do not accept `path`.
 
 Example: a grid row and a hidden field, joined by `and`:
@@ -308,8 +305,7 @@ These requests return `invalid_args`:
 
 Clear or change the logic first, in an earlier op of the same batch.
 `publish_form` also rejects invalid paths, incomplete conditions, and missing hidden fields.
-`form_apply_edits` cannot edit a custom field's output schema.
-It cannot edit hidden-field definitions either.
+`form_apply_edits` cannot edit a custom field's output schema or hidden-field definitions.
 
 ---
 

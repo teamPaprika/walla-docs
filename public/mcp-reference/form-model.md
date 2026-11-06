@@ -286,16 +286,13 @@ A flat list of prefill / URL parameters carried with a submission but not shown 
 
 Each entry is `{ "id": string, "label": string }`.
 The `label` is the URL parameter name, as in `?utm_source=ads`.
-The `id` is a generated id. Conditions use the `id`, not the `label`.
+The `id` is a generated id.
 
-A branch condition can read a hidden field's value.
-Set the condition's `field` to `"hidden-<id>"`, not the bare `id` or the `label`.
-For example, the id `k3Xw9Qa` becomes `"hidden-k3Xw9Qa"`.
-A hidden-field condition takes a string `value` and no `path`.
-If the link has no value for the `label`, the value is empty. An empty value matches no operator, including `NOT_EQUAL`.
-A hidden field is never a jump target.
-Publishing rejects a condition on a missing hidden field.
-Walla blocks removal of a hidden field that a condition uses.
+To branch on a hidden field, set the condition's `field` to `"hidden-<id>"`. For example, the id `k3Xw9Qa` becomes `"hidden-k3Xw9Qa"`.
+Give the condition a string `value` and no `path`.
+If the link has no value for the `label`, the value is empty and no operator matches, including `NOT_EQUAL`.
+A hidden field can never be a jump target.
+Publishing rejects a condition on a missing hidden field, and Walla blocks removal of a hidden field that a condition uses.
 `form_apply_edits` cannot add, change, or remove hidden-field definitions.
 See `walla://reference/editing-contract` §(b) and `walla://reference/branch-logic`.
 
