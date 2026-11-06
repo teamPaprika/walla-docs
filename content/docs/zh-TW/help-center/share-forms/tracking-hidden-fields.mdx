@@ -72,3 +72,59 @@ https://walla.my/v/QA9S0imWeo232fSbd4?source=instagram&media=video
 <Callout title="小技巧">
 若需要大量建立隱藏欄位 URL，複製[隱藏欄位連結產生器 Google 試算表範本](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing)來用會很方便。
 </Callout>
+
+## 用隱藏欄位建立邏輯條件
+
+可以依隱藏欄位的值，把填答者送到不同題目。
+
+<Steps>
+  <Step>
+    ### 登錄隱藏欄位
+    登錄隱藏欄位 `utm_source` 並儲存。
+  </Step>
+  <Step>
+    ### 建立連結
+    在廣告要用的連結後面加上值。
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?utm_source=ads
+    ```
+  </Step>
+  <Step>
+    ### 建立邏輯條件
+    在邏輯畫面中，選擇 `utm_source` 作為基準題目。
+    條件設為 `等於`，比較值設為 `ads`。
+  </Step>
+  <Step>
+    ### 選擇要前往的題目
+    選擇從廣告進來的填答者要前往的題目。
+  </Step>
+</Steps>
+
+- 隱藏欄位的值會以文字比較。
+- 連結中沒有隱藏欄位的值時，值會是空的。此時條件不會符合，`不等於` 也一樣。
+- 發布前，可以在專案編輯畫面的預覽中確認。在瀏覽器網址列中，於編輯畫面網址的最後加上 `?utm_source=ads`，再開啟預覽。如果網址中已經有 `?`，請改加 `&utm_source=ads`。
+- 發布後，請分別開啟加上值的連結與沒有值的連結來確認。
+- 隱藏欄位不能選為前往的目標。
+- 詳細方法請參考[設定邏輯中的「用隱藏欄位建立條件」](/zh-TW/docs/help-center/create-forms/setting-up-logic#用隱藏欄位建立條件)。
+
+## 刪除邏輯中使用的隱藏欄位
+
+邏輯條件中使用的隱藏欄位無法刪除。
+刪除後儲存時，會出現 `無法刪除條件正在使用的隱藏欄位。請先修改該條件。`。
+即使是已發布問卷的邏輯使用該隱藏欄位，也無法刪除。
+
+<Steps>
+  <Step>
+    ### 修改條件
+    在邏輯畫面中，找到使用該隱藏欄位的條件。
+    刪除條件，或改成其他基準題目。
+  </Step>
+  <Step>
+    ### 重新發布
+    如果已發布的問卷也有該條件，請用修改後的邏輯重新發布問卷。
+  </Step>
+  <Step>
+    ### 刪除隱藏欄位
+    在追蹤管理頁面刪除隱藏欄位，然後點選 `儲存`。
+  </Step>
+</Steps>

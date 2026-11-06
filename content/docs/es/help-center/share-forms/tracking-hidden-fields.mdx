@@ -72,3 +72,59 @@ https://walla.my/v/QA9S0imWeo232fSbd4?source=instagram&media=video
 <Callout title="Consejo">
 Si necesitas crear muchas URL con campos ocultos, resulta muy práctico duplicar esta [plantilla de Google Sheets para generar enlaces con campos ocultos](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing).
 </Callout>
+
+## Crear condiciones de lógica con campos ocultos
+
+Puedes enviar a cada persona a una pregunta distinta según el valor del campo oculto.
+
+<Steps>
+  <Step>
+    ### Registra el campo oculto
+    Registra el campo oculto `utm_source` y guárdalo.
+  </Step>
+  <Step>
+    ### Crea el enlace
+    Añade el valor al enlace que usarás en el anuncio.
+    ```
+    https://walla.my/v/QA9S0imWeo232fSbd4?utm_source=ads
+    ```
+  </Step>
+  <Step>
+    ### Crea la condición de lógica
+    En la pantalla de lógica, elige `utm_source` como pregunta de referencia.
+    Elige la condición `Igual a` y escribe `ads` como valor de comparación.
+  </Step>
+  <Step>
+    ### Elige la pregunta de destino
+    Elige la pregunta a la que irán las personas que llegan desde el anuncio.
+  </Step>
+</Steps>
+
+- El valor del campo oculto se compara como texto.
+- Si el enlace no trae ningún valor para el campo oculto, el valor queda vacío. En ese caso no se cumple la condición, tampoco con `Distinto de`.
+- Antes de publicar, puedes comprobar la condición en la vista previa del editor del proyecto. En la barra de direcciones del navegador, añade `?utm_source=ads` al final de la dirección del editor y abre la vista previa. Si la dirección ya contiene `?`, añade `&utm_source=ads`.
+- Después de publicar, abre el enlace con el valor y el enlace sin el valor para comprobarlo.
+- No puedes elegir un campo oculto como destino.
+- Consulta los detalles en [Crear condiciones con campos ocultos en Configurar la lógica](/es/docs/help-center/create-forms/setting-up-logic#crear-condiciones-con-campos-ocultos).
+
+## Eliminar un campo oculto usado en la lógica
+
+No puedes eliminar un campo oculto usado en una condición de lógica.
+Si lo eliminas y guardas, aparece `No se puede eliminar un campo oculto usado en una condición. Cambia primero la condición.`.
+Tampoco puedes eliminarlo si lo usa la lógica de un formulario ya publicado.
+
+<Steps>
+  <Step>
+    ### Cambia la condición
+    En la pantalla de lógica, busca la condición que usa ese campo oculto.
+    Elimina la condición o cambia su pregunta de referencia.
+  </Step>
+  <Step>
+    ### Vuelve a publicar
+    Si el formulario publicado también tenía esa condición, vuelve a publicarlo con la lógica nueva.
+  </Step>
+  <Step>
+    ### Elimina el campo oculto
+    En la página de gestión del seguimiento, elimina el campo oculto y pulsa `Guardar`.
+  </Step>
+</Steps>

@@ -20,6 +20,12 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 >
 > Practical consequence: renaming a `label` changes the `value` (and therefore the stored answer text and what a branch operand matches) but does **not** change the `id`, so branches stay stable because they anchor on `id`. On `add_field` the server mints option `id`s — you supply none (use a `key` to reference a new option in same-batch logic); only when adding an option via `update_field` do you assign a fresh unique `id` (never a reused one). (Adding an option forces its `value` to equal its `label` — a custom `value` supplied on add is discarded; to store a `value` distinct from `label`, set it when **updating** the field via `form_apply_edits`, which preserves a supplied `value`. The system default is `value === label`.)
 
+## Contact questions
+
+For a new contact question, use the format that the user specifies. If the format is unspecified, ask: phone number, email address, or both. Wait for the reply before you add contact fields.
+
+Use `PHONE_NUMBER` for a phone number and `EMAIL` for an email address. If the user requests both, add separate fields for each format.
+
 ## Field types and groups
 
 ```jsonc
@@ -30,6 +36,7 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 "GEOLOCATION","TABLE","PRIVACY_POLICY_INFORMATION","EMAIL","PHONE_NUMBER",
 "WEBSITE_LINK","IMAGE_UPLOAD","VIDEO_UPLOAD","FILE_UPLOAD","ADDRESS",
 "TOSS_PAYMENTS",
+"PAYMENT_BROKERAGE",
 "SECRETS","CUSTOM","SUBMIT",
 "REJECT","ENDING_REDIRECT","ENDING_DESCRIPTION"
 
@@ -47,6 +54,7 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 | **DATA** | `GEOLOCATION`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD`, `FILE_UPLOAD` |
 | **DATE_TIME** | `DATE`, `TIME` |
 | **PAYMENTS** | `TOSS_PAYMENTS` |
+| **PAYMENTS** | `PAYMENT_BROKERAGE` |
 | **ENDING** | `ENDING_REDIRECT`, `ENDING_DESCRIPTION` |
 | **ACTION** | `CUSTOM`, `REJECT` (and `SUBMIT`, which has no group) |
 
@@ -67,14 +75,12 @@ Choice and grid fields carry options. **Each option is `{ id, label, value }` an
 { "options": [ /* … */ ], "shuffle": true, "hasCustomInput": true }
 ```
 
-`PICTURE_CHOICE` options add an `imageUrl`, and its properties add `imageHeight`, `multiSelect`, `isSingleLineOnMobile`:
+`PICTURE_CHOICE` options store an `imageUrl`, optional original `imageAspectRatio` (width / height, without clamping), and optional normalized `focalPoint` (`x`/`y` from 0 through 1, default center). Every existing and new field derives its frame from the first authored option at render time, clamped from 4:5 through 16:9; no field-level ratio or layout version is stored on new writes. Reorder, deletion, and MCP updates follow the current first option automatically. Respondent shuffle preserves the authored ratio source. Missing metadata initially uses 1:1; loading the first image corrects the frame in the editor, public form, and response detail. Image loading is read-only on every screen. The editor remembers loaded original ratios in memory and adds missing ratios to the next explicit properties edit only when the option id and URL still match; explicit uploads may persist dimensions immediately. On `update_field`, changing or removing an existing option's `imageUrl` clears both its `imageAspectRatio` and `focalPoint`, including values supplied in that same update: copied metadata cannot be distinguished from metadata for the replacement image, even when the ratios match. The replacement starts centered and its ratio is measured on image load. To set known metadata for the replacement, use a later `update_field` with the same option id and unchanged new URL (also supported as the next op in the same batch). New options may include their image metadata immediately; unchanged URLs, reordering, and edits to other settings preserve metadata. All images use `cover` cropping with per-option `object-position`, in one, two, then three responsive columns. Historical `layoutVersion`, `imageHeight`, and `isSingleLineOnMobile` inputs are ignored and removed when normalizing new writes:
 
 ```jsonc
 {
-  "options": [ { "id": "…", "label": "Cat", "value": "Cat", "imageUrl": "https://…" } ],
-  "imageHeight": 120,        // default 120; editor clamps 50–500
-  "multiSelect": false,
-  "isSingleLineOnMobile": false
+  "options": [ { "id": "…", "label": "Cat", "value": "Cat", "imageUrl": "https://…", "imageAspectRatio": 1.5, "focalPoint": { "x": 0.5, "y": 0.25 } } ],
+  "multiSelect": false
 }
 ```
 
@@ -117,6 +123,7 @@ Read ranks from row-id keys, which can identify slots absent from the current ro
 Open API lists flatten values to `fieldId::rank-N`.
 CSV/XLSX exports and MCP `list_responses` include current rows only, like grid rows.
 Keep `isDuplicateColumnLimited: true`.
+`shuffleColumns: true` randomizes the choice order once per form load. `shuffleRows` has no effect, because the rows are rank slots.
 
 ## Properties shape per type
 
@@ -125,12 +132,12 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 | Properties shape | Types | Defaults / fields |
 |---|---|---|
 | `{ placeholder? }` | `SHORT_TEXT`, `LONG_TEXT`, `NUMBER`, `EMAIL` | `placeholder: ""` |
-| `{ options[], shuffle?, hasCustomInput? }` | `RADIO`, `CHECKBOX` | starts with one blank option. `CHECKBOX` options apply `isExclusive?` |
+| `{ options[], shuffle?, hasCustomInput?, customInputLabel? }` | `RADIO`, `CHECKBOX` | starts with one blank option. An option takes `isPinned?`; `CHECKBOX` also applies `isExclusive?` |
 | `{ options[] }` | `DROPDOWN`, `DROPDOWN_MULTI`, `PRIVACY_POLICY_INFORMATION` | dropdowns have no `shuffle`; privacy default = two options `동의합니다` / `동의하지 않습니다`. `DROPDOWN_MULTI` options apply `isExclusive?` |
-| `{ options[], imageHeight?, multiSelect?, isSingleLineOnMobile?, shuffle? }` | `PICTURE_CHOICE` | `imageHeight: 120`. An option takes `isExclusive?` (active only with `multiSelect: true`) |
+| `{ options[], multiSelect?, shuffle? }` | `PICTURE_CHOICE` | all fields use a responsive 1→2→3-column cover-cropped frame derived from the first authored option, clamped to 4:5–16:9. Historical version, height, and mobile-line flags are ignored. An option takes `isPinned?` and `isExclusive?` (active only with `multiSelect: true`) |
 | `{ options[], min, max, minLabel, maxLabel }` | `LINEAR` | scale 1..5; **author `min`/`max`/`minLabel`/`maxLabel` only — `options` are derived from `min`/`max`, not supplied** |
-| `{ rows[], columns[], shuffleRows?, shuffleColumns?, isDuplicateColumnLimited? }` | `CHECKBOX_GRID`, `RADIO_GRID`, `TABLE` | one blank row + one blank column. A `CHECKBOX_GRID` column applies `isExclusive?` |
-| `{ rows[], columns[], hasCustomInput?, isDuplicateColumnLimited? }` | `RANKING` | rows are rank slots; columns are choices; see RANKING above for add/update rules |
+| `{ rows[], columns[], shuffleRows?, shuffleColumns?, isDuplicateColumnLimited?, isStackedOnMobile? }` | `CHECKBOX_GRID`, `RADIO_GRID`, `TABLE` | one blank row + one blank column. A row and a column take `isPinned?`. A `CHECKBOX_GRID` column also applies `isExclusive?`. No `customInputLabel` |
+| `{ rows[], columns[], shuffleColumns?, hasCustomInput?, isDuplicateColumnLimited?, customInputLabel? }` | `RANKING` | rows are rank slots; columns are choices; see RANKING above for add/update rules. A column takes `isPinned?` |
 | `{ defaultCountry? }` | `PHONE_NUMBER` | — |
 | `{ placeholder?, allowPaste?, requireConfirmation? }` | `SECRETS` | `allowPaste: true`, `requireConfirmation: false` |
 | `{ link? }` | `WEBSITE_LINK` | created empty unless you set `link` |
@@ -138,8 +145,11 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 | `{ redirectUrl }` | `ENDING_REDIRECT` | `redirectUrl: ""` |
 | `{ redirectEnabled?, redirectUrl? }` | `REJECT` | `redirectEnabled: false`, `redirectUrl: ""`. `redirectEnabled: true` puts the field in redirect mode: the respondent goes to `redirectUrl`, and a missing or unusable address (only an absolute http(s) address or a same-origin path counts) shows a not-found page instead. `redirectEnabled: false` keeps the static reject page. Reject fields created earlier carry an empty `{}` properties object, and the oldest rows can carry `null`. The switch needs a paid plan — see `walla://reference/editing-contract`. |
 | `{ workspaceSecretDataId, variantKey, orderIdPrefix, orderName, amount }` | `TOSS_PAYMENTS` | all required |
+| `{ product_type, product_name, product_description?, amount_mode, amount?, min_amount?, max_amount?, field_status, event_start_date?, event_end_date?, sale_start_date?, settlement_basis?, refund_policy_buyer?, fee_bearer? }` | `PAYMENT_BROKERAGE` | event product; fixed amount 0; active; seller bears fees |
 
-> `shuffleRows` / `shuffleColumns` exist on the grid shape but are not honored at fill time — only `shuffle` on `RADIO`, `CHECKBOX`, `PICTURE_CHOICE` actually randomizes order.
+> `shuffleRows` / `shuffleColumns` randomize the row / column order once per form load for `CHECKBOX_GRID` and `RADIO_GRID`. `RANKING` uses `shuffleColumns` alone, because its columns are the choices and its rows are rank slots. `TABLE` ignores both flags. `shuffle` does the same for the `options` of `RADIO`, `CHECKBOX`, `PICTURE_CHOICE`.
+
+> `isPinned: true` on one option, row, or column holds that entry at its index. The shuffle then moves only the entries around it. An author can pin an entry such as an "Other" choice. A pin does nothing on a `TABLE`, or on a `RANKING` row, because those axes never shuffle.
 
 > `isExclusive` is an optional boolean on an option, not on the field or its validation. `CHECKBOX` and `DROPDOWN_MULTI` apply it to `options`. `PICTURE_CHOICE` applies it to `options` only with `multiSelect: true`. `CHECKBOX_GRID` applies it to `columns`, separately for each row. Other field types do not apply it. Omitted or `false` means a usual option.
 >
@@ -147,15 +157,18 @@ Types not listed have **no properties object** (omit `properties` or send `{}`):
 >
 > For choice fields, an exclusive answer alone skips `array.min`, `array.max`, `array.exact`, and `array.includes` at fill time. `basic.isRequired` and `array.excludes` still apply. If `PICTURE_CHOICE.multiSelect` becomes `false`, the flags stay stored but have no effect.
 
+> `customInputLabel` names the free-text entry that `hasCustomInput` adds. `RADIO`, `CHECKBOX`, and `RANKING` accept the key. A blank or unset value keeps the default name of each screen. `CHECKBOX_GRID`, `RADIO_GRID`, and `TABLE` do not accept it, and an edit that sends it there fails with `invalid_args`.
+
 ## Validations per type
 
-A field's `validation` object can carry these kinds. **`basic` is the only one enforced on the server alongside `quota`; `string` / `numeric` / `array` are checked at fill time only; `custom` / `remote` are accepted but never enforced (do not rely on them).**
+A field's `validation` object can carry these kinds. **`basic`, `quota`, and `emailVerification` are enforced on the server; `string` / `numeric` / `array` are checked at fill time only; `custom` / `remote` are accepted but never enforced (do not rely on them).**
 
 **`phoneVerification` is server-enforced as well.**
 
 | Kind | Shape | Meaning |
 |---|---|---|
 | `basic` | `{ isRequired: boolean }` | Required toggle (default `false`). |
+| `emailVerification` | `{ enabled: boolean }` | Require email OTP ownership verification on `EMAIL` only. **Server-enforced.** Enabling requires SMTP or kids messaging in this deployment; disabling remains allowed without either transport. Stored answers stay email strings. |
 | `string` | `{ includes?, excludes?, pattern?, length?: { minLength?, maxLength? } }` | Text constraints. |
 | `numeric` | `{ min?, max? }` | Numeric range (the answer is a string, compared numerically). |
 | `array` | `{ min?, max?, exact?, includes?, excludes? }` | Selection-count / required-value constraints for multi-select. |
@@ -175,6 +188,7 @@ Which kinds each type accepts:
 | `DATE`, `TIME`, `GEOLOCATION`, `ADDRESS` | ✅ | | | | |
 | `IMAGE_UPLOAD`, `VIDEO_UPLOAD`, `FILE_UPLOAD` | ✅ | | | | |
 | `TOSS_PAYMENTS`, `CUSTOM` | ✅ | | | | |
+| `PAYMENT_BROKERAGE` | ✅ | | | | |
 | `DESCRIPTION`, `WEBSITE_LINK`, `SUBMIT`, `REJECT`, `ENDING_REDIRECT`, `ENDING_DESCRIPTION` | | | | | |
 
 Notes you will get wrong otherwise:
@@ -197,6 +211,7 @@ A submitted answer must validate against the field's `outputSchema`. For choice 
 | `TABLE` | `{ [rowId]: { [colId]: string } }` | free-text cell per row×column (not a column selection). |
 | `GEOLOCATION` | `{ latitude: string, longitude: string }` | |
 | `TOSS_PAYMENTS` | `{ status, orderId, amount, message?, code? }` | `status` ∈ `request_success`, `request_fail`, `confirm_fail`, `confirm_cancel`, `confirm_cancel_fail`. |
+| `PAYMENT_BROKERAGE` | `{ status, orderId, amount, message?, code? }` | `status` ∈ `request_success`, `request_fail`, `confirm_fail`, `confirm_cancel`, `confirm_cancel_fail`. |
 | `CUSTOM` | per the custom field's own schema | see `walla://reference/custom-fields`. |
 | `DESCRIPTION`, `WEBSITE_LINK`, `SUBMIT`, `REJECT`, `ENDING_REDIRECT`, `ENDING_DESCRIPTION` | `null` (no input) | structural / display / terminal. |
 
@@ -252,6 +267,7 @@ Worked example — a `RADIO` field and a matching submitted answer:
 | `FILE_UPLOAD` | DATA | no | basic | string |
 | `ADDRESS` | CONTACTS | no | basic | string |
 | `TOSS_PAYMENTS` | PAYMENTS | no | basic | `{status, orderId, amount, …}` |
+| `PAYMENT_BROKERAGE` | PAYMENTS | no | basic | `{status, orderId, amount, …}` |
 | `SECRETS` | TEXT | no | basic, string | string |
 | `CUSTOM` | ACTION | per field | basic | per custom field |
 | `SUBMIT` | (none) | no | — | null |

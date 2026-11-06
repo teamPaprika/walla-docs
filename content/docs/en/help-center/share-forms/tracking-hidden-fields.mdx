@@ -72,3 +72,59 @@ https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?source=instagram&media=video
 <Callout title="Tip">
 If you need to generate a large batch of hidden field URLs, try duplicating our [hidden field link generator Google Sheet template](https://docs.google.com/spreadsheets/d/14F7iSY6yNiEV78eceveOkPNCTHzaMK5LIEqtYE4bo_I/edit?usp=sharing).
 </Callout>
+
+## Using Hidden Fields in Logic Conditions
+
+You can send respondents to different questions based on a hidden field value.
+
+<Steps>
+  <Step>
+    ### Register the hidden field
+    Register the hidden field `utm_source` and save it.
+  </Step>
+  <Step>
+    ### Create the link
+    Add the value to the link for your ad.
+    ```
+    https://walla.my/v/QA9S0i0UfZn5rZTfSbd4?utm_source=ads
+    ```
+  </Step>
+  <Step>
+    ### Create the logic condition
+    On the logic screen, choose `utm_source` as the reference field.
+    Set the condition to `Equal` and the comparison value to `ads`.
+  </Step>
+  <Step>
+    ### Choose the destination question
+    Choose the question for respondents who come from the ad.
+  </Step>
+</Steps>
+
+- Logic compares hidden field values as text.
+- If the link has no value for the hidden field, the value is empty. Then the condition is not met. This also applies to `Not equal`.
+- Before you publish, you can test the condition in the preview of the project editor. In the browser address bar, add `?utm_source=ads` to the end of the editor address. Then open the preview. If the address already contains `?`, add `&utm_source=ads` instead.
+- After you publish, open the link with the value and the link without the value. Make sure that each link goes to the correct question.
+- You cannot choose a hidden field as a destination.
+- For more details, see [Creating Conditions with Hidden Fields in Setting Up Logic](/en/docs/help-center/create-forms/setting-up-logic#creating-conditions-with-hidden-fields).
+
+## Deleting a Hidden Field Used in Logic
+
+You cannot delete a hidden field that a logic condition uses.
+If you delete it and save, `A hidden field used in a condition cannot be deleted. Change the condition first.` appears.
+This rule also applies when the logic of a published form uses the hidden field.
+
+<Steps>
+  <Step>
+    ### Change the condition
+    On the logic screen, find the condition that uses the hidden field.
+    Delete the condition, or change it to a different reference field.
+  </Step>
+  <Step>
+    ### Publish again
+    If the published form also had this condition, publish the form again with the changed logic.
+  </Step>
+  <Step>
+    ### Delete the hidden field
+    On the tracking management page, delete the hidden field and click `Save`.
+  </Step>
+</Steps>

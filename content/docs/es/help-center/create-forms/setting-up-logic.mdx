@@ -25,6 +25,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### Condición
     1. **Elige la pregunta de referencia** – selecciona en qué respuesta se basará la lógica.
+       - En las preguntas de cuadrícula, tabla, clasificación y campo personalizado, elige también un `Subelemento`. Consulta [Crear condiciones con subelementos](#crear-condiciones-con-subelementos).
+       - También puedes elegir un campo oculto como referencia. Consulta [Crear condiciones con campos ocultos](#crear-condiciones-con-campos-ocultos).
     2. **Elige la condición** – selecciona el tipo de condición. Las condiciones se dividen en comparaciones de texto/valor, de opciones, numéricas y de fecha; consulta la lista completa en [Tipos de condición en detalle](#tipos-de-condición-en-detalle).
     3. **Elige la opción o respuesta** – selecciona con qué respuestas se activa la condición.
        - También puedes seleccionar varias respuestas a la vez.
@@ -84,6 +86,104 @@ Se usa en preguntas donde se pueden elegir varios elementos, como las de opción
 | Anterior o igual | En la fecha de referencia o antes (incluyéndola) | Si es el `2026-01-01` o antes |
 | Posterior a | Después de la fecha de referencia (sin incluirla) | Si es posterior al `2026-01-01` |
 | Posterior o igual | En la fecha de referencia o después (incluyéndola) | Si es el `2026-01-01` o después |
+
+## Crear condiciones con subelementos
+
+Algunas preguntas tienen varias casillas en una sola respuesta.
+En estas preguntas, primero eliges la pregunta de referencia y después eliges, paso a paso, la casilla que quieres comparar.
+
+<Steps>
+  <Step>
+    ### Elige la pregunta de referencia
+    Elige la pregunta de referencia.
+    Si esa pregunta tiene casillas internas, aparece debajo el selector `Subelemento`.
+  </Step>
+  <Step>
+    ### Elige el subelemento
+    En `Subelemento`, elige la fila, la columna o la propiedad que quieres comparar.
+    Si aparece otro selector, sigue eligiendo hasta el último.
+  </Step>
+  <Step>
+    ### Define la condición y el valor de comparación
+    Elige el tipo de condición e introduce el valor de comparación.
+    El campo del valor cambia según el formato de la última casilla que elegiste.
+  </Step>
+</Steps>
+
+### Orden de selección por tipo de pregunta
+
+| Pregunta | Orden de selección | Valor de comparación |
+| ------------- | ------------------- | ---------------------- |
+| Cuadrícula de opción múltiple | Fila | Una opción elegida en esa fila |
+| Cuadrícula de casillas | Fila | Las opciones elegidas en esa fila (puede ser más de una) |
+| Clasificación | Puesto | La opción colocada en ese puesto |
+| Tabla | Fila → columna | El texto escrito en esa casilla |
+| Campo personalizado | Propiedad → posición del elemento, si hace falta | Un valor con el formato de esa propiedad |
+
+- En la cuadrícula de opción múltiple, la cuadrícula de casillas y la clasificación, el valor de comparación se define justo después de elegir la fila. No hay que elegir la posición del elemento.
+- Si la pregunta de clasificación permite que la persona escriba su propia opción, el valor de comparación ofrece `Seleccionar opciones` y `Personalizado`. En `Personalizado`, escribe el valor y pulsa Enter.
+- Si aparece `Esta respuesta no se puede usar en una condición`, esa casilla no sirve para condiciones. Elige otro subelemento.
+
+### Subelementos de los campos personalizados
+
+- Si el campo tiene propiedades definidas, elige una en `Subelemento`.
+- Si la propiedad admite claves propias, aparecen los botones `Elegir propiedad` y `Escribir clave`. Para usar una clave que no está en la lista, pulsa `Escribir clave` y escríbela.
+- Si la respuesta es una lista, aparece la casilla `Posición del elemento`.
+  - 1 es el primer elemento y 2 es el segundo.
+  - Si toda la respuesta del campo personalizado es una lista, primero tienes que rellenar `Posición del elemento`.
+- Puedes dejar vacía la casilla `Posición del elemento (opcional)`.
+  - Si la dejas vacía, se compara toda la lista.
+  - Si escribes un número, se compara solo ese elemento.
+
+### Introducir el valor de comparación
+
+- No necesitas escribir el valor en un formato especial (como JSON). Usa solo los selectores y campos de la pantalla.
+- **Valores con opciones** – elige una opción de la lista. Algunos campos permiten elegir varias.
+- **Valores de lista escritos a mano** – escribe un valor y pulsa Enter. El valor se añade como una pequeña etiqueta. Añade los demás valores del mismo modo.
+- **Números** – escribe un número. Para comparar con 0, escribe `0`. Un campo vacío no cuenta como 0.
+- **Verdadero/falso** – elige `Verdadero` o `Falso`. Si no eliges nada, no cuenta como `Falso`. En un campo de lista, escribe `true` o `false` y pulsa Enter.
+
+### Condiciones sin completar
+
+- Si debajo de la condición aparece `Revisa la condición y completa los valores.`, la condición no está terminada.
+- Si queda texto en un campo, pulsa Enter para añadirlo como etiqueta.
+- Si el valor no tiene el formato correcto, el texto se queda en el campo y aparece `Introduce un valor del tipo esperado.`. Corrige el valor y vuelve a pulsar Enter.
+- Si `Posición del elemento` está vacía o fuera de rango, aparece un aviso. Corrige el número según el aviso.
+- En este estado no puedes publicar el formulario. Si intentas publicarlo, aparece `Completa o corrige la condición antes de publicar.`.
+
+### Condiciones rotas tras cambiar una pregunta
+
+- Si eliminas o cambias filas, columnas u opciones de una pregunta, la condición puede mostrar `Elemento no encontrado` o `Este valor ya no es una opción. Elige otro.`.
+- Vuelve a elegir otro subelemento u otro valor.
+- Si una condición así queda guardada, no puedes publicar. Si intentas publicar, aparece `Una condición de valor de respuesta no es válida. Revisa la pregunta, el subelemento y el valor de comparación.`.
+
+## Crear condiciones con campos ocultos
+
+Puedes enviar a cada persona a una pregunta distinta según el valor del campo oculto que llega en el enlace.
+Primero tienes que registrar el campo oculto en el seguimiento de la página de compartir. Consulta cómo hacerlo en [Seguimiento (campos ocultos)](/es/docs/help-center/share-forms/tracking-hidden-fields).
+
+<Steps>
+  <Step>
+    ### Elige el campo oculto
+    En la lista de preguntas de referencia, elige el nombre del campo oculto.
+  </Step>
+  <Step>
+    ### Define la condición y el valor
+    Elige una de las condiciones de [Comparación de texto y valores](#comparación-de-texto-y-valores).
+    Escribe el valor de comparación como texto.
+  </Step>
+  <Step>
+    ### Elige la pregunta de destino
+    Elige la pregunta a la que irá quien cumpla la condición.
+  </Step>
+</Steps>
+
+- Ejemplo: campo oculto `utm_source`, `Igual a`, `ads`
+  - Si el enlace es `https://walla.my/v/QA9S0imWeo232fSbd4?utm_source=ads`, se cumple la condición.
+  - Solo las personas que llegan desde el anuncio van a la pregunta indicada.
+- Si el enlace no trae ningún valor para el campo oculto, el valor queda vacío. Con un valor vacío no se cumple ninguna condición, tampoco `Distinto de`.
+- No puedes elegir un campo oculto como destino. Solo sirve como referencia de la condición.
+- No puedes eliminar un campo oculto usado en una condición de lógica. Consulta [Eliminar un campo oculto usado en la lógica](/es/docs/help-center/share-forms/tracking-hidden-fields#eliminar-un-campo-oculto-usado-en-la-lógica).
 
 ## Configurar la lógica con nodos
 
