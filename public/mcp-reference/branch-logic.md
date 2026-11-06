@@ -2,7 +2,7 @@
 
 Reference for the raw `branches` array on a form field — the STORAGE model the routing engine reads at runtime. Form-retrieval tools (`get_form`) and the write ops (`set_field_logic` / `clear_field_logic`) speak a friendlier `logic` shape instead; this doc explains the underlying `branches` that `logic` compiles to, so you can reason about what a write produces.
 
-Conditional logic (a.k.a. branch / skip / jump logic) decides what a respondent sees *after* they answer a field: the next field, a specific field further ahead, or an ending screen. Each field carries a `branches` array internally; each branch is one rule of the form **"when these conditions hold, JUMP to this target."** This `branches` array is **storage**: the form-retrieval tools do not expose it directly — `get_form` decompiles it into a friendly `logic` shape on each field (a field with no real logic carries no `logic` key), and the same shape is what you **write** through `form_apply_edits` via the `set_field_logic` / `clear_field_logic` ops (which take a friendly rules/`otherwise` shape and compile back to the raw `branches` documented here). So read `field.logic` from `get_form`, modify it, and write it back with `set_field_logic`; the raw `branches` below let you reason about what that write produces. The submit step has its own branches that pick the ending screen.
+Conditional logic (a.k.a. branch / skip / jump logic) decides what a respondent sees *after* they answer a field: the next field, a specific field further ahead, or an ending screen. Each field carries a `branches` array internally; each branch is one rule of the form **"when these conditions hold, JUMP to this target."** This `branches` array is **storage**: the form-retrieval tools do not expose it directly — `get_form` decompiles it into a friendly `logic` shape on each field (a field with no real logic carries no `logic` key), and the same shape is what you **write** through `form_apply_edits` via the `set_field_logic` / `clear_field_logic` ops (which take a friendly rules/`otherwise` shape and compile back to the raw `branches` documented here). So read `field.logic` from `get_form`, modify it, and write it back through `form_apply_edits` with a `set_field_logic` op; the raw `branches` below let you reason about what that write produces. The submit step has its own branches that pick the ending screen.
 
 For form/field/page discovery, see the server instructions. For field shapes and option ids, see `walla://reference/field-types` (and other `walla://reference/*` siblings).
 
@@ -89,20 +89,73 @@ A comparison runs only when **both** resolved operands are non-empty. If the ref
 
 ```jsonc
 {
-  "type": "FIELD | CHOICE | CONSTANT | HIDDEN | VARIABLE",
+  "type": "FIELD | FIELD_PATH | CHOICE | CONSTANT | HIDDEN | VARIABLE",
   "value": {
-    "id": "<field id>",          // when type is FIELD
+    "id": "<field id>",          // when type is FIELD or FIELD_PATH
+    "path": ["<property key>"],   // FIELD_PATH only; array indices are zero-based strings
     "data": <any literal>,        // when type is CONSTANT
     "choiceIds": ["<option id>"]  // when type is CHOICE
   }
 }
 ```
 
-Include only the one `value` sub-field that matches the operand `type` (per the table below); omit the others.
+### Sub-answer paths and hidden fields
+
+Use `FIELD_PATH` to compare one part of an answer: a grid row, a ranking position, a table cell, or a nested custom value.
+In the editor, pick the question first, then each row, column, property, or array position.
+Whole-answer conditions use `FIELD`.
+
+| Answer | `value.path` example | Constant example |
+|---|---|---|
+| Choice grid row | `["row-id"]` | `["Good"]` |
+| Ranking position | `["rank-1"]` | `["Speed"]` |
+| Table cell | `["row-id", "column-id"]` | `"3"` |
+| Nested custom object | `["customer", "orders", "0", "total"]` | `0` |
+
+Each segment is one literal key. Dots and `::` within a key do not split the path.
+Array indices are canonical decimal strings starting at `"0"`, and the editor shows them starting at 1.
+Custom paths follow the stored output schema.
+Supported containers are declared object properties, typed additionalProperties maps, and homogeneous arrays. These containers can nest.
+Nullable type arrays, anyOf, and oneOf must have one non-null type.
+Sibling type, enum, const, and maxItems constraints retain their intersections.
+Mixed unions, references, allOf, tuples, pattern schemas, conditional schemas, and overlapping structural definitions are unavailable for path comparisons.
+Path checks do not replace JSON Schema validation of the complete custom answer.
+The editor can select an empty dynamic key with the "Use empty key" button.
+A declared empty key without a title appears as `""`.
+
+`FIELD_PATH` pairs with `CONSTANT` only, and the constant keeps the leaf type: string, number, boolean, or an array of those primitive values.
+For choice grid and ranking paths, the constant holds stored choice **values**.
+Ordinary option fields (including dropdowns, scales, and consent) do not support `FIELD_PATH`. Compare them with whole-answer `FIELD` and `CHOICE` option IDs.
+Array-level enum and const constraints validate the complete actual array by JSON equality (array order matters).
+Comparison constants can contain a subset or a reordering of the permitted elements.
+Selecting a nested key or index retains ancestor enum and const constraints.
+`FIELD_PATH` array equality ignores order and counts duplicates.
+`FIELD` conditions use the empty-value rule above and the set comparisons in §5.
+Missing paths, empty answers, invalid paths, and mismatched constant types evaluate to false, even for negative operators such as `NOT_EQUAL`.
+`0` and `false` count as answers.
+Publishing rejects invalid `FIELD_PATH` references.
+
+To branch on a hidden field, use a `FIELD` operand with `value.id = "hidden-<id>"` and a string `CONSTANT`.
+`<id>` is the hidden field's generated `id`. Its `label` is the URL parameter name and does not identify the field here.
+If the link omits that parameter, the value is empty and no operator matches.
+Hidden-field conditions take no `path`, and a hidden field can never be a jump target.
+
+The friendly MCP condition uses the parent `field`, optional `path`, and typed `value`:
+
+```json
+{ "field": "custom-question-id", "path": ["customer", "score"], "operator": "EQUAL", "value": 0 }
+```
+
+For more examples and write restrictions, see `walla://reference/editing-contract` §(b).
+
+Automation JSON Logic rejects `FIELD_PATH`.
+
+Include only the `value` fields for the operand type.
 
 | Operand `type` | Resolves to | Which `value` field | Evaluated? |
 |---|---|---|---|
 | `FIELD` | The respondent's answer to that field | `value.id` | Yes |
+| `FIELD_PATH` | A nested answer in that field | `value.id` and `value.path` | Yes |
 | `CONSTANT` | The literal you author | `value.data` | Yes |
 | `CHOICE` | The option *values* for the given option ids | `value.choiceIds` | Yes |
 | `HIDDEN` | (hidden-field value) | `value.id` | **No — not evaluated; will never match** |
@@ -226,6 +279,7 @@ Behavior: answer "No" → `branch_q1_no` matches first → jump to `field_q5` (a
 2. Every condition has **exactly 2 operands** (except `ALWAYS`, which has none). Build compound logic from multiple conditions, not extra operands. Remember: prefixes fold left-to-right with no precedence.
 3. Always end the array with an `ALWAYS` default branch (mandatory and tool-owned — `set_field_logic` appends it for you from the op's `otherwise` target, so you never author it). When no conditional branch matches, this trailing default is what fires; keep conditional branches above it in priority order.
 4. Operand 0 = `FIELD`; operand 1 = `CONSTANT` (text/number/date) or `CHOICE` (option ids, with a `FIELD` sibling). Avoid `HIDDEN` / `VARIABLE` — they won't route today.
+   To compare part of an answer, use `FIELD_PATH` with a typed `CONSTANT` (see §3).
 5. Use real, current ids for `target.value` and operand `value.id` / `choiceIds`; never collide with the `"NEXT"` / `"SUBMIT"` sentinels.
 6. On the submit node, branches select endings: `ENDING` targets with `"SUBMIT"` (default screen) or a real ending id.
 

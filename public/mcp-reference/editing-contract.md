@@ -4,7 +4,7 @@ The content shapes the `form_apply_edits` tool accepts when adding, updating, de
 
 > **What `form_apply_edits` can edit.** It edits fields and their layout: add / update / delete a field, reorder fields and groups, set a field's rich-text description (as HTML), set / clear a field's branch (skip/jump) logic via the `set_field_logic` / `clear_field_logic` ops — section (b), set the form's visual appearance (colors + next-button) via `set_form_appearance`, and set a group's page-break / label via `set_group` — section (d). A registered **`CUSTOM` (extension) field can also be added** — you bind it to an existing type/version via `customFieldTypeId` (see `walla://reference/custom-fields`), but you cannot author the custom field's input UI or value schema here.
 
-> **Op envelope.** `form_apply_edits` takes `{ formId, ops: [...] }`, where each op is one of `add_field`, `update_field`, `delete_field`, `reorder`, `set_field_logic`, `clear_field_logic`, `set_form_appearance`, `set_group`. A field's content is passed **flattened** into an `add_field` / `update_field` op — its `fieldType`, `label`, `properties`, `validations`, and `descriptionHtml` are op keys, not a nested `field` object. Placement is part of the same `add_field` op (see "Placing the field"); only the standalone `reorder` op carries a whole `formFieldsOrder`; logic is set with `set_field_logic` (see (b)); form-level appearance and a single group's page-break are set with `set_form_appearance` / `set_group` (see (d)).
+> **Op envelope.** `form_apply_edits` takes `{ formId, ops: [...] }`, where each op is one of `add_field`, `update_field`, `delete_field`, `reorder`, `set_field_logic`, `clear_field_logic`, `set_form_appearance`, `set_group`. A field's content is passed **flattened** into an `add_field` / `update_field` op — its `fieldType`, `label`, `properties`, `validations`, and `descriptionHtml` are op keys, not a nested `field` object. Placement is part of the same `add_field` op (see "Placing the field"); only the `reorder` op carries a whole `formFieldsOrder`; logic is set with `set_field_logic` (see (b)); form-level appearance and a single group's page-break are set with `set_form_appearance` / `set_group` (see (d)).
 
 > Cross-links: value catalogs are not repeated here. For the field-type list, per-type `properties` shapes, validation, and the option `id`/`value`/`label` model, see `walla://reference/field-types`. For the branch/condition/operator model, see `walla://reference/branch-logic`. The full document layout (`formFieldsOrder`, field objects, hidden fields) is in `walla://reference/form-model`.
 
@@ -19,9 +19,49 @@ A form has two layers you work with:
 | **Field objects** | One object per question/screen: a server-assigned `id`, `label`, `fieldType`, `properties`, `validations`, and its `logic` (branch/skip rules, read via `get_form`; the raw `branches` array it compiles to is storage-only), … | `add_field` / `update_field`; logic via `set_field_logic` / `clear_field_logic` |
 | **`formFieldsOrder`** | The ordered grouping of field ids into pages/groups + submit + ending | `reorder` op (and `add_field` / `delete_field` update it for you) |
 
-A field's body and its position in `formFieldsOrder` are separate concepts, but you do **not** splice them together by hand when adding or deleting: `add_field` places the new field for you (via an anchor), and `delete_field` removes its id from its group. (`delete_field` rejects the always-present `submit` system field; ending and reject fields can be deleted.) You write `formFieldsOrder` directly only for the standalone `reorder` op.
+A field's body and its position in `formFieldsOrder` are separate concepts, but you do **not** splice them together by hand when adding or deleting: `add_field` places the new field for you (via an anchor), and `delete_field` removes its id from its group. (`delete_field` rejects the always-present `submit` system field; ending and reject fields can be deleted.) You write `formFieldsOrder` directly only for the `reorder` op.
 
 ---
+
+## One tool for atomic draft edits
+
+`form_apply_edits` is the only tool for draft edits. Each operation has a distinct input schema within `ops`.
+
+Do not combine `reorder` with `add_field` or `set_group` in one batch. If the user requires either combination to be atomic, explain this limit. Do not split that request into separate write calls.
+
+For a new contact question, use the format that the user specifies. If the format is unspecified, ask: phone number, email address, or both. Wait for the reply before you add contact fields.
+
+For one edit, send one operation in `ops`. For related edits, send all operations in one call. For example:
+
+```json
+{
+  "formId": "<form id from get_form>",
+  "ops": [
+    { "op": "update_field", "fieldId": "<field id from get_form>", "descriptionHtml": "<h3>Enter your name</h3>" }
+  ]
+}
+```
+
+| `op` | Effect |
+|---|---|
+| `add_field` | Add one field. Return its assigned field and option ids under `added`. |
+| `update_field` | Merge supplied keys into one field. Arrays replace. |
+| `delete_field` | Remove one non-system field and its layout entry. |
+| `reorder` | Replace the complete field/group layout and preserve all fields. |
+| `set_field_logic` | Replace one field's jump rules and default destination. |
+| `clear_field_logic` | Remove rules and restore the system default destination. |
+| `set_form_appearance` | Merge supplied colors and next-button settings. |
+| `set_group` | Merge one existing group's page break and label. |
+
+If validation or a draft mutation fails before commit, no operation in that batch changes the draft. This guarantee covers one batch only. It does not isolate the batch from edits by other clients.
+
+If persistence confirmation fails or times out, edits can already be applied. This failure does not promise rollback. Read `get_form` before retrying the write.
+
+Do not send parallel write calls for the same form. If another call is necessary, wait for the first result. Then read `get_form` again before the next edit. If a later call fails, separate calls can leave partial changes.
+
+`tempId` names a new field within the batch. The `@tempId` and `@key` aliases resolve only to earlier additions in that batch. Across calls, use the assigned ids returned under `added` or read `get_form` again.
+
+Draft edits do not publish. Publication and external actions are separate from this transaction. `publish_form` replaces the live form and can purge removed fields and soft-delete their uploaded files. When the user requests publication, call `publish_form`.
 
 ## (a) Adding a field
 
@@ -88,7 +128,7 @@ The `properties` object is **discriminated by `fieldType`** — there is one sha
 Because the server mints field and option ids on add, you cannot know them when you write a same-batch `set_field_logic`. Use aliases:
 
 - On `add_field`, set a `tempId` for the field and a `key` on each option (or grid row/column): `{ "op": "add_field", "fieldType": "CHECKBOX", "tempId": "q1", "properties": { "options": [ { "key": "yes", "label": "Yes" }, { "key": "no", "label": "No" } ] } }`.
-- In the SAME batch's `set_field_logic`, reference the field as `@q1` (in `fieldId`, a condition's `field`, or a `goTo`'s `{ field }`) and an option as `@yes` (in `choiceIds`). The tool resolves every `@alias` to the real id, then validates and writes.
+- In the SAME batch's `set_field_logic`, reference the field as `@q1` (in `fieldId`, a condition's `field`, or a `goTo`'s `{ field }`) and an option as `@yes` (in `choiceIds`). A `TABLE` row or column key, or a `RADIO_GRID` / `CHECKBOX_GRID` row key, also works as a `path` step. The tool resolves every `@alias` to the real id, then validates and writes.
 - The result's `added` array echoes the mapping, one entry per added field: `{ index, fieldId, tempId?, options?: [{ key?, id, label? }], rows?, columns? }`. Use it (or a later `get_form`) to learn the assigned ids.
 
 Aliases must be unique within the batch and resolve **backwards only** — an op may reference fields/options added by an EARLIER op in the same `ops` array, never a later one (a forward reference is `invalid_args`). A real id never starts with `@`, so you can freely mix resolved ids and aliases. This collapses the old add → re-read → `set_field_logic` round-trip into a single call. `LINEAR` derives its options from `min`/`max`, so it takes no option keys.
@@ -115,7 +155,7 @@ Adding an **ending** field (e.g. `ENDING_REDIRECT`, `ENDING_DESCRIPTION`) is the
 
 ## (b) Branch (skip/jump) logic — editable via `set_field_logic` / `clear_field_logic`
 
-`form_apply_edits` sets a field's logic with the `set_field_logic` op (and clears it with `clear_field_logic`). You author logic in a **friendly** shape — `{ fieldId, rules?: [...], otherwise?: <goTo> }` — and `get_form` returns each field's logic in that same shape, so read → modify → write. Each rule is `{ when: [<condition>...], goTo: <target> }`: pass the option **ids** (read from `get_form`) as `choiceIds` to match a choice answer, or a literal `value` for text/number/date answers; a per-condition `connector` (`'and'`/`'or'`) folds left-to-right with **no precedence** (`[A, or B, and C]` = `((A or B) and C)`), and the first condition's connector just seeds the accumulator. `set_field_logic` REPLACES the field's logic, always appends one mandatory tool-owned `ALWAYS` default branch last (its target is the op's `otherwise`; default = continue to the next field, or — on the submit field — the default ending), and refuses to overwrite a field whose stored branches are not friendly-representable (edit those in the Walla editor). The raw branch shape below is what your friendly logic compiles to; the condition/operator model is in `walla://reference/branch-logic`.
+`form_apply_edits` sets a field's logic with the `set_field_logic` op (and clears it with `clear_field_logic`). You author logic in a **friendly** shape — `{ fieldId, rules?: [...], otherwise?: <goTo> }` — and `get_form` returns each field's logic in that same shape, so read → modify → write. Each rule is `{ when: [<condition>...], goTo: <target> }`: pass the option **ids** (read from `get_form`) as `choiceIds` to match a choice answer, or a literal `value` for text/number/date answers; a per-condition `connector` (`'and'`/`'or'`) folds left-to-right with **no precedence** (`[A, or B, and C]` = `((A or B) and C)`), and the first condition's connector just seeds the accumulator. `set_field_logic` REPLACES the field's logic, always appends one mandatory tool-owned `ALWAYS` default branch last (its target is the op's `otherwise`; default = continue to the next field, or — on the submit field — the default ending), and refuses to overwrite a field whose stored branches are not friendly-representable (edit those in the Walla editor). The raw branch shape below is what your friendly logic compiles to; the condition/operator model is in `walla://reference/branch-logic`. For sub-answer and hidden-field conditions, see "Sub-answer and hidden-field conditions" below.
 
 A branch is one routing rule on a field: *"when `conditions` hold, JUMP to `target`."* A field's `branches` array holds objects of this shape:
 
@@ -168,6 +208,104 @@ A branch is one routing rule on a field: *"when `conditions` hold, JUMP to `targ
 ### Submit-node branches target endings
 
 The submit node carries branches whose targets are **endings** (`type: "ENDING"`), not fields. Its default branch targets `{ "type": "ENDING", "value": "SUBMIT" }` (the default submit screen). Conditional submit branches select a specific ending by `{ "type": "ENDING", "value": "<endingId>" }`.
+
+### Sub-answer and hidden-field conditions
+
+A friendly condition has these keys:
+
+| Key | Rule |
+|---|---|
+| `field` | A field id, an earlier `@tempId`, or `"hidden-<id>"` for a hidden field. |
+| `path` | Optional. One string per step into the answer. It requires `value`. |
+| `value` | Without `path`: a string or number. The tool stores it as a string. |
+| `value` with `path` | The leaf type: string, number, boolean, or an array of these. |
+| `choiceIds` | Whole-answer choice fields only. Never combine it with `path`. |
+| `operator` | See `walla://reference/branch-logic` §5. |
+| `connector` | `"and"` or `"or"`. The first condition ignores it. |
+
+A condition with `path` compiles to `FIELD_PATH` and a typed `CONSTANT`. A condition without `path` compiles to `FIELD` and either `CHOICE` or a string `CONSTANT`.
+`get_form` returns `path` and the typed `value` as you wrote them.
+
+| Source | `path` | `value` example |
+|---|---|---|
+| `RADIO_GRID` / `CHECKBOX_GRID` row | `["<rowId>"]` | `["Good"]` |
+| `RANKING` slot | `["rank-1"]` | `["Speed"]` |
+| `TABLE` cell | `["<rowId>", "<columnId>"]` | `"3"` |
+| `CUSTOM` nested property | `["customer", "orders", "0", "total"]` | `0` |
+| Hidden field | none | `"newsletter"` |
+
+Path rules:
+
+- Steps follow the field's stored output schema. See `walla://reference/branch-logic` §3.
+- A grid row or ranking slot holds an array of column **values**, not column ids, so its `value` is an array such as `["Good"]`.
+- A table cell holds a string, so its `value` is a string such as `"3"`.
+- Array indices are zero-based decimal strings, such as `"0"`.
+- Each step is one literal key. A key with dots, such as `"a.b"`, stays one step.
+- `@<key>` steps resolve for `TABLE` rows and columns and for `RADIO_GRID` / `CHECKBOX_GRID` rows added earlier in the batch.
+- Choice-grid and ranking columns are never path steps. Put the column value in `value`.
+- A `RANKING` step uses a generated slot id, such as `rank-1`.
+- A path has at least one step. A custom answer that is an array at the root starts with an index, such as `["0"]`.
+- Custom steps are literal. A custom key that starts with `@` is not an alias.
+- A path must end at a comparable leaf. A table row or a custom object is rejected.
+- A number leaf takes a JSON number, such as `5`, not the string `"5"`.
+- `0` and `false` work as `value` and count as answers.
+
+Fields without paths:
+
+- `RADIO`, `CHECKBOX`, `DROPDOWN`, `DROPDOWN_MULTI`, `PICTURE_CHOICE`, `LINEAR`, and `PRIVACY_POLICY_INFORMATION` take no `path`. Compare them with `choiceIds` that hold option ids.
+- A hidden field takes no `path`. Give it a string `value`.
+- `"hidden-<id>"` must name a hidden field of the form. See `walla://reference/form-model`.
+- Build it from the hidden field `id`, because the `label` is the URL parameter name. For `{ "id": "k3Xw9Qa", "label": "utm_source" }`, write `"hidden-k3Xw9Qa"`, not `"hidden-utm_source"`.
+- Never use `"hidden-<id>"` in a `goTo`.
+- Automation route conditions do not accept `path`.
+
+Example: a grid row and a hidden field, joined by `and`:
+
+```json
+{
+  "op": "set_field_logic",
+  "fieldId": "fld_grid",
+  "rules": [
+    {
+      "when": [
+        { "field": "fld_grid", "path": ["r4Kp9"], "operator": "CONTAINS_ANY", "value": ["Good"] },
+        { "connector": "and", "field": "hidden-k3Xw9Qa", "operator": "EQUAL", "value": "newsletter" }
+      ],
+      "goTo": { "field": "fld_followup" }
+    }
+  ]
+}
+```
+
+More `when` entries:
+
+```jsonc
+// Ranking: "Speed" holds rank 1.
+{ "field": "fld_rank", "path": ["rank-1"], "operator": "CONTAINS_ANY", "value": ["Speed"] }
+// Table cell from a TABLE added earlier in this batch (tempId "t1", row key "row_a", column key "col_qty").
+{ "field": "@t1", "path": ["@row_a", "@col_qty"], "operator": "EQUAL", "value": "3" }
+// Custom boolean leaf. false is a real answer.
+{ "field": "fld_custom", "path": ["customer", "active"], "operator": "EQUAL", "value": false }
+// Custom key that contains a dot: one step.
+{ "field": "fld_custom", "path": ["plan.v2", "seats"], "operator": "GREATER_THAN", "value": 0 }
+```
+
+These requests return `invalid_args`:
+
+| Request | Reason |
+|---|---|
+| `path` with `choiceIds` | A path compares a typed `value` only. |
+| `path` without `value` | A path needs a constant. |
+| `path` on an option field or a hidden field | These answers have no sub-answer paths. |
+| A path that does not exist, or ends at an object | The leaf is missing or not comparable. |
+| A `value` of the wrong type | The constant must match the leaf type. |
+| An unknown `"hidden-<id>"` | The form has no such hidden field. |
+| `update_field` that removes a row or column used by a path | The change would break the condition. |
+| `delete_field` on a field that a condition reads | The change would leave a dangling reference. |
+
+Clear or change the logic first, in an earlier op of the same batch.
+`publish_form` also rejects invalid paths, incomplete conditions, and missing hidden fields.
+`form_apply_edits` cannot edit a custom field's output schema or hidden-field definitions.
 
 ---
 
@@ -260,7 +398,9 @@ Validation (`invalid_args` / `not_found`):
 `set_group` targets **groups that already exist** at the start of the batch — the server mints group ids (there is no group alias), so to page-break a group you must first read its `groupId` from `get_form`'s `groups` view, then `set_group { groupId, chaining }`.
 
 Batch guard:
-- `set_group` and `reorder` **cannot be combined in one batch** (both rewrite `formFieldsOrder`); use separate calls. This mirrors the existing `add_field` ⊗ `reorder` mutual exclusion.
+- `set_group` and `reorder` **cannot be combined in one batch** because both rewrite `formFieldsOrder`. If atomicity is not required, use separate sequential calls.
+- `add_field` and `reorder` **cannot be combined in one batch**. If atomicity is not required, add fields first. Then read `get_form` before a separate reorder call.
+- If the user requires either combination to be atomic, explain this limit. Do not split that request into separate write calls.
 - `set_group` may coexist with `add_field` as long as it targets a group that already existed before the batch (new groups added in the same batch are not yet addressable).
 - `set_form_appearance` composes freely with anything (it is independent of field structure).
 

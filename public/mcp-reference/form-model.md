@@ -18,7 +18,7 @@ Sibling references:
   "id": "form_abc123",
   "title": "Customer survey",
   "formFieldsOrder": { /* layout: groups + submit + optional ending — see below */ },
-  "hiddenFields": [ { "id": "utm_source", "label": "Source" } ],
+  "hiddenFields": [ { "id": "k3Xw9Qa", "label": "utm_source" } ],
   "fields": [ /* one object per field — see "The field object" */ ],
   "groups": [ /* friendly page/group view derived from formFieldsOrder — see "Pages and groups" */ ]
   // ...plus presentation/metadata keys (colorPalette, pageTransitionSetting, badge, brandLogoUrl, timestamps)
@@ -190,6 +190,7 @@ An object keyed by rule name; every key is optional except `basic`. Only `basic`
   "custom":  { /* arbitrary JSON-Schema */ },
   "remote":  { "url": "https://...", "method": "POST", "body": "", "headers": {} },
   "phoneVerification": { "enabled": true },       // PHONE_NUMBER only; Enterprise
+  "emailVerification": { "enabled": true },       // EMAIL only; requires a mail-enabled deployment
   "quota":   { "config": { "<optionId>": 100 } }  // see note below
 }
 ```
@@ -206,6 +207,7 @@ Which rules are meaningful depends on `fieldType`:
 | `numeric` | `NUMBER`. |
 | `array` | `CHECKBOX`, `RADIO`, `DROPDOWN`, `DROPDOWN_MULTI`, `LINEAR`, `PRIVACY_POLICY_INFORMATION`, `PICTURE_CHOICE`. |
 | `custom`, `remote` | Any field type. |
+| `emailVerification` | `EMAIL` only. Enabling requires a deployment with SMTP or kids messaging; disabling is always allowed. The submitted answer remains the email string. |
 | `quota` | Option-bearing types: `RADIO`, `CHECKBOX`, `DROPDOWN`, `DROPDOWN_MULTI`, `PICTURE_CHOICE`. `config` maps an option id to its max count. |
 | `phoneVerification` | `PHONE_NUMBER` only. Turning it **on** requires the Enterprise plan; turning it off is always allowed. |
 
@@ -277,12 +279,22 @@ A flat list of prefill / URL parameters carried with a submission but not shown 
 
 ```jsonc
 [
-  { "id": "utm_source", "label": "Traffic source" },
-  { "id": "ref",        "label": "Referrer" }
+  { "id": "k3Xw9Qa", "label": "utm_source" },
+  { "id": "p7Lm2Rt", "label": "ref" }
 ]
 ```
 
-Each entry is `{ "id": string, "label": string }`. Branch conditions can reference a hidden field by this `id` (see `walla://reference/branch-logic`).
+Each entry is `{ "id": string, "label": string }`.
+The `label` is the URL parameter name, as in `?utm_source=ads`.
+The `id` is a generated id.
+
+To branch on a hidden field, set the condition's `field` to `"hidden-<id>"`. For example, the id `k3Xw9Qa` becomes `"hidden-k3Xw9Qa"`.
+Give the condition a string `value` and no `path`.
+If the link has no value for the `label`, the value is empty and no operator matches, including `NOT_EQUAL`.
+A hidden field can never be a jump target.
+Publishing rejects a condition on a missing hidden field, and Walla blocks removal of a hidden field that a condition uses.
+`form_apply_edits` cannot add, change, or remove hidden-field definitions.
+See `walla://reference/editing-contract` §(b) and `walla://reference/branch-logic`.
 
 ---
 

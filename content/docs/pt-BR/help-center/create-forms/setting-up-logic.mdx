@@ -31,6 +31,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### Defina a condição
     1. **Selecione a pergunta de referência** – Escolha a pergunta cuja resposta será usada como base.
+       - Em perguntas de grade, tabela, classificação e campo personalizado, escolha também em `Subitem` a célula que deseja comparar. Veja como em [Criar condições com subitens](#criar-condições-com-subitens).
+       - Você também pode usar como referência o valor de um campo oculto recebido pelo link. Veja como em [Criar condições com campos ocultos](#criar-condições-com-campos-ocultos).
     2. **Selecione a condição** – Escolha o tipo de condição. As condições incluem comparações de texto/valor, opções, números e datas. Veja os detalhes em [Tipos de condição](#tipos-de-condição) abaixo.
     3. **Selecione a opção ou resposta** – Defina quais respostas acionam a condição.
        - Você pode selecionar várias respostas ao mesmo tempo.
@@ -96,6 +98,95 @@ Use para verificar quais opções foram selecionadas em perguntas como múltipla
 | Anterior ou igual a | Igual ou anterior à data de referência, incluindo-a | Se for em `2026-01-01` ou antes |
 | Posterior a | Posterior à data de referência, sem incluí-la | Se for depois de `2026-01-01` |
 | Posterior ou igual a | Igual ou posterior à data de referência, incluindo-a | Se for em `2026-01-01` ou depois |
+
+## Criar condições com subitens
+
+Em perguntas como a grade de múltipla escolha ou a tabela, uma única resposta tem várias células. Depois de escolher a pergunta de referência, escolha também a célula que deseja comparar.
+
+<Steps>
+  <Step>
+    ### Escolha a pergunta de referência
+    Quando você escolhe uma pergunta com células internas, o seletor `Subitem` aparece logo abaixo dela.
+  </Step>
+  <Step>
+    ### Escolha o subitem
+    Em `Subitem`, escolha a linha, a coluna ou a propriedade que deseja comparar. Se aparecer outro seletor, continue escolhendo até chegar ao último.
+  </Step>
+  <Step>
+    ### Defina a condição e o valor de comparação
+    Escolha o tipo de condição e insira o valor de comparação. O campo do valor se ajusta à última célula escolhida. Por exemplo, se você escolheu uma célula de uma tabela, digite um texto; se escolheu uma linha de uma grade de múltipla escolha, escolha uma das opções dessa linha.
+  </Step>
+</Steps>
+
+### Ordem de seleção por tipo de pergunta
+
+| Pergunta | Ordem de seleção | Valor de comparação |
+| ------------- | ------------------- | ---------------------- |
+| Grade de múltipla escolha | Linha | Uma opção escolhida nessa linha |
+| Grade de caixas de seleção | Linha | As opções escolhidas nessa linha (pode haver mais de uma) |
+| Classificação | Posição | A opção colocada nessa posição |
+| Tabela | Linha → coluna | O texto digitado nessa célula |
+| Campo personalizado | Propriedade → posição do item, se necessário | Um valor no formato dessa propriedade |
+
+- Na grade de múltipla escolha, na grade de caixas de seleção e na classificação, você define o valor de comparação assim que escolhe a linha (na classificação, a posição).
+- Se a pergunta de classificação permitir que o respondente digite a própria opção, o valor de comparação oferece `Selecionar opções` e `Personalizado`. Para comparar com um valor que não está na lista, escolha `Personalizado`, digite o valor e pressione Enter.
+- Se o subitem mostrar `Esta resposta não pode ser usada em uma condição`, essa célula não pode ser usada em condições. Escolha outro subitem.
+
+### Subitens de campos personalizados
+
+- Se as propriedades estiverem definidas, escolha uma na lista `Subitem`.
+- As propriedades que mostram os botões `Escolher propriedade` e `Digitar chave` aceitam chaves próprias. Se a chave não estiver na lista, clique em `Digitar chave` e digite-a.
+- Se a resposta for uma lista, aparece o campo `Posição do item`. Digite 1 para o primeiro item e 2 para o segundo. Se toda a resposta do campo personalizado for uma lista, é obrigatório preencher o campo `Posição do item` que aparece primeiro.
+- Se você deixar o campo `Posição do item (opcional)` em branco, a lista inteira é comparada. Se digitar um número, apenas esse item é comparado.
+
+### Inserir o valor de comparação
+
+Escolha ou digite o valor de comparação no seletor ou campo que corresponde à última célula escolhida.
+
+- **Valores com opções** – escolha uma opção da lista. Dependendo da célula, você também pode escolher várias.
+- **Valores de lista digitados** – digite um valor e pressione Enter para adicioná-lo como uma pequena etiqueta. Adicione os outros valores da mesma forma.
+- **Números** – o campo começa vazio, então digite o número que deseja comparar. Para comparar com 0, digite `0`.
+- **Verdadeiro/falso** – escolha você mesmo `Verdadeiro` ou `Falso` como valor de comparação. Em um campo de lista, digite `true` ou `false` e pressione Enter.
+
+### Condições incompletas
+
+Se aparecer `Confira a condição e conclua os valores.` abaixo da condição, você ainda não terminou de preenchê-la. Confira os itens abaixo para concluí-la.
+
+- Se sobrar texto em um campo, pressione Enter para adicioná-lo como etiqueta.
+- Se o valor não estiver no formato correto, o texto fica no campo e aparece `Insira um valor do tipo esperado.`. Corrija o valor e pressione Enter de novo.
+- Se aparecer um aviso de que `Posição do item` está vazia ou fora do intervalo, corrija o número conforme o aviso.
+
+Nesse estado, não é possível publicar o formulário. Ao clicar em publicar, aparece `Complete ou corrija a condição antes de publicar.`.
+
+### Condições quebradas após alterar uma pergunta
+
+Se você excluir ou alterar linhas, colunas ou opções de uma pergunta, a condição pode mostrar `Item não encontrado` ou `Este valor não é mais uma opção. Escolha outro.`. Nesse caso, escolha outro subitem ou outro valor.
+
+Se uma condição assim continuar salva, não é possível publicar o formulário. Ao clicar em publicar, aparece `Uma condição de valor de resposta é inválida. Verifique a pergunta, o subitem e o valor de comparação.`.
+
+## Criar condições com campos ocultos
+
+Você pode direcionar o respondente para outra pergunta conforme o valor do campo oculto adicionado ao link. Por exemplo, você pode levar às perguntas sobre um anúncio apenas quem chegou pelo link desse anúncio.
+Primeiro, cadastre o campo oculto no rastreamento da página de compartilhamento. Veja como em [Rastreamento (campos ocultos)](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields).
+
+<Steps>
+  <Step>
+    ### Escolha o campo oculto
+    Na lista de perguntas de referência, escolha o nome do campo oculto.
+  </Step>
+  <Step>
+    ### Defina a condição e o valor
+    Escolha uma das condições de [Comparação de texto ou valor](#comparação-de-texto-ou-valor) e digite como texto o valor que deseja comparar.
+  </Step>
+  <Step>
+    ### Escolha a pergunta de destino
+    Escolha a pergunta que será exibida quando o valor do campo oculto atender à condição.
+  </Step>
+</Steps>
+
+- Exemplo: se você criar a condição com o campo oculto `utm_source`, `Igual a` e `ads`, apenas quem chegar pelo link `https://walla.my/v/QA9S0imWeo232fSbd4?utm_source=ads` irá para a pergunta definida.
+- Um campo oculto sem valor não atende a nenhuma condição de comparação, nem mesmo `Diferente de`.
+- Não é possível excluir um campo oculto usado em uma condição de lógica. Veja as etapas para excluí-lo em [Excluir um campo oculto usado na lógica](/pt-BR/docs/help-center/share-forms/tracking-hidden-fields#excluir-um-campo-oculto-usado-na-lógica).
 
 ## Configurar a lógica usando nós
 
