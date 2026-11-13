@@ -7,6 +7,10 @@ description: API reference for managing forms
 
 The Forms API allows you to retrieve information about forms (surveys/projects) within your workspaces. You can list all forms, get specific form details, and access form settings.
 
+> **Note**: API key calls are subject to a [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key. OAuth token calls are subject to a separate [per-team call quota](/en/docs/developer-docs/authentication#oauth-token-call-quota).
+
+> **OAuth tokens**: The read (`GET`) operations on this page can also be called with an OAuth token (`project:read`). Send `Authorization: Bearer <access token>` instead of `X-WALLA-API-KEY`. Adding and deleting hidden fields is API key-only; calling those with a token returns `403 This endpoint does not accept OAuth tokens`. For details, see [Authentication](/en/docs/developer-docs/authentication#oauth-access-tokens).
+
 ## Endpoints
 
 ### Get All Forms
@@ -20,8 +24,15 @@ GET /open-api/v1/forms
 #### Request
 
 **Headers**
-- `X-WALLA-API-KEY` (required): Your API key
+- `X-WALLA-API-KEY` (required for API key authentication): Your API key
+- `Authorization: Bearer <access token>` (required for OAuth authentication): requires the `project:read` scope
 - `Content-Type`: application/json
+
+**Query Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `teamId` | string | Required for OAuth token calls | ID of the team to query. Look it up with [List teams](/en/docs/developer-docs/workspaces#list-teams). Ignored for API key calls |
 
 **Example Request**
 
@@ -29,6 +40,13 @@ GET /open-api/v1/forms
 curl -X GET "https://api.walla.my/open-api/v1/forms" \
   -H "X-WALLA-API-KEY: your_api_key_here" \
   -H "Content-Type: application/json"
+```
+
+When calling with an OAuth token:
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/forms?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
 ```
 
 #### Response
@@ -85,6 +103,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms" \
 
 **Error Responses**
 
+- **400 Bad Request**: `teamId` is missing from an OAuth token call
 - **401 Unauthorized**: API key missing or invalid
 - **403 Forbidden**: No permission for this resource
 - **500 Internal Server Error**: Server error
@@ -504,7 +523,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
 
 ### Add Hidden Fields
 
-Add hidden fields to a specific form. Labels that already exist are ignored.
+Add hidden fields to a specific form. Labels that already exist are ignored. This is an API key-only operation.
 
 ```http
 POST /open-api/v1/forms/{formId}/hidden-fields
@@ -571,7 +590,7 @@ curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/hidden-fields" \
 
 ### Delete Hidden Field
 
-Delete a hidden field from a specific form.
+Delete a hidden field from a specific form. This is an API key-only operation.
 
 ```http
 DELETE /open-api/v1/forms/{formId}/hidden-fields/{hiddenFieldId}

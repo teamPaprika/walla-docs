@@ -15,6 +15,7 @@ Walla Open API 以 RESTful 方式運作，提供下列功能。
 - **表單管理**：查詢表單資料與設定
 - **表單發送**：以電子郵件或簡訊發送表單
 - **回覆追蹤**：查詢並監控表單回覆與送出資料
+- **下載回覆檔案**：下載上傳到回覆中的檔案
 
 ## 資源階層結構
 
@@ -24,12 +25,12 @@ Walla API 的資源由下列階層結構組成。
 Team → Workspace → Form → Response
 ```
 
-- **Team（團隊）**：最上層的組織單位。API 金鑰以團隊為單位建立，並會自動帶入團隊資訊。
+- **Team（團隊）**：最上層的組織單位。API 金鑰以團隊為單位建立，並會自動帶入團隊資訊。以 OAuth 權杖呼叫時，請用 `GET /teams` 確認團隊 ID。
 - **Workspace（工作區）**：團隊中用來歸類表單與專案的單位。
 - **Form（表單）**：在工作區中建立的問卷或表單。
 - **Response（回覆）**：送交到表單的個別回覆。
 
-**注意**：由於 API 金鑰本身已包含團隊資訊，發出 API 請求時不需要另外傳送團隊資訊。
+**注意**：由於 API 金鑰本身已包含團隊資訊，以 API 金鑰發出請求時不需要另外傳送團隊資訊。以 OAuth 權杖呼叫 `GET /workspaces`、`GET /forms` 時，必須傳送 `teamId`（[指定團隊](/zh-TW/docs/developer-docs/authentication#指定團隊)）。
 
 ## 基本 URL
 
@@ -60,14 +61,14 @@ https://api.walla.my/open-api/v1
 可以用電子郵件或簡訊把表單發送給多位收件人，並追蹤發送狀態與參與度。
 
 ### 回覆收集
-透過支援分頁的回覆查詢 API，可以確認顧客金鑰與送出時間等詳細資料。
+透過支援分頁的回覆查詢 API，可以確認顧客金鑰與送出時間等詳細資料。上傳到回覆中的檔案可以透過檔案下載 API 下載。
 
 ## API 規格
 
 - **版本**：1.0
 - **通訊協定**：HTTPS
-- **資料格式**：JSON
-- **驗證**：API 金鑰（透過標頭驗證）
+- **資料格式**：JSON（回覆檔案下載為檔案二進位資料）
+- **驗證**：API 金鑰（`X-WALLA-API-KEY`）或 OAuth 存取權杖（`Authorization: Bearer`，僅限部分讀取作業與檔案下載）
 
 ## 支援
 
@@ -77,6 +78,7 @@ https://api.walla.my/open-api/v1
 
 | 分類 | 端點 | 說明 |
 |---------|-----------|------|
+| 團隊 | `GET /teams` | 查詢可呼叫的團隊清單 |
 | 工作區 | `GET /workspaces` | 查詢所有工作區 |
 | 工作區 | `GET /workspaces/{workspaceId}` | 查詢特定工作區 |
 | 工作區 | `GET /workspaces/{workspaceId}/forms` | 查詢工作區內的表單清單 |
@@ -97,8 +99,11 @@ https://api.walla.my/open-api/v1
 | 發送 | `POST /forms/{formId}/delivery/status` | 查詢發送狀態 |
 | 回覆 | `GET /forms/{formId}/responses` | 查詢表單回覆清單（分頁） |
 | 回覆 | `GET /forms/{formId}/responses/{responseId}` | 查詢特定回覆 |
+| 回覆 | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file` | 下載上傳到回覆中的檔案 |
 | 回覆匯出 | `POST /forms/{formId}/exports/responses` | 把表單回覆匯出成 Parquet 檔 |
 | 回覆匯出 | `POST /forms/{formId}/exports/field-definitions` | 把表單欄位定義匯出成 Parquet 檔 |
+
+可以用 OAuth 權杖呼叫的作業，請參閱[驗證 > 範圍與可用作業](/zh-TW/docs/developer-docs/authentication#範圍與可用作業)。
 
 ## 下一步
 

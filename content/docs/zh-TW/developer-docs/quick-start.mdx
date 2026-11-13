@@ -12,7 +12,7 @@ description: 幾分鐘內開始使用 Walla Open API
 開始之前請先確認下列項目。
 
 - 具備工作區存取權限的 Walla 帳號
-- API 金鑰（在 Walla 工作區設定中發行）
+- API 金鑰（在 Walla 工作區設定中發行）。或已取得的 OAuth 存取權杖（請參閱[驗證](/zh-TW/docs/developer-docs/authentication#oauth-存取權杖)）
 - 工作區中至少有 1 份已發布的表單
 
 ## 步驟 1：環境設定
@@ -122,6 +122,22 @@ Your workspaces:
 - Marketing Team (ID: workspace_123)
 - Customer Success (ID: workspace_456)
 ```
+
+### 使用 OAuth 權杖時
+
+上面的範例以 API 金鑰為準。若使用 OAuth 權杖（`project:read`），請先確認團隊 ID，再帶上 `teamId` 查詢工作區。
+
+```bash
+# 1. 確認可呼叫的團隊
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. 用確認到的團隊 ID 查詢工作區
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+以權杖呼叫步驟 3 的 `GET /forms` 時，同樣需要 `teamId`（例如：`/forms?teamId=team_456`）。
 
 ## 步驟 3：查詢表單清單
 
@@ -249,6 +265,8 @@ for i, response in enumerate(data['responses'], 1):
     print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
     print(f"  Submitted: {response['submittedAt']}")
 ```
+
+> **注意**：以 OAuth 權杖（`project:response.read`）查詢回覆清單時，檔案上傳欄位的值會顯示為 `[file]`。檔案請透過[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)取得。
 
 ## 完整流程範例
 
@@ -435,5 +453,15 @@ if __name__ == '__main__':
 - 確認該資源中是否有資料
 - 確認你查詢的是正確的工作區／表單
 - 確認你具備必要的權限
+
+### 以 OAuth 權杖呼叫時出現與 `teamId` 相關的 400 錯誤
+
+- 以權杖呼叫 `GET /workspaces` 與 `GET /forms` 時，請帶上 `teamId` 查詢參數
+- 團隊 ID 請用 `GET /teams` 確認
+
+### 以 OAuth 權杖呼叫時出現 `insufficient_scope` 403 錯誤
+
+- 確認權杖具備所需的範圍（[範圍與可用作業](/zh-TW/docs/developer-docs/authentication#範圍與可用作業)）
+- 確認請求權杖時沒有送出 `resource` 參數
 
 詳細的錯誤資訊請參考[錯誤代碼](/zh-TW/docs/developer-docs/error-codes)文件。

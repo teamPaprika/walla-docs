@@ -15,6 +15,7 @@ Walla Open API は RESTful 方式で動作し、以下の機能を提供しま�
 - **フォーム管理**: フォームのデータと設定を取得します
 - **フォーム送信**: メールまたは SMS でフォームを送信します
 - **回答の追跡**: フォームの回答と送信データを取得・モニタリングします
+- **回答ファイルのダウンロード**: 回答にアップロードされたファイルをダウンロードします
 
 ## リソースの階層構造
 
@@ -24,12 +25,12 @@ Walla API のリソースは以下の階層構造で構成されます。
 Team → Workspace → Form → Response
 ```
 
-- **Team（チーム）**: 最上位の組織単位です。API キーはチーム単位で生成され、チーム情報が自動的に含まれます。
+- **Team（チーム）**: 最上位の組織単位です。API キーはチーム単位で生成され、チーム情報が自動的に含まれます。OAuth トークンで呼び出すときは `GET /teams` でチーム ID を確認します。
 - **Workspace（ワークスペース）**: チーム内でフォームとプロジェクトをまとめる単位です。
 - **Form（フォーム）**: ワークスペース内で作成したフォームです。
 - **Response（回答）**: フォームに送信された個々の回答です。
 
-**注意**: API キーにチーム情報が含まれているため、API リクエスト時に別途チーム情報を渡す必要はありません。
+**注意**: API キーにチーム情報が含まれているため、API キーでリクエストするときは別途チーム情報を渡す必要はありません。OAuth トークンで `GET /workspaces`・`GET /forms` を呼び出すときは `teamId` を渡す必要があります（[チームの指定](/ja/docs/developer-docs/authentication#チームの指定)）。
 
 ## 基本 URL
 
@@ -60,14 +61,14 @@ https://api.walla.my/open-api/v1
 メールや SMS で複数の宛先にフォームを送信し、送信ステータスと参加状況を追跡できます。
 
 ### 回答の収集
-ページネーションに対応した回答取得 API で、顧客キーや送信時刻などの詳細データを確認できます。
+ページネーションに対応した回答取得 API で、顧客キーや送信時刻などの詳細データを確認できます。回答にアップロードされたファイルは、ファイルダウンロード API でダウンロードできます。
 
 ## API 仕様
 
 - **バージョン**: 1.0
 - **プロトコル**: HTTPS
-- **データ形式**: JSON
-- **認証**: API キー（ヘッダーによる認証）
+- **データ形式**: JSON（回答ファイルのダウンロードはファイルのバイナリ）
+- **認証**: API キー（`X-WALLA-API-KEY`）または OAuth アクセストークン（`Authorization: Bearer`、一部の読み取り操作とファイルのダウンロードのみ）
 
 ## サポート
 
@@ -77,6 +78,7 @@ https://api.walla.my/open-api/v1
 
 | カテゴリ | エンドポイント | 説明 |
 |---------|-----------|------|
+| チーム | `GET /teams` | 呼び出し可能なチーム一覧の取得 |
 | ワークスペース | `GET /workspaces` | すべてのワークスペースの取得 |
 | ワークスペース | `GET /workspaces/{workspaceId}` | 特定のワークスペースの取得 |
 | ワークスペース | `GET /workspaces/{workspaceId}/forms` | ワークスペース内のフォーム一覧の取得 |
@@ -97,8 +99,11 @@ https://api.walla.my/open-api/v1
 | 送信 | `POST /forms/{formId}/delivery/status` | 送信ステータスの取得 |
 | 回答 | `GET /forms/{formId}/responses` | フォームの回答一覧の取得（ページネーション） |
 | 回答 | `GET /forms/{formId}/responses/{responseId}` | 特定の回答の取得 |
+| 回答 | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file` | 回答にアップロードされたファイルのダウンロード |
 | 回答のエクスポート | `POST /forms/{formId}/exports/responses` | フォームの回答を Parquet ファイルへエクスポート |
 | 回答のエクスポート | `POST /forms/{formId}/exports/field-definitions` | フォームのフィールド定義を Parquet ファイルへエクスポート |
+
+OAuth トークンで呼び出せる操作は [認証 > スコープと利用できる操作](/ja/docs/developer-docs/authentication#スコープと利用できる操作) を参照してください。
 
 ## 次のステップ
 

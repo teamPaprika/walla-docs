@@ -7,7 +7,76 @@ description: API reference for managing workspaces
 
 The Workspaces API allows you to retrieve information about the workspaces you have access to. Workspaces are the top-level organizational unit in Walla that contain forms and teams.
 
+To list only the forms in a specific workspace, use `GET /workspaces/{workspaceId}/forms`. To list all forms at once, use `GET /forms` in the [Forms API](/en/docs/developer-docs/forms).
+
+When calling with an OAuth token, first look up your team ID with [List teams](#list-teams).
+
+> **Note**: API key calls are subject to a [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key. OAuth token calls are subject to a separate [per-team call quota](/en/docs/developer-docs/authentication#oauth-token-call-quota). Every operation on this page can also be called with an OAuth token (`project:read`).
+
 ## Endpoints
+
+### List teams
+
+Returns the teams you can call through the Open API. With an API key, it returns only the team the key was issued for. With an OAuth token, it returns only the teams the token user belongs to that pass the team's Open API setting and IP access restrictions. Use the returned `id` as `teamId` for `GET /workspaces` and `GET /forms`.
+
+```http
+GET /open-api/v1/teams
+```
+
+#### Request
+
+**Headers** (one of the following)
+- `X-WALLA-API-KEY`: Your API key
+- `Authorization: Bearer <access token>`: OAuth access token (requires the `project:read` scope)
+
+**Example Request**
+
+```bash
+# API key
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "X-WALLA-API-KEY: your_api_key_here"
+
+# OAuth token
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+#### Response
+
+**Success Response (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "team_456",
+      "name": "Marketing Team",
+      "profileUrl": null
+    }
+  ]
+}
+```
+
+**Response Fields**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `success` | boolean | Indicates if the request was successful |
+| `data` | array | Array of team objects |
+| `data[].id` | string | Team ID |
+| `data[].name` | string | Team name |
+| `data[].profileUrl` | string \| null | Team profile image URL |
+
+> **Note**: A guest who has not turned on two-factor authentication still sees the team in the list, but operations on that team return `403`.
+
+**Error Responses**
+
+- **401 Unauthorized**: API key or OAuth token missing, invalid or expired
+- **403 Forbidden**: The OAuth token lacks the `project:read` scope. For API key calls, this is also returned when the call is blocked by the team's Open API setting or IP access restrictions (for token calls, such teams are left out of the list instead)
+- **500 Internal Server Error**: Server error
+
+---
 
 ### Get All Workspaces
 
@@ -20,8 +89,15 @@ GET /open-api/v1/workspaces
 #### Request
 
 **Headers**
-- `X-WALLA-API-KEY` (required): Your API key
+- `X-WALLA-API-KEY` (required for API key authentication): Your API key
+- `Authorization: Bearer <access token>` (required for OAuth authentication): requires the `project:read` scope
 - `Content-Type`: application/json
+
+**Query Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `teamId` | string | Required for OAuth token calls | ID of the team to query. Look it up with [List teams](#list-teams). Ignored for API key calls |
 
 **Example Request**
 
@@ -29,6 +105,13 @@ GET /open-api/v1/workspaces
 curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
   -H "X-WALLA-API-KEY: your_api_key_here" \
   -H "Content-Type: application/json"
+```
+
+When calling with an OAuth token:
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
 ```
 
 #### Response
@@ -71,6 +154,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
 
 **Error Responses**
 
+- **400 Bad Request**: `teamId` is missing from an OAuth token call
 - **401 Unauthorized**: API key missing or invalid
 - **403 Forbidden**: No permission for this resource
   ```json
@@ -146,7 +230,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123" \
 **Error Responses**
 
 - **401 Unauthorized**: API key missing or invalid
-- **403 Forbidden**: No permission for this resource
+- **403 Forbidden**: No permission for this resource. For OAuth token calls, if the token user cannot access this workspace, the API returns `{"error":"Access denied"}`
   ```json
   {
     "error": "Authentication failed or insufficient permissions"

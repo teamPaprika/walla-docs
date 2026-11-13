@@ -5,7 +5,20 @@ description: Walla Open API 的驗證方式
 
 # 驗證
 
-Walla Open API 採用以 API 金鑰為基礎的驗證。所有 API 請求都必須在標頭中帶上有效的 API 金鑰。
+Walla Open API 以 API 金鑰或 OAuth 存取權杖進行驗證。所有 API 請求都必須在標頭中帶上其中一種。OAuth 權杖只能用於部分讀取作業與回覆檔案下載。
+
+## 選擇驗證方式
+
+| 項目 | API 金鑰 | OAuth 存取權杖 |
+|------|--------|-------------------|
+| 標頭 | `X-WALLA-API-KEY: <API 金鑰>` | `Authorization: Bearer <存取權杖>` |
+| 團隊範圍 | 金鑰所屬的團隊（不需指定團隊） | 權杖使用者所屬的團隊。`GET /workspaces`、`GET /forms` 需要 `teamId`（[指定團隊](#指定團隊)） |
+| 可用作業 | 所有 Open API 作業 | 僅限讀取作業與回覆檔案下載（[範圍與可用作業](#範圍與可用作業)） |
+| 權限 | 連結到 API 金鑰的權限 | 權杖使用者的團隊成員資格、工作區存取、回覆查詢與檔案下載權限 |
+| 速率限制 | 每把 API 金鑰每小時 6,000 次 | 依方案、以團隊為單位的每小時配額（[OAuth 權杖呼叫配額](#oauth-權杖呼叫配額)） |
+| 適用情境 | 團隊層級的伺服器整合，以及回覆搜尋、匯出、發送與寫入作業 | 在使用者權限範圍內讀取資料的應用程式 |
+
+同時送出兩種標頭時，會優先套用 API 金鑰。既有的 API 金鑰整合會照常運作。
 
 ## API 金鑰驗證
 
@@ -94,6 +107,77 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
   .catch(error => console.error('錯誤:', error));
 ```
 
+## OAuth 存取權杖
+
+OAuth 存取權杖透過 `Authorization: Bearer <存取權杖>` 標頭送出。路徑與回應格式和 API 金鑰呼叫相同，但只能呼叫下表列出的作業。
+
+### 取得權杖
+
+權杖透過 OAuth authorization code 流程取得。請求時請遵守下列事項。
+
+- 務必一併請求 `openid` 範圍（scope）。若缺少，所有呼叫都會回傳 `401`，更新權杖也無法解決。
+- 請依要使用的作業請求對應的範圍（`project:read`、`project:response.read`、`project:response.download`）。
+- 若要更新權杖，也請請求 `offline_access`。缺少時不會發行 refresh 權杖。
+- 請勿送出 `resource` 參數（RFC 8707）。送出後，用該權杖進行的所有呼叫都會回傳 `403 insufficient_scope`。
+
+部分部署環境（例如地端部署）可能已停止發行與更新新權杖。即使如此，已發行的權杖在過期或被撤銷前仍可繼續使用。
+
+### 範圍與可用作業
+
+路徑以 `/open-api/v1` 為基準。
+
+| 範圍 | 可用作業 |
+|--------|------------------|
+| `project:read` | `GET /teams`<br />`GET /workspaces`, `GET /workspaces/{workspaceId}`, `GET /workspaces/{workspaceId}/forms`<br />`GET /forms`, `GET /forms/{formId}`<br />`GET /forms/{formId}/fields`, `GET /forms/{formId}/fields/{fieldId}`, `GET /forms/{formId}/fields/{fieldId}/description`<br />`GET /forms/{formId}/hidden-fields`<br />`POST /forms/{formId}/exports/field-definitions`<br />`GET /field-output-schemas` |
+| `project:response.read` | `GET /forms/{formId}/responses` |
+| `project:response.download` | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file`（[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)） |
+
+**僅限 API 金鑰的作業**：以 OAuth 權杖呼叫下列作業時，會回傳 `403 This endpoint does not accept OAuth tokens`。
+
+- 查詢特定回覆 `GET /forms/{formId}/responses/{responseId}`
+- 搜尋回覆 `POST /forms/{formId}/responses/search`
+- 匯出回覆 `POST /forms/{formId}/exports/responses`
+- 發送表單（`/forms/{formId}/delivery` 底下的所有作業）
+- 新增 `POST`／刪除 `DELETE` 隱藏欄位
+
+### 指定團隊
+
+以 OAuth 權杖呼叫 `GET /workspaces` 或 `GET /forms` 時，需要 `teamId` 查詢參數。缺少時會回傳 `400`。API 金鑰呼叫會忽略 `teamId`。
+
+團隊 ID 請用 [`GET /teams`（英文）](/en/docs/developer-docs/workspaces#list-teams)確認。以權杖呼叫時，只會回傳權杖使用者所屬團隊中，通過 Open API 啟用設定與 IP 存取限制的團隊。
+
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "team_456", "name": "行銷團隊", "profileUrl": null }
+  ]
+}
+```
+
+- 未啟用兩步驟驗證的訪客也會在清單中看到團隊，但該團隊的作業會回傳 `403`。
+- 以權杖呼叫 `GET /workspaces/{workspaceId}` 時，若權杖使用者無法存取該工作區，會回傳 `403 {"error":"Access denied"}`。
+
+### cURL 範例
+
+以下範例假設你已把取得的存取權杖存放在 `WALLA_OAUTH_TOKEN` 環境變數中。
+
+```bash
+# 1. 查詢可呼叫的團隊 (project:read)
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. 查詢團隊的工作區 (project:read，teamId 必填)
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 3. 查詢表單回覆清單 (project:response.read)
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+回覆檔案下載範例請參閱[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)。
+
 ## 驗證錯誤
 
 驗證失敗時會回傳下列錯誤。
@@ -123,6 +207,16 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
   "error": "Forbidden"
 }
 ```
+
+### OAuth 權杖錯誤
+
+- **401**：權杖無效或已過期。回應會包含 `WWW-Authenticate: Bearer error="invalid_token"` 標頭。只有這種情況需要更新權杖。
+- **403 `insufficient_scope`**：權杖缺少所需的範圍。本文為 `{"error":"insufficient_scope","scope":"<所需範圍>"}`。
+- **403 `This endpoint does not accept OAuth tokens`**：這是[僅限 API 金鑰的作業](#範圍與可用作業)。請改用 API 金鑰呼叫。
+- **403 `Forbidden`**：不是團隊成員、是未啟用兩步驟驗證的訪客，或是無法存取的工作區 ID。
+- **403 `Unauthorized`**：伺服器無法驗證權杖。這不代表權杖無效，請勿更新權杖，稍後再試。
+
+完整的錯誤清單請參閱[錯誤代碼](/zh-TW/docs/developer-docs/error-codes)。
 
 ## 最佳做法
 
@@ -170,6 +264,24 @@ Walla Open API 為了系統穩定性設有速率限制。
 - 監控 API 使用量
 - 盡可能把請求批次處理
 
+上述限制適用於 API 金鑰呼叫。
+
+#### OAuth 權杖呼叫配額
+
+OAuth 權杖呼叫與 API 金鑰每小時 6,000 次的限制分開計算，所有方案都可以使用。方案只決定配額。一個團隊的配額由該團隊所有使用者與應用程式共用。
+
+| 對象 | 每小時配額 |
+|------|---------------|
+| Free 方案團隊 | 600 次 |
+| Pro 方案團隊 | 3,000 次 |
+| Enterprise／自訂方案團隊 | 6,000 次 |
+| `GET /teams`, `GET /field-output-schemas` | 每位使用者 600 次 |
+
+- 1 小時的視窗從該團隊（或使用者）的第一次呼叫開始計算。
+- 超過配額時會回傳 `429 {"error":"rate_limit_exceeded"}`，並包含 `Retry-After`（秒）、`RateLimit-Limit`、`RateLimit-Remaining`、`RateLimit-Reset` 標頭。請等待 `Retry-After` 指定的時間後再重試。
+- 超過配額後送出的呼叫也會計入次數。
+- 團隊的 Open API 啟用設定與 IP 存取限制與方案無關，一律適用。
+
 ## 疑難排解
 
 ### 常見問題
@@ -188,6 +300,18 @@ Walla Open API 為了系統穩定性設有速率限制。
 - 確認標頭格式正確
 - 確認 HTTP 用戶端有帶上自訂標頭
 - 確認標頭名稱沒有拼字錯誤
+
+**問題**：以 OAuth 權杖呼叫 `GET /workspaces` 或 `GET /forms` 時出現 400 錯誤
+
+**解決方式**：
+- 請帶上 `teamId` 查詢參數。團隊 ID 可以用 `GET /teams` 確認
+
+**問題**：OAuth 權杖呼叫回傳 403 錯誤
+
+**解決方式**：
+- 若是 `insufficient_scope`，請確認已請求所需的範圍，且權杖請求中沒有送出 `resource` 參數
+- 若是 `This endpoint does not accept OAuth tokens`，請改用 API 金鑰呼叫
+- 若是 `Unauthorized`，請勿更新權杖，稍後再試
 
 ## 下一步
 
@@ -221,6 +345,7 @@ Walla Open API 為了系統穩定性設有速率限制。
 - 請為每位團隊成員各自發行 API 金鑰
 - 不再使用的金鑰請立即撤銷
 - 請定期檢視 API 金鑰的使用狀況
+- OAuth 權杖呼叫會套用權杖使用者的團隊成員資格、工作區存取權限，以及回覆查詢與檔案下載權限
 
 ### 錯誤處理最佳做法
 
