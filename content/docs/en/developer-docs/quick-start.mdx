@@ -12,7 +12,7 @@ This guide will help you make your first API calls to the Walla Open API. We'll 
 Before you begin, ensure you have:
 
 - A Walla account with access to at least one workspace
-- An API key (obtainable from your Walla workspace settings)
+- An API key (obtainable from your Walla workspace settings), or an already-issued OAuth access token (see [Authentication](/en/docs/developer-docs/authentication#oauth-access-tokens))
 - A published form in your workspace
 
 ## Step 1: Set Up Your Environment
@@ -122,6 +122,22 @@ Your workspaces:
 - Marketing Team (ID: workspace_123)
 - Customer Success (ID: workspace_456)
 ```
+
+### Using an OAuth token
+
+The examples above use an API key. If you use an OAuth token (`project:read`), first look up your team ID, then list workspaces with `teamId`.
+
+```bash
+# 1. List callable teams
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. List workspaces with the team ID you found
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+When called with a token, `GET /forms` in Step 3 also requires `teamId` (for example, `/forms?teamId=team_456`).
 
 ## Step 3: List Your Forms
 
@@ -249,6 +265,8 @@ for i, response in enumerate(data['responses'], 1):
     print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
     print(f"  Submitted: {response['submittedAt']}")
 ```
+
+> **Note**: When you list responses with an OAuth token (`project:response.read`), file upload field values appear as `[file]`. Download the files with [Download a response file](/en/docs/developer-docs/responses#download-a-response-file).
 
 ## Complete Example: Full Workflow
 
@@ -436,4 +454,14 @@ Now that you've made your first API calls, explore more:
 - Check you're querying the correct workspace/form
 - Ensure you have the necessary permissions
 
-For more help, see the [Error Codes](/docs/error-codes) documentation.
+### `teamId` 400 errors with OAuth token calls
+
+- Include the `teamId` query parameter when calling `GET /workspaces` and `GET /forms` with a token
+- Look up team IDs with `GET /teams`
+
+### `insufficient_scope` 403 errors with OAuth token calls
+
+- Check that the token has the required scope ([Scopes and allowed operations](/en/docs/developer-docs/authentication#scopes-and-allowed-operations))
+- Make sure you did not send the `resource` parameter when requesting the token
+
+For more help, see the [Error Codes](/en/docs/developer-docs/error-codes) documentation.

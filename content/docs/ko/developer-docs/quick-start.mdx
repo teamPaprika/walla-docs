@@ -12,7 +12,7 @@ description: 몇 분 안에 Walla Open API 시작하기
 시작하기 전에 아래 항목을 확인하세요.
 
 - 워크스페이스 접근 권한이 있는 Walla 계정
-- API 키 (Walla 워크스페이스 설정에서 발급)
+- API 키 (Walla 워크스페이스 설정에서 발급). 또는 이미 발급받은 OAuth 액세스 토큰([인증](/ko/docs/developer-docs/authentication#oauth-액세스-토큰) 참고)
 - 워크스페이스에 게시된 폼 1개 이상
 
 ## 1단계: 환경 설정
@@ -122,6 +122,22 @@ Your workspaces:
 - Marketing Team (ID: workspace_123)
 - Customer Success (ID: workspace_456)
 ```
+
+### OAuth 토큰을 사용하는 경우
+
+위 예시는 API 키 기준입니다. OAuth 토큰(`project:read`)을 사용한다면 먼저 팀 ID를 확인한 뒤, `teamId`를 넣어 워크스페이스를 조회하세요.
+
+```bash
+# 1. 호출 가능한 팀 확인
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. 확인한 팀 ID로 워크스페이스 조회
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+3단계의 `GET /forms`도 토큰으로 호출할 때는 `teamId`가 필요합니다(예: `/forms?teamId=team_456`).
 
 ## 3단계: 폼 목록 조회하기
 
@@ -249,6 +265,8 @@ for i, response in enumerate(data['responses'], 1):
     print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
     print(f"  Submitted: {response['submittedAt']}")
 ```
+
+> **참고**: OAuth 토큰(`project:response.read`)으로 응답 목록을 조회하면 파일 업로드 필드의 값이 `[file]`로 표시됩니다. 파일은 [응답 파일 다운로드](/ko/docs/developer-docs/responses#응답-파일-다운로드)로 받으세요.
 
 ## 전체 워크플로 예제
 
@@ -435,5 +453,15 @@ if __name__ == '__main__':
 - 해당 리소스에 데이터가 있는지 확인하세요
 - 올바른 워크스페이스/폼을 조회하고 있는지 확인하세요
 - 필요한 권한이 있는지 확인하세요
+
+### OAuth 토큰 호출 시 `teamId` 관련 400 오류
+
+- `GET /workspaces`와 `GET /forms`를 토큰으로 호출할 때는 `teamId` 쿼리 파라미터를 포함하세요
+- 팀 ID는 `GET /teams`로 확인하세요
+
+### OAuth 토큰 호출 시 `insufficient_scope` 403 오류
+
+- 토큰에 필요한 스코프가 있는지 확인하세요 ([스코프와 사용 가능한 작업](/ko/docs/developer-docs/authentication#스코프와-사용-가능한-작업))
+- 토큰을 요청할 때 `resource` 파라미터를 보내지 않았는지 확인하세요
 
 자세한 오류 정보는 [오류 코드](/ko/docs/developer-docs/error-codes) 문서를 참고하세요.

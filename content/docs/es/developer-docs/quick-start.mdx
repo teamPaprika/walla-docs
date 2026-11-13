@@ -12,7 +12,7 @@ En esta guía recorremos rápidamente el flujo básico de la Walla Open API: aut
 Antes de empezar, comprueba lo siguiente.
 
 - Una cuenta de Walla con acceso al espacio de trabajo
-- Una clave de API (generada en los ajustes del espacio de trabajo)
+- Una clave de API (generada en los ajustes del espacio de trabajo) o un token de acceso OAuth ya emitido (consulta [Autenticación](/es/docs/developer-docs/authentication#tokens-de-acceso-oauth))
 - Al menos un formulario publicado en el espacio de trabajo
 
 ## Paso 1: configurar el entorno
@@ -122,6 +122,22 @@ Your workspaces:
 - Marketing Team (ID: workspace_123)
 - Customer Success (ID: workspace_456)
 ```
+
+### Si usas un token OAuth
+
+Los ejemplos anteriores usan una clave de API. Si usas un token OAuth (`project:read`), consulta primero el ID del equipo y después consulta los espacios de trabajo con `teamId`.
+
+```bash
+# 1. Consultar los equipos disponibles
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. Consultar los espacios de trabajo con el ID de equipo obtenido
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+La llamada `GET /forms` del paso 3 también necesita `teamId` cuando se hace con un token (por ejemplo, `/forms?teamId=team_456`).
 
 ## Paso 3: consultar la lista de formularios
 
@@ -249,6 +265,8 @@ for i, response in enumerate(data['responses'], 1):
     print(f"  Customer: {response.get('customerKey', 'Anonymous')}")
     print(f"  Submitted: {response['submittedAt']}")
 ```
+
+> **Nota**: si consultas la lista de respuestas con un token OAuth (`project:response.read`), los valores de los campos de subida de archivos aparecen como `[file]`. Descarga los archivos con [Descargar un archivo de respuesta (en inglés)](/en/docs/developer-docs/responses#download-a-response-file).
 
 ## Ejemplo del flujo completo
 
@@ -435,5 +453,15 @@ Cuando domines lo básico, echa un vistazo también a la referencia de cada API.
 - Comprueba que ese recurso tenga datos
 - Comprueba que estés consultando el espacio de trabajo o el formulario correctos
 - Comprueba que tengas los permisos necesarios
+
+### Error 400 relacionado con `teamId` al llamar con un token OAuth
+
+- Incluye el parámetro de consulta `teamId` al llamar a `GET /workspaces` y `GET /forms` con un token
+- Consulta los ID de equipo con `GET /teams`
+
+### Error 403 `insufficient_scope` al llamar con un token OAuth
+
+- Comprueba que el token tenga el scope necesario ([Scopes y operaciones permitidas](/es/docs/developer-docs/authentication#scopes-y-operaciones-permitidas))
+- Comprueba que no enviaste el parámetro `resource` al solicitar el token
 
 Consulta la documentación de [códigos de error](/es/docs/developer-docs/error-codes) para más información.

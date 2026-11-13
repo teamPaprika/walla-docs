@@ -22,11 +22,13 @@ Walla API は標準の HTTP ステータスコードでリクエストの成功�
 | コード | ステータス | 説明 |
 |------|--------|-------------|
 | 400 | Bad Request | 不正なリクエストパラメータ、または形式が正しくないリクエスト |
-| 401 | Unauthorized | 認証失敗（API キーの欠落または無効） |
+| 401 | Unauthorized | 認証失敗（API キーまたは OAuth トークンの欠落・無効・期限切れ） |
 | 403 | Forbidden | 権限不足（該当リソースにアクセスできない） |
 | 404 | Not Found | リソースが見つからない |
+| 413 | Payload Too Large | リクエストボディが 4KiB、またはファイルが 500MiB を超過（回答ファイルのダウンロード） |
 | 429 | Too Many Requests | レート制限の超過 |
 | 500 | Internal Server Error | サーバーエラーの発生 |
+| 502 | Bad Gateway | ストレージからファイルを取得できない（回答ファイルのダウンロード） |
 
 ## エラーレスポンスの形式
 
@@ -37,6 +39,8 @@ Walla API は標準の HTTP ステータスコードでリクエストの成功�
   "error": "Error message describing what went wrong"
 }
 ```
+
+一部のエラーには、`code`、`detailsType`・`details`、`scope` などの追加フィールドが含まれます。
 
 ## エラーコードの詳細
 
@@ -85,6 +89,19 @@ Walla API は標準の HTTP ステータスコードでリクエストの成功�
    }
    ```
    **解決方法**: `limit` パラメータは 100 以下にしてください。
+
+6. **OAuth トークンでの呼び出しで `teamId` が欠落**
+
+   **解決方法**: トークンで `GET /workspaces`・`GET /forms` を呼び出すときは、`teamId` クエリパラメーターを含めてください。チーム ID は `GET /teams` で確認します。
+
+7. **機密ファイルのダウンロード理由の欠落**
+   ```json
+   {
+     "error": "A download reason is required for a secure file.",
+     "code": "REASON_REQUIRED"
+   }
+   ```
+   **解決方法**: [回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) のリクエストボディに `reason`（1〜500 文字）を含めてください。
 
 **シナリオ例:**
 
@@ -137,6 +154,8 @@ API キーがない、または無効で認証に失敗した場合に発生し�
    ```
    **解決方法**: API キーが正しく、期限切れ・取り消し済みでないか確認してください。
 
+**OAuth トークンの場合**: トークンが無効または期限切れの場合、`WWW-Authenticate: Bearer error="invalid_token"` ヘッダーとともに 401 が返されます。この場合はトークンを更新してください。トークンのリクエスト時に `openid` スコープが含まれていなかった場合は、更新しても 401 が続くため、`openid` を含めてトークンを新たに発行し直す必要があります。
+
 **シナリオ例:**
 
 ```javascript
@@ -175,6 +194,36 @@ await fetch(`${API_BASE}/workspaces`, {
    }
    ```
    **解決方法**: リクエストしたワークスペースまたはフォームが自分のチームのリソースか確認し、必要ならワークスペース管理者にアクセス権限を依頼してください。
+
+2. **OAuth トークンのスコープ不足**
+   ```json
+   {
+     "error": "insufficient_scope",
+     "scope": "project:response.read"
+   }
+   ```
+   **解決方法**: `scope` に表示されたスコープを含めてトークンを発行し直してください。トークンのリクエストで `resource` パラメーターを送っていないかも確認してください。
+
+3. **`This endpoint does not accept OAuth tokens`**
+
+   **解決方法**: API キー専用の操作です。API キーで呼び出してください（[スコープと利用できる操作](/ja/docs/developer-docs/authentication#スコープと利用できる操作)）。
+
+4. **`Unauthorized`（ステータス 403、OAuth トークン）**
+
+   **解決方法**: サーバーがトークンを確認できなかった場合です。トークンを更新せず、しばらくしてから再試行してください。
+
+5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+
+   **解決方法**: チームの Open API の利用設定と IP アクセス制限をチーム管理者に確認してください。
+
+6. **`Access denied`**
+
+   **解決方法**: OAuth トークンのユーザーのワークスペースへのアクセス権限、またはファイルのダウンロード時は回答の閲覧・ファイルのダウンロード権限を確認してください。
+
+7. **回答ファイルのダウンロード関連**
+   - `Approval required`（`code: "APPROVAL_REQUIRED"`、`actionKey`、`projectId`）: チームのダウンロード承認ポリシーにより、`projectId` のフォームに対する承認が必要です。
+   - `This field is masked and cannot be downloaded.`: マスキングされたファイルフィールドは Open API でダウンロードできません。
+   - `Secure file access requires an enterprise plan.`: 機密ファイルフィールドには、機密ファイル機能に対応したチームプランが必要です。
 
 **トラブルシューティングの手順:**
 
@@ -259,6 +308,14 @@ API のレート制限を超えた場合に発生します。
 }
 ```
 
+**OAuth トークンの呼び出し上限**: OAuth トークンでの呼び出しには、上記の API キーの制限とは別に、プランごとのチーム単位の上限が適用されます（[OAuth トークンの呼び出し上限](/ja/docs/developer-docs/authentication#oauth-トークンの呼び出し上限)）。超過すると、以下の本文とともに `Retry-After`（秒）、`RateLimit-Limit`、`RateLimit-Remaining`、`RateLimit-Reset` ヘッダーが返されます。`Retry-After` の分だけ待ってから再試行してください。
+
+```json
+{
+  "error": "rate_limit_exceeded"
+}
+```
+
 **対処方法:**
 
 1. **レート制限の処理を実装する**: レスポンスのステータスを確認し、429 を適切に処理してください
@@ -326,6 +383,27 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 - **Webhook を活用する**: リアルタイムの更新が必要なら、ポーリングではなく Webhook を検討してください
 - **リクエストをまとめる**: 可能なら 1 回のリクエストで複数の項目を取得してください
 - **モニタリングと通知**: API の使用量を追跡し、制限に近づいたら通知が届くよう設定してください
+
+---
+
+### 413 Payload Too Large
+
+[回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) でサイズの上限を超えた場合に発生します。
+
+- `Request body too large`: リクエストボディが 4KiB を超えました。`reason` を 500 文字以下にしてください。
+- `File too large`: ファイルが 500MiB（524,288,000 バイト）を超えました。この上限は、ストレージがファイルサイズ（`Content-Length`）を通知した場合にのみ適用されます。
+
+---
+
+### 502 Bad Gateway
+
+[回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) でストレージからファイルを取得できなかった場合に発生します。
+
+- `Failed to fetch file`: ストレージへの接続に失敗したか、ストレージがエラーを返しました。ストレージにファイルがない場合にもこのレスポンスが返ることがあります。
+- `Failed to resolve file`: 保護されたストレージのダウンロードアドレスを作成できませんでした。
+- `Invalid file source`: 保存されたファイルのアドレスをストレージの場所として解釈できませんでした。管理者が保存されたアドレスまたはデプロイ設定を確認する必要があります。
+
+**解決方法**: 一時的なエラーであれば、しばらくしてから再試行してください。続く場合は管理者にお問い合わせください。
 
 ---
 

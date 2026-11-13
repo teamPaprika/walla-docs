@@ -15,6 +15,7 @@ A Walla Open API é RESTful e oferece os seguintes recursos.
 - **Gerenciamento de formulários**: consulte dados e configurações dos formulários.
 - **Envio de formulários**: envie formulários por e-mail; SMS está disponível somente em ambientes com esse canal habilitado e configurado.
 - **Acompanhamento de respostas**: consulte e monitore respostas e dados de envio.
+- **Download de arquivos de respostas**: baixe arquivos enviados nas respostas.
 
 ## Hierarquia dos recursos
 
@@ -24,12 +25,12 @@ Os recursos da API da Walla seguem a hierarquia abaixo.
 Team → Workspace → Form → Response
 ```
 
-- **Team (equipe)**: unidade organizacional principal. As chaves de API são criadas por equipe e incluem automaticamente suas informações.
+- **Team (equipe)**: unidade organizacional principal. As chaves de API são criadas por equipe e incluem automaticamente suas informações. Ao chamar com um token OAuth, consulte o ID da equipe com `GET /teams`.
 - **Workspace (espaço de trabalho)**: organiza formulários e projetos dentro de uma equipe.
 - **Form (formulário)**: pesquisa ou formulário criado em um espaço de trabalho.
 - **Response (resposta)**: resposta individual enviada a um formulário.
 
-**Observação**: como a chave de API inclui as informações da equipe, não é necessário enviá-las separadamente nas solicitações.
+**Observação**: como a chave de API inclui as informações da equipe, não é necessário enviá-las separadamente nas solicitações com chave de API. Ao chamar `GET /workspaces` ou `GET /forms` com um token OAuth, envie `teamId` ([Indicar a equipe](/pt-BR/docs/developer-docs/authentication#indicar-a-equipe)).
 
 ## URL base
 
@@ -60,14 +61,14 @@ Consulte listas de formulários, configurações, quantidade de envios e outros 
 Envie formulários por e-mail a vários destinatários e acompanhe o status de envio e a participação. No SaaS, cada destinatário precisa ter um endereço de e-mail. O envio por SMS exige que esse canal esteja habilitado e configurado no ambiente.
 
 ### Coleta de respostas
-Use a API de consulta de respostas com paginação para conferir dados detalhados, como chave do cliente e horário do envio.
+Use a API de consulta de respostas com paginação para conferir dados detalhados, como chave do cliente e horário do envio. Arquivos enviados nas respostas podem ser baixados com a API de download de arquivos.
 
 ## Especificações da API
 
 - **Versão**: 1.0
 - **Protocolo**: HTTPS
-- **Formato dos dados**: JSON
-- **Autenticação**: chave de API (no cabeçalho)
+- **Formato dos dados**: JSON (o download de arquivos de respostas retorna o arquivo em binário)
+- **Autenticação**: chave de API (`X-WALLA-API-KEY`) ou token de acesso OAuth (`Authorization: Bearer`, apenas para algumas operações de leitura e download de arquivos)
 
 ## Suporte
 
@@ -77,6 +78,7 @@ Entre em contato com o suporte da Walla para dúvidas ou solicitações de recur
 
 | Categoria | Endpoint | Descrição |
 |---------|-----------|------|
+| Equipes | `GET /teams` | Listar as equipes disponíveis para chamadas |
 | Espaços de trabalho | `GET /workspaces` | Listar todos os espaços de trabalho |
 | Espaços de trabalho | `GET /workspaces/{workspaceId}` | Consultar um espaço de trabalho |
 | Espaços de trabalho | `GET /workspaces/{workspaceId}/forms` | Listar formulários de um espaço de trabalho |
@@ -97,8 +99,11 @@ Entre em contato com o suporte da Walla para dúvidas ou solicitações de recur
 | Envio | `POST /forms/{formId}/delivery/status` | Consultar status de envio |
 | Respostas | `GET /forms/{formId}/responses` | Listar respostas de um formulário (com paginação) |
 | Respostas | `GET /forms/{formId}/responses/{responseId}` | Consultar uma resposta |
+| Respostas | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file` | Baixar um arquivo enviado em uma resposta |
 | Exportação de respostas | `POST /forms/{formId}/exports/responses` | Exportar respostas para Parquet |
 | Exportação de respostas | `POST /forms/{formId}/exports/field-definitions` | Exportar definições de campos para Parquet |
+
+Para ver as operações que podem ser chamadas com um token OAuth, consulte [Autenticação > Escopos e operações permitidas](/pt-BR/docs/developer-docs/authentication#escopos-e-operações-permitidas).
 
 ## Próximos passos
 

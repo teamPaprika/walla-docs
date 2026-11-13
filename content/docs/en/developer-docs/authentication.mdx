@@ -5,7 +5,20 @@ description: Learn how to authenticate with the Walla Open API
 
 # Authentication
 
-The Walla Open API uses API key authentication to secure access to your workspace data. All API requests must include a valid API key in the request header.
+The Walla Open API authenticates requests with an API key or an OAuth access token. Every API request must include one of them in a request header. OAuth tokens can be used only for certain read operations and for downloading response files.
+
+## Choosing an authentication method
+
+| Item | API key | OAuth access token |
+|------|---------|--------------------|
+| Header | `X-WALLA-API-KEY: <API key>` | `Authorization: Bearer <access token>` |
+| Team scope | The team the key was issued for (no team needs to be specified) | Teams the token user belongs to. `GET /workspaces` and `GET /forms` require `teamId` ([Specifying a team](#specifying-a-team)) |
+| Available operations | All Open API operations | Read operations and response file downloads only ([Scopes and allowed operations](#scopes-and-allowed-operations)) |
+| Permissions | Permissions tied to the API key | The token user's team membership, workspace access, response viewing and file download permissions |
+| Rate limit | 6,000 requests per hour per API key | Hourly per-team quota based on the plan ([OAuth token call quota](#oauth-token-call-quota)) |
+| Best for | Team-level server integrations; response search, export, delivery and write operations | Apps that read data within a user's permissions |
+
+If you send both headers, the API key takes precedence. Existing API key integrations keep working exactly as before.
 
 ## API Key Authentication
 
@@ -97,6 +110,77 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
   .catch(error => console.error('Error:', error));
 ```
 
+## OAuth access tokens
+
+Send an OAuth access token in the `Authorization: Bearer <access token>` header. Paths and response formats are the same as for API key calls, but only the operations in the table below can be called.
+
+### Getting a token
+
+Tokens are obtained through the OAuth authorization code flow. Follow these rules when requesting one:
+
+- Always request the `openid` scope. Without it, every call returns `401`, and refreshing the token does not fix it.
+- Request the scopes that match the operations you need (`project:read`, `project:response.read`, `project:response.download`).
+- To refresh tokens, also request `offline_access`. Without it, no refresh token is issued.
+- Do not send the `resource` parameter (RFC 8707). If you do, every call made with that token returns `403 insufficient_scope`.
+
+In some deployments (for example, on-premises), issuing and refreshing new tokens may be disabled. Even then, tokens that were already issued remain usable until they expire or are revoked.
+
+### Scopes and allowed operations
+
+Paths are relative to `/open-api/v1`.
+
+| Scope | Allowed operations |
+|-------|--------------------|
+| `project:read` | `GET /teams`<br />`GET /workspaces`, `GET /workspaces/{workspaceId}`, `GET /workspaces/{workspaceId}/forms`<br />`GET /forms`, `GET /forms/{formId}`<br />`GET /forms/{formId}/fields`, `GET /forms/{formId}/fields/{fieldId}`, `GET /forms/{formId}/fields/{fieldId}/description`<br />`GET /forms/{formId}/hidden-fields`<br />`POST /forms/{formId}/exports/field-definitions`<br />`GET /field-output-schemas` |
+| `project:response.read` | `GET /forms/{formId}/responses` |
+| `project:response.download` | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file` ([Download a response file](/en/docs/developer-docs/responses#download-a-response-file)) |
+
+**API key-only operations**: Calling the following operations with an OAuth token returns `403 This endpoint does not accept OAuth tokens`.
+
+- Get a specific response `GET /forms/{formId}/responses/{responseId}`
+- Search responses `POST /forms/{formId}/responses/search`
+- Export responses `POST /forms/{formId}/exports/responses`
+- Form delivery (all operations under `/forms/{formId}/delivery`)
+- Add (`POST`) or delete (`DELETE`) hidden fields
+
+### Specifying a team
+
+When you call `GET /workspaces` or `GET /forms` with an OAuth token, the `teamId` query parameter is required. Without it, the call returns `400`. API key calls ignore `teamId`.
+
+Look up team IDs with [`GET /teams`](/en/docs/developer-docs/workspaces#list-teams). With a token, it returns only the teams the token user belongs to that pass the team's Open API setting and IP access restrictions.
+
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "team_456", "name": "Marketing Team", "profileUrl": null }
+  ]
+}
+```
+
+- A guest who has not turned on two-factor authentication still sees the team in the list, but operations on that team return `403`.
+- When you call `GET /workspaces/{workspaceId}` with a token and the token user cannot access that workspace, the call returns `403 {"error":"Access denied"}`.
+
+### cURL examples
+
+The examples below assume you have stored an already-issued access token in the `WALLA_OAUTH_TOKEN` environment variable.
+
+```bash
+# 1. List callable teams (project:read)
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. List a team's workspaces (project:read, teamId required)
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 3. List form responses (project:response.read)
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+For a response file download example, see [Download a response file](/en/docs/developer-docs/responses#download-a-response-file).
+
 ## Authentication Errors
 
 If authentication fails, the API will return one of the following error responses:
@@ -126,6 +210,16 @@ Authentication succeeded, but you don't have permission to access the requested 
   "error": "Forbidden"
 }
 ```
+
+### OAuth token errors
+
+- **401**: The token is invalid or expired. The response includes the `WWW-Authenticate: Bearer error="invalid_token"` header. This is the only case in which you should refresh the token.
+- **403 `insufficient_scope`**: The token lacks a required scope. The body is `{"error":"insufficient_scope","scope":"<required scope>"}`.
+- **403 `This endpoint does not accept OAuth tokens`**: This is an [API key-only operation](#scopes-and-allowed-operations). Call it with an API key.
+- **403 `Forbidden`**: The user is not a team member, is a guest without two-factor authentication, or used a workspace ID they cannot access.
+- **403 `Unauthorized`**: The server could not verify the token. This does not mean the token is invalid, so do not refresh it; try again shortly.
+
+For the full list of errors, see [Error Codes](/en/docs/developer-docs/error-codes).
 
 ## Best Practices
 
@@ -173,6 +267,24 @@ If you exceed the rate limit, the API will return a `429 Too Many Requests` resp
 - Monitor your API usage to stay within limits
 - Consider batching operations where possible
 
+The limit above applies to API key calls.
+
+#### OAuth token call quota
+
+OAuth token calls are counted separately from the API key limit of 6,000 requests per hour and are available on every plan. The plan sets only the quota. A team's quota is shared by all users and apps in that team.
+
+| Applies to | Hourly quota |
+|------------|--------------|
+| Free plan teams | 600 requests |
+| Pro plan teams | 3,000 requests |
+| Enterprise and custom plan teams | 6,000 requests |
+| `GET /teams`, `GET /field-output-schemas` | 600 requests per user |
+
+- The 1-hour window starts with the team's (or user's) first call.
+- When the quota is exceeded, the API returns `429 {"error":"rate_limit_exceeded"}` with the `Retry-After` (seconds), `RateLimit-Limit`, `RateLimit-Remaining` and `RateLimit-Reset` headers. Wait for `Retry-After` before retrying.
+- Calls sent after the quota is exceeded still count.
+- The team's Open API setting and IP access restrictions apply regardless of plan.
+
 ## Troubleshooting
 
 ### Common Issues
@@ -191,6 +303,18 @@ If you exceed the rate limit, the API will return a `429 Too Many Requests` resp
 - Check that the header is properly formatted
 - Ensure your HTTP client is including custom headers
 - Verify there are no typos in the header name
+
+**Problem**: Calling `GET /workspaces` or `GET /forms` with an OAuth token returns a 400 error
+
+**Solutions**:
+- Include the `teamId` query parameter. You can find team IDs with `GET /teams`
+
+**Problem**: An OAuth token call returns a 403 error
+
+**Solutions**:
+- For `insufficient_scope`, check that you requested the required scope and did not send the `resource` parameter in the token request
+- For `This endpoint does not accept OAuth tokens`, call the endpoint with an API key
+- For `Unauthorized`, do not refresh the token; try again shortly
 
 ## Next Steps
 
@@ -224,6 +348,7 @@ Now that you understand authentication, you can:
 - Issue a separate API key per team member
 - Revoke unused keys right away
 - Review API key usage periodically
+- OAuth token calls are subject to the token user's team membership, workspace access, and response viewing and file download permissions
 
 ### Error Handling Best Practices
 

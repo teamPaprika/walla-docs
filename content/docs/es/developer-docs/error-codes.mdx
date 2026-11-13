@@ -22,11 +22,13 @@ La API de Walla indica el éxito o el fallo de las peticiones con códigos de es
 | Código | Estado | Descripción |
 |------|--------|-------------|
 | 400 | Bad Request | Parámetros incorrectos o petición con formato no válido |
-| 401 | Unauthorized | Fallo de autenticación (falta la clave de API o no es válida) |
+| 401 | Unauthorized | Fallo de autenticación (falta la clave de API o el token OAuth, no es válido o ha caducado) |
 | 403 | Forbidden | Permisos insuficientes (no puedes acceder a ese recurso) |
 | 404 | Not Found | Recurso no encontrado |
+| 413 | Payload Too Large | El cuerpo de la petición supera 4 KiB o el archivo supera 500 MiB (descarga de archivos de respuestas) |
 | 429 | Too Many Requests | Límite de peticiones superado |
 | 500 | Internal Server Error | Error del servidor |
+| 502 | Bad Gateway | No se pudo obtener el archivo del almacenamiento (descarga de archivos de respuestas) |
 
 ## Formato de las respuestas de error
 
@@ -37,6 +39,8 @@ Todas las respuestas de error siguen un formato JSON coherente:
   "error": "Error message describing what went wrong"
 }
 ```
+
+Algunos errores incluyen campos adicionales como `code`, `detailsType` y `details` o `scope`.
 
 ## Códigos de error en detalle
 
@@ -85,6 +89,19 @@ Se produce cuando el formato de la petición es incorrecto o incluye parámetros
    }
    ```
    **Solución**: mantén el parámetro `limit` en 100 o menos.
+
+6. **Falta `teamId` en una llamada con token OAuth**
+
+   **Solución**: al llamar a `GET /workspaces` o `GET /forms` con un token, incluye el parámetro de consulta `teamId`. Consulta los ID de equipo con `GET /teams`.
+
+7. **Falta el motivo de descarga de un archivo sensible**
+   ```json
+   {
+     "error": "A download reason is required for a secure file.",
+     "code": "REASON_REQUIRED"
+   }
+   ```
+   **Solución**: incluye `reason` (de 1 a 500 caracteres) en el cuerpo de la petición de [descarga de un archivo de respuesta (en inglés)](/en/docs/developer-docs/responses#download-a-response-file).
 
 **Escenario de ejemplo:**
 
@@ -137,6 +154,8 @@ Se produce cuando falta la clave de API o no es válida y falla la autenticació
    ```
    **Solución**: comprueba que la clave sea correcta y no haya caducado ni se haya revocado.
 
+**Con tokens OAuth**: si el token no es válido o ha caducado, se devuelve 401 con la cabecera `WWW-Authenticate: Bearer error="invalid_token"`. En ese caso, renueva el token. Si al solicitar el token faltaba el scope `openid`, seguirás recibiendo 401 aunque lo renueves, así que debes obtener uno nuevo que incluya `openid`.
+
 **Escenario de ejemplo:**
 
 ```javascript
@@ -175,6 +194,36 @@ Se produce cuando la autenticación es correcta pero no tienes permiso para acce
    }
    ```
    **Solución**: comprueba que el espacio de trabajo o el formulario pertenezcan a tu equipo y, si hace falta, pide acceso a quien administre el espacio.
+
+2. **Al token OAuth le falta un scope**
+   ```json
+   {
+     "error": "insufficient_scope",
+     "scope": "project:response.read"
+   }
+   ```
+   **Solución**: obtén un token nuevo que incluya el scope indicado en `scope`. Comprueba también que no enviaste el parámetro `resource` al solicitar el token.
+
+3. **`This endpoint does not accept OAuth tokens`**
+
+   **Solución**: es una operación solo con clave de API. Llámala con una clave de API ([Scopes y operaciones permitidas](/es/docs/developer-docs/authentication#scopes-y-operaciones-permitidas)).
+
+4. **`Unauthorized` (estado 403, token OAuth)**
+
+   **Solución**: el servidor no pudo verificar el token. No lo renueves y vuelve a intentarlo más tarde.
+
+5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+
+   **Solución**: consulta con quien administre el equipo la configuración de uso de la Open API y la restricción de acceso por IP.
+
+6. **`Access denied`**
+
+   **Solución**: comprueba el acceso al espacio de trabajo del usuario del token OAuth o, si descargas un archivo, sus permisos para ver respuestas y descargar archivos.
+
+7. **Relacionados con la descarga de archivos de respuestas**
+   - `Approval required` (`code: "APPROVAL_REQUIRED"`, `actionKey`, `projectId`): según la política de aprobación de descargas del equipo, se necesita aprobación para el formulario `projectId`.
+   - `This field is masked and cannot be downloaded.`: los campos de archivo enmascarados no se pueden descargar con la Open API.
+   - `Secure file access requires an enterprise plan.`: los campos de archivos sensibles requieren que el plan del equipo admita la función de archivos sensibles.
 
 **Pasos para resolverlo:**
 
@@ -259,6 +308,14 @@ Se produce cuando superas el límite de peticiones de la API.
 }
 ```
 
+**Cuota de llamadas con tokens OAuth**: las llamadas con tokens OAuth se cuentan aparte del límite de la clave de API y tienen una cuota por equipo según el plan ([Cuota de llamadas con tokens OAuth](/es/docs/developer-docs/authentication#cuota-de-llamadas-con-tokens-oauth)). Si la superas, se devuelve el cuerpo siguiente con las cabeceras `Retry-After` (en segundos), `RateLimit-Limit`, `RateLimit-Remaining` y `RateLimit-Reset`. Espera el tiempo indicado en `Retry-After` antes de reintentar.
+
+```json
+{
+  "error": "rate_limit_exceeded"
+}
+```
+
 **Cómo actuar:**
 
 1. **Implementa el manejo del límite**: comprueba el estado de la respuesta y gestiona bien los 429
@@ -326,6 +383,27 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 - **Aprovecha los webhooks**: si necesitas actualizaciones en tiempo real, plantéate webhooks en lugar de sondeo
 - **Agrupa las peticiones**: consulta varios elementos en una sola petición cuando sea posible
 - **Monitoriza y avisa**: haz seguimiento del consumo y configura alertas cuando te acerques al límite
+
+---
+
+### 413 Payload Too Large
+
+Se produce cuando se supera un límite de tamaño al [descargar un archivo de respuesta (en inglés)](/en/docs/developer-docs/responses#download-a-response-file).
+
+- `Request body too large`: el cuerpo de la petición supera 4 KiB. Reduce `reason` a 500 caracteres o menos.
+- `File too large`: el archivo supera 500 MiB (524.288.000 bytes). Este límite solo se aplica cuando el almacenamiento informa del tamaño del archivo (`Content-Length`).
+
+---
+
+### 502 Bad Gateway
+
+Se produce cuando no se puede obtener el archivo del almacenamiento al [descargar un archivo de respuesta (en inglés)](/en/docs/developer-docs/responses#download-a-response-file).
+
+- `Failed to fetch file`: no se pudo conectar con el almacenamiento o este respondió con un error. También puede devolverse cuando el archivo no existe en el almacenamiento.
+- `Failed to resolve file`: no se pudo generar la dirección de descarga del almacenamiento protegido.
+- `Invalid file source`: no se pudo interpretar la dirección guardada del archivo como una ubicación del almacenamiento. Quien administre el sistema debe revisar la dirección guardada o la configuración del despliegue.
+
+**Solución**: si es un error temporal, vuelve a intentarlo más tarde; si persiste, contacta con quien administre el sistema.
 
 ---
 

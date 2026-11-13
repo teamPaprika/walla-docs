@@ -22,11 +22,13 @@ Walla API 以標準 HTTP 狀態碼表示請求的成功／失敗。
 | 代碼 | 狀態 | 說明 |
 |------|--------|-------------|
 | 400 | Bad Request | 錯誤的請求參數，或格式不正確的請求 |
-| 401 | Unauthorized | 驗證失敗（缺少 API 金鑰或金鑰無效） |
+| 401 | Unauthorized | 驗證失敗（API 金鑰或 OAuth 權杖缺少、無效或已過期） |
 | 403 | Forbidden | 權限不足（無法存取該資源） |
 | 404 | Not Found | 找不到資源 |
+| 413 | Payload Too Large | 請求本文超過 4KiB 或檔案超過 500MiB（回覆檔案下載） |
 | 429 | Too Many Requests | 超過速率限制 |
 | 500 | Internal Server Error | 發生伺服器錯誤 |
+| 502 | Bad Gateway | 無法從儲存空間取得檔案（回覆檔案下載） |
 
 ## 錯誤回應格式
 
@@ -37,6 +39,8 @@ Walla API 以標準 HTTP 狀態碼表示請求的成功／失敗。
   "error": "Error message describing what went wrong"
 }
 ```
+
+部分錯誤會包含 `code`、`detailsType`／`details`、`scope` 等額外欄位。
 
 ## 各錯誤代碼詳解
 
@@ -85,6 +89,19 @@ Walla API 以標準 HTTP 狀態碼表示請求的成功／失敗。
    }
    ```
    **解決方式**：請把 `limit` 參數維持在 100 以下。
+
+6. **OAuth 權杖呼叫缺少 `teamId`**
+
+   **解決方式**：以權杖呼叫 `GET /workspaces`、`GET /forms` 時，請帶上 `teamId` 查詢參數。團隊 ID 可以用 `GET /teams` 確認。
+
+7. **下載敏感檔案時缺少原因**
+   ```json
+   {
+     "error": "A download reason is required for a secure file.",
+     "code": "REASON_REQUIRED"
+   }
+   ```
+   **解決方式**：請在[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)的請求本文中帶上 `reason`（1～500 個字元）。
 
 **範例情境：**
 
@@ -137,6 +154,8 @@ await fetch(`${API_BASE}/forms/form_abc/delivery`, {
    ```
    **解決方式**：請確認 API 金鑰正確，且尚未過期或被撤銷。
 
+**OAuth 權杖的情況**：權杖無效或已過期時，會回傳 401 並帶上 `WWW-Authenticate: Bearer error="invalid_token"` 標頭。此時請更新權杖。若請求權杖時缺少 `openid` 範圍，即使更新也會持續回傳 401，因此必須帶上 `openid` 重新取得權杖。
+
 **範例情境：**
 
 ```javascript
@@ -175,6 +194,36 @@ await fetch(`${API_BASE}/workspaces`, {
    }
    ```
    **解決方式**：請確認你請求的工作區或表單是否屬於自己的團隊，必要時向工作區管理者申請存取權限。
+
+2. **OAuth 權杖範圍不足**
+   ```json
+   {
+     "error": "insufficient_scope",
+     "scope": "project:response.read"
+   }
+   ```
+   **解決方式**：請帶上 `scope` 中顯示的範圍重新取得權杖。也請確認權杖請求中沒有送出 `resource` 參數。
+
+3. **`This endpoint does not accept OAuth tokens`**
+
+   **解決方式**：這是僅限 API 金鑰的作業。請改用 API 金鑰呼叫（[範圍與可用作業](/zh-TW/docs/developer-docs/authentication#範圍與可用作業)）。
+
+4. **`Unauthorized`（狀態 403，OAuth 權杖）**
+
+   **解決方式**：伺服器無法驗證權杖。請勿更新權杖，稍後再試。
+
+5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+
+   **解決方式**：請向團隊管理者確認團隊的 Open API 啟用設定與 IP 存取限制。
+
+6. **`Access denied`**
+
+   **解決方式**：請確認 OAuth 權杖使用者的工作區存取權限；若是下載檔案，請確認回覆查詢與檔案下載權限。
+
+7. **與回覆檔案下載相關**
+   - `Approval required`（`code: "APPROVAL_REQUIRED"`、`actionKey`、`projectId`）：依團隊的下載核准政策，需要取得 `projectId` 表單的核准。
+   - `This field is masked and cannot be downloaded.`：已遮罩的檔案欄位無法透過 Open API 下載。
+   - `Secure file access requires an enterprise plan.`：敏感檔案欄位需要團隊方案支援敏感檔案功能。
 
 **疑難排解步驟：**
 
@@ -259,6 +308,14 @@ await sendForm('published_form_id', recipients);
 }
 ```
 
+**OAuth 權杖呼叫配額**：OAuth 權杖呼叫與上述 API 金鑰限制分開計算，適用依方案、以團隊為單位的配額（[OAuth 權杖呼叫配額](/zh-TW/docs/developer-docs/authentication#oauth-權杖呼叫配額)）。超過時會回傳下列本文，並包含 `Retry-After`（秒）、`RateLimit-Limit`、`RateLimit-Remaining`、`RateLimit-Reset` 標頭。請等待 `Retry-After` 指定的時間後再重試。
+
+```json
+{
+  "error": "rate_limit_exceeded"
+}
+```
+
 **因應方式：**
 
 1. **實作速率限制處理**：確認回應狀態並妥善處理 429
@@ -326,6 +383,27 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 - **善用 Webhook**：需要即時更新時，請考慮用 Webhook 取代輪詢
 - **批次處理請求**：盡可能用一次請求查詢多個項目
 - **監控與告警**：追蹤 API 使用量，並設定在接近限制時收到通知
+
+---
+
+### 413 Payload Too Large
+
+在[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)時超過大小上限會發生。
+
+- `Request body too large`：請求本文超過 4KiB。請把 `reason` 縮短到 500 個字元以內。
+- `File too large`：檔案超過 500MiB（524,288,000 位元組）。只有在儲存空間回報檔案大小（`Content-Length`）時才會套用此上限。
+
+---
+
+### 502 Bad Gateway
+
+在[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)時無法從儲存空間取得檔案會發生。
+
+- `Failed to fetch file`：無法連線到儲存空間，或儲存空間回傳錯誤。儲存空間中沒有該檔案時也可能回傳此錯誤。
+- `Failed to resolve file`：無法產生受保護儲存空間的下載位址。
+- `Invalid file source`：無法把已儲存的檔案位址解析為儲存位置。需要由管理者確認已儲存的位址或部署設定。
+
+**解決方式**：若是暫時性錯誤，請稍後再試；若持續發生，請聯繫管理者。
 
 ---
 

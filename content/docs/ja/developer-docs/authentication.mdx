@@ -5,7 +5,20 @@ description: Walla Open API の認証方法
 
 # 認証
 
-Walla Open API は API キーによる認証を使用します。すべての API リクエストには、有効な API キーをヘッダーに含める必要があります。
+Walla Open API は API キーまたは OAuth アクセストークンで認証します。すべての API リクエストには、どちらか一方をヘッダーに含める必要があります。OAuth トークンは一部の読み取り操作と回答ファイルのダウンロードにのみ使用できます。
+
+## 認証方式の選択
+
+| 項目 | API キー | OAuth アクセストークン |
+|------|----------|------------------------|
+| ヘッダー | `X-WALLA-API-KEY: <API キー>` | `Authorization: Bearer <アクセストークン>` |
+| チームの範囲 | キーが発行されたチーム（チームの指定は不要） | トークンのユーザーが所属するチーム。`GET /workspaces`・`GET /forms` には `teamId` が必要（[チームの指定](#チームの指定)） |
+| 利用できる操作 | すべての Open API 操作 | 読み取り操作と回答ファイルのダウンロードのみ（[スコープと利用できる操作](#スコープと利用できる操作)） |
+| 権限 | API キーに紐づく権限 | トークンのユーザーのチームメンバーシップ・ワークスペースへのアクセス・回答の閲覧・ファイルのダウンロード権限 |
+| レート制限 | API キーあたり 1 時間 6,000 件 | プランごとのチーム単位の 1 時間あたりの上限（[OAuth トークンの呼び出し上限](#oauth-トークンの呼び出し上限)） |
+| 適したケース | チーム単位のサーバー連携、回答の検索・エクスポート・送信・書き込み操作 | ユーザーの権限の範囲内でデータを読み取るアプリ |
+
+2 つのヘッダーを同時に送ると、API キーが優先されます。既存の API キー連携はこれまでどおり動作します。
 
 ## API キー認証
 
@@ -94,6 +107,77 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
   .catch(error => console.error('エラー:', error));
 ```
 
+## OAuth アクセストークン
+
+OAuth アクセストークンは `Authorization: Bearer <アクセストークン>` ヘッダーで送ります。パスとレスポンスの形式は API キーでの呼び出しと同じです。ただし、呼び出せるのは下の表の操作のみです。
+
+### トークンの取得
+
+トークンは OAuth の authorization code フローで取得します。リクエストの際は次の点を守ってください。
+
+- `openid` スコープを必ず一緒にリクエストしてください。含まれていないと、すべての呼び出しが `401` になり、トークンを更新しても解決しません。
+- 使用する操作に合ったスコープ（`project:read`、`project:response.read`、`project:response.download`）をリクエストしてください。
+- トークンを更新するには `offline_access` もリクエストしてください。含まれていないと refresh トークンは発行されません。
+- `resource` パラメーター（RFC 8707）は送らないでください。送ると、そのトークンによるすべての呼び出しが `403 insufficient_scope` になります。
+
+一部のデプロイ環境（例: オンプレミス）では、新しいトークンの発行・更新が停止されている場合があります。その場合でも、すでに発行済みのトークンは有効期限が切れるか取り消されるまで使用できます。
+
+### スコープと利用できる操作
+
+パスは `/open-api/v1` を基準とします。
+
+| スコープ | 利用できる操作 |
+|----------|----------------|
+| `project:read` | `GET /teams`<br />`GET /workspaces`, `GET /workspaces/{workspaceId}`, `GET /workspaces/{workspaceId}/forms`<br />`GET /forms`, `GET /forms/{formId}`<br />`GET /forms/{formId}/fields`, `GET /forms/{formId}/fields/{fieldId}`, `GET /forms/{formId}/fields/{fieldId}/description`<br />`GET /forms/{formId}/hidden-fields`<br />`POST /forms/{formId}/exports/field-definitions`<br />`GET /field-output-schemas` |
+| `project:response.read` | `GET /forms/{formId}/responses` |
+| `project:response.download` | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file`（[回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file)） |
+
+**API キー専用の操作**: 次の操作を OAuth トークンで呼び出すと `403 This endpoint does not accept OAuth tokens` が返されます。
+
+- 特定の回答の取得 `GET /forms/{formId}/responses/{responseId}`
+- 回答の検索 `POST /forms/{formId}/responses/search`
+- 回答のエクスポート `POST /forms/{formId}/exports/responses`
+- フォームの送信（`/forms/{formId}/delivery` 以下のすべての操作）
+- 隠しフィールドの追加 `POST`・削除 `DELETE`
+
+### チームの指定
+
+OAuth トークンで `GET /workspaces` または `GET /forms` を呼び出すときは、`teamId` クエリパラメーターが必要です。含まれていないと `400` が返されます。API キーでの呼び出しでは `teamId` は無視されます。
+
+チーム ID は [`GET /teams`](/en/docs/developer-docs/workspaces#list-teams) で確認してください。トークンで呼び出すと、トークンのユーザーが所属するチームのうち、Open API の利用設定と IP アクセス制限を通過したチームのみが返されます。
+
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "team_456", "name": "マーケティングチーム", "profileUrl": null }
+  ]
+}
+```
+
+- 2 段階認証を有効にしていないゲストにもチームは一覧に表示されますが、そのチームの操作は `403` を返します。
+- トークンで `GET /workspaces/{workspaceId}` を呼び出したとき、トークンのユーザーがそのワークスペースにアクセスできない場合は `403 {"error":"Access denied"}` が返されます。
+
+### cURL の例
+
+以下の例では、発行済みのアクセストークンを環境変数 `WALLA_OAUTH_TOKEN` に保存していると仮定します。
+
+```bash
+# 1. 呼び出し可能なチームの取得 (project:read)
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. チームのワークスペースの取得 (project:read、teamId 必須)
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 3. フォームの回答一覧の取得 (project:response.read)
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+回答ファイルのダウンロード例は [回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) を参照してください。
+
 ## 認証エラー
 
 認証に失敗すると、以下のようなエラーが返されます。
@@ -123,6 +207,16 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
   "error": "Forbidden"
 }
 ```
+
+### OAuth トークンのエラー
+
+- **401**: トークンが無効、または期限切れです。レスポンスに `WWW-Authenticate: Bearer error="invalid_token"` ヘッダーが含まれます。トークンを更新すべきなのはこの場合だけです。
+- **403 `insufficient_scope`**: トークンに必要なスコープがありません。本文は `{"error":"insufficient_scope","scope":"<必要なスコープ>"}` です。
+- **403 `This endpoint does not accept OAuth tokens`**: [API キー専用の操作](#スコープと利用できる操作)です。API キーで呼び出してください。
+- **403 `Forbidden`**: チームメンバーではない、2 段階認証を有効にしていないゲストである、またはアクセスできないワークスペース ID です。
+- **403 `Unauthorized`**: サーバーがトークンを確認できませんでした。トークンが無効という意味ではないため、更新せずにしばらくしてから再試行してください。
+
+すべてのエラーの一覧は [エラーコード](/ja/docs/developer-docs/error-codes) を参照してください。
 
 ## ベストプラクティス
 
@@ -170,6 +264,24 @@ Walla Open API には、システムの安定性のためレート制限が適�
 - API の使用量をモニタリングしてください
 - 可能ならリクエストをまとめて処理してください
 
+上記の制限は API キーでの呼び出しに適用されます。
+
+#### OAuth トークンの呼び出し上限
+
+OAuth トークンでの呼び出しは、API キーの 1 時間 6,000 件の制限とは別に集計され、すべてのプランで利用できます。プランが決めるのは上限のみです。1 つのチームの上限を、そのチームのすべてのユーザーとアプリで共有します。
+
+| 対象 | 1 時間あたりの上限 |
+|------|--------------------|
+| Free プランのチーム | 600 件 |
+| Pro プランのチーム | 3,000 件 |
+| Enterprise・カスタムプランのチーム | 6,000 件 |
+| `GET /teams`、`GET /field-output-schemas` | ユーザーあたり 600 件 |
+
+- 1 時間のウィンドウは、そのチーム（またはユーザー）の最初の呼び出しから始まります。
+- 上限を超えると `429 {"error":"rate_limit_exceeded"}` が返され、`Retry-After`（秒）、`RateLimit-Limit`、`RateLimit-Remaining`、`RateLimit-Reset` ヘッダーが含まれます。`Retry-After` の分だけ待ってから再試行してください。
+- 上限を超えた後に送った呼び出しも回数に含まれます。
+- チームの Open API の利用設定と IP アクセス制限は、プランに関係なく適用されます。
+
 ## トラブルシューティング
 
 ### よくある問題
@@ -188,6 +300,18 @@ Walla Open API には、システムの安定性のためレート制限が適�
 - ヘッダーの形式が正しいか確認してください
 - HTTP クライアントでカスタムヘッダーが含まれているか確認してください
 - ヘッダー名に打ち間違いがないか確認してください
+
+**問題**: OAuth トークンで `GET /workspaces` または `GET /forms` を呼び出すと 400 エラーが発生する
+
+**解決方法**:
+- `teamId` クエリパラメーターを含めてください。チーム ID は `GET /teams` で確認できます
+
+**問題**: OAuth トークンでの呼び出しが 403 エラーを返す
+
+**解決方法**:
+- `insufficient_scope` の場合は、必要なスコープをリクエストしたか、トークンのリクエストで `resource` パラメーターを送っていないか確認してください
+- `This endpoint does not accept OAuth tokens` の場合は、API キーで呼び出してください
+- `Unauthorized` の場合は、トークンを更新せずにしばらくしてから再試行してください
 
 ## 次のステップ
 
@@ -221,6 +345,7 @@ Walla Open API には、システムの安定性のためレート制限が適�
 - チームメンバーごとに個別の API キーを発行してください
 - 使わなくなったキーはすぐに破棄してください
 - API キーの利用状況を定期的に点検してください
+- OAuth トークンでの呼び出しには、トークンのユーザーのチームメンバーシップ、ワークスペースへのアクセス権限、回答の閲覧・ファイルのダウンロード権限が適用されます
 
 ### エラー処理のベストプラクティス
 

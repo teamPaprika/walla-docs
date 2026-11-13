@@ -5,7 +5,20 @@ description: "Como autenticar na Walla Open API"
 
 # Autenticação
 
-A Walla Open API usa autenticação por chave de API. Todas as solicitações devem incluir uma chave válida no cabeçalho.
+A Walla Open API autentica com uma chave de API ou um token de acesso OAuth. Todas as solicitações devem incluir uma dessas credenciais no cabeçalho. Tokens OAuth só podem ser usados em algumas operações de leitura e no download de arquivos de respostas.
+
+## Escolher o método de autenticação
+
+| Item | Chave de API | Token de acesso OAuth |
+|------|--------|-------------------|
+| Cabeçalho | `X-WALLA-API-KEY: <chave de API>` | `Authorization: Bearer <token de acesso>` |
+| Escopo de equipe | A equipe para a qual a chave foi gerada (não é preciso indicar a equipe) | As equipes das quais o usuário do token faz parte. `GET /workspaces` e `GET /forms` exigem `teamId` ([Indicar a equipe](#indicar-a-equipe)) |
+| Operações disponíveis | Todas as operações da Open API | Apenas operações de leitura e download de arquivos de respostas ([Escopos e operações permitidas](#escopos-e-operações-permitidas)) |
+| Permissões | As permissões vinculadas à chave de API | A participação na equipe, o acesso a espaços de trabalho e as permissões de visualização de respostas e download de arquivos do usuário do token |
+| Limite de requisições | 6.000 solicitações por hora por chave de API | Cota por hora por equipe, conforme o plano ([Cota de chamadas com token OAuth](#cota-de-chamadas-com-token-oauth)) |
+| Quando usar | Integrações de servidor no nível da equipe e operações de busca, exportação, envio e escrita de respostas | Aplicativos que leem dados dentro das permissões do usuário |
+
+Se os dois cabeçalhos forem enviados, a chave de API prevalece. As integrações existentes com chave de API continuam funcionando da mesma forma.
 
 ## Autenticação por chave de API
 
@@ -94,6 +107,77 @@ axios.get('https://api.walla.my/open-api/v1/workspaces', config)
   .catch(error => console.error('오류:', error));
 ```
 
+## Tokens de acesso OAuth
+
+O token de acesso OAuth é enviado no cabeçalho `Authorization: Bearer <token de acesso>`. As rotas e o formato das respostas são os mesmos das chamadas com chave de API, mas apenas as operações da tabela abaixo podem ser chamadas.
+
+### Obter um token
+
+Os tokens são obtidos pelo fluxo OAuth authorization code. Ao solicitar, observe o seguinte.
+
+- Sempre solicite o escopo `openid`. Sem ele, todas as chamadas retornam `401`, e renovar o token não resolve.
+- Solicite os escopos correspondentes às operações que você vai usar (`project:read`, `project:response.read`, `project:response.download`).
+- Para poder renovar o token, solicite também `offline_access`. Sem ele, nenhum refresh token é emitido.
+- Não envie o parâmetro `resource` (RFC 8707). Se ele for enviado, todas as chamadas com esse token retornam `403 insufficient_scope`.
+
+Em alguns ambientes de implantação (por exemplo, on-premises), a emissão e a renovação de novos tokens podem estar desativadas. Mesmo assim, os tokens já emitidos continuam válidos até expirarem ou serem revogados.
+
+### Escopos e operações permitidas
+
+As rotas são relativas a `/open-api/v1`.
+
+| Escopo | Operações permitidas |
+|--------|------------------|
+| `project:read` | `GET /teams`<br />`GET /workspaces`, `GET /workspaces/{workspaceId}`, `GET /workspaces/{workspaceId}/forms`<br />`GET /forms`, `GET /forms/{formId}`<br />`GET /forms/{formId}/fields`, `GET /forms/{formId}/fields/{fieldId}`, `GET /forms/{formId}/fields/{fieldId}/description`<br />`GET /forms/{formId}/hidden-fields`<br />`POST /forms/{formId}/exports/field-definitions`<br />`GET /field-output-schemas` |
+| `project:response.read` | `GET /forms/{formId}/responses` |
+| `project:response.download` | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file` ([Baixar um arquivo de resposta, em inglês](/en/docs/developer-docs/responses#download-a-response-file)) |
+
+**Operações exclusivas da chave de API**: ao chamar as operações abaixo com um token OAuth, a API retorna `403 This endpoint does not accept OAuth tokens`.
+
+- Consultar uma resposta `GET /forms/{formId}/responses/{responseId}`
+- Buscar respostas `POST /forms/{formId}/responses/search`
+- Exportar respostas `POST /forms/{formId}/exports/responses`
+- Envio de formulários (todas as operações em `/forms/{formId}/delivery`)
+- Adicionar `POST` e excluir `DELETE` campos ocultos
+
+### Indicar a equipe
+
+Ao chamar `GET /workspaces` ou `GET /forms` com um token OAuth, o parâmetro de consulta `teamId` é obrigatório. Sem ele, a API retorna `400`. Nas chamadas com chave de API, `teamId` é ignorado.
+
+Consulte os IDs de equipe com [`GET /teams` (em inglês)](/en/docs/developer-docs/workspaces#list-teams). Com um token, são retornadas apenas as equipes do usuário do token que passam pela configuração de uso da Open API e pela restrição de acesso por IP.
+
+```json
+{
+  "success": true,
+  "data": [
+    { "id": "team_456", "name": "Equipe de marketing", "profileUrl": null }
+  ]
+}
+```
+
+- Convidados sem verificação em duas etapas também veem a equipe na lista, mas as operações dessa equipe retornam `403`.
+- Ao chamar `GET /workspaces/{workspaceId}` com um token, se o usuário do token não tiver acesso a esse espaço de trabalho, a API retorna `403 {"error":"Access denied"}`.
+
+### Exemplos de cURL
+
+Os exemplos abaixo pressupõem que um token de acesso já emitido foi salvo na variável de ambiente `WALLA_OAUTH_TOKEN`.
+
+```bash
+# 1. Consultar as equipes disponíveis (project:read)
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 2. Consultar os espaços de trabalho da equipe (project:read, teamId obrigatório)
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+
+# 3. Listar as respostas de um formulário (project:response.read)
+curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+Para ver um exemplo de download de arquivos de respostas, consulte [Baixar um arquivo de resposta (em inglês)](/en/docs/developer-docs/responses#download-a-response-file).
+
 ## Erros de autenticação
 
 Se a autenticação falhar, serão retornados erros como os seguintes.
@@ -123,6 +207,16 @@ Ocorre quando a autenticação é válida, mas você não tem permissão para ac
   "error": "Forbidden"
 }
 ```
+
+### Erros de token OAuth
+
+- **401**: o token é inválido ou expirou. A resposta inclui o cabeçalho `WWW-Authenticate: Bearer error="invalid_token"`. Este é o único caso em que o token deve ser renovado.
+- **403 `insufficient_scope`**: falta ao token o escopo necessário. O corpo é `{"error":"insufficient_scope","scope":"<escopo necessário>"}`.
+- **403 `This endpoint does not accept OAuth tokens`**: é uma [operação exclusiva da chave de API](#escopos-e-operações-permitidas). Chame-a com uma chave de API.
+- **403 `Forbidden`**: você não é membro da equipe, é um convidado sem verificação em duas etapas ou o ID é de um espaço de trabalho ao qual você não tem acesso.
+- **403 `Unauthorized`**: o servidor não conseguiu verificar o token. Isso não significa que o token seja inválido; não o renove e tente novamente mais tarde.
+
+Consulte a lista completa de erros em [Códigos de erro](/pt-BR/docs/developer-docs/error-codes).
 
 ## Boas práticas
 
@@ -170,6 +264,24 @@ Ao exceder o limite, a API retorna `429 Too Many Requests`. Nesse caso:
 - Monitore o uso da API.
 - Processe solicitações em lote quando possível.
 
+Esses limites se aplicam às chamadas com chave de API.
+
+#### Cota de chamadas com token OAuth
+
+As chamadas com token OAuth são contabilizadas separadamente do limite de 6.000 solicitações por hora da chave de API e estão disponíveis em todos os planos. O plano define apenas a cota. Todos os usuários e aplicativos de uma equipe compartilham a cota dessa equipe.
+
+| Aplica-se a | Cota por hora |
+|------|---------------|
+| Equipes do plano Free | 600 chamadas |
+| Equipes do plano Pro | 3.000 chamadas |
+| Equipes dos planos Enterprise e personalizados | 6.000 chamadas |
+| `GET /teams`, `GET /field-output-schemas` | 600 chamadas por usuário |
+
+- A janela de 1 hora começa na primeira chamada da equipe (ou do usuário).
+- Ao exceder a cota, a API retorna `429 {"error":"rate_limit_exceeded"}` com os cabeçalhos `Retry-After` (em segundos), `RateLimit-Limit`, `RateLimit-Remaining` e `RateLimit-Reset`. Aguarde o tempo indicado em `Retry-After` antes de tentar novamente.
+- Chamadas enviadas depois de exceder a cota também são contabilizadas.
+- A configuração de uso da Open API da equipe e a restrição de acesso por IP se aplicam independentemente do plano.
+
 ## Solução de problemas
 
 ### Problemas frequentes
@@ -188,6 +300,18 @@ Ao exceder o limite, a API retorna `429 Too Many Requests`. Nesse caso:
 - Verifique o formato do cabeçalho.
 - Verifique se o cliente HTTP inclui os cabeçalhos personalizados.
 - Verifique se há erros de digitação no nome do cabeçalho.
+
+**Problema**: erro 400 ao chamar `GET /workspaces` ou `GET /forms` com um token OAuth
+
+**Solução**:
+- Inclua o parâmetro de consulta `teamId`. Os IDs de equipe podem ser consultados com `GET /teams`.
+
+**Problema**: chamadas com token OAuth retornam erro 403
+
+**Solução**:
+- Se for `insufficient_scope`, verifique se você solicitou o escopo necessário e se não enviou o parâmetro `resource` ao solicitar o token.
+- Se for `This endpoint does not accept OAuth tokens`, chame com uma chave de API.
+- Se for `Unauthorized`, não renove o token e tente novamente mais tarde.
 
 ## Próximos passos
 
@@ -221,6 +345,7 @@ Após configurar a autenticação, consulte os documentos abaixo.
 - Gere chaves separadas para cada membro da equipe.
 - Revogue imediatamente as chaves que não são mais usadas.
 - Revise periodicamente o uso das chaves de API.
+- Chamadas com token OAuth seguem a participação na equipe, o acesso a espaços de trabalho e as permissões de visualização de respostas e download de arquivos do usuário do token.
 
 ### Boas práticas de tratamento de erros
 

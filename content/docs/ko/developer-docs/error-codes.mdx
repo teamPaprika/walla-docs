@@ -22,11 +22,13 @@ Walla API는 표준 HTTP 상태 코드로 요청의 성공/실패를 나타냅�
 | 코드 | 상태 | 설명 |
 |------|--------|-------------|
 | 400 | Bad Request | 잘못된 요청 매개변수 또는 형식이 올바르지 않은 요청 |
-| 401 | Unauthorized | 인증 실패 (API 키 누락 또는 유효하지 않음) |
+| 401 | Unauthorized | 인증 실패 (API 키 또는 OAuth 토큰 누락·무효·만료) |
 | 403 | Forbidden | 권한 부족 (해당 리소스에 접근할 수 없음) |
 | 404 | Not Found | 리소스를 찾을 수 없음 |
+| 413 | Payload Too Large | 요청 본문 4KiB 또는 파일 500MiB 초과 (응답 파일 다운로드) |
 | 429 | Too Many Requests | 속도 제한 초과 |
 | 500 | Internal Server Error | 서버 오류 발생 |
+| 502 | Bad Gateway | 저장소에서 파일을 가져오지 못함 (응답 파일 다운로드) |
 
 ## 오류 응답 형식
 
@@ -37,6 +39,8 @@ Walla API는 표준 HTTP 상태 코드로 요청의 성공/실패를 나타냅�
   "error": "Error message describing what went wrong"
 }
 ```
+
+일부 오류에는 `code`, `detailsType`·`details`, `scope` 같은 추가 필드가 포함됩니다.
 
 ## 상세 오류 코드
 
@@ -85,6 +89,19 @@ Walla API는 표준 HTTP 상태 코드로 요청의 성공/실패를 나타냅�
    }
    ```
    **해결 방법**: `limit` 매개변수를 100 이하로 유지하세요.
+
+6. **OAuth 토큰 호출에서 `teamId` 누락**
+
+   **해결 방법**: 토큰으로 `GET /workspaces`·`GET /forms`를 호출할 때는 `teamId` 쿼리 파라미터를 포함하세요. 팀 ID는 `GET /teams`로 확인합니다.
+
+7. **민감 파일 다운로드 사유 누락**
+   ```json
+   {
+     "error": "A download reason is required for a secure file.",
+     "code": "REASON_REQUIRED"
+   }
+   ```
+   **해결 방법**: [응답 파일 다운로드](/ko/docs/developer-docs/responses#응답-파일-다운로드) 요청 본문에 `reason`(1~500자)을 포함하세요.
 
 **예시 시나리오:**
 
@@ -137,6 +154,8 @@ API 키가 없거나 유효하지 않아 인증에 실패한 경우 발생합니
    ```
    **해결 방법**: API 키가 올바르고 만료·취소되지 않았는지 확인하세요.
 
+**OAuth 토큰의 경우**: 토큰이 유효하지 않거나 만료되면 `WWW-Authenticate: Bearer error="invalid_token"` 헤더와 함께 401을 반환합니다. 이때 토큰을 갱신하세요. 토큰을 요청할 때 `openid` 스코프가 빠졌다면 갱신해도 계속 401이므로 `openid`를 포함해 다시 발급받아야 합니다.
+
 **예시 시나리오:**
 
 ```javascript
@@ -175,6 +194,36 @@ await fetch(`${API_BASE}/workspaces`, {
    }
    ```
    **해결 방법**: 요청한 워크스페이스 또는 폼이 본인 팀의 리소스인지 확인하고, 필요하면 워크스페이스 관리자에게 접근 권한을 요청하세요.
+
+2. **OAuth 토큰 스코프 부족**
+   ```json
+   {
+     "error": "insufficient_scope",
+     "scope": "project:response.read"
+   }
+   ```
+   **해결 방법**: `scope`에 표시된 스코프를 포함해 토큰을 다시 발급받으세요. 토큰 요청에 `resource` 파라미터를 보내지 않았는지도 확인하세요.
+
+3. **`This endpoint does not accept OAuth tokens`**
+
+   **해결 방법**: API 키 전용 작업입니다. API 키로 호출하세요 ([스코프와 사용 가능한 작업](/ko/docs/developer-docs/authentication#스코프와-사용-가능한-작업)).
+
+4. **`Unauthorized` (상태 403, OAuth 토큰)**
+
+   **해결 방법**: 서버가 토큰을 확인하지 못한 경우입니다. 토큰을 갱신하지 말고 잠시 후 다시 시도하세요.
+
+5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+
+   **해결 방법**: 팀의 Open API 사용 설정과 IP 접근 제한을 팀 관리자에게 확인하세요.
+
+6. **`Access denied`**
+
+   **해결 방법**: OAuth 토큰 사용자의 워크스페이스 접근 권한, 또는 파일 다운로드 시 응답 조회·파일 다운로드 권한을 확인하세요.
+
+7. **응답 파일 다운로드 관련**
+   - `Approval required` (`code: "APPROVAL_REQUIRED"`, `actionKey`, `projectId`): 팀의 다운로드 승인 정책에 따라 `projectId` 폼에 대한 승인이 필요합니다.
+   - `This field is masked and cannot be downloaded.`: 마스킹된 파일 필드는 Open API로 내려받을 수 없습니다.
+   - `Secure file access requires an enterprise plan.`: 민감 파일 필드는 팀 플랜이 민감 파일 기능을 지원해야 합니다.
 
 **문제 해결 단계:**
 
@@ -259,6 +308,14 @@ API 속도 제한을 초과한 경우 발생합니다.
 }
 ```
 
+**OAuth 토큰 호출 허용량**: OAuth 토큰 호출은 위 API 키 제한과 별도로 플랜별 팀 단위 허용량이 적용됩니다([OAuth 토큰 호출 허용량](/ko/docs/developer-docs/authentication#oauth-토큰-호출-허용량)). 초과하면 아래 본문과 함께 `Retry-After`(초), `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset` 헤더를 반환합니다. `Retry-After`만큼 기다린 뒤 다시 시도하세요.
+
+```json
+{
+  "error": "rate_limit_exceeded"
+}
+```
+
 **대처 방법:**
 
 1. **속도 제한 처리 구현**: 응답 상태를 확인하고 429를 적절히 처리하세요
@@ -326,6 +383,27 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 - **웹훅 활용**: 실시간 업데이트가 필요하면 폴링 대신 웹훅을 고려하세요
 - **요청 일괄 처리**: 가능하면 한 번의 요청으로 여러 항목을 조회하세요
 - **모니터링 및 알림**: API 사용량을 추적하고, 제한에 가까워지면 알림을 받도록 설정하세요
+
+---
+
+### 413 Payload Too Large
+
+[응답 파일 다운로드](/ko/docs/developer-docs/responses#응답-파일-다운로드)에서 크기 상한을 넘은 경우 발생합니다.
+
+- `Request body too large`: 요청 본문이 4KiB를 넘었습니다. `reason`을 500자 이하로 줄이세요.
+- `File too large`: 파일이 500MiB(524,288,000바이트)를 넘었습니다. 이 상한은 저장소가 파일 크기(`Content-Length`)를 알려 준 경우에만 적용됩니다.
+
+---
+
+### 502 Bad Gateway
+
+[응답 파일 다운로드](/ko/docs/developer-docs/responses#응답-파일-다운로드)에서 저장소의 파일을 가져오지 못한 경우 발생합니다.
+
+- `Failed to fetch file`: 저장소 연결에 실패했거나 저장소가 오류로 응답했습니다. 저장소에 파일이 없을 때도 이 응답이 올 수 있습니다.
+- `Failed to resolve file`: 보호 저장소의 다운로드 주소를 만들지 못했습니다.
+- `Invalid file source`: 저장된 파일 주소를 저장소 위치로 해석하지 못했습니다. 관리자가 저장된 주소나 배포 설정을 확인해야 합니다.
+
+**해결 방법**: 일시적인 오류라면 잠시 후 다시 시도하고, 계속되면 관리자에게 문의하세요.
 
 ---
 
