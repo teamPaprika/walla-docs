@@ -5,6 +5,7 @@ plan:
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
 ## Alterar o título do projeto
 ### Alterar o título exibido no espaço de trabalho
@@ -51,6 +52,10 @@ Se nenhum título for definido, o título padrão "Walla Form" será exibido aut
 - No cartão do projeto, clique em `...` (Mais) → 'Mover para espaço de trabalho' e selecione o destino.
 
 <img src="/images/guides/manage-forms/project-move.png" alt="Mover para espaço de trabalho no menu Mais do cartão do projeto" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+<Callout type="warn" title="Atenção">
+Se a sua equipe Enterprise utiliza o [Controle de acesso às respostas](/pt-BR/docs/help-center/security/response-access-control), ao mover um formulário para outro espaço de trabalho **todas as regras de acesso às respostas baseadas nas funções do espaço de trabalho anterior serão excluídas**. Após mover, revise as configurações de acesso às respostas no espaço de trabalho de destino.
+</Callout>
 
 ## Excluir e restaurar projetos
 

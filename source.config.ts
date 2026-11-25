@@ -37,7 +37,7 @@ function stripMediaOutsideKorean() {
   const isMedia = (node: MdastNode) =>
     node.type === 'image' ||
     ((node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') &&
-      (node.name === 'img' || node.name === 'video'));
+      (node.name === 'img' || node.name === 'video' || node.name === 'InteractiveTour'));
 
   return (tree: MdastNode, file: { path?: string }) => {
     if (/[\\/]content[\\/]docs[\\/]ko[\\/]/.test(file.path ?? '')) return;

@@ -1,0 +1,81 @@
+---
+title: Control de acceso a respuestas
+description: "Restringe el alcance de respuestas que puede ver cada rol a «Todas las respuestas» o «Respuestas coincidentes»."
+plan: enterprise
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Incluso entre miembros que participan en un mismo proyecto de formulario, a veces cada persona debe **consultar únicamente las respuestas que le corresponden** según su región, departamento o rango de puntuación. Con la función de control de acceso a respuestas (**Acceso a respuestas**) del **plan Enterprise**, puedes controlar por proyecto el alcance de respuestas visibles; por ejemplo, mostrar a un investigador asignado a Seúl solo las respuestas donde `Región = Seúl` y ocultar las de Gyeonggi o Busan.
+
+El control de acceso a respuestas se aplica en **2 pasos**:
+
+1. **Nivel de rol del espacio de trabajo**: En **Configuración del espacio de trabajo → Roles y permisos**, selecciona **Definir por proyecto** en el desplegable **Ver respuestas** del rol objetivo.
+2. **Nivel de proyecto**: En el editor del formulario, ve a **Configuración del formulario → Permisos del proyecto**, elige el rol objetivo, selecciona **No puede ver respuestas**, **Todas las respuestas** o **Respuestas coincidentes** en el desplegable **Respuestas → Ver respuestas** y pulsa **Guardar** en la parte inferior.
+
+## Simulador de filtros por condición
+
+En el siguiente simulador, cambia las reglas aplicadas al rol **Investigador de Seúl** para comprobar al instante cómo se reflejan en la hoja de respuestas, las estadísticas y las analíticas de visitas y comportamiento.
+
+<ResponseAccessSimulator locale="es" />
+
+## Recorrido por el flujo de configuración
+
+Sigue estos pasos para configurar un rol del espacio de trabajo, guardar condiciones en los permisos del proyecto y comprobar cómo las ve un miembro con acceso restringido:
+
+<Steps>
+  <Step>
+    ### Configura el rol del espacio de trabajo
+
+    En **Configuración del espacio de trabajo → Roles y permisos**, selecciona el rol correspondiente (por ejemplo, un rol personalizado como `Investigador de Seúl`) y, en la pestaña **Permisos del espacio de trabajo**, cambia el desplegable **Ver respuestas** a **Definir por proyecto**.
+  </Step>
+  <Step>
+    ### Abre la configuración del formulario
+
+    Abre el editor del formulario y haz clic en el icono `⚙️` (**Configuración del formulario**) en la esquina superior derecha.
+  </Step>
+  <Step>
+    ### Despliega Permisos del proyecto y elige el rol
+
+    En el menú lateral izquierdo, haz clic en **Permisos del proyecto** para desplegar la lista de roles y selecciona el rol que quieres configurar.
+  </Step>
+  <Step>
+    ### Configura Ver respuestas y guarda
+
+    En el grupo **Respuestas**, abre el desplegable **Ver respuestas**, selecciona **Respuestas coincidentes**, añade las reglas y condiciones necesarias (por ejemplo, `Región incluye alguna de [Seúl]`) y haz clic en **Guardar** en la parte inferior.
+  </Step>
+  <Step>
+    ### Comprueba la vista con acceso restringido
+
+    Cuando un miembro asignado a ese rol abre la **Hoja de respuestas**, las **Respuestas individuales** o **Analíticas**, solo ve las filas y estadísticas permitidas junto con los avisos de acceso restringido.
+  </Step>
+</Steps>
+
+## Cómo crear reglas de condición
+
+Al seleccionar **Respuestas coincidentes**, puedes combinar **reglas** y **condiciones**.
+
+- **Condiciones (AND)**: Si añades varias condiciones dentro de una misma regla, solo se permiten las respuestas que **cumplan todas las condiciones a la vez**. *(Ejemplo: `Región incluye alguna de [Seúl]` **Y** `Satisfacción general mayor o igual que 4`)*
+- **Reglas (OR)**: Si añades otra regla con **Añadir regla**, se podrán ver las respuestas que **cumplan al menos una de las reglas**.
+- **Tipos de campo compatibles**: Puedes filtrar por `Fecha de envío`, preguntas de selección (opción múltiple, desplegable, escala lineal, etc.), texto corto, número o fecha.
+
+<Callout type="warn" title="Advertencia">
+Justo después de cambiar **Ver respuestas** a **Definir por proyecto** en el rol del espacio de trabajo, los miembros con ese rol no podrán ver ninguna respuesta hasta que guardes una regla en el formulario individual (estado **No puede ver respuestas**). Asegúrate de entrar en **Configuración del formulario → Permisos del proyecto** de cada formulario, seleccionar el rol y guardar **Todas las respuestas** o **Respuestas coincidentes** en **Respuestas → Ver respuestas**.
+</Callout>
+
+## Comportamiento en las pantallas de resultados y gestión
+
+Cuando un miembro con acceso restringido a las respuestas entra en las pantallas de resultados del proyecto, el sistema funciona así:
+
+| Área funcional | Comportamiento |
+| --- | --- |
+| **Hoja de respuestas** | En la parte superior aparece el aviso **«Solo se muestran las respuestas a las que tienes acceso.»** y solo se ven las filas que cumplen las condiciones. *(Si la búsqueda o los filtros coinciden con 0 respuestas accesibles, se muestra «No hay respuestas accesibles con los filtros actuales.»).* |
+| **Respuestas individuales y estadísticas** | Solo se agregan y muestran las respuestas accesibles, por lo que no se exponen cifras ni textos originales de respuestas ocultas. |
+| **Descargar y eliminar respuestas** | Aunque el rol tenga permiso para descargar o eliminar, solo puede descargar o borrar las respuestas a las que tiene acceso. *(Si hay 0 respuestas descargables, no se permite la descarga).* |
+| **Analíticas (análisis de visitas y comportamiento)** | Para evitar que métricas de tráfico general como visualizaciones o tasa de abandono se muestren separadas del subconjunto de respuestas permitido, **no se ofrece el análisis de visitas y comportamiento**. *(Un banner superior invita a usar Estadísticas de respuestas).* |
+| **Mover proyecto de espacio de trabajo** | Al mover un formulario a otro espacio de trabajo, **se eliminan todas las reglas de acceso a respuestas** basadas en los roles del espacio de trabajo anterior. Tras moverlo, debes volver a configurar las reglas en el nuevo espacio de trabajo. |
+
+<Callout type="info" title="Nota">
+Al guardar una política de acceso a respuestas, **se aplica de inmediato con independencia de si vuelves a publicar el formulario**. Sin embargo, los campos de condición se eligen a partir de las preguntas ya publicadas; si añades una pregunta nueva, publica primero el formulario antes de seleccionarla en una regla de condición.
+</Callout>

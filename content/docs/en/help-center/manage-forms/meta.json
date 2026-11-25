@@ -3,6 +3,7 @@
   "pages": [
     "field-template",
     "managing-projects",
+    "project-permissions",
     "exporting-a-survey",
     "closing-a-survey",
     "project-tags",

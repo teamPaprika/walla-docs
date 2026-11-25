@@ -1,0 +1,81 @@
+---
+title: "Controle de acesso às respostas"
+description: "Restrinja o escopo de respostas que cada função pode visualizar em um formulário para 'Todas as respostas' ou 'Respostas correspondentes'."
+plan: enterprise
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Mesmo entre membros que colaboram no mesmo projeto de formulário, pode ser necessário que cada pessoa **visualize apenas as respostas sob sua responsabilidade**, de acordo com região, departamento ou faixa de pontuação. Com o recurso de controle de acesso às respostas do **plano Enterprise**, você pode mostrar a um pesquisador responsável por Seul apenas as respostas em que `Região de residência = Seul` e ocultar as respostas de Gyeonggi e Busan.
+
+O controle de acesso às respostas funciona em **2 etapas**:
+
+1. **Nível de função do espaço de trabalho**: Em **Configurações do espaço de trabalho → Funções e permissões**, selecione **Definir por projeto** no menu suspenso **Visualizar respostas** da função desejada.
+2. **Nível do projeto**: No editor do formulário, acesse **Configurações do formulário → Permissões do projeto**, selecione a função desejada, escolha **Não permitido**, **Todas as respostas** ou **Respostas correspondentes** no menu suspenso **Respostas → Ver respostas** e clique em **Salvar** na parte inferior.
+
+## Simulador de filtro por condições
+
+Experimente o simulador abaixo alterando as regras aplicadas à função **Pesquisador de Seul** para ver na hora como as restrições refletem na planilha de respostas, nas estatísticas e nas análises de comportamento.
+
+<ResponseAccessSimulator locale="pt-BR" />
+
+## Fluxo de configuração passo a passo
+
+Veja como configurar a função no espaço de trabalho, salvar as condições no projeto e como a restrição aparece para um membro limitado:
+
+<Steps>
+  <Step>
+    ### Defina a função do espaço de trabalho como "Definir por projeto"
+
+    Em **Configurações do espaço de trabalho → Funções e permissões**, altere o menu suspenso **Visualizar respostas** na função alvo (por exemplo, `Pesquisador de Seul`) para **Definir por projeto**.
+  </Step>
+  <Step>
+    ### Selecione a função em Permissões do projeto
+
+    No editor do formulário, expanda **Configurações do formulário → Permissões do projeto** e clique na função desejada. Até que o acesso seja liberado no projeto, a função permanece bloqueada (**Não permitido**); selecione **Respostas correspondentes** no menu suspenso **Respostas → Ver respostas** para habilitar o filtro condicional.
+  </Step>
+  <Step>
+    ### Adicione regras condicionais e salve
+
+    Insira uma condição (como `Região de residência = Seul`) e clique em **Salvar** na parte inferior. A regra passa a valer imediatamente na planilha de respostas, nas respostas individuais, nas estatísticas e nos downloads dessa função.
+  </Step>
+  <Step>
+    ### Confira a visualização restrita na planilha de respostas
+
+    Quando um membro com a função `Pesquisador de Seul` abre a planilha de respostas, vê o aviso **"Apenas as respostas às quais você tem acesso são exibidas."** no topo e apenas as respostas que atendem à regra.
+  </Step>
+  <Step>
+    ### Confira o aviso nas análises de comportamento
+
+    Para membros com acesso restrito às respostas, as análises de visitas e comportamento não são exibidas; um aviso no topo orienta a analisar as respostas acessíveis em **Estatísticas de respostas**.
+  </Step>
+</Steps>
+
+## Como criar regras condicionais
+
+Ao selecionar **Respostas correspondentes**, você pode combinar **regras** e **condições**:
+
+- **Condições (AND)**: Quando você adiciona várias condições dentro da mesma regra, apenas as respostas que **atendem a todas as condições simultaneamente** são liberadas. *(Exemplo: `Região de residência contém qualquer uma [Seul]` **E** `Satisfação geral maior ou igual a 4`)*
+- **Regras (OR)**: Ao adicionar uma regra separada com **Adicionar regra**, ficam visíveis as respostas que **atendem a qualquer uma das regras**.
+- **Tipos de campo compatíveis**: Você pode filtrar por `Data/hora de envio`, perguntas de seleção (múltipla escolha, lista suspensa, escala linear etc.), texto curto, número e data.
+
+<Callout type="warn" title="Atenção">
+Logo após alterar **Visualizar respostas** para **Definir por projeto** na função do espaço de trabalho, os membros dessa função não poderão visualizar respostas em nenhum formulário até que uma regra seja salva individualmente (**Não permitido** por padrão). Lembre-se de selecionar **Todas as respostas** ou **Respostas correspondentes** em **Configurações do formulário → Permissões do projeto → Respostas → Ver respostas** e clicar em **Salvar** em cada formulário necessário.
+</Callout>
+
+## Comportamento nas telas de resultados e gerenciamento
+
+Quando um membro de função com acesso restrito às respostas abre as telas de resultados de um projeto, o comportamento é o seguinte:
+
+| Área | Comportamento |
+| --- | --- |
+| **Planilha de respostas** | Exibe o aviso **"Apenas as respostas às quais você tem acesso são exibidas."** no topo e mostra apenas as linhas que atendem às condições. *(Se 0 respostas acessíveis coincidirem com a busca ou os filtros aplicados, será exibida uma mensagem informando que nenhuma resposta acessível corresponde ao filtro atual.)* |
+| **Respostas individuais · Estatísticas de respostas** | Apenas as respostas acessíveis são exibidas e contabilizadas, impedindo a exposição de valores ou textos originais das respostas ocultas. |
+| **Baixar · Excluir respostas** | Mesmo com permissão para baixar ou excluir, apenas as respostas acessíveis podem ser exportadas ou excluídas. *(Se houver 0 respostas disponíveis, o download não será permitido.)* |
+| **Análises (visitas e comportamento)** | Para evitar que métricas gerais de tráfego (como visualizações e taxa de abandono) sejam expostas fora do conjunto de respostas permitido, **as análises de visitas e comportamento não são disponibilizadas**. *(Um aviso no topo orienta o usuário a acessar Estatísticas de respostas.)* |
+| **Mover projeto de espaço de trabalho** | Se o formulário for movido para outro espaço de trabalho, todas as **regras de acesso às respostas vinculadas às funções do espaço de trabalho anterior serão excluídas**. Após mover, configure as regras novamente no novo espaço de trabalho. |
+
+<Callout type="info" title="Observação">
+Ao salvar uma política de acesso às respostas, ela é **aplicada imediatamente, independentemente de republicar o formulário**. Como os campos das condições são selecionados com base nas perguntas já publicadas, publique o formulário primeiro caso tenha adicionado novas perguntas antes de usá-las em uma regra.
+</Callout>

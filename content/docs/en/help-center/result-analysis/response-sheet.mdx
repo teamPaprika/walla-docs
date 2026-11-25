@@ -4,6 +4,8 @@ description: "The 'Response Sheet' shows your collected response data in a table
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
 ## Basic Features
 
 - View response data: See all raw data collected through the survey.
@@ -71,4 +73,8 @@ At the bottom of the detail view, you can find a summary of the project name, re
 
 <Callout title="Tip">
 Use filters to quickly analyze only the data you need by period, field value, keyword, and more. Open the response detail view with filters applied, and you can browse only the filtered responses in order.
+</Callout>
+
+<Callout type="info" title="Note">
+For roles whose viewing scope is restricted by [Response Access Control](/en/docs/help-center/security/response-access-control) on an Enterprise team, a banner reading **"Only responses you can access are shown."** appears at the top, and only response rows matching the allowed conditions can be viewed, downloaded, or deleted.
 </Callout>

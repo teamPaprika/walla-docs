@@ -1,19 +1,86 @@
 ---
-title: "Configurar permissões"
-description: "Defina os recursos e as permissões disponíveis para cada função da equipe e do espaço de trabalho (proprietário, administrador e membro)."
+title: "Gerenciar permissões por função"
+description: "Configure as permissões da equipe, as funções do espaço de trabalho (padrão, não atribuído e personalizadas) e o escopo de permissões por projeto."
 plan: enterprise
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Configurar permissões dos membros da equipe
+O sistema de permissões do Walla funciona em três camadas: **permissões da equipe**, **permissões de função do espaço de trabalho** e **permissões individuais do projeto**. Os recursos de segurança e administração de toda a equipe são controlados no gerenciamento da equipe, enquanto a criação e edição de formulários e a visualização e o download de respostas são controlados no nível do espaço de trabalho e do projeto.
 
-A hierarquia de permissões da equipe é proprietário > administrador > membro.
-O proprietário pode ativar ou desativar permissões detalhadas das funções **Administrador** e **Membro** na seção `Permissões das funções`, no final da página **Membros**.
+## Diferenças de permissões por plano
 
-<img src="/images/guides/team-workspace/team-roles-admin.png" alt="Aba Administrador das permissões por função com opções de convidar membros, criar espaços de trabalho, remover membros, alterar funções, configurar segurança e baixar logs ativadas" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+| Categoria | Planos Free · Pro | Plano Enterprise |
+| --- | --- | --- |
+| **Edição de permissões por função** | Administradores e membros compartilham as mesmas permissões do espaço de trabalho (`Proprietário`, `Administrador` e `Membro` fixos) | Permite **Adicionar função**, usar a função **Não atribuído** e editar permissões detalhadas por função |
+| **Função padrão de convite** | Membro *(aplicada por padrão nos convites)* | **Não atribuído** *(padrão em links de convite e convites diretos)* |
+| **Escopo de aplicação** | Ligado/desligado em todo o espaço de trabalho | Permite delegar permissões de projeto e resposta com **Definir por projeto** |
+| **Controle de acesso às respostas** | Não disponível | Suporte à visualização condicional por função ([Controle de acesso às respostas](/pt-BR/docs/help-center/security/response-access-control)) |
 
-## Configurar permissões dos membros do espaço de trabalho
-Clique em `⚙️` no espaço de trabalho para abrir as configurações. Na aba Funções e permissões, configure as permissões de administradores e membros.
+<Callout type="info" title="Observação">
+Nos planos Free e Pro, administradores e membros possuem as mesmas permissões no espaço de trabalho. **Adicionar função**, a função **Não atribuído** e a personalização de permissões por função estão disponíveis no **plano Enterprise**.
+</Callout>
 
-<img src="/images/guides/team-workspace/workspace-roles-permissions.png" alt="Aba Funções e permissões das configurações do espaço de trabalho com opções para Admin e Member" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+## Permissões da equipe
+
+São as permissões que abrangem membros, faturamento, criação de espaços de trabalho e configurações de segurança em toda a equipe. Elas são gerenciadas na barra lateral esquerda em **Gerenciamento da equipe → Permissões por função**.
+
+| Nome da permissão | Descrição |
+| --- | --- |
+| **Convidar membros da equipe** | Convida membros para a equipe por e-mail ou link de convite. |
+| **Criar espaços de trabalho** | Cria novos espaços de trabalho dentro da equipe. |
+| **Remover membros da equipe** | Remove membros existentes da equipe. |
+| **Alterar função** | Altera a função na equipe de um membro (Administrador · Membro). |
+| **Configurações de segurança da equipe** | Define políticas de segurança da equipe, como autenticação de dois fatores (MFA), duração da sessão de login, restrição de acesso por IP, bloqueio de IA externa e fluxo de aprovação. |
+| **Gerenciar faturamento** | Altera o plano da equipe e gerencia métodos de pagamento. |
+| **Baixar logs da equipe** | Exporta os logs de atividades da equipe. |
+
+## Funções do espaço de trabalho
+
+Gerenciam as permissões para formulários e respostas dentro de um espaço de trabalho. Você pode acessá-las clicando no ícone de engrenagem (**Configurações do espaço de trabalho**) no canto superior direito do espaço de trabalho → **Funções e permissões**.
+
+- **Proprietário (Owner)**: O criador do espaço de trabalho ou o usuário que recebeu a propriedade, com todas as permissões fixas.
+- **Administrador (Admin)**: Possui a maioria das permissões ativadas por padrão, incluindo gerenciamento de projetos, membros e convites.
+- **Membro (Member)**: Recebe as permissões necessárias para a operação diária, como criar e editar projetos e consultar ou baixar respostas.
+- **Não atribuído (Restrito / Unassigned)** *(Enterprise)*: Usada como função padrão para novos convites; inicia com todas as permissões de projeto e respostas desativadas para que apenas o necessário seja liberado seletivamente.
+- **Funções personalizadas** *(Enterprise)*: Clique em **Adicionar função** para criar funções adaptadas à sua equipe, como `Pesquisador de Seul` ou `Auditor externo`, e gerencie as permissões detalhadas e os membros atribuídos nas abas **Permissões do espaço de trabalho**, **Permissões por projeto** e **Lista de membros**. *(Quando a função possui ao menos uma permissão configurada como **Definir por projeto**, a aba **Permissões por projeto** também é exibida.)*
+
+## As 17 permissões detalhadas do espaço de trabalho
+
+A aba **Permissões do espaço de trabalho** das funções do espaço de trabalho divide-se em três grupos: **Projeto**, **Privacidade** e **Avançado**. *(No plano Enterprise, as 8 permissões indicadas na coluna 'Delegação por projeto' da tabela abaixo podem ser definidas no menu suspenso como **Permitir tudo**, **Definir por projeto** ou **Não permitido**.)*
+
+### Projeto (10)
+
+| Nome da permissão | Descrição | Delegação por projeto |
+| --- | --- | --- |
+| **Criar projetos** | Permite criar novos projetos no espaço de trabalho. | Permitir/bloquear em todo o espaço |
+| **Duplicar projetos** | Permite duplicar projetos existentes. | Permite **Definir por projeto** |
+| **Gerenciar projetos** | Permite mover, arquivar e excluir projetos. | Permite **Definir por projeto** |
+| **Editar projetos** | Permite editar projetos e atribuir etiquetas. | Permite **Definir por projeto** |
+| **Gerenciar etiquetas** | Permite criar, renomear e excluir etiquetas compartilhadas do espaço de trabalho. | Permitir/bloquear em todo o espaço |
+| **Gerenciar automações** | Permite visualizar, criar, editar e excluir automações. *(Para reenviar respostas anteriores pelo histórico de execução, também é necessária a permissão **Visualizar respostas**.)* | Permite **Definir por projeto** |
+| **Enviar formulários** | Permite cadastrar, editar e excluir destinatários e enviar formulários. | Permite **Definir por projeto** |
+| **Visualizar respostas** | Escopo de respostas que esta função pode visualizar. Escolha entre **Permitir tudo**, **Definir por projeto** ou **Não permitido**. | Permite **Definir por projeto** *(suporta acesso condicional)* |
+| **Excluir respostas** | Permite excluir respostas do formulário. | Permite **Definir por projeto** |
+| **Baixar respostas** | Permite baixar respostas em formatos como CSV e Excel. | Permite **Definir por projeto** |
+
+### Privacidade (3)
+
+| Nome da permissão | Descrição |
+| --- | --- |
+| **Editar opções de mascaramento** | Permite ativar ou desativar o [mascaramento de dados](/pt-BR/docs/help-center/security/data-masking) por campo. |
+| **Acessar respostas mascaradas** | Permite revelar e consultar o conteúdo original de respostas mascaradas (`*****`). *(Ao revelar, o registro de motivo e políticas de aprovação podem ser exigidos.)* |
+| **Configurar exclusão automática de respostas** | Permite definir o ciclo de [exclusão automática de respostas](/pt-BR/docs/help-center/security/auto-delete-responses) por formulário. |
+
+### Avançado (4)
+
+| Nome da permissão | Descrição |
+| --- | --- |
+| **Editar funções e permissões** | Permite adicionar, renomear e excluir funções do espaço de trabalho e modificar suas permissões. |
+| **Atribuir funções** | Permite alterar a função de membros e convites no espaço de trabalho. |
+| **Adicionar membros** | Permite adicionar membros da equipe ao espaço de trabalho ou convidar novos membros. |
+| **Remover membros** | Permite remover membros existentes do espaço de trabalho. |
+
+<Callout type="idea" title="Observação">
+Para liberar permissões de edição, download ou exclusão apenas em projetos específicos, ou restringir a visualização às respostas que atendem a determinadas condições, consulte os guias [Permissões do projeto](/pt-BR/docs/help-center/manage-forms/project-permissions) e [Controle de acesso às respostas](/pt-BR/docs/help-center/security/response-access-control).
+</Callout>

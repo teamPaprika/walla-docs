@@ -4,6 +4,8 @@ description: アナリティクス機能は、フォームへの参加状況と�
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
 ## 全体インサイト（Overall Survey Insights）
 
 - 総閲覧数（Total Views）: フォームが開かれて閲覧された回数の合計です。
@@ -27,3 +29,7 @@ plan:
 
 #### 赤 → 青 → 水色 → 青
 回答者が 1 問目と 2 問目を見たあとロジックで 4 問目へ移動し、1 問目で離脱しました。
+
+<Callout type="warn" title="注意事項">
+Enterprise チームで[回答閲覧の管理](/ja/docs/help-center/security/response-access-control)により回答アクセスが制限されているロールには、**「回答アクセスが制限されている場合、訪問・行動分析は提供されません。回答統計からアクセス可能な回答を分析できます。」** という案内が表示され、トラフィック・離脱分析が制限されます。
+</Callout>

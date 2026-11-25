@@ -1,54 +1,57 @@
 ---
 title: "Inviting Workspace Members"
-description: "Invite team members into a workspace and assign their roles from the workspace settings."
-plan:
+description: "Learn how to add team members, send email invites, create invite links, and manage sent invitations from the Invite tab in Workspace Settings."
+plan: pro
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
-import { Callout } from 'fumadocs-ui/components/callout';
 
-## Adding members to a workspace
+Users with the **Add members** permission enabled in a workspace (by default, Owners and Admins) can add or invite new members from the **Invite** tab by clicking the gear icon (**Workspace Settings**) at the top right of the workspace.
+
+## Adding Existing Team Members · Inviting via Email
+
+On the **Invite → Invite** tab, you can immediately add team members who have already joined your team, or send email invitations to people who are not yet on the team.
 
 <Steps>
   <Step>
-    ### Open workspace settings
-    Click the `gear icon` in the top right of the workspace.
+    ### Select recipients and assign a role
 
-    <img src="/images/guides/team-workspace/workspace-settings-button.png" alt="The gear (settings) icon in the top right of the workspace page" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    Select the team members to add from the list, choose the **Workspace role** to apply from the dropdown at the bottom right (defaults to **Unassigned** on Enterprise, **Member** on Free · Pro), and click **Add**. For email addresses not yet in the team, use the **Email invite** input field to send invitations at once.
   </Step>
   <Step>
-    ### Select team members and add them
-    Select the team members you want to add to the workspace, or enter the account of someone you want to newly invite to the team/workspace, then click the `Add` button.
+    ### Confirm member addition
 
-    <img src="/images/guides/team-workspace/workspace-member-added.png" alt="A new member added to the workspace member list with the invitation complete toast" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-  </Step>
-  <Step>
-    ### Invitation complete
-    Team members are added immediately. Accounts that aren't team members yet are invited to the team and workspace automatically when they click the `Go to invitation` button in the email.
-
-    <img src="/images/guides/team-workspace/workspace-add-member-select.png" alt="The team member selection dropdown and the Add button highlighted" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    Once added, the new member appears immediately in the **Member Management** list.
   </Step>
 </Steps>
 
-## Inviting with an invite link
+## Inviting with an Invite Link
 
-### Creating an invite link
-Click the `Create invite link` button in the `Invite link` area to generate a new invite link.
+On the **Invite → Invite link** tab, you can pre-configure a **Link expiry** and **Workspace role** to create multiple invite links and manage them in a list.
 
-<img src="/images/guides/team-workspace/workspace-invite-link-create-button.png" alt="The Create invite link button shown in the initial state with no invite link" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+<Steps>
+  <Step>
+    ### Choose expiry & role and create an invite link
 
-### Setting the expiry
-A generated link is valid for 7 days by default. Click the `Change expiry` button to the right of the link to reset the remaining validity in hours.
+    Select the **Link expiry** (for example, `7 days`) and the **Workspace role** to assign upon joining, then click **Create invite link**.
+  </Step>
+  <Step>
+    ### Copy the created invite link
 
-<img src="/images/guides/team-workspace/workspace-invite-link-created.png" alt="A generated invite link showing the expires in 7 days notice and the creation toast" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    The new link is added to the **Created invite links** list below. Click the link to copy the URL and share it with the people you want to invite.
+  </Step>
+  <Step>
+    ### Change the expiry
 
-<img src="/images/guides/team-workspace/workspace-invite-link-change-expiry.png" alt="The remaining validity panel that expands when the Change expiry button is clicked" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    Open the **Expiry** dropdown on a created link to adjust its remaining validity period directly.
+  </Step>
+  <Step>
+    ### Delete an invite link
 
-### Deleting an invite link
-If you no longer need the link, click the trash icon to its right. Click `Confirm` in the deletion dialog and the link is invalidated immediately. Members who already joined stay as they are.
+    For links you no longer need, click the delete icon on the right side of the row to invalidate them immediately. Click **Confirm** in the confirmation dialog to delete the link and refresh the list.
+  </Step>
+</Steps>
 
-<img src="/images/guides/team-workspace/workspace-invite-link-delete-button.png" alt="The trash icon to the right of the invite link highlighted" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+## Managing Sent Invites
 
-<img src="/images/guides/team-workspace/workspace-invite-link-delete-confirm.png" alt="The deletion confirmation dialog shown when deleting an invite link" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-<img src="/images/guides/team-workspace/workspace-invite-link-deleted.png" alt="The invite link deleted, returning to the initial state with the deletion complete toast" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+On the **Invite → Sent invites** tab, you can review pending email invitations and their expiration status, copy invite links, resend invitations, or cancel invitations.

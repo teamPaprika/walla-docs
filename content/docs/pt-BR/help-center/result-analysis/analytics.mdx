@@ -4,6 +4,8 @@ description: "O recurso Análises apresenta uma visão geral da participação e
 plan: pro
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
 ## Visão geral do formulário (Overall Survey Insights)
 
 <img src="/images/guides/result-analysis/analytics-overall.png" alt="Visão geral do formulário" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
@@ -31,3 +33,7 @@ O respondente passou da pergunta 1 para a 4 por meio da lógica e abandonou o fo
 
 #### Vermelho → Azul → Azul-claro → Azul
 O respondente visualizou as perguntas 1 e 2, passou para a pergunta 4 por meio da lógica e abandonou o formulário na pergunta 1.
+
+<Callout type="warn" title="Atenção">
+Em equipes Enterprise, para funções com acesso às respostas restrito pelo [Controle de acesso às respostas](/pt-BR/docs/help-center/security/response-access-control), é exibido o aviso **"Quando o acesso às respostas é restrito, as análises de visitas e comportamento não são disponibilizadas. Você pode analisar as respostas acessíveis em Estatísticas de respostas."**, e as análises de tráfego e abandono ficam indisponíveis.
+</Callout>

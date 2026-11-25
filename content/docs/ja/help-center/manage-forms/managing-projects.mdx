@@ -4,6 +4,7 @@ description: "プロジェクトは移動、削除、復元、複製、情報の
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## プロジェクトのタイトルを変更する
@@ -41,6 +42,10 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 - プロジェクトは同じチーム内のワークスペース間でのみ移動できます。
 - 別のチームのワークスペースへは移動できません。
 - 移動するには、プロジェクトカードの `...`（その他）→「ワークスペースを移動」を押して、移動先のワークスペースを選択します。
+
+<Callout type="warn" title="注意事項">
+Enterprise チームで[回答閲覧の管理](/ja/docs/help-center/security/response-access-control)を利用している場合、フォームを別のワークスペースへ移動すると **元のワークスペースのロールを基準とした回答アクセスルールはすべて削除** されます。移動後、移動先のワークスペースで回答アクセス設定を改めて確認してください。
+</Callout>
 
 ## プロジェクトを削除・復元する
 

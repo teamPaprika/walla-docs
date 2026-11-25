@@ -1,0 +1,74 @@
+---
+title: "Permissões do projeto"
+description: "Configure de forma granular as permissões de ação por função e o escopo de acesso às respostas nas configurações do formulário de cada projeto."
+plan: enterprise
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Em equipes do **plano Enterprise**, proprietários, administradores e funções autorizadas com permissão para editar funções e permissões podem definir permissões de ação por função e o escopo de visualização de respostas individualmente para cada formulário em **Configurações do formulário → Permissões do projeto**.
+
+## Passo a passo de configuração
+
+Siga estas etapas para configurar as permissões de um projeto específico:
+
+<Steps>
+  <Step>
+    ### Abra as configurações do formulário
+
+    No editor do projeto, clique no ícone de engrenagem (**Configurações do formulário**) no canto superior direito.
+  </Step>
+  <Step>
+    ### Expanda Permissões do projeto e selecione uma função
+
+    Clique em **Permissões do projeto** no menu esquerdo de **Configurações do formulário** para expandir a lista de funções e selecione a função que deseja configurar.
+  </Step>
+  <Step>
+    ### Ajuste as permissões de ação por grupo
+
+    No painel unificado da função, ative ou desative as permissões configuradas como **Definir por projeto** nos grupos **Edição**, **Integrações**, **Compartilhamento** e **Respostas**. *(Permissões já fixadas no espaço de trabalho aparecem bloqueadas como somente leitura.)*
+  </Step>
+  <Step>
+    ### Escolha o escopo de Ver respostas
+
+    No grupo **Respostas**, abra o menu suspenso **Ver respostas** e escolha **Não permitido**, **Todas as respostas** ou **Respostas correspondentes**.
+  </Step>
+  <Step>
+    ### Adicione regras condicionais e salve
+
+    Ao escolher **Respostas correspondentes**, adicione condições (por exemplo, `Região de residência igual a Seul`) e clique em **Salvar** na parte inferior da tela. As alterações passam a valer imediatamente, independentemente de o formulário estar publicado ou não.
+  </Step>
+</Steps>
+
+## Permissões de ação por função
+
+Ao clicar em **Permissões do projeto** no menu esquerdo de **Configurações do formulário**, a lista de funções é expandida. Ao selecionar uma função, abre-se o painel de permissões organizado em quatro grupos: **Edição**, **Integrações**, **Compartilhamento** e **Respostas**.
+
+Entre as 7 permissões de ação abaixo, aquelas definidas como **Definir por projeto** em **Funções e permissões** do espaço de trabalho podem ser ativadas ou desativadas nesta tela.
+
+| Grupo | Nome da permissão | Descrição |
+| --- | --- | --- |
+| **Edição** | **Duplicar projetos** | Permite duplicar este projeto. |
+| **Edição** | **Editar projetos** | Permite editar este projeto e atribuir etiquetas. |
+| **Edição** | **Gerenciar projetos** | Permite mover, arquivar e excluir este projeto. |
+| **Integrações** | **Gerenciar automações** | Permite visualizar, criar, editar e excluir automações deste projeto. |
+| **Compartilhamento** | **Enviar formulários** | Permite cadastrar, editar e excluir destinatários e enviar este formulário. |
+| **Respostas** | **Excluir respostas** | Permite excluir respostas deste projeto. |
+| **Respostas** | **Baixar respostas** | Permite baixar respostas deste projeto. |
+
+<Callout type="warn" title="Atenção">
+Permissões já fixadas como **Permitir tudo** ou **Não permitido** nas configurações de função do espaço de trabalho também aparecem nesta tela, mas ficam bloqueadas em estado somente leitura (**Permitido** ou **Não permitido**, conforme o espaço de trabalho). Para ativar ou desativar uma permissão por projeto, altere-a primeiro para **Definir por projeto** em [Configurações do espaço de trabalho → Funções e permissões](/pt-BR/docs/help-center/team-workspace/managing-workspaces).
+</Callout>
+
+## Escopo de acesso em Ver respostas
+
+No item **Ver respostas** do grupo **Respostas**, use o menu suspenso para definir quais respostas deste formulário podem ser visualizadas por funções que tenham **Visualizar respostas** configurado como **Definir por projeto** no espaço de trabalho:
+
+- **Não permitido**: Não permite visualizar respostas deste formulário. *(Estado padrão)*
+- **Todas as respostas**: Permite visualizar todas as respostas deste formulário.
+- **Respostas correspondentes**: Permite consultar apenas as respostas que atendem às regras condicionais definidas.
+
+Mesmo que uma função tenha permissão para excluir ou baixar respostas neste formulário, as ações de exclusão e download ficam restritas ao conjunto de respostas permitido aqui. Após ajustar os seletores de ações e as regras de visualização de respostas, clique no botão **Salvar** na parte inferior da tela para aplicar as alterações imediatamente.
+
+Para saber como criar regras condicionais e como a restrição funciona na planilha de respostas, nas estatísticas e nas análises de visitas e comportamento, consulte o guia [Controle de acesso às respostas](/pt-BR/docs/help-center/security/response-access-control).

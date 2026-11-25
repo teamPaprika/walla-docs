@@ -8,6 +8,7 @@
     "data-masking",
     "blocking-external-ai",
     "managing-permissions",
+    "response-access-control",
     "approval-workflow"
   ]
 }

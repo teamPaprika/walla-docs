@@ -1,42 +1,44 @@
 ---
 title: Gestionar espacios de trabajo
-description: "Los espacios de trabajo cuentan con menús como «Gestión de miembros», donde puedes administrar invitaciones, cambios de nombre, permisos y eliminaciones."
+description: Aprende a gestionar miembros, invitaciones, roles y permisos, además de eliminar espacios de trabajo o transferir su propiedad.
 plan:
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Gestión de miembros (invitaciones)
+La **gestión de miembros**, las **invitaciones** y los **roles y permisos** de un espacio de trabajo se administran desde un único lugar pulsando el icono de engranaje (**Configuración del espacio de trabajo**) en la esquina superior derecha de la pantalla del espacio.
 
-- Al pulsar «Gestión de miembros» puedes invitar a miembros del equipo al espacio de trabajo.
-- El plan Free no permite invitar a miembros del equipo, por lo que tampoco puede usar las invitaciones a espacios de trabajo.
+## Gestionar miembros y roles
 
-## Roles y permisos
+### Gestión de miembros
 
-- Los roles se dividen en Admin (administrador) y Member (miembro).
-- Puedes permitir o restringir las siguientes funciones para cada rol.
-<Callout title="Funciones que se gestionan con permisos">
-- Editar roles y permisos: crear o modificar roles y cambiar permisos
-- Asignar roles: asignar un rol a un miembro
-- Añadir o eliminar miembros: invitar o expulsar personas del espacio de trabajo
-- Gestión de proyectos: mover, duplicar y eliminar proyectos
-- Edición de proyectos: editar el contenido del proyecto
-- Ver respuestas: acceder a las páginas relacionadas con las respuestas
-- Eliminar respuestas: borrar las respuestas recogidas
-- Descargar respuestas: exportar los datos de respuestas
-- Editar opciones de enmascarado: usar las opciones de enmascarado al editar el proyecto
-- Restringir acceso a datos enmascarados: controlar quién puede ver las respuestas enmascaradas
-- Configurar el borrado automático: definir el periodo de borrado automático
+En la pestaña **Gestión de miembros**, puedes consultar la lista de miembros actuales del espacio de trabajo y el rol de cada uno, cambiar su rol mediante el menú desplegable o el menú de más opciones (`⋯`), o expulsarlos del espacio de trabajo.
+
+Para añadir nuevos miembros del equipo o enviar invitaciones por correo electrónico o enlace de invitación, utiliza la pestaña **Invitar** del menú izquierdo (**Enlace de invitación**, **Invitar**, **Invitaciones enviadas**). Encontrarás el procedimiento detallado en [Invitar a miembros del espacio de trabajo](/es/docs/help-center/team-workspace/inviting-workspace-members).
+
+### Roles y permisos
+
+En la pestaña **Roles y permisos**, configuras por rol los permisos de **Proyecto** (10 tipos), **Datos personales** (3 tipos) y **Avanzado** (4 tipos). En los planes Free y Pro, los administradores y miembros comparten los mismos permisos del espacio de trabajo; en el **plan Enterprise**, puedes usar **Añadir rol**, el rol **Sin asignar**, la personalización de permisos por rol y la configuración de alcance en 3 niveles: **Permitir todo · Definir por proyecto · No permitido**.
+
+En los roles que tengan al menos un permiso configurado como **Definir por proyecto**, también se muestra la pestaña **Permisos por proyecto**, desde donde puedes consultar y ajustar de un vistazo las acciones permitidas por formulario y el alcance de **Ver respuestas** dentro del espacio de trabajo.
+
+Al cambiar a la pestaña superior **Lista de miembros**, puedes consultar los miembros asignados a ese rol y asignar el rol directamente a otros miembros con el botón **Añadir miembros**.
+
+Para ver la explicación completa del sistema de roles y de los 17 permisos detallados, consulta [Gestión de permisos por rol](/es/docs/help-center/security/managing-permissions).
+
+## Eliminar el espacio de trabajo y transferir la propiedad
+
+Las acciones para eliminar un espacio de trabajo o transferir su propiedad se controlan mediante el permiso de **Propietario** y el menú de gestión del equipo.
+
+### Eliminar el espacio de trabajo
+
+- **Parte inferior de Configuración del espacio de trabajo**: Puedes eliminarlo pulsando el botón **Eliminar espacio de trabajo** al final del menú izquierdo de la configuración. *(A los miembros normales se les muestra **Salir del espacio de trabajo**).*
+- **Página Gestión del equipo**: También puedes ir a **Gestión del equipo → Gestión de espacios de trabajo** en la barra lateral izquierda, abrir el menú de más opciones (`⋯`) a la derecha del espacio de trabajo y elegir **Eliminar**.
+
+<Callout type="warn" title="Advertencia">
+Al eliminar un espacio de trabajo, se eliminan también todos los proyectos, los datos de respuestas y los enlaces de invitación que contiene, y no es posible recuperarlos.
 </Callout>
 
-## Eliminar un espacio de trabajo
+### Transferir la propiedad
 
-  - En «Gestión del equipo → Gestión de espacios de trabajo» (arriba a la izquierda), pulsa «Eliminar espacio de trabajo».
-
-<Callout type="warn" title="Atención">
-La eliminación de un espacio de trabajo no se puede deshacer, así que te recomendamos hacer una copia de seguridad de los datos que necesites.
-</Callout>
-
-## Cambiar el propietario del espacio de trabajo
-
-- En «Gestión del equipo → Gestión de espacios de trabajo» (arriba a la izquierda) puedes ver la lista de espacios del equipo y cambiar el propietario de cada uno.
+Para cambiar el propietario actual a otro miembro del equipo, ve a **Gestión del equipo → Gestión de espacios de trabajo**, abre el menú de más opciones (`⋯`) del espacio de trabajo correspondiente y selecciona **Transferir propiedad**.

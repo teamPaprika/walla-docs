@@ -1,36 +1,57 @@
 ---
-title: "Invitar a miembros del espacio de trabajo"
-description: "Desde la configuración del espacio de trabajo puedes invitar a miembros del equipo y asignarles un rol."
-plan:
+title: Invitar a miembros del espacio de trabajo
+description: Aprende a añadir miembros del equipo, enviar invitaciones por correo, crear enlaces de invitación y gestionar invitaciones enviadas desde la pestaña Invitar en la configuración del espacio de trabajo.
+plan: pro
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
-import { Callout } from 'fumadocs-ui/components/callout';
 
-## Añadir miembros al espacio de trabajo
+Los usuarios que tengan activado el permiso **Añadir miembros** en el espacio de trabajo (por defecto, el propietario y los administradores) pueden añadir o invitar a nuevos miembros desde la pestaña **Invitar** haciendo clic en el icono de engranaje (**Configuración del espacio de trabajo**) situado en la esquina superior derecha del espacio al que quieran invitar.
+
+## Añadir miembros existentes del equipo e invitar por correo
+
+En la pestaña **Invitar → Invitar**, puedes añadir directamente al espacio de trabajo a miembros que ya pertenecen al mismo equipo o enviar una invitación por correo electrónico a personas que aún no forman parte del equipo.
 
 <Steps>
   <Step>
-    ### Entra en la configuración del espacio
-    Haz clic en el `icono del engranaje` de la esquina superior derecha del espacio de trabajo.
+    ### Selecciona el destinatario y asigna un rol
+
+    Elige en la lista al miembro del equipo que quieres añadir, selecciona el **rol del espacio de trabajo** que se le aplicará en el desplegable inferior derecho (predeterminado **Sin asignar** en Enterprise, **Miembro** en Free · Pro) y haz clic en el botón **Añadir**. Para direcciones de correo que aún no estén registradas en el equipo, puedes enviar invitaciones directamente desde el campo **Invitar por correo electrónico**.
   </Step>
   <Step>
-    ### Selecciona a los miembros y añádelos
-    Elige a los miembros del equipo que quieras añadir al espacio, o escribe la cuenta de alguien a quien quieras invitar por primera vez al equipo y al espacio, y pulsa `Añadir`.
-  </Step>
-  <Step>
-    ### Invitación completada
-    Los miembros del equipo quedan añadidos de inmediato. Las cuentas que aún no pertenecen al equipo se incorporan automáticamente al equipo y al espacio cuando pulsan el botón `Ir a la invitación` del correo.
+    ### Verifica que se haya añadido el miembro
+
+    Una vez completada la operación, el nuevo miembro aparecerá de inmediato en la lista de **Gestión de miembros**.
   </Step>
 </Steps>
 
-## Invitar con un enlace de invitación
+## Invitar mediante un enlace de invitación
 
-### Crear el enlace
-Pulsa el botón `Crear enlace de invitación` en la sección `Enlace de invitación` para generar uno nuevo.
+En la pestaña **Invitar → Enlace de invitación**, puedes crear varios enlaces definiendo de antemano el **periodo de validez del enlace** y el **rol del espacio de trabajo**, y administrarlos desde la lista.
 
-### Definir la validez
-El enlace generado es válido durante 7 días por defecto. Pulsa el botón `Cambiar validez` a la derecha del enlace para redefinir en horas el tiempo restante.
+<Steps>
+  <Step>
+    ### Elige la validez y el rol, y crea el enlace
 
-### Eliminar el enlace
-Cuando ya no necesites el enlace, pulsa el icono de la papelera situado a su derecha. Al confirmar en el diálogo, el enlace queda invalidado al instante. Quienes ya se hayan unido permanecen en el espacio.
+    Selecciona el **periodo de validez del enlace** (por ejemplo, `7 días`) y el **rol del espacio de trabajo** que se aplicará al unirse, y luego pulsa **Crear enlace de invitación**.
+  </Step>
+  <Step>
+    ### Copia el enlace de invitación generado
+
+    El nuevo enlace se añade a la lista inferior **Enlaces de invitación creados**. Haz clic en el enlace para copiar la URL y envíasela a la persona que quieras invitar.
+  </Step>
+  <Step>
+    ### Cambia el periodo de validez
+
+    Abre el desplegable **Periodo de validez** de un enlace creado para ajustar de inmediato el tiempo restante hasta su caducidad.
+  </Step>
+  <Step>
+    ### Elimina un enlace de invitación
+
+    Si ya no vas a utilizar un enlace, pulsa el icono de eliminar situado a la derecha de su fila para invalidarlo al instante. Al pulsar **Confirmar** en la ventana de confirmación, el enlace se elimina y la lista se actualiza.
+  </Step>
+</Steps>
+
+## Gestionar invitaciones enviadas
+
+En la pestaña **Invitar → Invitaciones enviadas**, puedes consultar la lista de invitaciones por correo electrónico aún pendientes de aceptación y su estado de caducidad, además de copiar el enlace de invitación, reenviar la invitación o cancelarla.

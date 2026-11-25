@@ -1,0 +1,81 @@
+---
+title: "Response Access Control"
+description: "Restrict which form responses each role can view to 'All responses' or 'Matching responses'."
+plan: enterprise
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Even among members participating in the same form project, you may need each member to **view only the responses they are responsible for**—based on region, department, score range, and more. With Response Access Control on the **Enterprise plan**, you can control each project's response viewing scope—for example, showing only `Region = Seoul` responses to a Seoul regional researcher while hiding Gyeonggi and Busan responses.
+
+Response access control is applied in **two steps**:
+
+1. **Workspace role level**: In **Workspace Settings → Roles & Permissions**, set the target role's **View Responses** dropdown to **Follow Project Settings**.
+2. **Project level**: In the form editor under **Form Settings → Project Permissions**, select the target role, choose **Not Allowed**, **All Responses**, or **Matching Responses** from the **Responses → View Responses** dropdown, and click **Save** at the bottom.
+
+## Condition Filter Simulator
+
+Try changing the rules applied to the **Seoul Researcher** role in the simulator below to see how they affect the Response Sheet, Response Statistics, and Analytics in real time.
+
+<ResponseAccessSimulator locale="en" />
+
+## Walkthrough: Setup and Restricted View
+
+Follow these steps to configure conditional response access and see what a restricted member sees:
+
+<Steps>
+  <Step>
+    ### Delegate View Responses at the workspace role level
+
+    In **Workspace Settings → Roles & Permissions**, set the target workspace role's **View Responses** dropdown to **Follow Project Settings**.
+  </Step>
+  <Step>
+    ### Select Matching Responses in Form Settings
+
+    In the form editor, open **Form Settings → Project Permissions**, select the target role, and choose **Matching Responses** from the **Responses → View Responses** dropdown.
+  </Step>
+  <Step>
+    ### Add and save condition rules
+
+    Add condition rules (for example, `Region = Seoul`) and click **Save** at the bottom to define which responses the role can access.
+  </Step>
+  <Step>
+    ### Verify the restricted Response Sheet view
+
+    When a restricted member opens the **Response Sheet**, a banner reading **"Only responses you can access are shown."** appears at the top, and only matching response rows are displayed.
+  </Step>
+  <Step>
+    ### Verify the restricted Analytics view
+
+    When a restricted member opens **Analytics**, a restriction notice appears explaining that visit and behavior analytics are unavailable and directing them to **Response Statistics** instead.
+  </Step>
+</Steps>
+
+## How to Write Condition Rules
+
+When you select **Matching Responses**, you can combine **rules** and **conditions**.
+
+- **Conditions (AND)**: Adding multiple conditions within a single rule allows only responses that satisfy **all conditions simultaneously**. *(Example: `Region includes any of [Seoul]` **AND** `Overall satisfaction ≥ 4`)*
+- **Rules (OR)**: Adding another rule with **Add rule** allows responses that satisfy **any one of the rules**.
+- **Supported field types**: You can filter by `Submitted at`, choice fields (Multiple Choice, Dropdown, Linear Scale, etc.), Short Text, Number, Date fields, and more.
+
+<Callout type="warn" title="Warning">
+Immediately after changing **View Responses** to **Follow Project Settings** on a workspace role, members in that role cannot view any responses until a rule is saved on each individual form (**Not Allowed** state). Be sure to select **All Responses** or **Matching Responses** under **Form Settings → Project Permissions → Responses → View Responses** and click **Save** for each form.
+</Callout>
+
+## Behavior in Results and Management Views
+
+When a member with restricted response access opens a project's results views, each feature behaves as follows:
+
+| Feature Area | Behavior |
+| --- | --- |
+| **Response Sheet** | Shows the banner **"Only responses you can access are shown."** at the top and displays only rows that meet the allowed conditions. *(If 0 accessible responses match the current search or filter, "No accessible responses match the current filter." is shown.)* |
+| **Individual Responses · Response Statistics** | Only accessible responses are aggregated and displayed, so hidden response counts and raw answers are never exposed. |
+| **Download · Delete Responses** | Even if the member has download or delete permissions, they can only export or delete accessible responses. *(Downloading is disabled if 0 responses are accessible.)* |
+| **Analytics (Visit & Behavior Analysis)** | To prevent overall traffic metrics such as views and drop-off rates from being separated from the accessible response set, **visit and behavior analytics are not provided.** *(A top banner directs users to Response Statistics.)* |
+| **Moving a Project to Another Workspace** | Moving a form to another workspace **deletes all response access rules tied to the previous workspace's roles**. You must reconfigure the rules in the new workspace after moving. |
+
+<Callout type="info" title="Good to know">
+Saving a response access policy **takes effect immediately regardless of whether the form is republished**. However, condition fields are chosen from already-published form fields—if you add a new field, publish the form first before selecting it in a condition rule.
+</Callout>
