@@ -11,8 +11,8 @@ Even among members participating in the same form project, you may need each mem
 
 Response access control is applied in **two steps**:
 
-1. **Workspace role level**: In **Workspace Settings → Roles & Permissions**, turn off **View all responses** for the target role and select **Follow project settings**.
-2. **Project level**: In the form editor, go to **Form Settings → Project permissions → Response access**, choose **Do not allow**, **All responses**, or **Matching responses** for that role, and click **Save**.
+1. **Workspace role level**: In **Workspace Settings → Roles & Permissions**, set the target role's **View Responses** dropdown to **Follow Project Settings**.
+2. **Project level**: In the form editor under **Form Settings → Project Permissions**, select the target role, choose **Not Allowed**, **All Responses**, or **Matching Responses** from the **Responses → View Responses** dropdown, and click **Save** at the bottom.
 
 ## Condition Filter Simulator
 
@@ -26,19 +26,19 @@ Follow these steps to configure conditional response access and see what a restr
 
 <Steps>
   <Step>
-    ### Delegate response viewing at the workspace role level
+    ### Delegate View Responses at the workspace role level
 
-    In **Workspace Settings → Roles & Permissions**, set the target workspace role's **View all responses** permission to **Follow project settings**.
+    In **Workspace Settings → Roles & Permissions**, set the target workspace role's **View Responses** dropdown to **Follow Project Settings**.
   </Step>
   <Step>
-    ### Select Matching responses in Form Settings
+    ### Select Matching Responses in Form Settings
 
-    In the form editor, open **Form Settings → Project permissions → Response access** and select **Matching responses** for that role.
+    In the form editor, open **Form Settings → Project Permissions**, select the target role, and choose **Matching Responses** from the **Responses → View Responses** dropdown.
   </Step>
   <Step>
     ### Add and save condition rules
 
-    Add and save condition rules (for example, `Region = Seoul`) to define which responses the role can access.
+    Add condition rules (for example, `Region = Seoul`) and click **Save** at the bottom to define which responses the role can access.
   </Step>
   <Step>
     ### Verify the restricted Response Sheet view
@@ -54,14 +54,14 @@ Follow these steps to configure conditional response access and see what a restr
 
 ## How to Write Condition Rules
 
-When you select **Matching responses**, you can combine **rules** and **conditions**.
+When you select **Matching Responses**, you can combine **rules** and **conditions**.
 
 - **Conditions (AND)**: Adding multiple conditions within a single rule allows only responses that satisfy **all conditions simultaneously**. *(Example: `Region includes any of [Seoul]` **AND** `Overall satisfaction ≥ 4`)*
 - **Rules (OR)**: Adding another rule with **Add rule** allows responses that satisfy **any one of the rules**.
 - **Supported field types**: You can filter by `Submitted at`, choice fields (Multiple Choice, Dropdown, Linear Scale, etc.), Short Text, Number, Date fields, and more.
 
 <Callout type="warn" title="Warning">
-Immediately after changing **View all responses** to **Follow project settings** on a workspace role, members in that role cannot view any responses until a rule is saved on each individual form (**Do not allow** state). Be sure to save **All responses** or **Matching responses** under **Form Settings → Project permissions → Response access** for each form.
+Immediately after changing **View Responses** to **Follow Project Settings** on a workspace role, members in that role cannot view any responses until a rule is saved on each individual form (**Not Allowed** state). Be sure to select **All Responses** or **Matching Responses** under **Form Settings → Project Permissions → Responses → View Responses** and click **Save** for each form.
 </Callout>
 
 ## Behavior in Results and Management Views

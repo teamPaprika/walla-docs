@@ -15,10 +15,10 @@ const require = createRequire(
 );
 const { chromium } = require('@playwright/test');
 
-const DASHBOARD_URL = process.env.DASHBOARD_URL || 'http://localhost:20700';
-const FORM_URL = process.env.FORM_URL || 'http://localhost:20701';
-const TEAM_ID = 'WJvquncIlRkGe8vXnQOa';
-const WORKSPACE_ID = 'GR1N7IzjnY3jm4rteqfq';
+const DASHBOARD_URL = process.env.DASHBOARD_URL || 'http://localhost:20300';
+const FORM_URL = process.env.FORM_URL || 'http://localhost:20301';
+const TEAM_ID = process.env.TEAM_ID || 'kBPWk2TpstGhPaLi8hpE';
+const WORKSPACE_ID = process.env.WORKSPACE_ID || 'PGh7CeoBMVfdFBMnVlBt';
 const WORKSPACE_URL = `${DASHBOARD_URL}/team/${TEAM_ID}/workspace/${WORKSPACE_ID}`;
 
 const GUIDES_IMG_DIR = path.join(DOCS_ROOT, 'public/images/guides');
@@ -26,8 +26,22 @@ const TOURS_DATA_DIR = path.join(DOCS_ROOT, 'src/data/tours');
 
 const MAIN_FORM_TITLE = '2026 지역별 고객 만족도 조사';
 const DRAFT_FORM_TITLE = '신규 서비스 베타 테스터 모집';
-const DEFAULT_MAIN_ID = 'TXBMqzbvPUju5vv6sS3m';
-const DEFAULT_DRAFT_ID = 'NeAALweoKKAhjjEcOcvZ';
+const DEFAULT_MAIN_ID = process.env.MAIN_FORM_ID || '9QnWoecH4SWrQE3hvWqa';
+const DEFAULT_DRAFT_ID = process.env.DRAFT_FORM_ID || 'UrErl4DPo8Sg3ATQKzqk';
+
+async function newKoContext(browser, viewport = VIEWPORT) {
+  const context = await browser.newContext({
+    viewport,
+    deviceScaleFactor: 1,
+    locale: 'ko-KR',
+    extraHTTPHeaders: { 'Accept-Language': 'ko-KR,ko;q=0.9' },
+  });
+  await context.addCookies([
+    { name: 'locale', value: 'ko', url: DASHBOARD_URL },
+    { name: 'locale', value: 'ko', url: FORM_URL },
+  ]);
+  return context;
+}
 
 function parseModes() {
   const arg = process.argv.find((a) => a.startsWith('--mode='));
@@ -39,6 +53,7 @@ function parseModes() {
 
 async function signIn(page, email, password = 'walla-dev') {
   const res = await page.context().request.post(`${DASHBOARD_URL}/api/auth/sign-in/email`, {
+    headers: { Origin: DASHBOARD_URL },
     data: { email, password },
   });
   if (!res.ok()) {
@@ -172,21 +187,34 @@ async function populateAndPublishMainForm(browser, page, mainFormId) {
     }
   }
 
-  // Check current response rows in /sheet (or text showing 8개 응답)
+  // Check current response rows in /sheet (wait for table hydration before counting)
   await page.goto(
     `${DASHBOARD_URL}/team/${TEAM_ID}/workspace/${WORKSPACE_ID}/project/${mainFormId}/sheet`,
     { waitUntil: 'domcontentloaded' }
   );
-  await page.waitForTimeout(4500);
+  await page
+    .waitForFunction(
+      () =>
+        document.querySelectorAll('tbody tr, [role="row"]').length > 0 ||
+        (document.body.innerText || '').includes('서울') ||
+        (document.body.innerText || '').includes('응답이 없습니다'),
+      { timeout: 15000 }
+    )
+    .catch(() => {});
+  await page.waitForTimeout(1500);
   await hideDevChrome(page);
-  const sheetDump = await page.evaluate(() => ({
-    url: location.href,
-    rows: document.querySelectorAll('tbody tr, [role="row"]').length,
-    text: (document.body.innerText || '').slice(0, 700),
-  }));
+  const sheetDump = await page.evaluate(() => {
+    const text = document.body.innerText || '';
+    return {
+      url: location.href,
+      rows: document.querySelectorAll('tbody tr, [role="row"]').length,
+      seoulCount: (text.match(/서울/g) || []).length,
+      text: text.slice(0, 700),
+    };
+  });
   console.log('Sheet snapshot before response seeding:', JSON.stringify(sheetDump, null, 2));
 
-  if (sheetDump.rows < 8 && !sheetDump.text.includes('서울')) {
+  if (sheetDump.rows < 8 && !sheetDump.text.includes('8개의 응답') && sheetDump.seoulCount < 6) {
     const samples = [
       { region: '서울', rating: '5', opinion: '응답 분석과 워크스페이스 협업 기능이 매우 깔끔합니다.', phone: '010-1234-5601' },
       { region: '서울', rating: '5', opinion: '조건부 접근 권한 설정이 직관적이어서 만족합니다.', phone: '010-1234-5602' },
@@ -200,15 +228,18 @@ async function populateAndPublishMainForm(browser, page, mainFormId) {
 
     for (let idx = 0; idx < samples.length; idx++) {
       const s = samples[idx];
-      const fCtx = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: 'ko-KR' });
+      const fCtx = await newKoContext(browser, { width: 1280, height: 900 });
       const fPage = await fCtx.newPage();
-      await fPage.goto(`${FORM_URL}/v/${mainFormId}`, { waitUntil: 'domcontentloaded' });
+      await fPage.goto(`${FORM_URL}/v/${mainFormId}`, { waitUntil: 'networkidle' }).catch(async () => {
+        await fPage.goto(`${FORM_URL}/v/${mainFormId}`, { waitUntil: 'domcontentloaded' });
+      });
 
-      // Wait up to 45s on first cold render after publish for form controls to attach
+      // Wait for form controls to attach and hydrate completely
       await fPage
         .locator('button:has-text("응답 제출")')
+        .first()
         .waitFor({ state: 'visible', timeout: 45000 });
-      await fPage.waitForTimeout(400);
+      await fPage.waitForTimeout(1000);
 
       // Field 1: 거주 지역
       const regionEl = fPage.locator('label').filter({ hasText: new RegExp(`^${s.region}$`) }).or(fPage.getByText(s.region, { exact: true })).first();
@@ -245,6 +276,7 @@ async function populateAndPublishMainForm(browser, page, mainFormId) {
       await submitBtn.click();
       await fPage
         .getByText(/응답이 성공적으로 제출되었습니다/)
+        .first()
         .waitFor({ state: 'visible', timeout: 15000 })
         .catch(async () => {
           console.log(`Warning on ${idx + 1}: body=`, await fPage.evaluate(() => document.body.innerText.slice(0, 300)));
@@ -284,15 +316,22 @@ async function setupSeoulResearcherRole(page) {
   if (!hasRole) {
     console.log('Creating custom role: 서울 리서처');
     await dialog.getByRole('button', { name: '역할 추가' }).first().click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(700);
 
     const roleInput = dialog
       .locator('input[type="text"]:visible:not([aria-hidden="true"]), input:visible:not([type="checkbox"]):not([aria-hidden="true"])')
       .first();
     await roleInput.waitFor({ state: 'visible', timeout: 8000 });
     await roleInput.fill('서울 리서처');
-    await dialog.getByRole('button', { name: '역할 만들기' }).first().click();
-    await page.waitForTimeout(1200);
+
+    const createBtn = dialog.getByRole('button', { name: '역할 만들기' }).first();
+    if (await createBtn.isVisible({ timeout: 1200 }).catch(() => false)) {
+      await createBtn.click();
+    } else {
+      await roleInput.press('Enter');
+    }
+    await dialog.getByRole('tab', { name: '서울 리서처' }).or(dialog.getByText('서울 리서처')).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(1000);
   }
 
   // Ensure 서울 리서처 detail view is open
@@ -302,8 +341,11 @@ async function setupSeoulResearcherRole(page) {
     await page.waitForTimeout(600);
   }
 
-  // Switch to 권한 설정 tab if tabbed
-  const permsTab = dialog.getByRole('button', { name: '권한 설정' }).or(dialog.getByRole('tab', { name: '권한 설정' })).first();
+  // Switch to 워크스페이스 권한 tab
+  const permsTab = dialog
+    .getByRole('tab', { name: /워크스페이스 권한|권한 설정/ })
+    .or(dialog.getByRole('button', { name: /워크스페이스 권한|권한 설정/ }))
+    .first();
   if (await permsTab.isVisible().catch(() => false)) {
     await permsTab.click();
     await page.waitForTimeout(400);
@@ -320,47 +362,75 @@ async function setupSeoulResearcherRole(page) {
     await ensureSwitchState(dialog, /프로젝트 생성/, true);
   }
 
-  // Set 프로젝트 편집, 응답 다운로드, 모든 응답 보기 to 프로젝트별 설정에 따름
-  // In WorkspacePermissionDialog, turning a scoped switch OFF reveals radio/button choices:
-  // "허용 안 함" vs "프로젝트별 설정에 따름"
+  // Set 프로젝트 편집, 응답 다운로드, 응답 보기 via origin/dev PermissionScopeSelect trigger (<button aria-haspopup="listbox" aria-label={title}>)
   const setScopedMode = async (permLabel, targetModeText) => {
-    const sw = dialog.getByRole('switch', { name: permLabel }).first();
-    if (await sw.isVisible().catch(() => false)) {
-      if ((await sw.getAttribute('aria-checked')) === 'true') {
-        await sw.click();
-        await page.waitForTimeout(400);
-      }
-      const row = sw.locator('xpath=ancestor::div[2]');
-      const opt = row.getByRole('radio', { name: targetModeText }).or(row.getByRole('button', { name: targetModeText })).or(row.getByText(targetModeText, { exact: true })).first();
-      if (await opt.isVisible().catch(() => false)) {
-        await opt.click();
-        await page.waitForTimeout(450);
-        return;
-      }
-    }
     const labelEl = dialog.getByText(permLabel, { exact: true }).first();
-    if (!(await labelEl.isVisible().catch(() => false))) return;
+    await labelEl.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
     await labelEl.scrollIntoViewIfNeeded().catch(() => {});
-    const row = labelEl.locator('xpath=ancestor::div[3]');
-    const scopedChoice = row
-      .getByRole('radio', { name: targetModeText })
-      .or(row.getByRole('button', { name: targetModeText }))
-      .or(row.getByText(targetModeText, { exact: true }))
+    let combo = dialog
+      .locator(`button[aria-label="${permLabel}"], [role="combobox"][aria-label="${permLabel}"]`)
       .first();
-    if (await scopedChoice.isVisible().catch(() => false)) {
-      await scopedChoice.click();
-      await page.waitForTimeout(450);
+    if ((await combo.count()) === 0) {
+      combo = labelEl
+        .locator('xpath=ancestor::div[@data-slot="workspace-permission-row"][1]')
+        .locator('button[aria-haspopup], [role="combobox"]')
+        .first();
     }
+    if ((await combo.count()) > 0) {
+      await combo.scrollIntoViewIfNeeded().catch(() => {});
+      await combo.waitFor({ state: 'visible', timeout: 8000 });
+      const curText = (await combo.innerText().catch(() => '')).trim();
+      if (!curText.includes(targetModeText)) {
+        // Wait until any previous PATCH has completed and trigger is enabled
+        await dialog
+          .page()
+          .waitForFunction(
+            (aria) => {
+              const btn = document.querySelector(`button[aria-label="${aria}"], [role="combobox"][aria-label="${aria}"]`);
+              return btn && !btn.hasAttribute('disabled') && btn.getAttribute('aria-disabled') !== 'true';
+            },
+            permLabel,
+            { timeout: 10000 }
+          )
+          .catch(() => {});
+        await combo.click();
+        const opt = dialog
+          .page()
+          .locator('[role="option"]:visible')
+          .filter({ hasText: targetModeText })
+          .first();
+        await opt.waitFor({ state: 'visible', timeout: 5000 });
+        await opt.click();
+        await opt.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
+        await dialog
+          .page()
+          .waitForFunction(
+            (aria) => {
+              const btn = document.querySelector(`button[aria-label="${aria}"], [role="combobox"][aria-label="${aria}"]`);
+              return btn && !btn.hasAttribute('disabled') && btn.getAttribute('aria-disabled') !== 'true';
+            },
+            permLabel,
+            { timeout: 10000 }
+          )
+          .catch(() => {});
+        await page.waitForTimeout(450);
+        console.log(`Set ${permLabel} -> ${targetModeText}`);
+      } else {
+        console.log(`Scoped mode already ${targetModeText} for ${permLabel}`);
+      }
+      return;
+    }
+    console.log(`Warning: could not find PermissionScopeSelect trigger for ${permLabel}`);
   };
 
   await setScopedMode('프로젝트 편집', '프로젝트별 설정에 따름');
   await setScopedMode('응답 다운로드', '프로젝트별 설정에 따름');
-  await setScopedMode('모든 응답 보기', '프로젝트별 설정에 따름');
+  await setScopedMode('응답 보기', '프로젝트별 설정에 따름');
 
-  // Assign 정하윤 in 멤버 / 멤버 관리 tab of role
+  // Assign 정하윤 in 멤버 목록 tab of role (use /멤버 목록/ so we do not hit the '멤버' role tab in left nav)
   const membersSubTab = dialog
-    .getByRole('tab', { name: /멤버/ })
-    .or(dialog.getByRole('button', { name: /멤버/ }).filter({ hasNotText: '멤버 관리' }))
+    .getByRole('tab', { name: /멤버 목록/ })
+    .or(dialog.getByRole('button', { name: /멤버 목록/ }))
     .first();
   if (await membersSubTab.isVisible().catch(() => false)) {
     await membersSubTab.click();
@@ -370,13 +440,19 @@ async function setupSeoulResearcherRole(page) {
       const addMemberBtn = dialog.getByRole('button', { name: /멤버 추가/ }).first();
       if (await addMemberBtn.isVisible().catch(() => false)) {
         await addMemberBtn.click();
-        await page.waitForTimeout(500);
-        const hayoonItem = dialog.getByText(/정하윤/).first();
+        const pickerDialog = dialog.page().locator(DIALOG_SEL).last();
+        await pickerDialog.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
+        await page.waitForTimeout(450);
+        const hayoonItem = pickerDialog
+          .getByRole('checkbox', { name: /정하윤/ })
+          .or(pickerDialog.getByText(/정하윤/))
+          .first();
         if (await hayoonItem.isVisible().catch(() => false)) {
           await hayoonItem.click();
           await page.waitForTimeout(300);
-          await dialog.getByRole('button', { name: /추가하기/ }).last().click();
-          await page.waitForTimeout(800);
+          await pickerDialog.getByRole('button', { name: /추가하기/ }).last().click();
+          await dialog.getByText('정하윤').first().waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
+          await page.waitForTimeout(600);
         }
       }
     }
@@ -385,7 +461,7 @@ async function setupSeoulResearcherRole(page) {
 
 async function runSetup(browser) {
   console.log('=== PHASE 1: SETUP ===');
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'ko-KR' });
+  const context = await newKoContext(browser);
   const page = await context.newPage();
 
   page.on('response', (res) => {
@@ -405,7 +481,7 @@ async function runSetup(browser) {
 
 async function runWorkspaceCaptures(browser) {
   console.log('=== PHASE 2: WORKSPACE CAPTURES ===');
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'ko-KR' });
+  const context = await newKoContext(browser);
   const page = await context.newPage();
   await signIn(page, 'minsu@example.com');
   await gotoWorkspace(page);
@@ -544,14 +620,17 @@ async function runWorkspaceCaptures(browser) {
     }
   }
 
-  // 11-12. 역할 및 권한 -> 서울 리서처 -> 권한 설정 & 멤버 목록
+  // 11-13. 역할 및 권한 -> 서울 리서처 -> 워크스페이스 권한 & 프로젝트별 권한 & 멤버 목록
   await dialog.getByRole('button', { name: '역할 및 권한', exact: true }).first().click();
   const seoulRole = dialog.locator('button:visible, [role="button"]:visible, a:visible').filter({ hasText: '서울 리서처' }).first();
   await seoulRole.waitFor({ state: 'visible', timeout: 10000 });
   await seoulRole.click();
-  await dialog.locator('span:not(.invisible):visible, p:visible, button:visible').filter({ hasText: '프로젝트별 설정에 따름' }).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
+  await dialog.locator('span:not(.invisible):visible, p:visible, button:visible, [role="combobox"]:visible').filter({ hasText: '프로젝트별 설정에 따름' }).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
   await page.waitForTimeout(600);
-  const permsSubTab = dialog.getByRole('tab', { name: '권한 설정' }).or(dialog.getByRole('button', { name: '권한 설정' })).first();
+  const permsSubTab = dialog
+    .getByRole('tab', { name: /워크스페이스 권한|권한 설정/ })
+    .or(dialog.getByRole('button', { name: /워크스페이스 권한|권한 설정/ }))
+    .first();
   if (await permsSubTab.isVisible().catch(() => false)) {
     await permsSubTab.click();
     await page.waitForTimeout(300);
@@ -560,6 +639,20 @@ async function runWorkspaceCaptures(browser) {
     modalBlur: true,
     waitMs: 400,
   });
+
+  const projectPermsTab = dialog
+    .getByRole('tab', { name: '프로젝트별 권한' })
+    .or(dialog.getByRole('button', { name: '프로젝트별 권한' }))
+    .first();
+  if (await projectPermsTab.isVisible().catch(() => false)) {
+    await projectPermsTab.click();
+    await dialog.getByText(MAIN_FORM_TITLE).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(450);
+    await capturePng(page, path.join(outDir, 'workspace-role-projects.png'), {
+      modalBlur: true,
+      waitMs: 400,
+    });
+  }
 
   const roleMembersTab = dialog
     .getByRole('tab', { name: /멤버 목록/ })
@@ -579,28 +672,32 @@ async function runWorkspaceCaptures(browser) {
 
 async function runSettingsCaptures(browser, ids) {
   console.log('=== PHASE 3: FORM SETTINGS CAPTURES ===');
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'ko-KR' });
+  const context = await newKoContext(browser);
   const page = await context.newPage();
   await signIn(page, 'minsu@example.com');
 
   const outDir = path.join(GUIDES_IMG_DIR, 'manage-forms');
 
-  // 1. project-move.png from workspace card menu
+  // 1. project-move.png from workspace card menu (y-band heuristic)
   await gotoWorkspace(page);
   const titleEl = page.getByText(MAIN_FORM_TITLE, { exact: true }).first();
-  // Find the nearest card ancestor containing a button (menu '...' trigger)
+  const tBox = await titleEl.boundingBox();
   let menuOpened = false;
-  for (let depth = 1; depth <= 5; depth++) {
-    const ancestor = titleEl.locator(`xpath=ancestor::div[${depth}]`);
-    const btn = ancestor.locator('button:visible').first();
-    if ((await btn.count()) > 0 && (await btn.boundingBox().then((b) => b && b.width < 48).catch(() => false))) {
-      await btn.click();
-      await page.waitForTimeout(450);
-      if (await page.getByRole('menuitem', { name: /워크스페이스 이동/ }).first().isVisible().catch(() => false)) {
-        menuOpened = true;
-        break;
+  if (tBox) {
+    const buttons = page.locator('button:visible');
+    const bCnt = await buttons.count();
+    for (let i = 0; i < bCnt; i++) {
+      const btn = buttons.nth(i);
+      const b = await btn.boundingBox().catch(() => null);
+      if (b && Math.abs(b.y - tBox.y) < 20 && b.x > tBox.x && b.x < tBox.x + 300 && b.width < 48) {
+        await btn.click();
+        await page.waitForTimeout(450);
+        if (await page.getByRole('menuitem', { name: /워크스페이스 이동/ }).first().isVisible().catch(() => false)) {
+          menuOpened = true;
+          break;
+        }
+        await page.keyboard.press('Escape');
       }
-      await page.keyboard.press('Escape');
     }
   }
   if (menuOpened) {
@@ -627,18 +724,19 @@ async function runSettingsCaptures(browser, ids) {
     waitMs: 200,
   });
 
-  // 3. 접근 tab captures
+  // 3. 접근 tab captures (ensure clean active state before & after captures)
   const dialog = await openFormSettings(page, '접근');
+  await ensureSwitchState(dialog, /^설문 활성화$/, true);
 
-  const recv = await findRowAndSwitchByLabel(dialog, /응답 받기/);
+  const recv = await findRowAndSwitchByLabel(dialog, /^설문 활성화$/);
   await capturePng(page, path.join(outDir, 'response-receiving-toggle.png'), {
     modalBlur: true,
     highlight: recv.row,
     waitMs: 300,
   });
 
-  const limitRes = await ensureSwitchState(dialog, /응답 수 제한/, true);
-  const limitInput = dialog.getByPlaceholder(/최대 응답 수/).first();
+  const limitRes = await ensureSwitchState(dialog, /응답 수 제한|최대 응답 수/, true);
+  const limitInput = dialog.getByPlaceholder(/최대 응답 수|응답 수/).first();
   if (await limitInput.isVisible().catch(() => false)) {
     await limitInput.fill('100');
     await page.waitForTimeout(300);
@@ -648,16 +746,16 @@ async function runSettingsCaptures(browser, ids) {
     highlight: limitRes.row,
     waitMs: 300,
   });
-  if (limitRes.changed) await ensureSwitchState(dialog, /응답 수 제한/, false);
+  await ensureSwitchState(dialog, /응답 수 제한|최대 응답 수/, false);
 
-  const schedRes = await ensureSwitchState(dialog, /응답 기간|시작 일정/, true);
-  const scheduleBox = dialog.getByText(/응답 기간/).first().locator('xpath=ancestor::div[2]');
+  const schedRes = await ensureSwitchState(dialog, /시작 일정|응답 기간/, true);
+  const scheduleBox = dialog.locator('#isEnableOpenScheduling').first().locator('xpath=ancestor::div[3]');
   await capturePng(page, path.join(outDir, 'schedule-settings.png'), {
     modalBlur: true,
     highlight: scheduleBox,
     waitMs: 400,
   });
-  if (schedRes.changed) await ensureSwitchState(dialog, /응답 기간|시작 일정/, false);
+  if (schedRes.changed) await ensureSwitchState(dialog, /시작 일정|응답 기간/, false);
 
   // 4. 응답자 tab captures
   const respNavBtn = dialog.getByRole('button', { name: '응답자', exact: true }).first();
@@ -701,15 +799,16 @@ async function runSettingsCaptures(browser, ids) {
     await ensureSwitchState(dialog, /특정 이메일/, false);
   }
 
-  const msgRes = await findRowAndSwitchByLabel(dialog, /인증 화면 안내/);
+  const msgRes = await findRowAndSwitchByLabel(dialog, /안내 문구|인증 화면 안내/);
   if (msgRes.sw) {
-    await ensureSwitchState(dialog, /인증 화면 안내/, true);
+    await ensureSwitchState(dialog, /안내 문구|인증 화면 안내/, true);
+    const gateSection = dialog.locator('#isEnableGateMessage').first().locator('xpath=ancestor::section[1]');
     await capturePng(page, path.join(outDir, 'logged-in-auth-screen-message.png'), {
       modalBlur: true,
-      highlight: msgRes.row,
+      highlight: (await gateSection.count()) > 0 ? gateSection : msgRes.row,
       waitMs: 300,
     });
-    await ensureSwitchState(dialog, /인증 화면 안내/, false);
+    await ensureSwitchState(dialog, /안내 문구|인증 화면 안내/, false);
   }
 
   const onceRes = await ensureSwitchState(dialog, /인증된 사용자당 1회/, true);
@@ -754,7 +853,19 @@ async function runSettingsCaptures(browser, ids) {
   // 5. 설문 내보내기 tab captures
   const exportNavBtn = dialog.getByRole('button', { name: '설문 내보내기', exact: true }).first();
   await exportNavBtn.click();
-  await dialog.getByText(/편집 내용이 동기화되기를/).first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  await dialog.getByText(/편집 내용이 동기화되기를/).first().waitFor({ state: 'hidden', timeout: 25000 }).catch(() => {});
+  const exportWordBtn = dialog.getByRole('button', { name: /Word로 내보내기/ }).first();
+  await page
+    .waitForFunction(
+      () => {
+        const b = Array.from(document.querySelectorAll('button')).find((el) =>
+          (el.innerText || '').includes('Word로 내보내기')
+        );
+        return Boolean(b && !b.disabled && b.getAttribute('aria-disabled') !== 'true');
+      },
+      { timeout: 20000 }
+    )
+    .catch(() => {});
   await page.waitForTimeout(500);
   await capturePng(page, path.join(outDir, 'survey-export-select-menu.png'), {
     modalBlur: true,
@@ -769,7 +880,6 @@ async function runSettingsCaptures(browser, ids) {
     waitMs: 300,
   });
 
-  const exportWordBtn = dialog.getByRole('button', { name: /Word로 내보내기/ }).first();
   await capturePng(page, path.join(outDir, 'survey-export-download-word.png'), {
     modalBlur: true,
     highlight: exportWordBtn,
@@ -848,7 +958,7 @@ async function runSettingsCaptures(browser, ids) {
 
 async function runTourCaptures(browser, ids) {
   console.log('=== PHASE 4: INTERACTIVE TOURS CAPTURES ===');
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'ko-KR' });
+  const context = await newKoContext(browser);
   const page = await context.newPage();
   await signIn(page, 'minsu@example.com');
 
@@ -861,52 +971,65 @@ async function runTourCaptures(browser, ids) {
   await capturePng(page, path.join(ppDir, 'step-01.png'), { waitMs: 350 });
 
   const dialog = await openFormSettings(page);
+  await ensureSwitchState(dialog, /^설문 활성화$/, true);
+  await ensureSwitchState(dialog, /응답 수 제한|최대 응답 수/, false);
   const ppTabBtn = dialog.getByRole('button', { name: '프로젝트 권한', exact: true }).first();
   await ppTabBtn.waitFor({ state: 'visible', timeout: 8000 });
   const ppStep2Hotspot = await toPercentBox(await ppTabBtn.boundingBox());
   await capturePng(page, path.join(ppDir, 'step-02.png'), { modalBlur: true, waitMs: 350 });
 
+  // Expand 프로젝트 권한 disclosure & select 서울 리서처 in left navigation
   await ppTabBtn.click();
+  const seoulNavBtn = dialog
+    .locator('button:visible')
+    .filter({ hasText: /^서울 리서처$/ })
+    .first();
+  await seoulNavBtn.waitFor({ state: 'visible', timeout: 10000 });
+  await seoulNavBtn.click();
   await dialog.getByText(/불러오는 중/).first().waitFor({ state: 'hidden', timeout: 25000 }).catch(() => {});
-  await dialog.getByText('허용 안 함').first().waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
-  await page.waitForTimeout(600);
+  await dialog.getByText('편집하기', { exact: true }).first().waitFor({ state: 'visible', timeout: 15000 });
+  await page.waitForTimeout(500);
 
-  // Enable 프로젝트 편집 & 응답 다운로드 in 이 프로젝트의 역할 권한
-  await ensureSwitchState(dialog, /프로젝트 편집/, true);
-  await ensureSwitchState(dialog, /응답 다운로드/, true);
-  const capSection = dialog.getByText('이 프로젝트의 역할 권한').first().locator('xpath=ancestor::div[2]');
-  const ppStep3Hotspot = await toPercentBox(await capSection.boundingBox());
+  // Enable 프로젝트 편집 & 응답 다운로드 inside unified ProjectCapabilitiesSection
+  await ensureSwitchState(dialog, /^프로젝트 편집$/, true);
+  await ensureSwitchState(dialog, /^응답 다운로드$/, true);
+  const editingSection = dialog.getByText('편집하기', { exact: true }).first().locator('xpath=ancestor::section[1]');
+  await editingSection.scrollIntoViewIfNeeded().catch(() => {});
+  await page.waitForTimeout(250);
+  const ppStep3Hotspot = await toPercentBox(await editingSection.boundingBox());
   await capturePng(page, path.join(ppDir, 'step-03.png'), { modalBlur: true, waitMs: 350 });
-  const capSaveBtn = capSection.getByRole('button', { name: '저장하기' }).first();
-  if (await capSaveBtn.isVisible().catch(() => false) && !(await capSaveBtn.isDisabled())) {
-    await capSaveBtn.click();
-    await page.waitForTimeout(800);
-  }
 
-  const respAccessSection = dialog.getByText('응답 접근', { exact: true }).first().locator('xpath=ancestor::div[2]');
-  await respAccessSection.scrollIntoViewIfNeeded().catch(() => {});
+  // Step 4: Scroll to 응답 section -> highlight 응답 보기 row
+  const responseViewLabel = dialog.getByText('응답 보기', { exact: true }).first();
+  await responseViewLabel.scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(300);
-  const ppStep4Hotspot = await toPercentBox(await respAccessSection.boundingBox());
+  const responseViewRow = responseViewLabel.locator('xpath=ancestor::div[@data-slot="workspace-permission-row"][1]');
+  const ppStep4Hotspot = await toPercentBox(await responseViewRow.boundingBox());
   await capturePng(page, path.join(ppDir, 'step-04.png'), { modalBlur: true, waitMs: 350 });
 
-  // Configure 조건에 맞는 응답 (거주 지역 -> 서울) for 서울 리서처 on mainFormId
-  const matchingBtn = dialog.getByRole('button', { name: '조건에 맞는 응답' }).or(dialog.getByText('조건에 맞는 응답', { exact: true })).first();
-  await matchingBtn.waitFor({ state: 'visible', timeout: 10000 });
-  await matchingBtn.click();
-  await page.waitForTimeout(600);
+  // Step 5: In 응답 보기 PermissionScopeSelect, select 조건에 맞는 응답 -> configure 거주 지역 = 서울 -> save via bottom sticky 저장하기 button
+  let scopeCombo = dialog
+    .locator('button[aria-label="응답 보기"], [role="combobox"][aria-label="응답 보기"]')
+    .first();
+  if (!(await scopeCombo.isVisible().catch(() => false))) {
+    scopeCombo = responseViewRow.locator('button[aria-haspopup], [role="combobox"]').first();
+  }
+  await scopeCombo.click();
+  const matchingOpt = page.locator('[role="option"]:visible').filter({ hasText: '조건에 맞는 응답' }).first();
+  await matchingOpt.waitFor({ state: 'visible', timeout: 5000 });
+  await matchingOpt.click();
+  await page.waitForTimeout(500);
 
-  // Add condition row if '조건 1' / '필드' is not yet visible
+  // Inline Condition 1 renders immediately; add fallback only if needed
   const hasFieldLabel = await dialog.getByText('필드', { exact: true }).first().isVisible().catch(() => false);
   if (!hasFieldLabel) {
     const condBtn = dialog.getByRole('button', { name: '조건 추가' }).first();
-    await condBtn.waitFor({ state: 'visible', timeout: 5000 });
-    await condBtn.scrollIntoViewIfNeeded().catch(() => {});
-    await condBtn.click();
-    await dialog.getByText('필드', { exact: true }).first().waitFor({ state: 'visible', timeout: 8000 });
-    await page.waitForTimeout(450);
+    if (await condBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await condBtn.click();
+      await dialog.getByText('필드', { exact: true }).first().waitFor({ state: 'visible', timeout: 8000 });
+    }
   }
 
-  // Note: field selector may be a <select> or a <button> trigger without role="combobox"
   const fieldCtrl = dialog
     .locator('select:visible, button:visible, [role="combobox"]:visible')
     .filter({ hasText: /제출 시각|거주 지역|연락처|추가 의견|전반적인 만족도/ })
@@ -917,117 +1040,119 @@ async function runTourCaptures(browser, ids) {
       await fieldCtrl.selectOption({ label: '거주 지역' }).catch(() => {});
     } else {
       await fieldCtrl.click();
-      await page.waitForTimeout(350);
+      await page.waitForTimeout(300);
       await page
-        .locator('[role="option"]:visible, [role="menuitem"]:visible, button:visible, div[role="button"]:visible')
+        .locator('[role="option"]:visible, [role="menuitem"]:visible, button:visible')
         .filter({ hasText: /거주 지역/ })
         .last()
         .click();
     }
-    await page.waitForTimeout(550);
+    await page.waitForTimeout(500);
   }
 
-  // '서울' is rendered directly as a checkbox <label> under 값 (no combobox trigger!)
   const seoulVal = dialog.locator('label:visible').filter({ hasText: /^서울$/ }).first();
   await seoulVal.waitFor({ state: 'visible', timeout: 5000 });
   await seoulVal.click();
   await page.waitForTimeout(450);
+
   const saveBtn = dialog.getByRole('button', { name: '저장하기' }).last();
   await saveBtn.scrollIntoViewIfNeeded().catch(() => {});
-  const ppStep5Hotspot = (await saveBtn.isVisible().catch(() => false))
-    ? await toPercentBox(await saveBtn.boundingBox())
-    : ppStep4Hotspot;
+  const ppStep5Hotspot = await toPercentBox(await saveBtn.boundingBox());
   await capturePng(page, path.join(ppDir, 'step-05.png'), { modalBlur: true, waitMs: 400 });
+
   if (await saveBtn.isVisible().catch(() => false) && !(await saveBtn.isDisabled())) {
     await saveBtn.click();
-    await dialog.getByText(/정책을 저장했습니다|변경사항을 저장했습니다/).first().waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
+    await dialog.getByText(/저장|정책을/).first().waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
     await page.waitForTimeout(1000);
   } else {
-    console.log('Warning: 응답 접근 저장하기 button still disabled:', await dialog.innerText());
+    console.log('Warning: 프로젝트 권한 저장하기 button disabled');
   }
 
-    await fs.mkdir(TOURS_DATA_DIR, { recursive: true });
-    await fs.writeFile(
-      path.join(TOURS_DATA_DIR, 'project-permissions.json'),
-      JSON.stringify(
-        {
-          id: 'project-permissions',
-          title: '프로젝트 권한 설정 둘러보기',
-          steps: [
-            {
-              id: 'open-settings',
-              title: '설문 설정 열기',
-              description: '프로젝트 편집 화면 우측 상단의 톱니바퀴(설문 설정) 아이콘을 클릭합니다.',
-              image: '/images/guides/tours/project-permissions/step-01.png',
-              alt: '프로젝트 편집 화면 우측 상단의 설문 설정 아이콘',
-              actionLabel: '설문 설정 열기',
-              hotspot: ppStep1Hotspot,
-            },
-            {
-              id: 'select-tab',
-              title: '프로젝트 권한 탭 선택',
-              description: 'Enterprise 플랜 팀에서 관리 권한이 있는 멤버에게 왼쪽 메뉴의 ‘프로젝트 권한’ 탭이 표시됩니다.',
-              image: '/images/guides/tours/project-permissions/step-02.png',
-              alt: '설문 설정 모달 왼쪽 메뉴의 프로젝트 권한 탭',
-              actionLabel: '프로젝트 권한 열기',
-              hotspot: ppStep2Hotspot,
-            },
-            {
-              id: 'role-capabilities',
-              title: '이 프로젝트의 역할 권한 지정',
-              description: '워크스페이스 역할 설정에서 ‘프로젝트별 설정에 따름’으로 둔 7가지 작업 권한을 이 설문에 한해 켤 수 있습니다.',
-              image: '/images/guides/tours/project-permissions/step-03.png',
-              alt: '이 프로젝트의 역할 권한 카드에서 서울 리서처 역할 권한을 설정하는 화면',
-              actionLabel: '다음: 응답 접근',
-              hotspot: ppStep3Hotspot,
-            },
-            {
-              id: 'response-access-rules',
-              title: '역할별 응답 접근 범위 선택',
-              description: '응답 접근 섹션에서 역할별로 ‘모든 응답’ 또는 ‘조건에 맞는 응답’을 선택할 수 있습니다.',
-              image: '/images/guides/tours/project-permissions/step-04.png',
-              alt: '응답 접근 섹션에서 서울 리서처 역할의 접근 범위를 선택하는 화면',
-              actionLabel: '조건 규칙 설정',
-              hotspot: ppStep4Hotspot,
-            },
-            {
-              id: 'save-policy',
-              title: '조건 규칙 추가 및 저장',
-              description: '‘거주 지역 같음 서울’ 같은 조건을 추가하고 저장하기를 누르면 설문 게시 상태와 무관하게 즉시 적용됩니다.',
-              image: '/images/guides/tours/project-permissions/step-05.png',
-              alt: '조건에 맞는 응답 규칙을 지정하고 저장하기 버튼이 활성화된 화면',
-              actionLabel: '저장 완료',
-              hotspot: ppStep5Hotspot,
-            },
-          ],
-        },
-        null,
-        2
-      )
-    );
+  await fs.mkdir(TOURS_DATA_DIR, { recursive: true });
+  await fs.writeFile(
+    path.join(TOURS_DATA_DIR, 'project-permissions.json'),
+    JSON.stringify(
+      {
+        id: 'project-permissions',
+        title: '프로젝트 권한 설정 둘러보기',
+        steps: [
+          {
+            id: 'open-settings',
+            title: '설문 설정 열기',
+            description: '프로젝트 편집 화면 우측 상단의 톱니바퀴(설문 설정) 아이콘을 클릭합니다.',
+            image: '/images/guides/tours/project-permissions/step-01.png',
+            alt: '프로젝트 편집 화면 우측 상단의 설문 설정 아이콘',
+            actionLabel: '설문 설정 열기',
+            hotspot: ppStep1Hotspot,
+          },
+          {
+            id: 'select-tab',
+            title: '프로젝트 권한 및 역할 선택',
+            description: 'Enterprise 플랜 팀에서 역할 수정 권한이 있는 멤버에게 왼쪽 메뉴의 ‘프로젝트 권한’이 표시되며, 클릭하면 역할 목록이 펼쳐집니다.',
+            image: '/images/guides/tours/project-permissions/step-02.png',
+            alt: '설문 설정 모달 왼쪽 메뉴의 프로젝트 권한 메뉴',
+            actionLabel: '프로젝트 권한 열기',
+            hotspot: ppStep2Hotspot,
+          },
+          {
+            id: 'role-capabilities',
+            title: '프로젝트 작업 권한 지정',
+            description: '역할을 선택하면 편집하기·연동하기·공유하기 그룹이 한 화면에 열리며, 워크스페이스에서 ‘프로젝트별 설정에 따름’으로 둔 권한을 이 설문에 한해 켤 수 있습니다.',
+            image: '/images/guides/tours/project-permissions/step-03.png',
+            alt: '설문 설정 프로젝트 권한에서 서울 리서처 역할의 편집하기 작업 권한을 설정하는 화면',
+            actionLabel: '다음: 응답 보기',
+            hotspot: ppStep3Hotspot,
+          },
+          {
+            id: 'response-access-rules',
+            title: '응답 보기 접근 범위 선택',
+            description: '응답 섹션의 ‘응답 보기’ 드롭다운에서 역할별로 ‘허용 안 함’, ‘모든 응답’, ‘조건에 맞는 응답’을 선택할 수 있습니다.',
+            image: '/images/guides/tours/project-permissions/step-04.png',
+            alt: '응답 섹션에서 서울 리서처 역할의 응답 보기 접근 범위를 선택하는 화면',
+            actionLabel: '조건 규칙 설정',
+            hotspot: ppStep4Hotspot,
+          },
+          {
+            id: 'save-policy',
+            title: '조건 규칙 추가 및 저장',
+            description: '‘거주 지역 다음 중 하나 이상 포함 서울’ 같은 조건을 지정하고 하단의 저장하기를 누르면 작업 권한과 응답 규칙이 즉시 적용됩니다.',
+            image: '/images/guides/tours/project-permissions/step-05.png',
+            alt: '조건에 맞는 응답 규칙을 지정하고 하단 저장하기 버튼이 활성화된 화면',
+            actionLabel: '저장 완료',
+            hotspot: ppStep5Hotspot,
+          },
+        ],
+      },
+      null,
+      2
+    )
+  );
 
   // --- TOUR 2: response-access ---
   const raDir = path.join(GUIDES_IMG_DIR, 'tours/response-access');
 
-  // Step 1: Workspace roles -> 서울 리서처 -> 모든 응답 보기 = 프로젝트별 설정에 따름
+  // Step 1: Workspace roles -> 서울 리서처 -> 워크스페이스 권한 -> 응답 보기 = 프로젝트별 설정에 따름
   await gotoWorkspace(page);
   const wsDialog = await openWorkspaceSettings(page, '역할 및 권한');
   const wsSeoulRole = wsDialog.locator('button:visible, [role="button"]:visible, a:visible').filter({ hasText: '서울 리서처' }).first();
   await wsSeoulRole.waitFor({ state: 'visible', timeout: 10000 });
   await wsSeoulRole.click();
-  await wsDialog.locator('span:not(.invisible):visible, p:visible, button:visible').filter({ hasText: '프로젝트별 설정에 따름' }).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
-  await page.waitForTimeout(600);
-  const viewAllRow = wsDialog.getByText('모든 응답 보기', { exact: true }).first().locator('xpath=ancestor::div[2]');
+  await wsDialog.locator('span:not(.invisible):visible, p:visible, [role="combobox"]:visible').filter({ hasText: '프로젝트별 설정에 따름' }).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
+  await page.waitForTimeout(500);
+  const viewAllRow = wsDialog
+    .getByText(/^응답 보기$|^모든 응답 보기$/)
+    .first()
+    .locator('xpath=ancestor::div[@data-slot="workspace-permission-row"][1]');
   await viewAllRow.scrollIntoViewIfNeeded().catch(() => {});
   const raStep1Hotspot = await toPercentBox(await viewAllRow.boundingBox());
   await capturePng(page, path.join(raDir, 'step-01.png'), { modalBlur: true, waitMs: 350 });
 
-  // Step 2 & 3: Project settings -> 응답 접근 (copy steps 4 & 5 framing cleanly)
+  // Step 2 & 3: Project settings -> 응답 보기 (copy steps 4 & 5 framing cleanly)
   await fs.copyFile(path.join(ppDir, 'step-04.png'), path.join(raDir, 'step-02.png'));
   await fs.copyFile(path.join(ppDir, 'step-05.png'), path.join(raDir, 'step-03.png'));
 
   // Step 4 & 5: Sign in as hayoon@example.com (정하윤, 서울 리서처)
-  const hayoonCtx = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'ko-KR' });
+  const hayoonCtx = await newKoContext(browser);
   const hayoonPage = await hayoonCtx.newPage();
   await signIn(hayoonPage, 'hayoon@example.com');
 
@@ -1068,18 +1193,18 @@ async function runTourCaptures(browser, ids) {
           {
             id: 'workspace-scope',
             title: '워크스페이스 역할에서 ‘프로젝트별 설정에 따름’ 선택',
-            description: '워크스페이스 설정 → 역할 및 권한에서 ‘서울 리서처’ 역할의 ‘모든 응답 보기’를 프로젝트별 설정에 따름으로 지정합니다.',
+            description: '워크스페이스 설정 → 역할 및 권한에서 ‘서울 리서처’ 역할의 ‘응답 보기’를 ‘프로젝트별 설정에 따름’으로 지정합니다.',
             image: '/images/guides/tours/response-access/step-01.png',
-            alt: '워크스페이스 역할 및 권한에서 모든 응답 보기를 프로젝트별 설정에 따름으로 선택한 화면',
-            actionLabel: '프로젝트 설정으로 이동',
+            alt: '워크스페이스 역할 및 권한에서 응답 보기를 프로젝트별 설정에 따름으로 선택한 화면',
+            actionLabel: '설문 설정으로 이동',
             hotspot: raStep1Hotspot,
           },
           {
             id: 'project-mode',
             title: '설문 설정 → 프로젝트 권한에서 ‘조건에 맞는 응답’ 선택',
-            description: '프로젝트별 허용 전까지는 응답이 차단되며, 프로젝트 권한 탭의 응답 접근에서 조건부 조회를 켤 수 있습니다.',
+            description: '프로젝트에서 별도 규칙을 저장하기 전까지는 응답이 차단되며, 프로젝트 권한 → 응답 보기에서 조건부 조회를 선택할 수 있습니다.',
             image: '/images/guides/tours/response-access/step-02.png',
-            alt: '설문 설정 프로젝트 권한 탭의 응답 접근 섹션',
+            alt: '설문 설정 프로젝트 권한에서 응답 보기 드롭다운을 선택하는 화면',
             actionLabel: '조건 입력',
             hotspot: ppStep4Hotspot,
           },
@@ -1088,7 +1213,7 @@ async function runTourCaptures(browser, ids) {
             title: '조건 규칙 설정 및 즉시 적용',
             description: '‘거주 지역 = 서울’ 조건을 추가하고 저장하면 해당 역할 멤버의 응답 시트·개별 응답·통계·다운로드에 즉시 적용됩니다.',
             image: '/images/guides/tours/response-access/step-03.png',
-            alt: '거주 지역 서울 조건 규칙을 저장하는 화면',
+            alt: '거주 지역 서울 조건 규칙을 지정하고 저장하기를 누르는 화면',
             actionLabel: '리서처 화면 확인',
             hotspot: ppStep5Hotspot,
           },
@@ -1122,7 +1247,7 @@ async function runTourCaptures(browser, ids) {
 
 async function fixMainFormFieldTitlesAndPublish(browser, ids) {
   console.log('=== POLISH: FIX MAIN FORM TITLES & PROJECT-MOVE ===');
-  const context = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, locale: 'ko-KR' });
+  const context = await newKoContext(browser);
   const page = await context.newPage();
   await signIn(page, 'minsu@example.com');
 
@@ -1249,14 +1374,14 @@ async function main() {
     if (modes.has('polish')) {
       await fixMainFormFieldTitlesAndPublish(browser, ids);
     }
-    if (modes.has('workspace')) {
-      await runWorkspaceCaptures(browser);
-    }
     if (modes.has('settings')) {
       await runSettingsCaptures(browser, ids);
     }
     if (modes.has('tours')) {
       await runTourCaptures(browser, ids);
+    }
+    if (modes.has('workspace')) {
+      await runWorkspaceCaptures(browser);
     }
   } finally {
     await browser.close();

@@ -14,7 +14,7 @@ El sistema de permisos de Walla funciona en tres niveles: **permisos del equipo*
 | --- | --- | --- |
 | **Edición de permisos por rol** | Administradores y miembros tienen los mismos permisos del espacio de trabajo (`Propietario` · `Administrador` · `Miembro` fijos) | Permite **Añadir rol**, usar el rol **Sin asignar** y editar permisos detallados por rol |
 | **Rol predeterminado al invitar** | Miembro *(aplicado por defecto al invitar)* | **Sin asignar** *(valor predeterminado en enlaces de invitación e invitaciones)* |
-| **Alcance de aplicación de permisos** | Activación o desactivación global en todo el espacio de trabajo | Permite delegar ciertos permisos de proyecto y respuestas con **Seguir configuración del proyecto** |
+| **Alcance de aplicación de permisos** | Activación o desactivación global en todo el espacio de trabajo | Permite delegar ciertos permisos de proyecto y respuestas con **Definir por proyecto** |
 | **Control de acceso a respuestas** | No compatible | Compatible con consulta condicional de respuestas por rol ([Control de acceso a respuestas](/es/docs/help-center/security/response-access-control)) |
 
 <Callout type="info" title="Nota">
@@ -43,34 +43,34 @@ Gestionan los permisos sobre los formularios y las respuestas dentro de un espac
 - **Administrador (Admin)**: Tiene activados de forma predeterminada la mayoría de los permisos, incluidos la gestión de proyectos y la administración de miembros e invitaciones.
 - **Miembro (Member)**: Recibe los permisos necesarios para el trabajo diario, como crear y editar proyectos o consultar y descargar respuestas.
 - **Sin asignar (Restricted / Unassigned)** *(Enterprise)*: Se utiliza como rol predeterminado al invitar; parte con todos los permisos de proyecto y respuestas desactivados para que asignes solo los permisos necesarios.
-- **Rol personalizado** *(Enterprise)*: Al pulsar **Añadir rol**, puedes crear nuevos roles adaptados a tu equipo (como `Investigador de Seúl` o `Auditor externo`) y asignar miembros directamente desde las pestañas **Configuración de permisos** y **Lista de miembros**.
+- **Rol personalizado** *(Enterprise)*: Al pulsar **Añadir rol**, puedes crear nuevos roles adaptados a tu equipo (como `Investigador de Seúl` o `Auditor externo`) y gestionar sus permisos detallados y miembros asignados desde las pestañas **Permisos del espacio de trabajo**, **Permisos por proyecto** y **Lista de miembros**. *(La pestaña **Permisos por proyecto** se muestra cuando el rol tiene al menos un permiso configurado como **Definir por proyecto**.)*
 
 ## Los 17 permisos detallados del espacio de trabajo
 
-La pestaña **Configuración de permisos** de cada rol del espacio de trabajo se divide en tres grupos: **Proyecto**, **Privacidad** y **Avanzado**. *(En el plan Enterprise, los 8 permisos indicados en la columna «Delegación por proyecto» de la tabla siguiente pueden configurarse como **Seguir configuración del proyecto**.)*
+La pestaña **Permisos del espacio de trabajo** de cada rol se divide en tres grupos: **Proyecto**, **Datos personales** y **Avanzado**. *(En el plan Enterprise, los 8 permisos indicados en la columna «Delegación por proyecto» de la tabla siguiente pueden configurarse desde el desplegable como **Permitir todo**, **Definir por proyecto** o **No permitido**.)*
 
 ### Proyecto (10 permisos)
 
 | Nombre del permiso | Descripción | Delegación por proyecto |
 | --- | --- | --- |
-| **Crear proyecto** | Permite crear nuevos proyectos en el espacio de trabajo. | Permitir/bloquear globalmente |
-| **Duplicar proyecto** | Permite duplicar proyectos existentes. | Admite **Seguir configuración del proyecto** |
-| **Gestionar proyecto** | Permite mover, archivar y eliminar proyectos. | Admite **Seguir configuración del proyecto** |
-| **Editar proyecto** | Permite editar proyectos y asignarles etiquetas. | Admite **Seguir configuración del proyecto** |
+| **Crear proyectos** | Permite crear nuevos proyectos en el espacio de trabajo. | Permitir/bloquear globalmente |
+| **Duplicar proyectos** | Permite duplicar proyectos existentes. | Admite **Definir por proyecto** |
+| **Gestionar proyectos** | Permite mover, archivar y eliminar proyectos. | Admite **Definir por proyecto** |
+| **Editar proyectos** | Permite editar proyectos y asignarles etiquetas. | Admite **Definir por proyecto** |
 | **Gestionar etiquetas** | Permite crear, renombrar y eliminar etiquetas compartidas del espacio de trabajo. | Permitir/bloquear globalmente |
-| **Gestionar automatizaciones** | Permite ver, crear, editar y eliminar automatizaciones. *(Para reenviar respuestas anteriores desde el historial de ejecución también hace falta permiso de consulta de respuestas).* | Admite **Seguir configuración del proyecto** |
-| **Enviar formulario** | Permite registrar, editar y eliminar destinatarios y enviar formularios. | Admite **Seguir configuración del proyecto** |
-| **Ver todas las respuestas** | Permite ver todas las respuestas de los formularios. Si se desactiva, puedes elegir entre **No permitir** o **Seguir configuración del proyecto**. | Admite **Seguir configuración del proyecto** *(compatible con acceso condicional a respuestas)* |
-| **Eliminar respuestas** | Permite eliminar respuestas de formularios. | Admite **Seguir configuración del proyecto** |
-| **Descargar respuestas** | Permite descargar respuestas en CSV, Excel y otros formatos. | Admite **Seguir configuración del proyecto** |
+| **Gestionar automatizaciones** | Permite ver, crear, editar y eliminar automatizaciones. *(Para reenviar respuestas anteriores desde el registro de ejecución también se requiere el permiso «Ver respuestas»).* | Admite **Definir por proyecto** |
+| **Enviar encuestas** | Permite registrar, editar y eliminar destinatarios y enviar encuestas. | Admite **Definir por proyecto** |
+| **Ver respuestas** | Define el alcance de respuestas que puede ver este rol. Puedes elegir entre **Permitir todo**, **Definir por proyecto** o **No permitido**. | Admite **Definir por proyecto** *(compatible con acceso condicional a respuestas)* |
+| **Eliminar respuestas** | Permite eliminar respuestas de formularios. | Admite **Definir por proyecto** |
+| **Descargar respuestas** | Permite descargar respuestas en CSV, Excel y otros formatos. | Admite **Definir por proyecto** |
 
-### Privacidad (3 permisos)
+### Datos personales (3 permisos)
 
 | Nombre del permiso | Descripción |
 | --- | --- |
-| **Editar opciones de enmascarado** | Permite activar o desactivar la configuración de [enmascarado de datos](/es/docs/help-center/security/data-masking) por pregunta. |
-| **Acceso al original de respuestas enmascaradas** | Permite revelar el texto original de respuestas enmascaradas (`*****`). *(Al revelarlo pueden aplicarse registro de motivo y políticas de aprobación).* |
-| **Configurar borrado automático de respuestas** | Permite definir el ciclo de [borrado automático de respuestas](/es/docs/help-center/security/auto-delete-responses) por formulario. |
+| **Editar opciones de enmascaramiento** | Permite activar o desactivar la configuración de [enmascarado de datos](/es/docs/help-center/security/data-masking) por pregunta. |
+| **Ver respuestas originales** | Permite revelar el texto original de respuestas enmascaradas (`*****`). *(Al revelarlo pueden aplicarse registro de motivo y políticas de aprobación).* |
+| **Configuración de eliminación automática de respuestas** | Permite definir el ciclo de [borrado automático de respuestas](/es/docs/help-center/security/auto-delete-responses) por formulario. |
 
 ### Avanzado (4 permisos)
 

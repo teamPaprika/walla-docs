@@ -14,7 +14,7 @@ Walla's permission model operates across three layers: **Team Permissions**, **W
 | --- | --- | --- |
 | **Editing role permissions** | Admin and Member share identical workspace permissions (fixed `Owner`, `Admin`, `Member`) | **Add role**, **Unassigned** role, and granular per-role permission editing |
 | **Default invite role** | Member *(applied by default on invite)* | **Unassigned** *(default for invite links and direct invites)* |
-| **Permission scope** | Workspace-wide ON/OFF | Delegate selected project and response permissions with **Follow project settings** |
+| **Permission scope** | Workspace-wide ON/OFF | Delegate selected project and response permissions with **Follow Project Settings** |
 | **Response access control** | Not supported | Role-based conditional response viewing ([Response Access Control](/en/docs/help-center/security/response-access-control)) |
 
 <Callout type="info" title="Note">
@@ -43,26 +43,26 @@ Workspace roles control permissions for forms and responses inside a workspace. 
 - **Admin**: Most permissions, including project management and member/invitation management, are enabled by default.
 - **Member**: Granted the permissions needed for day-to-day work, such as creating/editing projects and viewing/downloading responses.
 - **Unassigned (Restricted)** *(Enterprise)*: Used as the default role for invitations; starts with all project and response permissions turned off so only required permissions are granted selectively.
-- **Custom roles** *(Enterprise)*: Click **Add role** to create team-specific roles such as `Seoul Researcher` or `External Auditor`, and assign members directly from the **Permission settings** and **Member list** tabs.
+- **Custom roles** *(Enterprise)*: Click **Add role** to create team-specific roles such as `Seoul Researcher` or `External Auditor`, and manage detailed permissions and assigned members across the **Workspace Permissions**, **Project Permissions**, and **Members List** tabs. *(The **Project Permissions** tab appears whenever a role has at least one permission set to **Follow Project Settings**.)*
 
 ## 17 Detailed Workspace Permissions
 
-The **Permission settings** tab of a workspace role is organized into three groups: **Projects**, **Privacy**, and **Advanced**. *(On the Enterprise plan, the 8 permissions marked in the 'Per-project delegation' column below can be set to **Follow project settings**.)*
+The **Workspace Permissions** tab of a workspace role is organized into three groups: **Projects**, **Privacy**, and **Advanced**. *(On the Enterprise plan, the 8 permissions marked in the 'Per-project delegation' column below can be set via dropdown to **Allow All**, **Follow Project Settings**, or **Not Allowed**.)*
 
 ### Projects (10)
 
 | Permission | Description | Per-project delegation |
 | --- | --- | --- |
 | **Create project** | Create new projects in the workspace. | Allow/block globally |
-| **Duplicate project** | Duplicate existing projects. | **Follow project settings** supported |
-| **Manage project** | Move, archive, or delete projects. | **Follow project settings** supported |
-| **Edit project** | Edit projects and assign tags. | **Follow project settings** supported |
+| **Duplicate project** | Duplicate existing projects. | **Follow Project Settings** supported |
+| **Manage project** | Move, archive, or delete projects. | **Follow Project Settings** supported |
+| **Edit project** | Edit projects and assign tags. | **Follow Project Settings** supported |
 | **Manage tags** | Create, rename, and delete shared workspace tags. | Allow/block globally |
-| **Manage automations** | View, create, edit, and delete automations. *(Re-sending past responses from run history also requires response viewing permission.)* | **Follow project settings** supported |
-| **Send form** | Register, edit, and delete recipients and send forms. | **Follow project settings** supported |
-| **View all responses** | View all responses for forms. When turned off, choose **Do not allow** or **Follow project settings**. | **Follow project settings** supported *(supports conditional response access)* |
-| **Delete responses** | Delete form responses. | **Follow project settings** supported |
-| **Download responses** | Download form responses as CSV, Excel, etc. | **Follow project settings** supported |
+| **Manage automations** | View, create, edit, and delete automations. *(Re-sending past responses from run history also requires the **View Responses** permission.)* | **Follow Project Settings** supported |
+| **Send form** | Register, edit, and delete recipients and send forms. | **Follow Project Settings** supported |
+| **View Responses** | The scope of responses this role can view. Choose **Allow All**, **Follow Project Settings**, or **Not Allowed**. | **Follow Project Settings** supported *(supports conditional response access)* |
+| **Delete responses** | Delete form responses. | **Follow Project Settings** supported |
+| **Download responses** | Download form responses as CSV, Excel, etc. | **Follow Project Settings** supported |
 
 ### Privacy (3)
 

@@ -7,7 +7,7 @@ plan: enterprise
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-En equipos con el **plan Enterprise**, el propietario, los administradores y los roles autorizados con permiso para gestionar roles del espacio de trabajo o permisos de proyecto pueden definir por separado en cada formulario los permisos de acción por rol y el alcance de acceso a las respuestas desde la pestaña **Configuración del formulario → Permisos del proyecto**.
+En equipos con el **plan Enterprise**, el propietario, los administradores y los roles autorizados con el permiso **Editar roles y permisos** pueden definir por separado en cada formulario los permisos de acción por rol y el alcance de **Ver respuestas** desde **Configuración del formulario → Permisos del proyecto**.
 
 ## Recorrido por la configuración de permisos del proyecto
 
@@ -20,57 +20,57 @@ Sigue estos pasos para acceder y configurar **Configuración del formulario → 
     Abre el editor del proyecto que quieres configurar y haz clic en el icono `⚙️` (**Configuración del formulario**) en la esquina superior derecha.
   </Step>
   <Step>
-    ### Selecciona Permisos del proyecto
+    ### Despliega Permisos del proyecto y elige un rol
 
-    En el menú lateral izquierdo de la ventana de configuración, selecciona **Permisos del proyecto**.
+    En el menú lateral izquierdo de la ventana de configuración, haz clic en **Permisos del proyecto** para desplegar la lista de roles y selecciona el rol que quieres configurar.
   </Step>
   <Step>
-    ### Configura los permisos de rol en este proyecto
+    ### Ajusta los permisos por grupo
 
-    En la sección **Permisos de rol en este proyecto**, localiza los roles que tienen permisos delegados y activa o desactiva los interruptores que necesites (por ejemplo, **Editar proyecto** o **Descargar respuestas**).
+    En el panel unificado del rol verás los cuatro grupos (**Edición**, **Integraciones**, **Compartir** y **Respuestas**). Activa o desactiva los interruptores de los permisos configurados como **Definir por proyecto** (los permisos fijados en el espacio de trabajo aparecen bloqueados en solo lectura como **Permitido** o **No permitido**).
   </Step>
   <Step>
-    ### Define el acceso a respuestas
+    ### Define el alcance de Ver respuestas
 
-    En la sección **Acceso a respuestas**, selecciona el nivel de acceso para cada rol elegible (**No permitir**, **Todas las respuestas** o **Respuestas coincidentes** con reglas y condiciones).
+    En el grupo **Respuestas**, abre el desplegable **Ver respuestas** y selecciona **No puede ver respuestas**, **Todas las respuestas** o **Respuestas coincidentes** (añadiendo reglas y condiciones si eliges esta última opción).
   </Step>
   <Step>
     ### Guarda los cambios
 
-    Haz clic en **Guardar** para aplicar los cambios de inmediato.
+    Haz clic en el botón **Guardar** en la parte inferior de la pantalla para aplicar todos los cambios de inmediato.
   </Step>
 </Steps>
 
-## Permisos de rol en este proyecto
+## Configurar permisos de acción por rol
 
-Cuando en **Roles y permisos** del espacio de trabajo configuras al menos uno de los 7 permisos a nivel de proyecto siguientes como **Seguir configuración del proyecto**, ese rol aparece en la lista **Permisos de rol en este proyecto**.
+Al hacer clic en **Permisos del proyecto** en el menú izquierdo de **Configuración del formulario**, se despliega la lista de roles; al elegir un rol, se abre una pantalla de permisos organizada en cuatro grupos: **Edición**, **Integraciones**, **Compartir** y **Respuestas**.
 
-Los 7 permisos que puedes activar en esta pantalla son:
+En esta pantalla puedes activar o desactivar los interruptores de los 7 permisos de acción siguientes que hayas configurado como **Definir por proyecto** en **Roles y permisos** del espacio de trabajo.
 
-| Nombre del permiso | Descripción |
-| --- | --- |
-| **Duplicar proyecto** | Permite duplicar este proyecto. |
-| **Gestionar proyecto** | Permite mover, archivar y eliminar este proyecto. |
-| **Editar proyecto** | Permite editar este proyecto y asignarle etiquetas. |
-| **Gestionar automatizaciones** | Permite ver, crear, editar y eliminar automatizaciones en este proyecto. |
-| **Enviar formulario** | Permite registrar, editar y eliminar destinatarios y enviar este formulario. |
-| **Eliminar respuestas** | Permite eliminar respuestas de este proyecto. |
-| **Descargar respuestas** | Permite descargar las respuestas de este proyecto. |
+Los 7 permisos de acción de esta pantalla son:
+
+| Grupo | Nombre del permiso | Descripción |
+| --- | --- | --- |
+| **Edición** | **Duplicar proyectos** | Permite duplicar este proyecto. |
+| **Edición** | **Editar proyectos** | Permite editar este proyecto y asignarle etiquetas. |
+| **Edición** | **Gestionar proyectos** | Permite mover, archivar y eliminar este proyecto. |
+| **Integraciones** | **Gestionar automatizaciones** | Permite ver, crear, editar y eliminar automatizaciones en este proyecto. |
+| **Compartir** | **Enviar encuestas** | Permite registrar, editar y eliminar destinatarios y enviar este formulario. |
+| **Respuestas** | **Eliminar respuestas** | Permite eliminar respuestas de este proyecto. |
+| **Respuestas** | **Descargar respuestas** | Permite descargar las respuestas de este proyecto. |
 
 <Callout type="warn" title="Ten en cuenta">
-Los permisos que ya están fijados como **Permitir (todos los proyectos)** o **No permitir** en la configuración de roles del espacio de trabajo no aparecen en la configuración individual del proyecto. Para cambiar su alcance proyecto por proyecto, cámbialos primero a **Seguir configuración del proyecto** en [Configuración del espacio de trabajo → Roles y permisos](/es/docs/help-center/team-workspace/managing-workspaces).
+Los permisos que ya están fijados como **Permitir todo** o **No permitido** en la configuración de roles del espacio de trabajo también se muestran en esta pantalla, pero aparecen bloqueados en estado de solo lectura (**Permitido** o **No permitido**, según la configuración del espacio de trabajo). Para activarlos o desactivarlos proyecto por proyecto, cámbialos primero a **Definir por proyecto** en [Configuración del espacio de trabajo → Roles y permisos](/es/docs/help-center/team-workspace/managing-workspaces).
 </Callout>
 
-Después de activar los interruptores del rol deseado, pulsa **Guardar** para que los cambios se apliquen de inmediato.
+## Alcance de acceso para Ver respuestas
 
-## Acceso a respuestas
+En la opción **Ver respuestas** del grupo **Respuestas**, puedes elegir mediante un desplegable qué respuestas puede consultar en este formulario un rol cuyo permiso **Ver respuestas** esté configurado como **Definir por proyecto** en los ajustes del espacio de trabajo.
 
-En la sección **Acceso a respuestas**, puedes definir qué respuestas puede consultar en este formulario un rol cuyo permiso **Ver todas las respuestas** esté configurado como **Seguir configuración del proyecto** en los ajustes del espacio de trabajo.
-
-- **No permitir**: No puede ver las respuestas de este formulario. (Estado predeterminado)
+- **No puede ver respuestas**: No puede ver las respuestas de este formulario. (Estado predeterminado)
 - **Todas las respuestas**: Puede ver todas las respuestas de este formulario.
 - **Respuestas coincidentes**: Solo puede consultar las respuestas que cumplan las reglas de condición especificadas.
 
-Aunque un rol tenga permiso para eliminar o descargar respuestas en el formulario, el alcance real de eliminación y descarga queda restringido al conjunto de respuestas permitidas aquí.
+Aunque un rol tenga permiso para eliminar o descargar respuestas en el formulario, el alcance real de eliminación y descarga queda restringido al conjunto de respuestas permitidas aquí. Tras ajustar todos los interruptores de permisos de acción y las reglas de **Ver respuestas**, pulsa el botón **Guardar** en la parte inferior de la pantalla para aplicar los cambios de inmediato.
 
 Para saber cómo crear reglas de condición y cómo se comportan en la hoja de respuestas, estadísticas y analíticas de visitas y comportamiento, consulta la guía [Control de acceso a respuestas](/es/docs/help-center/security/response-access-control).

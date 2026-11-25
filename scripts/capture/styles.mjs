@@ -137,20 +137,17 @@ export async function rewriteDomainText(page) {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     let node;
     while ((node = walker.nextNode())) {
-      if (node.nodeValue && node.nodeValue.includes('localhost:20700')) {
-        node.nodeValue = node.nodeValue.replace(/http:\/\/localhost:20700/g, 'https://app.walla.my').replace(/localhost:20700/g, 'app.walla.my');
-      }
-      if (node.nodeValue && node.nodeValue.includes('localhost:20701')) {
-        node.nodeValue = node.nodeValue.replace(/http:\/\/localhost:20701/g, 'https://app.walla.my').replace(/localhost:20701/g, 'app.walla.my');
+      if (node.nodeValue && /localhost:\d+/.test(node.nodeValue)) {
+        node.nodeValue = node.nodeValue
+          .replace(/https?:\/\/localhost:\d+/g, 'https://app.walla.my')
+          .replace(/localhost:\d+/g, 'app.walla.my');
       }
     }
     document.querySelectorAll('input, textarea').forEach((el) => {
-      if (el.value && (el.value.includes('localhost:20700') || el.value.includes('localhost:20701'))) {
+      if (el.value && /localhost:\d+/.test(el.value)) {
         el.value = el.value
-          .replace(/http:\/\/localhost:20700/g, 'https://app.walla.my')
-          .replace(/localhost:20700/g, 'app.walla.my')
-          .replace(/http:\/\/localhost:20701/g, 'https://app.walla.my')
-          .replace(/localhost:20701/g, 'app.walla.my');
+          .replace(/https?:\/\/localhost:\d+/g, 'https://app.walla.my')
+          .replace(/localhost:\d+/g, 'app.walla.my');
       }
     });
   });

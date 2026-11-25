@@ -7,11 +7,11 @@ plan: enterprise
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-On an **Enterprise plan** team, owners, admins, and authorized roles with workspace role management or project permission management permissions can configure role-based action permissions and response access scope per form under **Form Settings → Project permissions**.
+On an **Enterprise plan** team, owners, admins, and authorized roles with the **Edit Roles & Permissions** permission can configure role-based action permissions and response viewing scope per form under **Form Settings → Project Permissions**.
 
 ## Walkthrough: Configuring Project Permissions
 
-Follow these steps to configure per-project role permissions and response access:
+Follow these steps to configure per-project role permissions and response viewing scope:
 
 <Steps>
   <Step>
@@ -20,57 +20,57 @@ Follow these steps to configure per-project role permissions and response access
     Click the gear icon (`⚙️`) at the top right of the form editor to open **Form Settings**.
   </Step>
   <Step>
-    ### Select the Project permissions tab
+    ### Expand Project Permissions and select a role
 
-    Select the **Project permissions** tab from the left menu.
+    Click **Project Permissions** in the left menu to expand the roles list, then select the role you want to configure.
   </Step>
   <Step>
-    ### Configure role permissions for this project
+    ### Toggle per-project action permissions
 
-    Under **Role permissions for this project**, toggle the per-project capabilities you want to grant for each role and click **Save**.
+    In the unified screen organized under **Edit**, **Integrate**, **Share**, and **Responses**, toggle the action permissions set to **Follow Project Settings**. *(Permissions fixed in workspace settings appear read-only as **Allowed** or **Not Allowed**.)*
   </Step>
   <Step>
-    ### Choose Response access scope
+    ### Choose View Responses scope
 
-    Under **Response access**, choose **Do not allow**, **All responses**, or **Matching responses** for the role.
+    Under **Responses → View Responses**, open the dropdown and choose **Not Allowed**, **All Responses**, or **Matching Responses** (and add condition rules such as `Region = Seoul` if needed).
   </Step>
   <Step>
-    ### Add condition rules and save
+    ### Save changes
 
-    If you selected **Matching responses**, add condition rules (for example, `Region = Seoul`) and click **Save**.
+    Click the sticky **Save** button at the bottom of the screen to apply all changes immediately.
   </Step>
 </Steps>
 
-## Role Permissions for This Project
+## Configuring Action Permissions by Role
 
-When one or more of the 7 project-level permissions below are set to **Follow project settings** under workspace **Roles & Permissions**, that role appears in the **Role permissions for this project** list.
+Clicking **Project Permissions** in the left menu of **Form Settings** expands the roles list, and selecting a role opens a single screen organized into four groups: **Edit**, **Integrate**, **Share**, and **Responses**.
 
-The 7 permissions you can toggle on this screen are:
+Any of the 7 action permissions below that are set to **Follow Project Settings** under workspace **Roles & Permissions** can be toggled on or off on this screen.
 
-| Permission | Description |
-| --- | --- |
-| **Duplicate project** | Allows duplicating this project. |
-| **Manage project** | Allows moving, archiving, or deleting this project. |
-| **Edit project** | Allows editing this project and assigning tags. |
-| **Manage automations** | Allows viewing, creating, editing, and deleting automations for this project. |
-| **Send form** | Allows registering, editing, and deleting recipients and sending this form. |
-| **Delete responses** | Allows deleting responses for this project. |
-| **Download responses** | Allows downloading responses for this project. |
+The 7 action permissions on this screen are:
+
+| Group | Permission | Description |
+| --- | --- | --- |
+| **Edit** | **Duplicate project** | Allows duplicating this project. |
+| **Edit** | **Edit project** | Allows editing this project and assigning tags. |
+| **Edit** | **Manage project** | Allows moving, archiving, or deleting this project. |
+| **Integrate** | **Manage automations** | Allows viewing, creating, editing, and deleting automations for this project. |
+| **Share** | **Send form** | Allows registering, editing, and deleting recipients and sending this form. |
+| **Responses** | **Delete responses** | Allows deleting responses for this project. |
+| **Responses** | **Download responses** | Allows downloading responses for this project. |
 
 <Callout type="warn" title="Good to know">
-Permissions already fixed as **Allow (all projects)** or **Do not allow** in workspace role settings do not appear in individual project settings. To adjust a permission's scope per project, first change it to **Follow project settings** in [Workspace Settings → Roles & Permissions](/en/docs/help-center/team-workspace/managing-workspaces).
+Permissions already fixed as **Allow All** or **Not Allowed** in workspace role settings still appear on this screen, but they are locked in a disabled, read-only state (**Allowed** or **Not Allowed**, depending on workspace settings). To toggle a permission per project, first change it to **Follow Project Settings** in [Workspace Settings → Roles & Permissions](/en/docs/help-center/team-workspace/managing-workspaces).
 </Callout>
 
-Turn on the toggles for the desired roles and click **Save** to apply your changes immediately.
+## Response Viewing Scope
 
-## Response Access
+Under **Responses → View Responses**, use the dropdown to choose which responses a role can view in this form when **View Responses** is set to **Follow Project Settings** in workspace role settings:
 
-In the **Response access** section, configure which responses a role can view in this form when **View all responses** is set to **Follow project settings** in workspace role settings.
+- **Not Allowed**: Cannot view responses for this form. *(Default state)*
+- **All Responses**: Can view all responses for this form.
+- **Matching Responses**: Can view only responses that satisfy the specified condition rules.
 
-- **Do not allow**: Cannot view responses for this form. *(Default state)*
-- **All responses**: Can view all responses for this form.
-- **Matching responses**: Can view only responses that satisfy the specified condition rules.
-
-Even if a role has permission to delete or download responses in the form, the actual set of responses they can delete or download is restricted to the permitted response set defined here.
+Even if a role has permission to delete or download responses in the form, the actual set of responses they can delete or download is restricted to the permitted response set defined here. After adjusting the action permission toggles and **View Responses** rules, click **Save** at the bottom of the screen to apply your changes immediately.
 
 For details on writing condition rules and how restrictions behave in the Response Sheet, statistics, and Analytics, see the [Response Access Control](/en/docs/help-center/security/response-access-control) guide.

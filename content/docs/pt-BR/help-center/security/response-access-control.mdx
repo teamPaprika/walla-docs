@@ -11,8 +11,8 @@ Mesmo entre membros que colaboram no mesmo projeto de formulário, pode ser nece
 
 O controle de acesso às respostas funciona em **2 etapas**:
 
-1. **Nível de função do espaço de trabalho**: Em **Configurações do espaço de trabalho → Funções e permissões**, desative o seletor **Visualizar todas as respostas** da função desejada e escolha **Seguir configurações do projeto**.
-2. **Nível do projeto**: No editor do formulário, acesse **Configurações do formulário → Permissões do projeto → Acesso às respostas**, escolha entre **Não permitir**, **Todas as respostas** ou **Respostas correspondentes** para a função e clique em **Salvar**.
+1. **Nível de função do espaço de trabalho**: Em **Configurações do espaço de trabalho → Funções e permissões**, selecione **Definir por projeto** no menu suspenso **Visualizar respostas** da função desejada.
+2. **Nível do projeto**: No editor do formulário, acesse **Configurações do formulário → Permissões do projeto**, selecione a função desejada, escolha **Não permitido**, **Todas as respostas** ou **Respostas correspondentes** no menu suspenso **Respostas → Ver respostas** e clique em **Salvar** na parte inferior.
 
 ## Simulador de filtro por condições
 
@@ -26,19 +26,19 @@ Veja como configurar a função no espaço de trabalho, salvar as condições no
 
 <Steps>
   <Step>
-    ### Defina a função do espaço de trabalho como "Seguir configurações do projeto"
+    ### Defina a função do espaço de trabalho como "Definir por projeto"
 
-    Em **Configurações do espaço de trabalho → Funções e permissões**, altere **Visualizar todas as respostas** na função alvo (por exemplo, `Pesquisador de Seul`) para **Seguir configurações do projeto**.
+    Em **Configurações do espaço de trabalho → Funções e permissões**, altere o menu suspenso **Visualizar respostas** na função alvo (por exemplo, `Pesquisador de Seul`) para **Definir por projeto**.
   </Step>
   <Step>
-    ### Abra Acesso às respostas nas configurações do formulário
+    ### Selecione a função em Permissões do projeto
 
-    No editor do formulário, acesse **Configurações do formulário → Permissões do projeto**. Até que o acesso seja liberado no projeto, a função permanece bloqueada (**Não permitir**); selecione **Respostas correspondentes** para habilitar o filtro condicional.
+    No editor do formulário, expanda **Configurações do formulário → Permissões do projeto** e clique na função desejada. Até que o acesso seja liberado no projeto, a função permanece bloqueada (**Não permitido**); selecione **Respostas correspondentes** no menu suspenso **Respostas → Ver respostas** para habilitar o filtro condicional.
   </Step>
   <Step>
     ### Adicione regras condicionais e salve
 
-    Insira uma condição (como `Região de residência = Seul`) e clique em **Salvar**. A regra passa a valer imediatamente na planilha de respostas, nas respostas individuais, nas estatísticas e nos downloads dessa função.
+    Insira uma condição (como `Região de residência = Seul`) e clique em **Salvar** na parte inferior. A regra passa a valer imediatamente na planilha de respostas, nas respostas individuais, nas estatísticas e nos downloads dessa função.
   </Step>
   <Step>
     ### Confira a visualização restrita na planilha de respostas
@@ -61,7 +61,7 @@ Ao selecionar **Respostas correspondentes**, você pode combinar **regras** e **
 - **Tipos de campo compatíveis**: Você pode filtrar por `Data/hora de envio`, perguntas de seleção (múltipla escolha, lista suspensa, escala linear etc.), texto curto, número e data.
 
 <Callout type="warn" title="Atenção">
-Logo após alterar **Visualizar todas as respostas** para **Seguir configurações do projeto** na função do espaço de trabalho, os membros dessa função não poderão visualizar respostas em nenhum formulário até que uma regra seja salva individualmente (**Não permitir** por padrão). Lembre-se de salvar **Todas as respostas** ou **Respostas correspondentes** em **Configurações do formulário → Permissões do projeto → Acesso às respostas** em cada formulário necessário.
+Logo após alterar **Visualizar respostas** para **Definir por projeto** na função do espaço de trabalho, os membros dessa função não poderão visualizar respostas em nenhum formulário até que uma regra seja salva individualmente (**Não permitido** por padrão). Lembre-se de selecionar **Todas as respostas** ou **Respostas correspondentes** em **Configurações do formulário → Permissões do projeto → Respostas → Ver respostas** e clicar em **Salvar** em cada formulário necessário.
 </Callout>
 
 ## Comportamento nas telas de resultados e gerenciamento

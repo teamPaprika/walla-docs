@@ -14,7 +14,7 @@ O sistema de permissões do Walla funciona em três camadas: **permissões da eq
 | --- | --- | --- |
 | **Edição de permissões por função** | Administradores e membros compartilham as mesmas permissões do espaço de trabalho (`Proprietário`, `Administrador` e `Membro` fixos) | Permite **Adicionar função**, usar a função **Não atribuído** e editar permissões detalhadas por função |
 | **Função padrão de convite** | Membro *(aplicada por padrão nos convites)* | **Não atribuído** *(padrão em links de convite e convites diretos)* |
-| **Escopo de aplicação** | Ligado/desligado em todo o espaço de trabalho | Permite delegar permissões de projeto e resposta com **Seguir configurações do projeto** |
+| **Escopo de aplicação** | Ligado/desligado em todo o espaço de trabalho | Permite delegar permissões de projeto e resposta com **Definir por projeto** |
 | **Controle de acesso às respostas** | Não disponível | Suporte à visualização condicional por função ([Controle de acesso às respostas](/pt-BR/docs/help-center/security/response-access-control)) |
 
 <Callout type="info" title="Observação">
@@ -43,26 +43,26 @@ Gerenciam as permissões para formulários e respostas dentro de um espaço de t
 - **Administrador (Admin)**: Possui a maioria das permissões ativadas por padrão, incluindo gerenciamento de projetos, membros e convites.
 - **Membro (Member)**: Recebe as permissões necessárias para a operação diária, como criar e editar projetos e consultar ou baixar respostas.
 - **Não atribuído (Restrito / Unassigned)** *(Enterprise)*: Usada como função padrão para novos convites; inicia com todas as permissões de projeto e respostas desativadas para que apenas o necessário seja liberado seletivamente.
-- **Funções personalizadas** *(Enterprise)*: Clique em **Adicionar função** para criar funções adaptadas à sua equipe, como `Pesquisador de Seul` ou `Auditor externo`, e atribua membros diretamente nas abas **Configurações de permissão** e **Lista de membros**.
+- **Funções personalizadas** *(Enterprise)*: Clique em **Adicionar função** para criar funções adaptadas à sua equipe, como `Pesquisador de Seul` ou `Auditor externo`, e gerencie as permissões detalhadas e os membros atribuídos nas abas **Permissões do espaço de trabalho**, **Permissões por projeto** e **Lista de membros**. *(Quando a função possui ao menos uma permissão configurada como **Definir por projeto**, a aba **Permissões por projeto** também é exibida.)*
 
 ## As 17 permissões detalhadas do espaço de trabalho
 
-A aba **Configurações de permissão** das funções do espaço de trabalho divide-se em três grupos: **Projeto**, **Privacidade** e **Avançado**. *(No plano Enterprise, as 8 permissões indicadas na coluna 'Delegação por projeto' da tabela abaixo podem ser definidas como **Seguir configurações do projeto**.)*
+A aba **Permissões do espaço de trabalho** das funções do espaço de trabalho divide-se em três grupos: **Projeto**, **Privacidade** e **Avançado**. *(No plano Enterprise, as 8 permissões indicadas na coluna 'Delegação por projeto' da tabela abaixo podem ser definidas no menu suspenso como **Permitir tudo**, **Definir por projeto** ou **Não permitido**.)*
 
 ### Projeto (10)
 
 | Nome da permissão | Descrição | Delegação por projeto |
 | --- | --- | --- |
 | **Criar projetos** | Permite criar novos projetos no espaço de trabalho. | Permitir/bloquear em todo o espaço |
-| **Duplicar projetos** | Permite duplicar projetos existentes. | Permite **Seguir configurações do projeto** |
-| **Gerenciar projetos** | Permite mover, arquivar e excluir projetos. | Permite **Seguir configurações do projeto** |
-| **Editar projetos** | Permite editar projetos e atribuir etiquetas. | Permite **Seguir configurações do projeto** |
+| **Duplicar projetos** | Permite duplicar projetos existentes. | Permite **Definir por projeto** |
+| **Gerenciar projetos** | Permite mover, arquivar e excluir projetos. | Permite **Definir por projeto** |
+| **Editar projetos** | Permite editar projetos e atribuir etiquetas. | Permite **Definir por projeto** |
 | **Gerenciar etiquetas** | Permite criar, renomear e excluir etiquetas compartilhadas do espaço de trabalho. | Permitir/bloquear em todo o espaço |
-| **Gerenciar automações** | Permite visualizar, criar, editar e excluir automações. *(Para reenviar respostas anteriores pelo histórico de execução, também é necessária a permissão de visualizar respostas.)* | Permite **Seguir configurações do projeto** |
-| **Enviar formulários** | Permite cadastrar, editar e excluir destinatários e enviar formulários. | Permite **Seguir configurações do projeto** |
-| **Visualizar todas as respostas** | Visualiza todas as respostas do formulário. Ao desativar, escolha entre **Não permitir** ou **Seguir configurações do projeto**. | Permite **Seguir configurações do projeto** *(suporta acesso condicional)* |
-| **Excluir respostas** | Permite excluir respostas do formulário. | Permite **Seguir configurações do projeto** |
-| **Baixar respostas** | Permite baixar respostas em formatos como CSV e Excel. | Permite **Seguir configurações do projeto** |
+| **Gerenciar automações** | Permite visualizar, criar, editar e excluir automações. *(Para reenviar respostas anteriores pelo histórico de execução, também é necessária a permissão **Visualizar respostas**.)* | Permite **Definir por projeto** |
+| **Enviar formulários** | Permite cadastrar, editar e excluir destinatários e enviar formulários. | Permite **Definir por projeto** |
+| **Visualizar respostas** | Escopo de respostas que esta função pode visualizar. Escolha entre **Permitir tudo**, **Definir por projeto** ou **Não permitido**. | Permite **Definir por projeto** *(suporta acesso condicional)* |
+| **Excluir respostas** | Permite excluir respostas do formulário. | Permite **Definir por projeto** |
+| **Baixar respostas** | Permite baixar respostas em formatos como CSV e Excel. | Permite **Definir por projeto** |
 
 ### Privacidade (3)
 
