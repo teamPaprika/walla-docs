@@ -1,50 +1,42 @@
 ---
-title: Gerenciar espaços de trabalho
-description: "Use Membros e o menu de reticências (...) para convidar pessoas, alterar nomes, configurar permissões e excluir espaços de trabalho."
+title: "Gerenciar espaços de trabalho"
+description: "Saiba como gerenciar membros, convites, funções e permissões de um espaço de trabalho, além de excluí-lo ou transferir sua propriedade."
 plan:
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Membros (convites)
+Em um espaço de trabalho, você centraliza o gerenciamento de **membros**, **convites** e **funções e permissões** clicando no ícone de engrenagem (**Configurações do espaço de trabalho**) no canto superior direito da tela.
 
-<img src="/images/guides/team-workspace/workspace-member-invite.png" alt="Tela para adicionar membros da equipe na aba Membros das configurações do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+## Gerenciar membros e funções
 
-- Clique em `Membros` para convidar membros da equipe para o espaço de trabalho.
-- O plano Free não permite convidar membros para a equipe, portanto os convites para espaços de trabalho também não estão disponíveis.
+### Gerenciar membros
 
-## Funções e permissões
+Na aba **Gerenciar membros**, você visualiza a lista de membros atuais do espaço de trabalho e suas funções, podendo alterar a função pelo menu suspenso ou remover o membro pelo menu de mais opções (`⋯`).
 
-<img src="/images/guides/team-workspace/workspace-roles-permissions.png" alt="Controles de permissões de Admin e Member na aba Funções e permissões das configurações do espaço de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+Para adicionar outros membros da equipe ou enviar convites por e-mail ou link de convite, use a aba **Convites** no menu esquerdo (**Link de convite**, **Convidar**, **Convites enviados**). Para ver o passo a passo completo, consulte [Convidar membros para o espaço de trabalho](/pt-BR/docs/help-center/team-workspace/inviting-workspace-members).
 
-- As funções são Admin (administrador) e Member (membro).
-- Você pode permitir ou restringir os recursos abaixo para cada função.
-<Callout title="Recursos controlados por permissões">
-- Editar funções e permissões: criar e editar funções e alterar permissões
-- Atribuir funções: definir as funções dos membros
-- Adicionar ou remover membros: convidar pessoas ou removê-las do espaço de trabalho
-- Gerenciar projetos: mover, duplicar e excluir projetos
-- Editar projetos e etiquetas: alterar o conteúdo dos projetos
-- Visualizar respostas: acessar as páginas relacionadas às respostas
-- Excluir respostas: apagar as respostas coletadas
-- Baixar respostas: exportar os dados das respostas
-- Editar opções de mascaramento: usar as opções de mascaramento ao editar um projeto
-- Acessar informações mascaradas: controlar a permissão para visualizar respostas mascaradas
-- Configurações de exclusão automática de respostas: definir o prazo de exclusão automática
-</Callout>
+### Funções e permissões
 
-## Excluir um espaço de trabalho
+Na aba **Funções e permissões**, você configura para cada função as permissões de **Projeto** (10), **Privacidade** (3) e **Avançado** (4). Nos planos Free e Pro, administradores e membros possuem as mesmas permissões no espaço de trabalho; no **plano Enterprise**, é possível usar **Adicionar função**, a função **Não atribuído**, personalizar permissões por função e delegar permissões com **Seguir configurações do projeto**.
 
-<img src="/images/guides/team-workspace/workspace-delete-menu.png" alt="Opção Excluir espaço de trabalho no menu de mais opções da lista de espaços de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+Ao selecionar qualquer função e alternar para a aba **Lista de membros** no topo, você consulta quem possui aquela função atribuída e pode atribuí-la rapidamente a outros membros usando o botão **Adicionar membro**.
 
-  - No canto superior esquerdo, acesse `Configurações da equipe → Gerenciamento da equipe → Gerenciamento de espaços de trabalho` e clique em `Excluir espaço de trabalho`.
+Para a explicação completa da estrutura de funções e das 17 permissões detalhadas, consulte [Gerenciar permissões por função](/pt-BR/docs/help-center/security/managing-permissions).
+
+## Excluir espaço de trabalho e transferir propriedade
+
+As ações de excluir um espaço de trabalho ou transferir sua propriedade são controladas pela permissão de **Proprietário** e pelo menu de gerenciamento da equipe.
+
+### Excluir espaço de trabalho
+
+- **Parte inferior do modal de configurações do espaço de trabalho**: Clique em **Excluir espaço de trabalho** na parte inferior do menu esquerdo em Configurações do espaço de trabalho. *(Membros comuns veem a opção **Sair do espaço de trabalho**.)*
+- **Página de gerenciamento da equipe**: Na barra lateral esquerda, acesse **Gerenciamento da equipe → Gerenciamento de espaços de trabalho**, abra o menu de mais opções (`⋯`) à direita do espaço de trabalho desejado e selecione **Excluir**.
 
 <Callout type="warn" title="Atenção">
-A exclusão de um espaço de trabalho não pode ser desfeita. Recomendamos fazer backup dos dados necessários antes de excluí-lo.
+Ao excluir um espaço de trabalho, todos os projetos, dados de respostas e links de convite contidos nele também serão excluídos e não poderão ser recuperados.
 </Callout>
 
-## Alterar o proprietário do espaço de trabalho
+### Transferir propriedade
 
-<img src="/images/guides/team-workspace/workspace-owner-transfer.png" alt="Opção Transferir propriedade no menu de mais opções da lista de espaços de trabalho" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-
-- No canto superior esquerdo, acesse `Configurações da equipe → Gerenciamento da equipe → Gerenciamento de espaços de trabalho` para ver os espaços da equipe e alterar o proprietário de cada um.
+Para transferir a propriedade atual para outro membro da equipe, acesse **Gerenciamento da equipe → Gerenciamento de espaços de trabalho**, abra o menu de mais opções (`⋯`) do espaço de trabalho e selecione **Transferir propriedade**.

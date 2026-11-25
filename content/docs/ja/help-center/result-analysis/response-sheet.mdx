@@ -4,6 +4,8 @@ description: "「回答シート」では、収集した回答データを表の
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
 ## 回答シートの基本機能
 
 - 回答データの表示: フォームを通じて収集したすべての元データを確認できます。
@@ -49,4 +51,8 @@ plan:
 
 <Callout title="ヒント">
 フィルター機能を使うと、特定の期間、設問の値、キーワードなどを基準に、必要なデータだけをすばやく分析できます。フィルターを適用した状態で個別回答の詳細表示を開けば、絞り込んだ回答だけを順番にたどれます。
+</Callout>
+
+<Callout type="info" title="参考">
+Enterprise チームで[回答閲覧の管理](/ja/docs/help-center/security/response-access-control)により閲覧範囲が制限されたロールには、上部に **「アクセスできる回答のみを表示しています。」** という案内が表示され、許可された条件に一致する回答行のみ閲覧・ダウンロード・削除できます。
 </Callout>

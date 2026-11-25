@@ -4,6 +4,7 @@ description: "You can manage projects in many ways — move, delete, restore, du
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
 ## Renaming a Project
@@ -41,6 +42,10 @@ If you don't enter a title, the default "Walla Form" title will be shown when th
 - Projects can only be moved between workspaces within the same team.
 - You cannot move a project to a workspace in a different team.
 - To move a project, click `...` (more) on the project card → 'Move to Workspace', then choose the destination.
+
+<Callout type="warn" title="Warning">
+If your Enterprise team uses [Response Access Control](/en/docs/help-center/security/response-access-control), moving a form to another workspace **deletes all response access rules tied to the previous workspace's roles**. After moving, please verify and reconfigure your response access settings in the destination workspace.
+</Callout>
 
 ## Deleting and Restoring a Project
 

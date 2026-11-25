@@ -1,0 +1,76 @@
+---
+title: Permisos del proyecto
+description: Controla en detalle los permisos de acción por rol y el alcance de acceso a respuestas en la configuración del formulario de cada proyecto.
+plan: enterprise
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+En equipos con el **plan Enterprise**, el propietario, los administradores y los roles autorizados con permiso para gestionar roles del espacio de trabajo o permisos de proyecto pueden definir por separado en cada formulario los permisos de acción por rol y el alcance de acceso a las respuestas desde la pestaña **Configuración del formulario → Permisos del proyecto**.
+
+## Recorrido por la configuración de permisos del proyecto
+
+Sigue estos pasos para acceder y configurar **Configuración del formulario → Permisos del proyecto**:
+
+<Steps>
+  <Step>
+    ### Abre la configuración del formulario
+
+    Abre el editor del proyecto que quieres configurar y haz clic en el icono `⚙️` (**Configuración del formulario**) en la esquina superior derecha.
+  </Step>
+  <Step>
+    ### Selecciona Permisos del proyecto
+
+    En el menú lateral izquierdo de la ventana de configuración, selecciona **Permisos del proyecto**.
+  </Step>
+  <Step>
+    ### Configura los permisos de rol en este proyecto
+
+    En la sección **Permisos de rol en este proyecto**, localiza los roles que tienen permisos delegados y activa o desactiva los interruptores que necesites (por ejemplo, **Editar proyecto** o **Descargar respuestas**).
+  </Step>
+  <Step>
+    ### Define el acceso a respuestas
+
+    En la sección **Acceso a respuestas**, selecciona el nivel de acceso para cada rol elegible (**No permitir**, **Todas las respuestas** o **Respuestas coincidentes** con reglas y condiciones).
+  </Step>
+  <Step>
+    ### Guarda los cambios
+
+    Haz clic en **Guardar** para aplicar los cambios de inmediato.
+  </Step>
+</Steps>
+
+## Permisos de rol en este proyecto
+
+Cuando en **Roles y permisos** del espacio de trabajo configuras al menos uno de los 7 permisos a nivel de proyecto siguientes como **Seguir configuración del proyecto**, ese rol aparece en la lista **Permisos de rol en este proyecto**.
+
+Los 7 permisos que puedes activar en esta pantalla son:
+
+| Nombre del permiso | Descripción |
+| --- | --- |
+| **Duplicar proyecto** | Permite duplicar este proyecto. |
+| **Gestionar proyecto** | Permite mover, archivar y eliminar este proyecto. |
+| **Editar proyecto** | Permite editar este proyecto y asignarle etiquetas. |
+| **Gestionar automatizaciones** | Permite ver, crear, editar y eliminar automatizaciones en este proyecto. |
+| **Enviar formulario** | Permite registrar, editar y eliminar destinatarios y enviar este formulario. |
+| **Eliminar respuestas** | Permite eliminar respuestas de este proyecto. |
+| **Descargar respuestas** | Permite descargar las respuestas de este proyecto. |
+
+<Callout type="warn" title="Ten en cuenta">
+Los permisos que ya están fijados como **Permitir (todos los proyectos)** o **No permitir** en la configuración de roles del espacio de trabajo no aparecen en la configuración individual del proyecto. Para cambiar su alcance proyecto por proyecto, cámbialos primero a **Seguir configuración del proyecto** en [Configuración del espacio de trabajo → Roles y permisos](/es/docs/help-center/team-workspace/managing-workspaces).
+</Callout>
+
+Después de activar los interruptores del rol deseado, pulsa **Guardar** para que los cambios se apliquen de inmediato.
+
+## Acceso a respuestas
+
+En la sección **Acceso a respuestas**, puedes definir qué respuestas puede consultar en este formulario un rol cuyo permiso **Ver todas las respuestas** esté configurado como **Seguir configuración del proyecto** en los ajustes del espacio de trabajo.
+
+- **No permitir**: No puede ver las respuestas de este formulario. (Estado predeterminado)
+- **Todas las respuestas**: Puede ver todas las respuestas de este formulario.
+- **Respuestas coincidentes**: Solo puede consultar las respuestas que cumplan las reglas de condición especificadas.
+
+Aunque un rol tenga permiso para eliminar o descargar respuestas en el formulario, el alcance real de eliminación y descarga queda restringido al conjunto de respuestas permitidas aquí.
+
+Para saber cómo crear reglas de condición y cómo se comportan en la hoja de respuestas, estadísticas y analíticas de visitas y comportamiento, consulta la guía [Control de acceso a respuestas](/es/docs/help-center/security/response-access-control).

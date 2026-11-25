@@ -4,6 +4,8 @@ description: 分析功能會把問卷的參與狀況與使用者行為視覺化�
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
 ## 整體問卷洞察（Overall Survey Insights）
 
 - 總瀏覽數（Total Views）：問卷被開啟瀏覽的總次數。
@@ -27,3 +29,7 @@ plan:
 
 #### 紅 → 藍 → 天藍 → 藍
 填答者看過第 1 題與第 2 題後透過邏輯前往第 4 題，並在第 1 題離開。
+
+<Callout type="warn" title="注意事項">
+在 Enterprise 團隊中，若角色經由[回應查詢管理](/zh-TW/docs/help-center/security/response-access-control)受到回應存取限制，畫面會顯示 **「當回應存取受限時，不提供造訪與行為分析。您可以在回應統計中分析可存取的回應。」** 提示，並限制流量與流失分析功能。
+</Callout>

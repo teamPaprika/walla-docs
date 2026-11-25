@@ -4,6 +4,8 @@ description: "The Analytics feature provides a visual overview of survey partici
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
 ## Overall Survey Insights
 
 
@@ -32,3 +34,7 @@ The respondent moved from Q1 to Q4 via logic and then dropped off at that point.
 
 #### Red → Blue → Sky → Blue
 The respondent viewed Q1 and Q2, moved to Q4 via logic, and dropped off at Q1.
+
+<Callout type="warn" title="Warning">
+For roles whose response access is restricted by [Response Access Control](/en/docs/help-center/security/response-access-control) on an Enterprise team, a notice reading **"Visit and behavior analytics are unavailable when response access is restricted. You can analyze accessible responses in Response Statistics."** is shown, and traffic and drop-off analytics are restricted.
+</Callout>

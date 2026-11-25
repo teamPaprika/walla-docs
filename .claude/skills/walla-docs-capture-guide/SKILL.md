@@ -144,3 +144,40 @@ import { Callout } from 'fumadocs-ui/components/callout';
 - **alert/confirm 다이얼로그 주의**: 삭제 버튼 등 모달을 트리거하는 요소 클릭 금지
 - **개인정보 주의**: 스크린샷에 민감한 정보가 포함되면 사용자에게 알림
 - 탐색이 막히거나 예상과 다른 화면이 나오면 사용자에게 확인
+
+---
+
+## 인터랙티브 투어 & Capture-as-Code 제작 가이드 (표준 워크플로우)
+
+여러 작업자가 동일한 스타일과 품질로 가이드를 반복 제작할 때는 **정적 GIF 대신 `<InteractiveTour />` (Playwright PNG + 핫스팟 JSON)** 를 기본으로 사용합니다.
+
+### 1. 캡처 표준 및 공용 스타일 헬퍼
+- **뷰포트**: `1728×992` (`deviceScaleFactor: 1`, `scripts/capture/styles.mjs` 의 `VIEWPORT`)
+- **스타일 헬퍼 (`scripts/capture/styles.mjs`)**:
+  - `modalBlur: true`: 모달 배경 자동 블러 처리
+  - `highlight`: 대상 요소에 `#f472b6` 강조 테두리 표시
+  - `domainRewrite: true`: 로컬 개발 URL(`localhost:20700` 등)을 `app.walla.my` 로 치환
+  - `toPercentBox(box)`: DOM `boundingBox` 를 `<InteractiveTour />` 용 `%` 좌표로 변환
+- **기존 가이드 스크린샷 교체**: 기존 파일명을 덮어쓰고 기존 좌측 탭·블러·크기 스타일과 일치시킵니다.
+- **Playwright 실행 환경**: 로컬 dev/slot 기준 `scripts/capture/capture-guides.mjs` 패턴을 참고하되, 수동으로 찍은 `1728×992` 스크린샷만으로도 아래 `?debugTour=1` 로 투어를 조립할 수 있습니다.
+
+### 2. 투어 등록 방식 (컴포넌트 코드 수정 불필요)
+1. **이미지 저장**: `public/images/guides/tours/<tour-id>/step-01.png` ~ `step-NN.png`
+2. **투어 JSON 생성**: `src/data/tours/<tour-id>.json`
+   - 각 스텝의 `title` 앞에 `"1. "` 같은 숫자 접두사를 **넣지 마세요** (`<InteractiveTour />` 가 `{stepIndex + 1}. {title}` 로 자동 렌더링합니다).
+3. **레지스트리 1줄 등록**: `src/data/tours/index.ts` 의 `TOURS` 맵에 JSON import 를 추가합니다.
+4. **MDX 삽입**: 한국어 원본 문서(`content/docs/ko/...`)에 `<InteractiveTour tourId="<tour-id>" />` 를 넣습니다.
+
+### 3. 비개발자용 핫스팟 좌표 편집 (`?debugTour=1`)
+Playwright 스크립트 없이 수동 캡처했거나 핫스팟 영역을 미세 조정할 때:
+1. `pnpm dev` 로 로컬 프리뷰를 띄운 뒤, 해당 문서 URL 뒤에 **`?debugTour=1`** 을 붙입니다.
+2. 투어 이미지 위에서 마우스로 원하는 버튼/섹션을 드래그하면 `{ "x": ..., "y": ..., "width": ..., "height": ... }` JSON 이 계산됩니다.
+3. **JSON 복사** 버튼을 눌러 `src/data/tours/<tour-id>.json` 의 해당 스텝 `hotspot` 에 붙여넣습니다.
+
+### 4. 다국어 및 검증 체크리스트
+- **외국어 문서 처리**: `source.config.ts` 의 `stripMediaOutsideKorean` 플러그인이 한국어(`ko`) 외 로케일에서 `<img>`, `<video>`, `<InteractiveTour>` 를 자동 제거합니다. 따라서 외국어 번역본에서는 `<InteractiveTour />` 를 넣지 말고 **동일한 단계별 텍스트 가이드**로 대체해 누락 없이 안내하세요.
+- **시각 검증**:
+  - `img` 상·하단 여백이 `0px` 인지 확인 (`InteractiveTour` 루트의 `not-prose` 및 `!m-0` 유지)
+  - 스텝 제목에 이중 번호(`1. 1.`)가 없는지 확인
+  - 좌/우 끝·하단 근처 핫스팟의 말풍선이 잘리지 않는지 확인
+- **빌드·번역 점검**: `pnpm i18n:check`, `pnpm types:check`, `pnpm build` 모두 통과 확인

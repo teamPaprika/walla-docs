@@ -1,15 +1,86 @@
 ---
-title: Configurar permisos
-description: Define qué funciones y permisos tiene cada rol (propietario, administrador o miembro) del equipo y del espacio de trabajo.
-plan:
+title: Gestión de permisos por rol
+description: Configura los permisos del equipo, los roles del espacio de trabajo (roles predeterminados, sin asignar y personalizados) y el alcance de permisos por proyecto.
+plan: enterprise
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Configurar los permisos de los miembros del equipo
+El sistema de permisos de Walla funciona en tres niveles: **permisos del equipo**, **permisos de rol del espacio de trabajo** y **permisos individuales de proyecto**. Las funciones de seguridad y administración de todo el equipo se gestionan en **Gestión del equipo**, mientras que los permisos para crear o editar formularios y consultar o descargar respuestas se controlan por espacio de trabajo y por proyecto.
 
-Los roles del equipo siguen el orden Propietario > Administrador > Miembro.
-El propietario puede activar y desactivar los permisos detallados de **Administrador** y **Miembro** en la sección `Permisos por rol`, al final de la página **Gestión de miembros**.
+## Diferencias de permisos de rol según el plan
 
-## Configurar los permisos de los miembros del espacio de trabajo
-Pulsa el botón `⚙️` en el espacio de trabajo para ir a sus ajustes y define los permisos de administradores y miembros en la pestaña de roles y permisos.
+| Concepto | Planes Free · Pro | Plan Enterprise |
+| --- | --- | --- |
+| **Edición de permisos por rol** | Administradores y miembros tienen los mismos permisos del espacio de trabajo (`Propietario` · `Administrador` · `Miembro` fijos) | Permite **Añadir rol**, usar el rol **Sin asignar** y editar permisos detallados por rol |
+| **Rol predeterminado al invitar** | Miembro *(aplicado por defecto al invitar)* | **Sin asignar** *(valor predeterminado en enlaces de invitación e invitaciones)* |
+| **Alcance de aplicación de permisos** | Activación o desactivación global en todo el espacio de trabajo | Permite delegar ciertos permisos de proyecto y respuestas con **Seguir configuración del proyecto** |
+| **Control de acceso a respuestas** | No compatible | Compatible con consulta condicional de respuestas por rol ([Control de acceso a respuestas](/es/docs/help-center/security/response-access-control)) |
+
+<Callout type="info" title="Nota">
+En los planes Free y Pro, los administradores y los miembros comparten los mismos permisos en el espacio de trabajo. **Añadir rol**, el rol **Sin asignar** y la personalización de permisos por rol están disponibles en el **plan Enterprise**.
+</Callout>
+
+## Permisos del equipo
+
+Son los permisos generales del equipo para gestionar miembros, facturación, creación de espacios de trabajo y políticas de seguridad. Se administran en **Gestión del equipo → Permisos por rol** en la barra lateral izquierda.
+
+| Nombre del permiso | Descripción |
+| --- | --- |
+| **Invitar miembros del equipo** | Permite invitar miembros al equipo por correo electrónico o enlace de invitación. |
+| **Crear espacio de trabajo** | Permite crear nuevos espacios de trabajo dentro del equipo. |
+| **Eliminar miembros del equipo** | Permite expulsar miembros existentes del equipo. |
+| **Cambiar rol** | Permite cambiar el rol de equipo de un miembro (Administrador · Miembro). |
+| **Configuración de seguridad del equipo** | Permite configurar políticas de seguridad del equipo como autenticación en dos pasos (MFA), duración de sesión, restricción de acceso por IP, bloqueo de IA externa y flujos de aprobación. |
+| **Gestión de facturación** | Permite cambiar el plan del equipo y gestionar los métodos de pago. |
+| **Descargar registros del equipo** | Permite exportar los registros de actividad del equipo. |
+
+## Roles del espacio de trabajo
+
+Gestionan los permisos sobre los formularios y las respuestas dentro de un espacio de trabajo. Se consultan haciendo clic en el icono de engranaje (**Configuración del espacio de trabajo**) en la esquina superior derecha del espacio → **Roles y permisos**.
+
+- **Propietario (Owner)**: Es quien creó el espacio de trabajo o recibió su propiedad; todos sus permisos son fijos.
+- **Administrador (Admin)**: Tiene activados de forma predeterminada la mayoría de los permisos, incluidos la gestión de proyectos y la administración de miembros e invitaciones.
+- **Miembro (Member)**: Recibe los permisos necesarios para el trabajo diario, como crear y editar proyectos o consultar y descargar respuestas.
+- **Sin asignar (Restricted / Unassigned)** *(Enterprise)*: Se utiliza como rol predeterminado al invitar; parte con todos los permisos de proyecto y respuestas desactivados para que asignes solo los permisos necesarios.
+- **Rol personalizado** *(Enterprise)*: Al pulsar **Añadir rol**, puedes crear nuevos roles adaptados a tu equipo (como `Investigador de Seúl` o `Auditor externo`) y asignar miembros directamente desde las pestañas **Configuración de permisos** y **Lista de miembros**.
+
+## Los 17 permisos detallados del espacio de trabajo
+
+La pestaña **Configuración de permisos** de cada rol del espacio de trabajo se divide en tres grupos: **Proyecto**, **Privacidad** y **Avanzado**. *(En el plan Enterprise, los 8 permisos indicados en la columna «Delegación por proyecto» de la tabla siguiente pueden configurarse como **Seguir configuración del proyecto**.)*
+
+### Proyecto (10 permisos)
+
+| Nombre del permiso | Descripción | Delegación por proyecto |
+| --- | --- | --- |
+| **Crear proyecto** | Permite crear nuevos proyectos en el espacio de trabajo. | Permitir/bloquear globalmente |
+| **Duplicar proyecto** | Permite duplicar proyectos existentes. | Admite **Seguir configuración del proyecto** |
+| **Gestionar proyecto** | Permite mover, archivar y eliminar proyectos. | Admite **Seguir configuración del proyecto** |
+| **Editar proyecto** | Permite editar proyectos y asignarles etiquetas. | Admite **Seguir configuración del proyecto** |
+| **Gestionar etiquetas** | Permite crear, renombrar y eliminar etiquetas compartidas del espacio de trabajo. | Permitir/bloquear globalmente |
+| **Gestionar automatizaciones** | Permite ver, crear, editar y eliminar automatizaciones. *(Para reenviar respuestas anteriores desde el historial de ejecución también hace falta permiso de consulta de respuestas).* | Admite **Seguir configuración del proyecto** |
+| **Enviar formulario** | Permite registrar, editar y eliminar destinatarios y enviar formularios. | Admite **Seguir configuración del proyecto** |
+| **Ver todas las respuestas** | Permite ver todas las respuestas de los formularios. Si se desactiva, puedes elegir entre **No permitir** o **Seguir configuración del proyecto**. | Admite **Seguir configuración del proyecto** *(compatible con acceso condicional a respuestas)* |
+| **Eliminar respuestas** | Permite eliminar respuestas de formularios. | Admite **Seguir configuración del proyecto** |
+| **Descargar respuestas** | Permite descargar respuestas en CSV, Excel y otros formatos. | Admite **Seguir configuración del proyecto** |
+
+### Privacidad (3 permisos)
+
+| Nombre del permiso | Descripción |
+| --- | --- |
+| **Editar opciones de enmascarado** | Permite activar o desactivar la configuración de [enmascarado de datos](/es/docs/help-center/security/data-masking) por pregunta. |
+| **Acceso al original de respuestas enmascaradas** | Permite revelar el texto original de respuestas enmascaradas (`*****`). *(Al revelarlo pueden aplicarse registro de motivo y políticas de aprobación).* |
+| **Configurar borrado automático de respuestas** | Permite definir el ciclo de [borrado automático de respuestas](/es/docs/help-center/security/auto-delete-responses) por formulario. |
+
+### Avanzado (4 permisos)
+
+| Nombre del permiso | Descripción |
+| --- | --- |
+| **Editar roles y permisos** | Permite añadir, renombrar y eliminar roles del espacio de trabajo y modificar los permisos de cada rol. |
+| **Asignar roles** | Permite cambiar el rol de miembros e invitaciones del espacio de trabajo. |
+| **Añadir miembros** | Permite añadir miembros del equipo al espacio de trabajo o invitar a nuevos miembros. |
+| **Eliminar miembros** | Permite expulsar miembros existentes del espacio de trabajo. |
+
+<Callout type="idea" title="Nota">
+Para habilitar permisos de edición, descarga o eliminación de respuestas solo en un proyecto concreto, o para restringir la consulta a las respuestas que cumplan ciertas condiciones, consulta [Permisos del proyecto](/es/docs/help-center/manage-forms/project-permissions) y [Control de acceso a respuestas](/es/docs/help-center/security/response-access-control).
+</Callout>

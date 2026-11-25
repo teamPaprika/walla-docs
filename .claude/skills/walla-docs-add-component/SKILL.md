@@ -30,6 +30,8 @@ user_invocable: true
 5. Accordion (접기/펼치기) - FAQ처럼 접었다 펼 수 있는 섹션
 6. Files (파일 트리) - 폴더/파일 구조를 시각적으로 표시
 7. TypeTable (속성 테이블) - API 파라미터 같은 타입 정보 표시
+8. InteractiveTour (인터랙티브 가이드) - 클릭 가능한 단계별 화면 투어
+9. ResponseAccessSimulator (응답 접근 시뮬레이터) - 역할·조건별 응답 필터 체험기
 
 어떤 걸 추가할까요? (번호나 이름으로 선택)
 ```
@@ -154,10 +156,31 @@ import { TypeTable } from 'fumadocs-ui/components/type-table';
 />
 ```
 
+### InteractiveTour (인터랙티브 가이드)
+
+```mdx
+<InteractiveTour tourId="project-permissions" />
+```
+
+- `src/components/mdx.tsx` 에 전역 등록되어 있으므로 **import 불필요**
+- 투어 데이터는 `src/data/tours/<tour-id>.json` 에 두고 `src/data/tours/index.ts` 에 등록 (각 step `title` 에 숫자 접두사 금지)
+- 루트 `not-prose` 적용으로 Fumadocs `.prose img` 32px 여백 간섭을 차단함
+- `source.config.ts` 가 한국어(`ko`) 외 로케일에서는 `<InteractiveTour />` 를 자동 제거하므로, **외국어 문서에는 넣지 말고 텍스트 단계 설명으로 대체**할 것
+
+### ResponseAccessSimulator (응답 접근 시뮬레이터)
+
+```mdx
+<ResponseAccessSimulator locale="ko" />
+```
+
+- `src/components/mdx.tsx` 에 전역 등록되어 있으므로 **import 불필요**
+- 지원 `locale`: `"ko" | "en" | "zh-TW" | "ja" | "es" | "pt-BR"` (6개 언어 전체 노출 가능, 대상 언어에 맞춰 prop 지정)
+- 루트 `not-prose` 적용
+
 ## 삽입 규칙
 
 1. **import문 위치**: 파일 내에서 해당 컴포넌트의 import가 이미 있는지 확인. 없으면 frontmatter(`---`) 아래, 본문 시작 전에 추가
-2. **Cards/Card는 import 불필요**: 기본 MDX 컴포넌트로 자동 등록되어 있음
+2. **Cards/Card, InteractiveTour, ResponseAccessSimulator 는 import 불필요**: 기본/전역 MDX 컴포넌트로 자동 등록되어 있음
 3. **중복 import 금지**: 이미 import된 컴포넌트를 다시 import하지 않음
 4. **언어 버전 동기화**: 한 언어에 추가하면 `src/lib/i18n.ts`의 `languages` 배열에 있는 모든 다른 언어에도 동일한 구조로 추가 (내용은 해당 언어로 번역)
 

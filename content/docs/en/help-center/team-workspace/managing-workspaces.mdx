@@ -1,43 +1,42 @@
 ---
-title: Managing Workspaces
-description: "Workspaces offer 'Member Management' and other menus for inviting members, renaming the workspace, setting permissions, and deleting it."
+title: "Managing Workspaces"
+description: "Learn how to manage workspace members, invitations, roles and permissions, deletion, and ownership transfer."
 plan:
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Member Management (Invitations)
+You can manage **Member Management**, **Invitations**, and **Roles & Permissions** within a workspace in one place by clicking the gear icon (**Workspace Settings**) in the top right of the workspace screen.
 
-- Click 'Member Management' to invite team members to the workspace.
-- Workspace invitations are not available on the Free plan since team member invitations are disabled.
+## Managing Members and Roles
 
-## Roles and Permissions
+### Member Management
 
-- Roles are divided into Admin and Member.
-- For each role, you can allow or restrict access to the following features.
-<Callout title="Features You Can Control with Permissions">
-- Edit roles and permissions: create/edit roles and change permissions
-- Assign roles: assign roles to members
-- Add/remove members: invite or remove workspace members
-- Manage projects: move, duplicate, delete projects
-- Edit projects: edit project content
-- View responses: access response pages
-- Delete responses: delete collected responses
-- Download responses: export response data
-- Edit masking options: use masking options when editing projects
-- Restrict masked data access: control who can view masked responses
-- Auto-delete response settings: set auto-delete retention periods
-</Callout>
+On the **Member Management** tab, you can view the list of members currently in the workspace along with each member's role, and use the role dropdown or more (`⋯`) menu to change roles or remove a member from the workspace.
 
-## Deleting a Workspace
-  
-  - Click 'Delete Workspace' to remove the workspace.
-  - You can also do this from 'Team Settings' at the bottom left.
+To add existing team members or invite someone via email or invite link, use the **Invite** tab (**Invite link**, **Invite**, **Sent invites**) in the left menu. For detailed instructions, see [Inviting Workspace Members](/en/docs/help-center/team-workspace/inviting-workspace-members).
+
+### Roles & Permissions
+
+On the **Roles & Permissions** tab, configure **Projects** (10 permissions), **Privacy** (3 permissions), and **Advanced** (4 permissions) for each role. On Free and Pro plans, Admins and Members share identical workspace permissions; on the **Enterprise plan**, you can use **Add role**, the **Unassigned** role, per-role permission customization, and **Follow project settings** delegation.
+
+When you select any role and switch to the **Member list** tab at the top, you can view the members assigned to that role and click **Add member** to assign the role to additional members right away.
+
+For a complete explanation of the role hierarchy and all 17 detailed permissions, see [Managing Permissions](/en/docs/help-center/security/managing-permissions).
+
+## Deleting a Workspace and Transferring Ownership
+
+Deleting a workspace or transferring its ownership is controlled by the **Owner** role and the Team Management menu.
+
+### Deleting a Workspace
+
+- **Bottom of the Workspace Settings modal**: Click **Delete workspace** at the bottom of the left menu in Workspace Settings. *(Regular members see **Leave workspace** instead.)*
+- **Team Management page**: In the left sidebar under **Team Management → Manage Workspaces**, open the more (`⋯`) menu on the right side of the workspace row and select **Delete**.
 
 <Callout type="warn" title="Warning">
-Deleting a workspace cannot be undone, so we recommend backing up any important data first.
+Deleting a workspace permanently removes all projects, response data, and invite links inside it and cannot be undone.
 </Callout>
 
-## Changing the Workspace Owner
+### Transferring Ownership
 
-- Under 'Team Management → Manage Workspaces' in the top left, you can see the list of workspaces in your team and change the owner of each one.
+To transfer ownership from the current owner to another team member, go to **Team Management → Manage Workspaces**, open the more (`⋯`) menu on the workspace row, and select **Transfer ownership**.

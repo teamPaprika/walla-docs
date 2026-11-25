@@ -4,6 +4,8 @@ description: La función de analíticas visualiza la participación en el formul
 plan:
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
 ## Visión general del formulario (Overall Survey Insights)
 
 - Visualizaciones totales (Total Views): número total de veces que se ha abierto y visto el formulario.
@@ -27,3 +29,7 @@ La persona pasó de la pregunta 1 a la 4 mediante la lógica y abandonó en ese 
 
 #### Rojo → azul → celeste → azul
 La persona vio las preguntas 1 y 2, pasó a la 4 mediante la lógica y abandonó en la 1.
+
+<Callout type="warn" title="Advertencia">
+En equipos Enterprise, a los roles con acceso limitado a las respuestas mediante el [Control de acceso a respuestas](/es/docs/help-center/security/response-access-control) se les mostrará el aviso **«Cuando el acceso a las respuestas está restringido, no se ofrece el análisis de visitas y comportamiento. Puedes analizar las respuestas accesibles en Estadísticas de respuestas.»** y se restringirá el análisis de tráfico y abandono.
+</Callout>

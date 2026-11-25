@@ -1,54 +1,75 @@
 ---
-title: "워크스페이스 멤버 초대하기"
-description: "워크스페이스 설정에서 팀 멤버를 워크스페이스로 초대하고, 역할을 부여할 수 있어요."
+title: 워크스페이스 멤버 초대하기
+description: 워크스페이스 설정의 초대 탭에서 팀원 추가, 이메일 초대, 초대 링크 생성 및 보낸 초대를 관리하는 방법을 안내합니다.
 plan: pro
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
-import { Callout } from 'fumadocs-ui/components/callout';
 
-## 워크스페이스에 멤버 추가하기
+워크스페이스 내 **멤버 추가** 권한이 켜진 사용자(기본적으로 소유자·관리자)는 초대할 워크스페이스 우측 상단의 톱니바퀴(**워크스페이스 설정**) 아이콘을 눌러 **초대** 탭에서 새 멤버를 추가하거나 초대할 수 있습니다.
+
+<img src="/images/guides/team-workspace/workspace-settings-button.png" alt="워크스페이스 페이지 우측 상단의 워크스페이스 설정 톱니바퀴 아이콘" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+## 기존 팀원 추가 · 이메일로 초대하기
+
+**초대 → 초대하기** 탭에서는 같은 팀에 이미 가입된 팀원을 워크스페이스에 바로 추가하거나, 아직 팀에 없는 사람에게 이메일로 초대장을 보낼 수 있습니다.
 
 <Steps>
   <Step>
-    ### 워크스페이스 설정 진입
-    워크스페이스 우측 상단의 `톱니바퀴 아이콘`을 클릭합니다.
+    ### 대상 선택 및 역할 지정
 
-    <img src="/images/guides/team-workspace/workspace-settings-button.png" alt="워크스페이스 페이지 우측 상단의 톱니바퀴(설정) 아이콘" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    목록에서 추가할 팀원을 선택하고 우측 하단 드롭다운에서 적용할 **워크스페이스 역할**(Enterprise 기본 **미지정**, Free · Pro 기본 **멤버**)을 고른 뒤 **추가** 버튼을 클릭합니다. 팀에 아직 가입하지 않은 이메일은 **이메일 초대** 입력란을 통해 한 번에 초대를 보낼 수 있습니다.
+
+    <img src="/images/guides/team-workspace/workspace-add-member-select.png" alt="워크스페이스 설정 초대하기 탭에서 추가할 팀원과 부여할 역할을 선택하고 추가 버튼을 강조한 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
   <Step>
-    ### 팀 멤버 선택 후 추가하기
-    워크스페이스에 추가할 팀 멤버를 선택 혹은 팀/워크스페이스에 새로 초대할 계정을 입력한 뒤 `추가하기` 버튼을 클릭합니다.
+    ### 멤버 추가 확인
 
-    <img src="/images/guides/team-workspace/workspace-member-added.png" alt="새 멤버가 워크스페이스 멤버 목록에 추가되고 초대 완료 토스트가 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
-  </Step>
-  <Step>
-    ### 초대 완료
-    팀 멤버는 바로 초대가 완료되고, 팀 멤버가 아닌 계정은 메일에서 `초대장 바로가기` 버튼을 클릭하면 자동으로 해당 팀 및 워크스페이스에 초대됩니다.
+    추가가 완료되면 **멤버 관리** 목록에 새 멤버가 즉시 반영됩니다.
 
-    <img src="/images/guides/team-workspace/workspace-add-member-select.png" alt="팀 멤버 선택 드롭다운과 추가하기 버튼이 강조된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/team-workspace/workspace-member-added.png" alt="새 멤버가 워크스페이스 멤버 관리 목록에 추가된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
   </Step>
 </Steps>
 
 ## 초대 링크로 초대하기
 
-### 초대 링크 만들기
-`초대 링크` 영역의 `초대 링크 만들기` 버튼을 클릭하면 새 초대 링크가 생성됩니다.
+**초대 → 초대 링크** 탭에서는 **링크 유효 기간**과 **워크스페이스 역할**을 미리 지정해 여러 초대 링크를 생성하고 목록에서 관리할 수 있습니다.
 
-<img src="/images/guides/team-workspace/workspace-invite-link-create-button.png" alt="초대 링크가 없는 초기 상태에서 표시되는 초대 링크 만들기 버튼" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+<Steps>
+  <Step>
+    ### 유효 기간·역할 선택 후 초대 링크 생성
 
-### 유효 기간 설정
-생성된 링크는 기본 7일 동안 유효합니다. 링크 우측의 `유효 기간 변경` 버튼을 누르면, 잔여 유효 기간을 시간 단위로 다시 설정할 수 있어요.
+    **링크 유효 기간**(예: `7일`)과 가입 시 적용할 **워크스페이스 역할**을 선택한 다음 **초대 링크 생성** 버튼을 누릅니다.
 
-<img src="/images/guides/team-workspace/workspace-invite-link-created.png" alt="초대 링크가 생성되어 표시되고 7일 후 만료 안내와 생성 토스트가 노출된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/team-workspace/workspace-invite-link-create-button.png" alt="워크스페이스 설정 초대 링크 탭에서 유효 기간·역할을 고르고 초대 링크 생성 버튼을 클릭하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 생성된 초대 링크 복사
 
-<img src="/images/guides/team-workspace/workspace-invite-link-change-expiry.png" alt="유효 기간 변경 버튼을 누르면 펼쳐지는 잔여 유효 기간 선택 패널" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    아래 **생성된 초대 링크** 목록에 새 링크가 추가됩니다. 링크를 클릭해 URL을 복사하고 초대할 사람에게 전달하세요.
 
-### 초대 링크 삭제
-더 이상 링크가 필요 없다면 링크 우측의 휴지통 아이콘을 클릭합니다. 삭제 확인 다이얼로그에서 `확인`을 누르면 링크가 즉시 무효화됩니다. 이미 합류한 멤버는 그대로 유지돼요.
+    <img src="/images/guides/team-workspace/workspace-invite-link-created.png" alt="생성된 초대 링크 목록에 역할·상태·유효 기간과 함께 새 링크가 표시된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 유효 기간 변경
 
-<img src="/images/guides/team-workspace/workspace-invite-link-delete-button.png" alt="초대 링크 우측의 휴지통 아이콘이 강조된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    생성된 링크의 **유효 기간** 드롭다운을 열면 잔여 만료 기간을 바로 조정할 수 있습니다.
 
-<img src="/images/guides/team-workspace/workspace-invite-link-delete-confirm.png" alt="초대 링크 삭제 시 표시되는 삭제 확인 다이얼로그" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    <img src="/images/guides/team-workspace/workspace-invite-link-change-expiry.png" alt="생성된 초대 링크의 유효 기간 드롭다운을 눌러 만료 기간을 변경하는 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+  <Step>
+    ### 초대 링크 삭제
 
-<img src="/images/guides/team-workspace/workspace-invite-link-deleted.png" alt="초대 링크가 삭제되어 초기 상태로 돌아가고 삭제 완료 토스트가 표시된 모습" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+    더 이상 사용하지 않는 링크는 행 우측의 삭제 아이콘을 눌러 즉시 무효화할 수 있습니다. 확인 팝업에서 **확인**을 누르면 링크가 삭제되고 목록이 갱신됩니다.
+
+    <img src="/images/guides/team-workspace/workspace-invite-link-delete-button.png" alt="생성된 초대 링크 행 우측의 삭제 아이콘이 강조된 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/team-workspace/workspace-invite-link-delete-confirm.png" alt="초대 링크 삭제 시 표시되는 삭제 확인 다이얼로그" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+
+    <img src="/images/guides/team-workspace/workspace-invite-link-deleted.png" alt="초대 링크가 삭제되어 목록이 비워진 화면" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+  </Step>
+</Steps>
+
+## 보낸 초대 관리
+
+**초대 → 보낸 초대** 탭에서는 아직 수락되지 않은 이메일 초대 목록과 만료 상태를 확인하고, 초대 링크 복사·재전송·초대 취소를 실행할 수 있습니다.

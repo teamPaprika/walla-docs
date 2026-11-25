@@ -1,0 +1,76 @@
+{
+  "id": "project-permissions",
+  "title": "프로젝트 권한 설정 둘러보기",
+  "steps": [
+    {
+      "id": "open-settings",
+      "title": "설문 설정 열기",
+      "description": "프로젝트 편집 화면 우측 상단의 톱니바퀴(설문 설정) 아이콘을 클릭합니다.",
+      "image": "/images/guides/tours/project-permissions/step-01.png",
+      "alt": "프로젝트 편집 화면 우측 상단의 설문 설정 아이콘",
+      "actionLabel": "설문 설정 열기",
+      "hotspot": {
+        "x": 84.32,
+        "y": 1.01,
+        "width": 2.08,
+        "height": 3.63
+      }
+    },
+    {
+      "id": "select-tab",
+      "title": "프로젝트 권한 탭 선택",
+      "description": "Enterprise 플랜 팀에서 관리 권한이 있는 멤버에게 왼쪽 메뉴의 ‘프로젝트 권한’ 탭이 표시됩니다.",
+      "image": "/images/guides/tours/project-permissions/step-02.png",
+      "alt": "설문 설정 모달 왼쪽 메뉴의 프로젝트 권한 탭",
+      "actionLabel": "프로젝트 권한 열기",
+      "hotspot": {
+        "x": 31.71,
+        "y": 19.07,
+        "width": 5.46,
+        "height": 3.63
+      }
+    },
+    {
+      "id": "role-capabilities",
+      "title": "이 프로젝트의 역할 권한 지정",
+      "description": "워크스페이스 역할 설정에서 ‘프로젝트별 설정에 따름’으로 둔 7가지 작업 권한을 이 설문에 한해 켤 수 있습니다.",
+      "image": "/images/guides/tours/project-permissions/step-03.png",
+      "alt": "이 프로젝트의 역할 권한 카드에서 서울 리서처 역할 권한을 설정하는 화면",
+      "actionLabel": "다음: 응답 접근",
+      "hotspot": {
+        "x": 38.5,
+        "y": 14.8,
+        "width": 30.3,
+        "height": 24.0
+      }
+    },
+    {
+      "id": "response-access-rules",
+      "title": "역할별 응답 접근 범위 선택",
+      "description": "응답 접근 섹션에서 역할별로 ‘모든 응답’ 또는 ‘조건에 맞는 응답’을 선택할 수 있습니다.",
+      "image": "/images/guides/tours/project-permissions/step-04.png",
+      "alt": "응답 접근 섹션에서 서울 리서처 역할의 접근 범위를 선택하는 화면",
+      "actionLabel": "조건 규칙 설정",
+      "hotspot": {
+        "x": 38.5,
+        "y": 41.5,
+        "width": 30.3,
+        "height": 45.0
+      }
+    },
+    {
+      "id": "save-policy",
+      "title": "조건 규칙 추가 및 저장",
+      "description": "‘거주 지역 같음 서울’ 같은 조건을 추가하고 저장하기를 누르면 설문 게시 상태와 무관하게 즉시 적용됩니다.",
+      "image": "/images/guides/tours/project-permissions/step-05.png",
+      "alt": "조건에 맞는 응답 규칙을 지정하고 저장하기 버튼이 활성화된 화면",
+      "actionLabel": "저장 완료",
+      "hotspot": {
+        "x": 64.21,
+        "y": 76.33,
+        "width": 4.07,
+        "height": 4.03
+      }
+    }
+  ]
+}

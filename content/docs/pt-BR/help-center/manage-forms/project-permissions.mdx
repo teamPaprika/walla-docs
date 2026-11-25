@@ -1,0 +1,76 @@
+---
+title: "Permissões do projeto"
+description: "Configure de forma granular as permissões de ação por função e o escopo de acesso às respostas nas configurações do formulário de cada projeto."
+plan: enterprise
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Em equipes do **plano Enterprise**, proprietários, administradores e funções autorizadas com permissão para gerenciar funções do espaço de trabalho ou permissões do projeto podem definir permissões de ação por função e o escopo de acesso às respostas individualmente para cada formulário na aba **Configurações do formulário → Permissões do projeto**.
+
+## Passo a passo de configuração
+
+Siga estas etapas para configurar as permissões de um projeto específico:
+
+<Steps>
+  <Step>
+    ### Abra as configurações do formulário
+
+    No editor do projeto, clique no ícone de engrenagem (**Configurações do formulário**) no canto superior direito.
+  </Step>
+  <Step>
+    ### Selecione a aba Permissões do projeto
+
+    Em equipes do plano Enterprise, membros com permissão de gerenciamento visualizam a aba **Permissões do projeto** no menu esquerdo do modal de configurações.
+  </Step>
+  <Step>
+    ### Defina as permissões de função neste projeto
+
+    Ative apenas para este formulário qualquer uma das 7 permissões de ação configuradas como **Seguir configurações do projeto** nas configurações de função do espaço de trabalho.
+  </Step>
+  <Step>
+    ### Escolha o escopo de acesso às respostas por função
+
+    Na seção **Acesso às respostas**, selecione **Não permitir**, **Todas as respostas** ou **Respostas correspondentes** para cada função elegível.
+  </Step>
+  <Step>
+    ### Adicione regras condicionais e salve
+
+    Ao escolher **Respostas correspondentes**, adicione condições (por exemplo, `Região de residência igual a Seul`) e clique em **Salvar**. As alterações passam a valer imediatamente, independentemente de o formulário estar publicado ou não.
+  </Step>
+</Steps>
+
+## Permissões de função neste projeto
+
+Quando você define uma ou mais das 7 permissões no nível do projeto abaixo como **Seguir configurações do projeto** em **Funções e permissões** do espaço de trabalho, a função correspondente aparece na lista **Permissões de função neste projeto**.
+
+As 7 permissões que podem ser ativadas nesta tela são:
+
+| Nome da permissão | Descrição |
+| --- | --- |
+| **Duplicar projeto** | Permite duplicar este projeto. |
+| **Gerenciar projeto** | Permite mover, arquivar e excluir este projeto. |
+| **Editar projeto** | Permite editar este projeto e atribuir etiquetas. |
+| **Gerenciar automações** | Permite visualizar, criar, editar e excluir automações deste projeto. |
+| **Enviar formulário** | Permite cadastrar, editar e excluir destinatários e enviar este formulário. |
+| **Excluir respostas** | Permite excluir respostas deste projeto. |
+| **Baixar respostas** | Permite baixar respostas deste projeto. |
+
+<Callout type="warn" title="Atenção">
+Permissões já fixadas como **Permitir (todos os projetos)** ou **Não permitir** nas configurações de função do espaço de trabalho não aparecem nas configurações individuais do projeto. Para ajustar o escopo por projeto, altere a permissão para **Seguir configurações do projeto** primeiro em [Configurações do espaço de trabalho → Funções e permissões](/pt-BR/docs/help-center/team-workspace/managing-workspaces).
+</Callout>
+
+Ative os seletores das funções desejadas e clique em **Salvar** para aplicar as alterações imediatamente.
+
+## Acesso às respostas
+
+Na seção **Acesso às respostas**, você define quais respostas deste formulário podem ser visualizadas pelas funções configuradas com **Visualizar todas as respostas** definido como **Seguir configurações do projeto** no espaço de trabalho.
+
+- **Não permitir**: Não permite visualizar respostas deste formulário. *(Estado padrão)*
+- **Todas as respostas**: Permite visualizar todas as respostas deste formulário.
+- **Respostas correspondentes**: Permite consultar apenas as respostas que atendem às regras condicionais definidas.
+
+Mesmo que uma função tenha permissão para excluir ou baixar respostas neste formulário, as ações de exclusão e download ficam restritas ao conjunto de respostas permitido aqui.
+
+Para saber como criar regras condicionais e como a restrição funciona na planilha de respostas, nas estatísticas e nas análises de visitas e comportamento, consulte o guia [Controle de acesso às respostas](/pt-BR/docs/help-center/security/response-access-control).

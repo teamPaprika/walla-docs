@@ -1,19 +1,86 @@
 ---
 title: "Managing Permissions"
-description: "Configure the features and permissions available to each role (Owner/Admin/Member) on your team."
-plan:
+description: "Configure team permissions, workspace roles (default roles, Unassigned, and custom roles), and project-level permission scopes."
+plan: enterprise
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## Setting team member permissions
+Walla's permission model operates across three layers: **Team Permissions**, **Workspace Role Permissions**, and **Individual Project Permissions**. Team-wide security and administration are managed under Team Management, while form creation, editing, response viewing, and download permissions are controlled at the workspace and project levels.
 
-Team roles rank as Owner > Admin > Member.
-The team owner can toggle detailed permissions for the **Admin** and **Member** roles in the `Role permissions` section at the bottom of the **Team Members** page.
+## Role Permission Differences by Plan
 
-<img src="/images/guides/team-workspace/team-roles-admin.png" alt="The Admin tab of role permissions with toggles enabled for inviting members, creating workspaces, removing members, changing roles, security settings, and downloading logs" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+| Category | Free · Pro Plans | Enterprise Plan |
+| --- | --- | --- |
+| **Editing role permissions** | Admin and Member share identical workspace permissions (fixed `Owner`, `Admin`, `Member`) | **Add role**, **Unassigned** role, and granular per-role permission editing |
+| **Default invite role** | Member *(applied by default on invite)* | **Unassigned** *(default for invite links and direct invites)* |
+| **Permission scope** | Workspace-wide ON/OFF | Delegate selected project and response permissions with **Follow project settings** |
+| **Response access control** | Not supported | Role-based conditional response viewing ([Response Access Control](/en/docs/help-center/security/response-access-control)) |
 
-## Setting workspace member permissions
-Click the `⚙️` button in a workspace to open workspace settings, then set Admin and Member permissions on the Roles & Permissions tab.
+<Callout type="info" title="Note">
+On Free and Pro plans, Admins and Members share the same workspace permissions. **Add role**, the **Unassigned** role, and per-role permission customization are available on the **Enterprise plan**.
+</Callout>
 
-<img src="/images/guides/team-workspace/workspace-roles-permissions.png" alt="Managing Admin / Member permissions with toggles on the Roles & Permissions tab of the workspace settings modal" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
+## Team Permissions
+
+These permissions govern team-wide member management, billing, workspace creation, and security policies. Manage them in the left sidebar under **Team Management → Role Permissions**.
+
+| Permission | Description |
+| --- | --- |
+| **Invite team members** | Invite team members via email or invite link. |
+| **Create workspace** | Create new workspaces within the team. |
+| **Remove team members** | Remove existing members from the team. |
+| **Change roles** | Change a team member's team role (Admin · Member). |
+| **Team security settings** | Configure team security policies including two-factor authentication (MFA), login session duration, IP access restrictions, blocking external AI, and approval workflows. |
+| **Billing management** | Manage team plan changes and payment methods. |
+| **Download team logs** | Export team activity logs. |
+
+## Workspace Roles
+
+Workspace roles control permissions for forms and responses inside a workspace. Open the gear icon (**Workspace Settings**) at the top right of the workspace and go to **Roles & Permissions**.
+
+- **Owner**: The workspace creator or the user who received ownership; all permissions are fixed.
+- **Admin**: Most permissions, including project management and member/invitation management, are enabled by default.
+- **Member**: Granted the permissions needed for day-to-day work, such as creating/editing projects and viewing/downloading responses.
+- **Unassigned (Restricted)** *(Enterprise)*: Used as the default role for invitations; starts with all project and response permissions turned off so only required permissions are granted selectively.
+- **Custom roles** *(Enterprise)*: Click **Add role** to create team-specific roles such as `Seoul Researcher` or `External Auditor`, and assign members directly from the **Permission settings** and **Member list** tabs.
+
+## 17 Detailed Workspace Permissions
+
+The **Permission settings** tab of a workspace role is organized into three groups: **Projects**, **Privacy**, and **Advanced**. *(On the Enterprise plan, the 8 permissions marked in the 'Per-project delegation' column below can be set to **Follow project settings**.)*
+
+### Projects (10)
+
+| Permission | Description | Per-project delegation |
+| --- | --- | --- |
+| **Create project** | Create new projects in the workspace. | Allow/block globally |
+| **Duplicate project** | Duplicate existing projects. | **Follow project settings** supported |
+| **Manage project** | Move, archive, or delete projects. | **Follow project settings** supported |
+| **Edit project** | Edit projects and assign tags. | **Follow project settings** supported |
+| **Manage tags** | Create, rename, and delete shared workspace tags. | Allow/block globally |
+| **Manage automations** | View, create, edit, and delete automations. *(Re-sending past responses from run history also requires response viewing permission.)* | **Follow project settings** supported |
+| **Send form** | Register, edit, and delete recipients and send forms. | **Follow project settings** supported |
+| **View all responses** | View all responses for forms. When turned off, choose **Do not allow** or **Follow project settings**. | **Follow project settings** supported *(supports conditional response access)* |
+| **Delete responses** | Delete form responses. | **Follow project settings** supported |
+| **Download responses** | Download form responses as CSV, Excel, etc. | **Follow project settings** supported |
+
+### Privacy (3)
+
+| Permission | Description |
+| --- | --- |
+| **Edit masking options** | Turn per-question [Data Masking](/en/docs/help-center/security/data-masking) settings on or off. |
+| **Access masked original responses** | Unmask and view original values of masked responses (`*****`). *(Unmasking may require logging a reason and approval policies.)* |
+| **Auto-delete response settings** | Configure per-form [Auto-Delete Responses](/en/docs/help-center/security/auto-delete-responses) schedules. |
+
+### Advanced (4)
+
+| Permission | Description |
+| --- | --- |
+| **Edit roles & permissions** | Add, rename, and delete workspace roles and edit each role's permission configuration. |
+| **Assign roles** | Change roles for workspace members and invitations. |
+| **Add members** | Add team members to the workspace or invite new members. |
+| **Remove members** | Remove existing members from the workspace. |
+
+<Callout type="idea" title="Note">
+To grant edit, download, or response-deletion permissions only for specific projects—or restrict members to viewing only matching responses—see [Project Permissions](/en/docs/help-center/manage-forms/project-permissions) and [Response Access Control](/en/docs/help-center/security/response-access-control).
+</Callout>
