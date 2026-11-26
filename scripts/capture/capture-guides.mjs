@@ -47,7 +47,7 @@ function parseModes() {
   const arg = process.argv.find((a) => a.startsWith('--mode='));
   if (!arg) return new Set(['setup', 'workspace', 'settings', 'tours']);
   const raw = arg.slice('--mode='.length).split(',').map((s) => s.trim()).filter(Boolean);
-  if (raw.includes('all')) return new Set(['setup', 'workspace', 'settings', 'tours']);
+  if (raw.includes('all')) return new Set(['setup', 'workspace', 'settings', 'tours', 'security']);
   return new Set(raw);
 }
 
@@ -1362,6 +1362,129 @@ async function fixMainFormFieldTitlesAndPublish(browser, ids) {
   await context.close();
 }
 
+async function runSecurityCaptures(browser) {
+  console.log('=== PHASE 5: TEAM SECURITY CAPTURES ===');
+  const context = await newKoContext(browser);
+  const page = await context.newPage();
+  await signIn(page, 'minsu@example.com');
+
+  const outDir = path.join(GUIDES_IMG_DIR, 'security');
+  await page.goto(`${DASHBOARD_URL}/team/${TEAM_ID}/teamSetting/security`, { waitUntil: 'domcontentloaded' });
+  await page.getByRole('switch', { name: '2차 인증 (MFA)' }).first().waitFor({ state: 'visible', timeout: 30000 });
+  await page.getByText('승인이 필요한 작업', { exact: true }).first().waitFor({ state: 'visible', timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(1000);
+  await hideDevChrome(page);
+
+  const toggleSwitch = async (label, desired) => {
+    const sw = page.getByRole('switch', { name: label }).first();
+    await sw.scrollIntoViewIfNeeded().catch(() => {});
+    await page.waitForTimeout(200);
+    const checked =
+      (await sw.getAttribute('aria-checked')) === 'true' ||
+      (await sw.getAttribute('data-checked')) !== null;
+    if (checked !== desired) {
+      await sw.click();
+      await page.waitForTimeout(350);
+    }
+    return sw;
+  };
+
+  // 1. team-security-overview.png (clean top card overview)
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(400);
+  await capturePng(page, path.join(outDir, 'team-security-overview.png'), { waitMs: 350 });
+
+  // 2. two-factor-team.png
+  const mfaSw = await toggleSwitch('2차 인증 (MFA)', true);
+  const mfaRow = mfaSw.locator('xpath=ancestor::div[1]');
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await capturePng(page, path.join(outDir, 'two-factor-team.png'), {
+    highlight: mfaRow,
+    waitMs: 350,
+  });
+  await toggleSwitch('2차 인증 (MFA)', false);
+
+  // 3. ip-verification.png (IP 접근 제한 + 적용 범위 + 허용 IP 목록)
+  const ipSw = await toggleSwitch('IP 접근 제한', true);
+  const ipInput = page.locator('#ipWhitelistEntry').first();
+  await ipInput.waitFor({ state: 'visible', timeout: 8000 });
+  await ipInput.fill('192.168.1.1');
+  await ipInput.press('Enter');
+  await page.waitForTimeout(200);
+  await ipInput.fill('192.168.1.0/24');
+  await ipInput.press('Enter');
+  await page.waitForTimeout(300);
+  const ipSection = ipSw.locator('xpath=ancestor::div[2]');
+  await page.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.blur());
+  await ipSection.evaluate((el) => el.scrollIntoView({ block: 'center' })).catch(() => {});
+  await capturePng(page, path.join(outDir, 'ip-verification.png'), {
+    highlight: ipSection,
+    waitMs: 350,
+  });
+  await toggleSwitch('IP 접근 제한', false);
+  const cancelBtn = page.getByRole('button', { name: '취소', exact: true }).first();
+  if (await cancelBtn.isEnabled().catch(() => false)) {
+    await cancelBtn.click();
+    await page.waitForTimeout(250);
+  }
+
+  // 4. masking-copy-prevention.png
+  const copySw = await toggleSwitch('마스킹 해제 정보 복사 방지', true);
+  const copyRow = copySw.locator('xpath=ancestor::div[1]');
+  await copyRow.evaluate((el) => el.scrollIntoView({ block: 'center' })).catch(() => {});
+  await capturePng(page, path.join(outDir, 'masking-copy-prevention.png'), {
+    highlight: copyRow,
+    waitMs: 350,
+  });
+  await toggleSwitch('마스킹 해제 정보 복사 방지', false);
+
+  // 5. blocking-external-ai.png
+  const aiSw = await toggleSwitch('외부 AI 사용 차단', true);
+  const aiRow = aiSw.locator('xpath=ancestor::div[1]');
+  await aiRow.evaluate((el) => el.scrollIntoView({ block: 'center' })).catch(() => {});
+  await capturePng(page, path.join(outDir, 'blocking-external-ai.png'), {
+    highlight: aiRow,
+    waitMs: 350,
+  });
+  await toggleSwitch('외부 AI 사용 차단', false);
+
+  // 6. team-security-mcp-openapi.png (MCP 세부 토글 + Open API 허용 + 카드 하단까지 여유 있게 노출)
+  const mcpTitle = page.getByText('MCP(AI 연동) 허용', { exact: true }).first();
+  const openApiTitle = page.getByText('Open API 허용', { exact: true }).first();
+  if (await mcpTitle.isVisible().catch(() => false)) {
+    await page.evaluate(() => {
+      const mcpHeading = Array.from(document.querySelectorAll('h3')).find((h) => h.textContent?.trim() === 'MCP(AI 연동) 허용');
+      const openApiHeading = Array.from(document.querySelectorAll('h3')).find((h) => h.textContent?.trim() === 'Open API 허용');
+      if (mcpHeading && openApiHeading) {
+        const openApiRowBottom = openApiHeading.parentElement?.parentElement?.getBoundingClientRect().bottom ?? openApiHeading.getBoundingClientRect().bottom;
+        const absBottom = openApiRowBottom + window.scrollY;
+        const absTop = mcpHeading.getBoundingClientRect().top + window.scrollY;
+        const target = Math.max(0, Math.max(absBottom - window.innerHeight + 90, (absTop + absBottom) / 2 - window.innerHeight / 2 + 60));
+        window.scrollTo(0, Math.min(target, Math.max(0, absTop - 80)));
+      }
+    });
+  } else {
+    await openApiTitle.scrollIntoViewIfNeeded().catch(() => {});
+  }
+  await page.waitForTimeout(350);
+  await capturePng(page, path.join(outDir, 'team-security-mcp-openapi.png'), { waitMs: 350 });
+
+  // 7. approval-policy-toggles.png
+  const approvalCard = page
+    .getByText('승인이 필요한 작업', { exact: true })
+    .first()
+    .locator('xpath=ancestor::div[@data-slot="card"][1]');
+  await approvalCard.scrollIntoViewIfNeeded().catch(() => {});
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(350);
+  await capturePng(page, path.join(outDir, 'approval-policy-toggles.png'), {
+    highlight: approvalCard,
+    waitMs: 350,
+  });
+
+  await context.close();
+}
+
 async function main() {
   const modes = parseModes();
   const browser = await chromium.launch({ headless: true });
@@ -1382,6 +1505,9 @@ async function main() {
     }
     if (modes.has('workspace')) {
       await runWorkspaceCaptures(browser);
+    }
+    if (modes.has('security')) {
+      await runSecurityCaptures(browser);
     }
   } finally {
     await browser.close();
