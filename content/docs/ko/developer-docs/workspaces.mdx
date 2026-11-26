@@ -9,9 +9,74 @@ description: 워크스페이스 관리를 위한 API 레퍼런스
 
 특정 워크스페이스에 속한 폼만 조회하려면 `GET /workspaces/{workspaceId}/forms`를, 전체 폼을 한꺼번에 조회하려면 [폼 API](/ko/docs/developer-docs/forms)의 `GET /forms`를 사용하세요.
 
-> **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다.
+OAuth 토큰으로 호출할 때는 먼저 [팀 목록 조회](#팀-목록-조회)로 팀 ID를 확인하세요.
+
+> **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다. OAuth 토큰 호출에는 별도의 [팀별 호출 허용량](/ko/docs/developer-docs/authentication#oauth-토큰-호출-허용량)이 적용됩니다. 이 페이지의 모든 작업은 OAuth 토큰(`project:read`)으로도 호출할 수 있습니다.
 
 ## 엔드포인트
+
+### 팀 목록 조회
+
+Open API로 호출할 수 있는 팀 목록을 반환합니다. API 키로 호출하면 키가 발급된 팀 하나만 반환합니다. OAuth 토큰으로 호출하면 토큰 사용자가 속한 팀 중 Open API 사용 설정과 IP 접근 제한을 통과하는 팀만 반환합니다. 받은 `id`를 `GET /workspaces`·`GET /forms`의 `teamId`로 사용하세요.
+
+```http
+GET /open-api/v1/teams
+```
+
+#### 요청
+
+**헤더** (둘 중 하나)
+- `X-WALLA-API-KEY`: API 키
+- `Authorization: Bearer <액세스 토큰>`: OAuth 액세스 토큰 (`project:read` 스코프 필요)
+
+**요청 예시**
+
+```bash
+# API 키
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "X-WALLA-API-KEY: your_api_key_here"
+
+# OAuth 토큰
+curl -X GET "https://api.walla.my/open-api/v1/teams" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
+```
+
+#### 응답
+
+**성공 응답 (200 OK)**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "team_456",
+      "name": "마케팅 팀",
+      "profileUrl": null
+    }
+  ]
+}
+```
+
+**응답 필드**
+
+| 필드 | 타입 | 설명 |
+|------|------|------|
+| `success` | boolean | 요청 성공 여부 |
+| `data` | array | 팀 객체 배열 |
+| `data[].id` | string | 팀 ID |
+| `data[].name` | string | 팀 이름 |
+| `data[].profileUrl` | string \| null | 팀 프로필 이미지 URL |
+
+> **참고**: 2단계 인증을 켜지 않은 게스트에게도 팀이 목록에 표시되지만, 그 팀의 작업은 `403`을 반환합니다.
+
+**오류 응답**
+
+- **401 Unauthorized**: API 키 또는 OAuth 토큰 누락·무효·만료
+- **403 Forbidden**: OAuth 토큰에 `project:read` 스코프가 없음. API 키 호출에서는 팀의 Open API 사용 설정이나 IP 접근 제한으로 차단된 경우에도 반환됩니다 (토큰 호출에서는 해당 팀이 목록에서 빠집니다)
+- **500 Internal Server Error**: 서버 오류
+
+---
 
 ### 모든 워크스페이스 조회
 
@@ -24,8 +89,15 @@ GET /open-api/v1/workspaces
 #### 요청
 
 **헤더**
-- `X-WALLA-API-KEY` (필수): API 키
+- `X-WALLA-API-KEY` (API 키 인증 시 필수): API 키
+- `Authorization: Bearer <액세스 토큰>` (OAuth 인증 시 필수): `project:read` 스코프 필요
 - `Content-Type`: application/json
+
+**쿼리 파라미터**
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| `teamId` | string | OAuth 토큰 호출 시 필수 | 조회할 팀 ID. [팀 목록 조회](#팀-목록-조회)로 확인합니다. API 키 호출에서는 무시됩니다 |
 
 **요청 예시**
 
@@ -33,6 +105,13 @@ GET /open-api/v1/workspaces
 curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
   -H "X-WALLA-API-KEY: your_api_key_here" \
   -H "Content-Type: application/json"
+```
+
+OAuth 토큰으로 호출하는 경우:
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
 ```
 
 #### 응답
@@ -75,6 +154,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces" \
 
 **오류 응답**
 
+- **400 Bad Request**: OAuth 토큰으로 호출하면서 `teamId`를 빠뜨림
 - **401 Unauthorized**: API 키 누락 또는 유효하지 않음
 - **403 Forbidden**: 해당 리소스에 대한 권한 없음
   ```json
@@ -150,7 +230,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces/workspace_123" \
 **오류 응답**
 
 - **401 Unauthorized**: API 키 누락 또는 유효하지 않음
-- **403 Forbidden**: 해당 리소스에 대한 권한 없음
+- **403 Forbidden**: 해당 리소스에 대한 권한 없음. OAuth 토큰 호출에서 토큰 사용자가 이 워크스페이스에 접근할 수 없으면 `{"error":"Access denied"}`를 반환합니다
 - **404 Not Found**: 워크스페이스를 찾을 수 없음
 - **500 Internal Server Error**: 서버 오류
 

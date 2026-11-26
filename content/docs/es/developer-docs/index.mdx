@@ -15,6 +15,7 @@ La Walla Open API funciona de forma RESTful y ofrece las siguientes funciones.
 - **Gestión de formularios**: consulta los datos y la configuración de los formularios
 - **Envío de formularios**: envía formularios por correo electrónico o SMS
 - **Seguimiento de respuestas**: consulta y monitoriza las respuestas y los datos enviados
+- **Descarga de archivos de respuestas**: descarga los archivos subidos en las respuestas
 
 ## Jerarquía de recursos
 
@@ -24,12 +25,12 @@ Los recursos de la API de Walla se organizan con la siguiente jerarquía.
 Team → Workspace → Form → Response
 ```
 
-- **Team (equipo)**: es la unidad organizativa superior. Las claves de API se generan por equipo e incluyen automáticamente su información.
+- **Team (equipo)**: es la unidad organizativa superior. Las claves de API se generan por equipo e incluyen automáticamente su información. Si llamas con un token OAuth, consulta el ID del equipo con `GET /teams`.
 - **Workspace (espacio de trabajo)**: la unidad que agrupa formularios y proyectos dentro de un equipo.
 - **Form (formulario)**: el formulario creado dentro de un espacio de trabajo.
 - **Response (respuesta)**: cada respuesta enviada a un formulario.
 
-**Nota**: como la clave de API ya incluye la información del equipo, no hace falta enviarla aparte en las peticiones.
+**Nota**: como la clave de API ya incluye la información del equipo, no hace falta enviarla aparte en las peticiones con clave de API. Si llamas a `GET /workspaces` o `GET /forms` con un token OAuth, debes enviar `teamId` ([Indicar el equipo](/es/docs/developer-docs/authentication#indicar-el-equipo)).
 
 ## URL base
 
@@ -60,14 +61,14 @@ Consulta datos de los formularios como la lista, la configuración o el número 
 Envía formularios a varios destinatarios por correo o SMS y haz seguimiento del estado del envío y la participación.
 
 ### Recogida de respuestas
-Con la API de consulta de respuestas, que admite paginación, puedes ver datos detallados como la clave de cliente o la hora de envío.
+Con la API de consulta de respuestas, que admite paginación, puedes ver datos detallados como la clave de cliente o la hora de envío. Los archivos subidos en las respuestas se pueden descargar con la API de descarga de archivos.
 
 ## Especificaciones de la API
 
 - **Versión**: 1.0
 - **Protocolo**: HTTPS
-- **Formato de datos**: JSON
-- **Autenticación**: clave de API (mediante cabecera)
+- **Formato de datos**: JSON (la descarga de archivos de respuestas devuelve el archivo en binario)
+- **Autenticación**: clave de API (`X-WALLA-API-KEY`) o token de acceso OAuth (`Authorization: Bearer`, solo para algunas operaciones de lectura y la descarga de archivos)
 
 ## Soporte
 
@@ -77,6 +78,7 @@ Si tienes dudas o quieres solicitar una función, ponte en contacto con el equip
 
 | Categoría | Endpoint | Descripción |
 |---------|-----------|------|
+| Equipos | `GET /teams` | Consultar los equipos disponibles |
 | Espacios de trabajo | `GET /workspaces` | Consultar todos los espacios |
 | Espacios de trabajo | `GET /workspaces/{workspaceId}` | Consultar un espacio concreto |
 | Espacios de trabajo | `GET /workspaces/{workspaceId}/forms` | Consultar los formularios de un espacio |
@@ -97,8 +99,11 @@ Si tienes dudas o quieres solicitar una función, ponte en contacto con el equip
 | Envío | `POST /forms/{formId}/delivery/status` | Consultar el estado del envío |
 | Respuestas | `GET /forms/{formId}/responses` | Consultar las respuestas de un formulario (con paginación) |
 | Respuestas | `GET /forms/{formId}/responses/{responseId}` | Consultar una respuesta concreta |
+| Respuestas | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file` | Descargar un archivo subido en una respuesta |
 | Exportar respuestas | `POST /forms/{formId}/exports/responses` | Exportar las respuestas a un archivo Parquet |
 | Exportar respuestas | `POST /forms/{formId}/exports/field-definitions` | Exportar las definiciones de campos a un archivo Parquet |
+
+Para ver qué operaciones se pueden llamar con un token OAuth, consulta [Autenticación > Scopes y operaciones permitidas](/es/docs/developer-docs/authentication#scopes-y-operaciones-permitidas).
 
 ## Siguientes pasos
 

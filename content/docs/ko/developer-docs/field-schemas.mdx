@@ -13,6 +13,8 @@ description: 필드 타입과 출력 형식을 이해하기 위한 API 레퍼런
 
 > **참고**: API 키당 시간당 6,000건의 [속도 제한](/ko/docs/developer-docs/authentication#속도-제한)이 적용됩니다. 스키마는 거의 변경되지 않으므로 캐시해서 사용하는 것을 권장합니다.
 
+> **OAuth 토큰**: 이 API는 OAuth 토큰(`project:read`)으로도 호출할 수 있으며 `teamId`가 필요 없습니다. 토큰 호출은 사용자당 시간당 600건으로 집계됩니다([OAuth 토큰 호출 허용량](/ko/docs/developer-docs/authentication#oauth-토큰-호출-허용량)).
+
 ## 개요
 
 폼 응답의 `response` 객체에는 필드 ID를 키로, 필드 타입에 따른 값이 동적으로 들어갑니다. 필드 출력 스키마 API를 통해 각 필드 타입의 데이터 구조를 확인할 수 있습니다.
@@ -33,6 +35,13 @@ GET /open-api/v1/field-output-schemas
 curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
   -H "X-WALLA-API-KEY: your_api_key_here" \
   -H "Content-Type: application/json"
+```
+
+API 키 대신 OAuth 토큰을 사용할 수도 있습니다. 이 경우 `X-WALLA-API-KEY` 헤더 없이 `Authorization` 헤더만 보내세요.
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
 ```
 
 ### 응답
@@ -165,6 +174,7 @@ curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
     "error": "Unauthorized"
   }
   ```
+- **403 Forbidden**: OAuth 토큰에 `project:read` 스코프가 없음 (`{"error":"insufficient_scope","scope":"project:read"}`)
 - **429 Too Many Requests**: 속도 제한 초과
   ```json
   {

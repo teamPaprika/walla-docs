@@ -13,6 +13,8 @@ Response data fetched from the [Form Responses API](/en/docs/developer-docs/resp
 
 > **Note**: A [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key applies. Schemas rarely change, so caching them is recommended.
 
+> **OAuth tokens**: This API can also be called with an OAuth token (`project:read`) and does not need `teamId`. Token calls count toward a quota of 600 requests per hour per user ([OAuth token call quota](/en/docs/developer-docs/authentication#oauth-token-call-quota)).
+
 ## Overview
 
 When you retrieve form responses, the `response` object contains field values as dynamic properties, where field IDs are keys and values vary by field type. The Field Output Schemas API tells you exactly what data structure to expect for each field type.
@@ -33,6 +35,13 @@ GET /open-api/v1/field-output-schemas
 curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
   -H "X-WALLA-API-KEY: your_api_key_here" \
   -H "Content-Type: application/json"
+```
+
+You can also use an OAuth token instead of an API key. In that case, send only the `Authorization` header, without `X-WALLA-API-KEY`.
+
+```bash
+curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
 ```
 
 ### Response
@@ -165,6 +174,7 @@ curl -X GET "https://api.walla.my/open-api/v1/field-output-schemas" \
     "error": "Unauthorized"
   }
   ```
+- **403 Forbidden**: The OAuth token lacks the `project:read` scope (`{"error":"insufficient_scope","scope":"project:read"}`)
 - **429 Too Many Requests**: Rate limit exceeded
   ```json
   {

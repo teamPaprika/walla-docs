@@ -5,7 +5,9 @@ description: API reference for retrieving form responses and submissions
 
 # Form Responses API
 
-The Form Responses API allows you to retrieve and analyze form submissions. You can list all responses with pagination, search responses with rich filters, get detailed response data, and access individual submission information.
+The Form Responses API allows you to retrieve and analyze form submissions. You can list all responses with pagination, search responses with rich filters, get detailed response data, and access individual submission information. Files uploaded in responses can be downloaded with [Download a response file](#download-a-response-file).
+
+> **OAuth tokens**: With an OAuth token, you can call only the response list (`project:response.read`) and response file download (`project:response.download`). Searching responses, getting a specific response and exporting responses are API key-only. For details, see [Authentication](/en/docs/developer-docs/authentication#scopes-and-allowed-operations).
 
 ## Endpoints
 
@@ -108,6 +110,28 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
 
 > **Note**: Response objects include dynamic fields based on the form structure. Each form field appears as a property in the response object.
 
+#### Calling with an OAuth token
+
+When you call this endpoint with an OAuth token (`project:response.read`), response objects are returned as follows:
+
+- Only the fixed keys (`responseId`, `customerKey`, `submittedAt`) and fields in the currently published form (including hidden fields) are included. Values of fields deleted from the form are left out.
+- Values of file, image and video upload fields are replaced with the string `"[file]"`. The same applies to flattened keys of the form `<field ID>::<key>`. Download the file with [Download a response file](#download-a-response-file), using the original file upload field ID as `fieldId`.
+- Masked fields are returned as `REDACTED`, as with API key calls, and masked file fields are also `REDACTED`. Unanswered file fields are `null`.
+
+```json
+{
+  "responseId": "response_123",
+  "customerKey": "customer_001",
+  "submittedAt": "2024-01-15T14:30:00Z",
+  "field_name": "John Doe",
+  "field_file": "[file]",
+  "field_phone": "REDACTED",
+  "field_image": null
+}
+```
+
+The response format for API key calls is unchanged; stored values are returned as-is.
+
 **Error Responses**
 
 - **400 Bad Request**: Invalid page number or limit
@@ -117,7 +141,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
   }
   ```
 
-- **403 Forbidden**: Authentication failed or insufficient permissions
+- **401 Unauthorized**: API key or OAuth token missing, invalid or expired
+- **403 Forbidden**: Authentication failed or insufficient permissions. If the OAuth token lacks `project:response.read`, the body is `{"error":"insufficient_scope","scope":"project:response.read"}`
 - **404 Not Found**: Form not found
 - **500 Internal Server Error**: Server error
 
@@ -126,6 +151,8 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses?page=2&li
 ### Search Responses (Filtered)
 
 Retrieve a paginated list of responses with rich filters. The response envelope is identical to the paginated list above, but the request takes the **same filter contract** as [Parquet Export](/en/docs/developer-docs/responses/parquet) (customerKeys, submission time range, hidden fields, response fields) in a JSON body. Use this endpoint when the single `customerKey` query filter is not enough and you need nested filters that are awkward to express in a query string.
+
+This is an API key-only operation. Calling it with an OAuth token returns `403 This endpoint does not accept OAuth tokens`.
 
 ```http
 POST /open-api/v1/forms/{formId}/responses/search
@@ -237,7 +264,7 @@ Search requests are recorded in the activity log, but the raw values you pass as
 
 ### Get Specific Response
 
-Retrieve detailed information about a specific form response.
+Retrieve detailed information about a specific form response. This is an API key-only operation. Calling it with an OAuth token returns `403 This endpoint does not accept OAuth tokens`.
 
 ```http
 GET /open-api/v1/forms/{formId}/responses/{responseId}
@@ -310,6 +337,116 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses/response_
 - **403 Forbidden**: Authentication failed or insufficient permissions
 - **404 Not Found**: Form or response not found
 - **500 Internal Server Error**: Server error
+
+---
+
+### Download a response file
+
+Downloads a file uploaded to a file upload field (`FILE_UPLOAD`, `IMAGE_UPLOAD`, `VIDEO_UPLOAD`) of a response. You can call it with an API key or with an OAuth token that has the `project:response.download` scope. The response body is the raw file bytes, not JSON.
+
+```http
+POST /open-api/v1/forms/{formId}/responses/{responseId}/fields/{fieldId}/file
+```
+
+#### Parameters
+
+**Path Parameters**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `formId` | string | Yes | Form ID |
+| `responseId` | string | Yes | Response ID |
+| `fieldId` | string | Yes | File upload field ID. For a flattened `<field ID>::<key>`, use the field ID before `::` |
+
+**Request Body** (optional, JSON)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `reason` | string | Required only for secure file fields | Download reason. 1–500 characters after trimming leading and trailing whitespace. When sent for a general file field, it is also recorded in the activity log |
+
+- The request body can be at most 4KiB.
+- For secure file fields, `reason` is required and the team plan must support secure files.
+- In the response list, general files and secure files both appear as `[file]` and cannot be told apart. Always sending `reason` is the simplest approach.
+- Masked file fields cannot be downloaded. The Open API provides no way to unmask them.
+
+#### Request
+
+**Example Request**
+
+```bash
+# API key
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/responses/response_123/fields/field_file/file" \
+  -H "X-WALLA-API-KEY: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"reason": "Reviewing external audit materials"}' \
+  --output downloaded_file
+
+# OAuth token (project:response.download)
+curl -X POST "https://api.walla.my/open-api/v1/forms/form_abc/responses/response_123/fields/field_file/file" \
+  -H "Authorization: Bearer $WALLA_OAUTH_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"reason": "Reviewing external audit materials"}' \
+  --output downloaded_file
+```
+
+To save the file under its original name, use `-OJ` instead of `--output downloaded_file`. If an error occurs, the JSON error body is saved instead of the file, so check the status code as well.
+
+#### Response
+
+**Success Response (200 OK)**
+
+The body is the file bytes. The response headers are:
+
+| Header | Description |
+|--------|-------------|
+| `Content-Type` | The stored file type, or `application/octet-stream` if unknown |
+| `Content-Disposition` | Always `attachment`. Carries the original file name as `filename` (ASCII fallback) and `filename*` (UTF-8) |
+| `Content-Length` | Included only when storage reports the file size |
+| `Cache-Control` | Always `private, no-store` |
+
+**Error Responses**
+
+- **400 Bad Request**
+  - `Invalid request body`: The body is not JSON. If the body is not an object or `reason` has the wrong format, `detailsType: "schema"` and `details` are also returned
+  - `A download reason is required for a secure file.` (`code: "REASON_REQUIRED"`): `reason` is missing for a secure file field
+  - `Invalid request path`: The path could not be parsed
+- **401 Unauthorized**: API key or OAuth token missing, invalid or expired
+- **403 Forbidden**
+  - `Access denied`: No permission to view responses or download files
+  - `Approval required`: Approval is required under the team's download approval policy. `projectId` is the ID of the form that requires approval
+    ```json
+    {
+      "error": "Approval required",
+      "code": "APPROVAL_REQUIRED",
+      "actionKey": "project:response.download",
+      "projectId": "form_abc"
+    }
+    ```
+  - `This field is masked and cannot be downloaded.`: The file field is masked
+  - `Secure file access requires an enterprise plan.`: The field is a secure file field and the team plan does not support it
+  - `insufficient_scope`: The OAuth token lacks `project:response.download`
+  - `Forbidden`, `Open API is disabled for this team`, `Access from this IP address is not allowed`: The form belongs to another team or you have no access, the team has turned off the Open API, or the request is blocked by IP access restrictions
+  - `Unauthorized`: In an OAuth token call, the server could not verify the token. Do not refresh the token; try again shortly
+- **404 Not Found**
+  - `Not Found`: No form matches the form ID
+  - `File not found.`: For example, the form is not published; the response is not a submitted response of this form or is outside your access scope; the field is not a currently published file upload field (including fields deleted from the form); or no file was uploaded
+  - `File not found` (no period): The file was deleted right after the check
+- **413 Payload Too Large**
+  - `Request body too large`: The request body is larger than 4KiB
+  - `File too large`: The file is larger than 500MiB (524,288,000 bytes). This limit applies only when storage reports the file size (`Content-Length`)
+- **500 Internal Server Error**: `Failed to download file` or `Internal Server Error`
+- **502 Bad Gateway**: The file could not be fetched from storage
+  - `Failed to fetch file`: The connection to storage failed or storage responded with an error. This response can also occur when the file is missing from storage
+  - `Failed to resolve file`: A download address for protected storage could not be created
+  - `Invalid file source`: The stored file address could not be resolved to a storage location. An administrator needs to check the stored address or deployment settings
+
+  If the error is temporary, try again shortly. If it persists, contact an administrator.
+
+<Callout type="info" title="Activity log">
+Every file download is recorded in the activity log before the file is sent. If recording fails, the file is not sent and the API returns `500 Failed to download file`.
+</Callout>
+
+**On-premises and existing files**: In deployments where uploads go through the form server, existing general files that have no file record can still be downloaded. However, the address stored in the response must point exactly to this form, field and response's upload location under the storage address configured for the deployment or under the form server's `/storage/` address. Otherwise, the API returns `404 File not found.` and sends no outbound request to the stored address.
 
 ## Understanding Response Data
 
@@ -703,6 +840,8 @@ for response in responses:
 - Cache responses when appropriate
 - Use pagination instead of fetching all responses at once for large datasets
 - Implement rate limiting in your application
+- API key calls are subject to a [rate limit](/en/docs/developer-docs/authentication#rate-limiting) of 6,000 requests per hour per API key
+- OAuth token calls (including file downloads) are subject to a separate [per-team call quota](/en/docs/developer-docs/authentication#oauth-token-call-quota)
 
 ### Data Processing
 

@@ -15,6 +15,7 @@ The Walla Open API is a RESTful API that enables developers to:
 - **Manage Forms**: Access and retrieve form data and settings
 - **Send Form Deliveries**: Distribute forms to recipients via email or SMS
 - **Track Responses**: Monitor and retrieve form responses and submission data
+- **Download Response Files**: Download files uploaded in responses
 
 ## Resource Hierarchy
 
@@ -24,12 +25,12 @@ The Walla API follows a hierarchical structure for organizing resources:
 Team → Workspace → Form → Response
 ```
 
-- **Team**: The top-level organization unit. API keys are created at the team level and automatically include team context.
+- **Team**: The top-level organization unit. API keys are created at the team level and automatically include team context. When calling with an OAuth token, look up team IDs with `GET /teams`.
 - **Workspace**: A container within a team for organizing forms and projects.
 - **Form**: A survey or form created within a workspace.
 - **Response**: Individual submissions received for a form.
 
-**Important**: Since API keys are team-scoped, you don't need to provide team information in your API requests. The team context is automatically determined from your API key.
+**Important**: Since API keys are team-scoped, you don't need to provide team information in requests made with an API key. The team context is automatically determined from your API key. When you call `GET /workspaces` or `GET /forms` with an OAuth token, you must pass `teamId` ([Specifying a team](/en/docs/developer-docs/authentication#specifying-a-team)).
 
 ## Base URL
 
@@ -60,19 +61,20 @@ Access your forms, view form settings, and retrieve form analytics including sub
 Send forms to multiple recipients with customized email subjects and messages. Track delivery status and monitor recipient engagement.
 
 ### Response Collection
-Retrieve form responses with pagination support. Access detailed response data including customer keys and submission timestamps.
+Retrieve form responses with pagination support. Access detailed response data including customer keys and submission timestamps. Files uploaded in responses can be downloaded with the file download API.
 
 ## API Specifications
 
 - **Version**: 1.0
 - **Protocol**: HTTPS
-- **Data Format**: JSON
-- **Authentication**: API Key (via header)
+- **Data Format**: JSON (response file downloads return binary file data)
+- **Authentication**: API key (`X-WALLA-API-KEY`) or OAuth access token (`Authorization: Bearer`, limited to certain read operations and file downloads)
 
 ## API Endpoints Overview
 
 | Category | Endpoint | Description |
 |----------|----------|-------------|
+| Teams | `GET /teams` | List callable teams |
 | Workspaces | `GET /workspaces` | List all workspaces |
 | Workspaces | `GET /workspaces/{workspaceId}` | Get specific workspace |
 | Workspaces | `GET /workspaces/{workspaceId}/forms` | List forms in workspace |
@@ -93,8 +95,11 @@ Retrieve form responses with pagination support. Access detailed response data i
 | Delivery | `POST /forms/{formId}/delivery/status` | Check delivery status |
 | Responses | `GET /forms/{formId}/responses` | List form responses (paginated) |
 | Responses | `GET /forms/{formId}/responses/{responseId}` | Get specific response |
+| Responses | `POST /forms/{formId}/responses/{responseId}/fields/{fieldId}/file` | Download a file uploaded in a response |
 | Response Export | `POST /forms/{formId}/exports/responses` | Export form responses as a Parquet file |
 | Response Export | `POST /forms/{formId}/exports/field-definitions` | Export form field definitions as a Parquet file |
+
+For the operations you can call with an OAuth token, see [Authentication > Scopes and allowed operations](/en/docs/developer-docs/authentication#scopes-and-allowed-operations).
 
 ## Support
 
