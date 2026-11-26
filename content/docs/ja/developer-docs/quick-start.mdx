@@ -12,7 +12,7 @@ description: 数分で Walla Open API を使い始める
 始める前に以下の項目を確認してください。
 
 - ワークスペースへのアクセス権限がある Walla アカウント
-- API キー（Walla のワークスペース設定で発行）。または発行済みの OAuth アクセストークン（[認証](/ja/docs/developer-docs/authentication#oauth-アクセストークン) を参照）
+- API キー（Walla のワークスペース設定で発行）または発行済みの OAuth アクセストークン（[認証](/ja/docs/developer-docs/authentication#oauth-アクセストークン) を参照）
 - ワークスペースに公開済みのフォーム 1 つ以上
 
 ## ステップ 1: 環境の設定
@@ -137,7 +137,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
   -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
 ```
 
-ステップ 3 の `GET /forms` も、トークンで呼び出すときは `teamId` が必要です（例: `/forms?teamId=team_456`）。
+下のステップ 3 の `GET /forms` も、OAuth トークンで呼び出すときは `teamId` クエリパラメーターが必要です（例: `/forms?teamId=team_456`）。
 
 ## ステップ 3: フォーム一覧を取得する
 
@@ -266,7 +266,7 @@ for i, response in enumerate(data['responses'], 1):
     print(f"  Submitted: {response['submittedAt']}")
 ```
 
-> **注意**: OAuth トークン（`project:response.read`）で回答一覧を取得すると、ファイルアップロードフィールドの値は `[file]` と表示されます。ファイルは [回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) で取得してください。
+> **注意**: OAuth トークン（`project:response.read`）で回答一覧を取得すると、ファイルアップロードフィールドの値は `[file]` と表示されます。実際のファイルは [回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) を参照してダウンロードしてください。
 
 ## ワークフロー全体の例
 
@@ -454,14 +454,13 @@ if __name__ == '__main__':
 - 正しいワークスペース／フォームを取得しているか確認してください
 - 必要な権限があるか確認してください
 
-### OAuth トークンでの呼び出し時の `teamId` に関する 400 エラー
+### OAuth トークン呼び出し時の `teamId` 欠落（400）
 
 - `GET /workspaces` と `GET /forms` をトークンで呼び出すときは、`teamId` クエリパラメーターを含めてください
 - チーム ID は `GET /teams` で確認してください
 
-### OAuth トークンでの呼び出し時の `insufficient_scope` 403 エラー
+### OAuth トークン呼び出し時の `insufficient_scope`（403）
 
 - トークンに必要なスコープがあるか確認してください（[スコープと利用できる操作](/ja/docs/developer-docs/authentication#スコープと利用できる操作)）
-- トークンをリクエストするときに `resource` パラメーターを送っていないか確認してください
 
 詳しいエラー情報は[エラーコード](/ja/docs/developer-docs/error-codes)のドキュメントをご覧ください。

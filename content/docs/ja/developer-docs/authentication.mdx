@@ -115,10 +115,10 @@ OAuth アクセストークンは `Authorization: Bearer <アクセストーク�
 
 トークンは OAuth の authorization code フローで取得します。リクエストの際は次の点を守ってください。
 
-- `openid` スコープを必ず一緒にリクエストしてください。含まれていないと、すべての呼び出しが `401` になり、トークンを更新しても解決しません。
-- 使用する操作に合ったスコープ（`project:read`、`project:response.read`、`project:response.download`）をリクエストしてください。
+- 使用する操作に合ったスコープ（`project:read`、`project:response.read`、`project:response.download`）をリクエストしてください。Open API の呼び出しに `openid` スコープは不要です（ただし `/oauth/api/*` 連携とトークンを共有する場合のみ `openid` も併せてリクエストしてください）。
 - トークンを更新するには `offline_access` もリクエストしてください。含まれていないと refresh トークンは発行されません。
-- `resource` パラメーター（RFC 8707）は送らないでください。送ると、そのトークンによるすべての呼び出しが `403 insufficient_scope` になります。
+- `resource` パラメーター（RFC 8707）を省略した opaque トークンと、`resource` に `https://app.walla.my`（末尾に `/` なし）を指定した JWT アクセストークンの両方を使用できます。MCP 専用 URI（`/api/mcp`）または認証ベースパス（`/api/auth`）のみを audience に持つ JWT、ユーザーを持たない `client_credentials` トークン、DPoP 証明が必要なトークンは `401 invalid_token` で拒否されます。
+- トークン 1 件のみを即座に失効（revoke）させる必要がある連携では、`resource` を省略した opaque トークンを使用してください。JWT の個別失効は `unsupported_token_type` で拒否され、有効期限切れ、紐づくセッションの終了、またはクライアントの無効化時に無効になります。
 
 一部のデプロイ環境（例: オンプレミス）では、新しいトークンの発行・更新が停止されている場合があります。その場合でも、すでに発行済みのトークンは有効期限が切れるか取り消されるまで使用できます。
 
@@ -185,8 +185,9 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 ### 401 Unauthorized
 
 次の場合に発生します。
-- リクエストに API キーが含まれていない場合
+- リクエストに API キー（`X-WALLA-API-KEY`）または OAuth トークン（`Authorization: Bearer`）が含まれていない場合
 - API キーが無効、または期限切れ・取り消し済みの場合
+- OAuth トークンが無効・期限切れ、または Open API で受け付けられない種別の場合（詳しくは下の [OAuth トークンのエラー](#oauth-トークンのエラー) を参照）
 
 **レスポンス例:**
 
@@ -198,7 +199,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 
 ### 403 Forbidden
 
-認証は通過したものの、そのリソースにアクセスする権限がない場合に発生します。
+認証は通過したものの、そのリソースにアクセスする権限がない場合に発生します。OAuth トークンでの呼び出しでは、スコープ不足（`insufficient_scope`）や API キー専用の操作の呼び出しなどでも 403 が返されます（下の [OAuth トークンのエラー](#oauth-トークンのエラー) を参照）。
 
 **レスポンス例:**
 
@@ -210,7 +211,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 
 ### OAuth トークンのエラー
 
-- **401**: トークンが無効、または期限切れです。レスポンスに `WWW-Authenticate: Bearer error="invalid_token"` ヘッダーが含まれます。トークンを更新すべきなのはこの場合だけです。
+- **401**: トークンが無効もしくは期限切れであるか、Open API（`https://app.walla.my`）と一致しない `resource`・audience の JWT、`client_credentials` トークン、または DPoP トークンです。レスポンスに `WWW-Authenticate: Bearer error="invalid_token"` ヘッダーが含まれます。期限切れの場合はトークンを更新し、audience やトークン種別が一致しない場合は正しい設定で再発行してください。
 - **403 `insufficient_scope`**: トークンに必要なスコープがありません。本文は `{"error":"insufficient_scope","scope":"<必要なスコープ>"}` です。
 - **403 `This endpoint does not accept OAuth tokens`**: [API キー専用の操作](#スコープと利用できる操作)です。API キーで呼び出してください。
 - **403 `Forbidden`**: チームメンバーではない、2 段階認証を有効にしていないゲストである、またはアクセスできないワークスペース ID です。
@@ -304,12 +305,13 @@ OAuth トークンでの呼び出しは、API キーの 1 時間 6,000 件の制
 **問題**: OAuth トークンで `GET /workspaces` または `GET /forms` を呼び出すと 400 エラーが発生する
 
 **解決方法**:
-- `teamId` クエリパラメーターを含めてください。チーム ID は `GET /teams` で確認できます
+- `teamId` クエリパラメーターを含めてください
+- チーム ID は `GET /teams` で確認してください
 
 **問題**: OAuth トークンでの呼び出しが 403 エラーを返す
 
 **解決方法**:
-- `insufficient_scope` の場合は、必要なスコープをリクエストしたか、トークンのリクエストで `resource` パラメーターを送っていないか確認してください
+- `insufficient_scope` の場合は、必要なスコープをリクエストしたか確認してください
 - `This endpoint does not accept OAuth tokens` の場合は、API キーで呼び出してください
 - `Unauthorized` の場合は、トークンを更新せずにしばらくしてから再試行してください
 

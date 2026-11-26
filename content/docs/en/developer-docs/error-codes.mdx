@@ -91,7 +91,11 @@ Indicates that the request was malformed or contains invalid parameters.
    **Solution**: Keep the `limit` parameter at or below 100.
 
 6. **Missing `teamId` in an OAuth Token Call**
-
+   ```json
+   {
+     "error": "teamId query parameter is required"
+   }
+   ```
    **Solution**: Include the `teamId` query parameter when calling `GET /workspaces` or `GET /forms` with a token. Look up team IDs with `GET /teams`.
 
 7. **Missing Download Reason for a Secure File**
@@ -134,7 +138,7 @@ await fetch(`${API_BASE}/forms/form_abc/delivery`, {
 
 ### 401 Unauthorized
 
-Authentication failed because the API key is missing or invalid. The response also carries a `WWW-Authenticate: ApiKey realm="walla-open-api"` header.
+Authentication failed because the API key or OAuth access token is missing or invalid. Failed API key requests return a `WWW-Authenticate: ApiKey realm="walla-open-api"` header, and failed OAuth token requests return a `WWW-Authenticate: Bearer error="invalid_token"` header.
 
 **Common Causes:**
 
@@ -154,7 +158,13 @@ Authentication failed because the API key is missing or invalid. The response al
    ```
    **Solution**: Verify your API key is correct and hasn't expired or been revoked.
 
-**For OAuth tokens**: If a token is invalid or expired, the API returns 401 with a `WWW-Authenticate: Bearer error="invalid_token"` header. Refresh the token in this case. If the `openid` scope was missing from the token request, refreshing still returns 401, so request a new token that includes `openid`.
+3. **Invalid, Expired, or Mismatched OAuth Token**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **Solution**: Refresh the token if it has expired. However, if it is a JWT whose `resource` (audience) does not match Open API (`https://app.walla.my`), or a `client_credentials` or DPoP token, refreshing will still return 401, so re-issue the token with the right configuration.
 
 **Example Scenarios:**
 
@@ -202,36 +212,61 @@ Authentication succeeded, but you don't have permission to access the requested 
      "scope": "project:response.read"
    }
    ```
-   **Solution**: Request a new token that includes the scope shown in `scope`. Also make sure you did not send the `resource` parameter in the token request.
+   **Solution**: Request a new token that includes the scope shown in `scope`.
 
-3. **`This endpoint does not accept OAuth tokens`**
-
+3. **Endpoint Does Not Accept OAuth Tokens**
+   ```json
+   {
+     "error": "This endpoint does not accept OAuth tokens"
+   }
+   ```
    **Solution**: This is an API key-only operation. Call it with an API key ([Scopes and allowed operations](/en/docs/developer-docs/authentication#scopes-and-allowed-operations)).
 
-4. **`Unauthorized` (status 403, OAuth token)**
-
+4. **Token Verification Failed (status 403, OAuth token)**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
    **Solution**: The server could not verify the token. Do not refresh the token; try again shortly.
 
-5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+5. **Team Open API Disabled or IP Restricted**
+   ```json
+   {
+     "error": "Open API is disabled for this team"
+   }
+   ```
+   **Solution**: Including when `Access from this IP address is not allowed` is returned, ask your team administrator to check the team's Open API setting and IP access restrictions.
 
-   **Solution**: Ask your team administrator to check the team's Open API setting and IP access restrictions.
-
-6. **`Access denied`**
-
+6. **Resource Access Denied (`Access denied`)**
+   ```json
+   {
+     "error": "Access denied"
+   }
+   ```
    **Solution**: Check the OAuth token user's workspace access, or, for file downloads, their response viewing and file download permissions.
 
-7. **Response File Downloads**
+7. **Response File Download Restrictions**
+   ```json
+   {
+     "error": "Approval required",
+     "code": "APPROVAL_REQUIRED",
+     "actionKey": "project:response.download",
+     "projectId": "form_abc"
+   }
+   ```
+   **Solution**: The response file download was blocked by a policy, plan, or masking restriction.
    - `Approval required` (`code: "APPROVAL_REQUIRED"`, `actionKey`, `projectId`): Under the team's download approval policy, approval is required for the form identified by `projectId`.
    - `This field is masked and cannot be downloaded.`: Masked file fields cannot be downloaded through the Open API.
    - `Secure file access requires an enterprise plan.`: Secure file fields require a team plan that supports secure files.
 
 **Troubleshooting Steps:**
 
-1. Verify the API key is correctly set in your environment
-2. Check the header name is exactly `X-WALLA-API-KEY` (case-sensitive)
-3. Ensure the API key hasn't been revoked or expired
-4. Confirm you have access to the requested workspace
-5. Verify you're using the correct API key for your environment (dev/staging/production)
+1. Verify the API key (`X-WALLA-API-KEY`) or OAuth token (`Authorization: Bearer`) is correctly configured and hasn't expired or been revoked
+2. For OAuth token calls, verify the token includes the required `scope` and that the endpoint accepts OAuth tokens
+3. Confirm the team's Open API setting and IP access restrictions allow the request
+4. Confirm you have access to the requested workspace or form (including team membership requirements such as two-factor authentication)
+5. Verify you're using credentials for the correct environment (dev/staging/production)
 
 ---
 
@@ -290,6 +325,30 @@ await sendForm('published_form_id', recipients);
 2. Check if the form is published (for delivery operations)
 3. Ensure the resource hasn't been deleted
 4. Confirm you're using the correct environment (dev/production)
+
+---
+
+### 413 Payload Too Large
+
+Returned when [Download a response file](/en/docs/developer-docs/responses#download-a-response-file) exceeds a size limit.
+
+**Common Causes:**
+
+1. **Request Body Too Large**
+   ```json
+   {
+     "error": "Request body too large"
+   }
+   ```
+   **Solution**: The request body is larger than 4KiB. Shorten `reason` to 500 characters or fewer.
+
+2. **File Too Large**
+   ```json
+   {
+     "error": "File too large"
+   }
+   ```
+   **Solution**: The file is larger than 500MiB (524,288,000 bytes). This limit applies only when storage reports the file size (`Content-Length`).
 
 ---
 
@@ -386,27 +445,6 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 
 ---
 
-### 413 Payload Too Large
-
-Returned when [Download a response file](/en/docs/developer-docs/responses#download-a-response-file) exceeds a size limit.
-
-- `Request body too large`: The request body is larger than 4KiB. Shorten `reason` to 500 characters or fewer.
-- `File too large`: The file is larger than 500MiB (524,288,000 bytes). This limit applies only when storage reports the file size (`Content-Length`).
-
----
-
-### 502 Bad Gateway
-
-Returned when [Download a response file](/en/docs/developer-docs/responses#download-a-response-file) cannot fetch the file from storage.
-
-- `Failed to fetch file`: The connection to storage failed or storage responded with an error. This response can also occur when the file is missing from storage.
-- `Failed to resolve file`: A download address for protected storage could not be created.
-- `Invalid file source`: The stored file address could not be resolved to a storage location. An administrator needs to check the stored address or deployment settings.
-
-**Solution**: If the error is temporary, try again shortly. If it persists, contact an administrator.
-
----
-
 ### 500 Internal Server Error
 
 Indicates an unexpected error occurred on the server.
@@ -474,6 +512,38 @@ def make_request_with_retry(url, headers, max_retries=3):
             if i == max_retries - 1:
                 raise
 ```
+
+---
+
+### 502 Bad Gateway
+
+Returned when [Download a response file](/en/docs/developer-docs/responses#download-a-response-file) cannot fetch the file from storage.
+
+**Common Causes:**
+
+1. **Failed to Fetch File**
+   ```json
+   {
+     "error": "Failed to fetch file"
+   }
+   ```
+   **Solution**: The connection to storage failed or storage responded with an error (this can also occur when the file is missing from storage). If temporary, try again shortly; otherwise verify the file exists and check storage status.
+
+2. **Failed to Resolve Protected Storage URL**
+   ```json
+   {
+     "error": "Failed to resolve file"
+   }
+   ```
+   **Solution**: A download address for protected storage could not be created. Try again shortly, and contact an administrator if it persists.
+
+3. **Invalid File Source**
+   ```json
+   {
+     "error": "Invalid file source"
+   }
+   ```
+   **Solution**: The stored file address could not be resolved to a storage location. An administrator needs to check the stored address or deployment settings.
 
 ## Error Handling Best Practices
 

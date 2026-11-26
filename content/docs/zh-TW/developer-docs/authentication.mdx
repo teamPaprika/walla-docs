@@ -115,10 +115,10 @@ OAuth 存取權杖透過 `Authorization: Bearer <存取權杖>` 標頭送出。�
 
 權杖透過 OAuth authorization code 流程取得。請求時請遵守下列事項。
 
-- 務必一併請求 `openid` 範圍（scope）。若缺少，所有呼叫都會回傳 `401`，更新權杖也無法解決。
-- 請依要使用的作業請求對應的範圍（`project:read`、`project:response.read`、`project:response.download`）。
+- 請依要使用的作業請求對應的範圍（`project:read`、`project:response.read`、`project:response.download`）。呼叫 Open API 不需要 `openid` 範圍（僅在與 `/oauth/api/*` 整合共用權杖時才需一併請求 `openid`）。
 - 若要更新權杖，也請請求 `offline_access`。缺少時不會發行 refresh 權杖。
-- 請勿送出 `resource` 參數（RFC 8707）。送出後，用該權杖進行的所有呼叫都會回傳 `403 insufficient_scope`。
+- 省略 `resource` 參數（RFC 8707）的 opaque 權杖，以及將 `resource` 指定為 `https://app.walla.my`（結尾不含 `/`）的 JWT 存取權杖皆可使用。audience 僅包含 MCP 專用 URI（`/api/mcp`）或驗證基礎路徑（`/api/auth`）的 JWT、不含使用者的 `client_credentials` 權杖，以及需要 DPoP 證明的權杖，都會以 `401 invalid_token` 拒絕。
+- 若整合需要立即單獨撤銷（revoke）某個權杖，請使用省略 `resource` 的 opaque 權杖。單獨撤銷 JWT 會以 `unsupported_token_type` 拒絕，JWT 會在過期、關聯的工作階段結束或用戶端停用時失效。
 
 部分部署環境（例如地端部署）可能已停止發行與更新新權杖。即使如此，已發行的權杖在過期或被撤銷前仍可繼續使用。
 
@@ -185,8 +185,9 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 ### 401 Unauthorized
 
 在下列情況下發生。
-- 請求中缺少 API 金鑰
+- 請求中缺少 API 金鑰（`X-WALLA-API-KEY`）或 OAuth 權杖（`Authorization: Bearer`）
 - API 金鑰無效，或已過期／被撤銷
+- OAuth 權杖無效、已過期，或是 Open API 不接受的類型（詳見下方 [OAuth 權杖錯誤](#oauth-權杖錯誤)）
 
 **回應範例：**
 
@@ -198,7 +199,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 
 ### 403 Forbidden
 
-在通過驗證但沒有存取該資源的權限時發生。
+在通過驗證但沒有存取該資源的權限時發生。使用 OAuth 權杖呼叫時，範圍不足（`insufficient_scope`）或呼叫僅限 API 金鑰的作業等情況也會回傳 403（詳見下方 [OAuth 權杖錯誤](#oauth-權杖錯誤)）。
 
 **回應範例：**
 
@@ -210,7 +211,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 
 ### OAuth 權杖錯誤
 
-- **401**：權杖無效或已過期。回應會包含 `WWW-Authenticate: Bearer error="invalid_token"` 標頭。只有這種情況需要更新權杖。
+- **401**：權杖無效、已過期，或是 `resource`／audience 與 Open API（`https://app.walla.my`）不符的 JWT、`client_credentials` 權杖或 DPoP 權杖。回應會包含 `WWW-Authenticate: Bearer error="invalid_token"` 標頭。若權杖已過期請更新權杖；若 audience 或權杖類型不符，請改用正確設定重新取得權杖。
 - **403 `insufficient_scope`**：權杖缺少所需的範圍。本文為 `{"error":"insufficient_scope","scope":"<所需範圍>"}`。
 - **403 `This endpoint does not accept OAuth tokens`**：這是[僅限 API 金鑰的作業](#範圍與可用作業)。請改用 API 金鑰呼叫。
 - **403 `Forbidden`**：不是團隊成員、是未啟用兩步驟驗證的訪客，或是無法存取的工作區 ID。
@@ -304,12 +305,13 @@ OAuth 權杖呼叫與 API 金鑰每小時 6,000 次的限制分開計算，所�
 **問題**：以 OAuth 權杖呼叫 `GET /workspaces` 或 `GET /forms` 時出現 400 錯誤
 
 **解決方式**：
-- 請帶上 `teamId` 查詢參數。團隊 ID 可以用 `GET /teams` 確認
+- 請帶上 `teamId` 查詢參數
+- 團隊 ID 請用 `GET /teams` 確認
 
 **問題**：OAuth 權杖呼叫回傳 403 錯誤
 
 **解決方式**：
-- 若是 `insufficient_scope`，請確認已請求所需的範圍，且權杖請求中沒有送出 `resource` 參數
+- 若是 `insufficient_scope`，請確認已請求所需的範圍
 - 若是 `This endpoint does not accept OAuth tokens`，請改用 API 金鑰呼叫
 - 若是 `Unauthorized`，請勿更新權杖，稍後再試
 

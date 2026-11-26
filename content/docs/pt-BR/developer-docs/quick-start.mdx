@@ -137,7 +137,7 @@ curl -X GET "https://api.walla.my/open-api/v1/workspaces?teamId=team_456" \
   -H "Authorization: Bearer $WALLA_OAUTH_TOKEN"
 ```
 
-A chamada `GET /forms` da etapa 3 também exige `teamId` quando feita com um token (por exemplo, `/forms?teamId=team_456`).
+A chamada `GET /forms` da etapa 3 abaixo também exige o parâmetro `teamId` quando feita com um token OAuth (por exemplo, `/forms?teamId=team_456`).
 
 ## Etapa 3: listar formulários
 
@@ -266,7 +266,7 @@ for i, response in enumerate(data['responses'], 1):
     print(f"  Submitted: {response['submittedAt']}")
 ```
 
-> **Observação**: ao listar respostas com um token OAuth (`project:response.read`), os valores dos campos de upload de arquivos aparecem como `[file]`. Baixe os arquivos com [Baixar um arquivo de resposta (em inglês)](/en/docs/developer-docs/responses#download-a-response-file).
+> **Observação**: ao listar respostas com um token OAuth (`project:response.read`), os valores dos campos de upload de arquivos aparecem como `[file]`. Para baixar os arquivos reais, consulte [Baixar um arquivo de resposta (em inglês)](/en/docs/developer-docs/responses#download-a-response-file).
 
 ## Exemplo do fluxo completo
 
@@ -454,14 +454,13 @@ Depois de aprender o básico, consulte também a referência de cada API.
 - Verifique se está consultando o espaço de trabalho ou formulário correto.
 - Verifique se você tem as permissões necessárias.
 
-### Erro 400 relacionado a `teamId` em chamadas com token OAuth
+### `teamId` ausente em chamadas com token OAuth (400)
 
 - Inclua o parâmetro de consulta `teamId` ao chamar `GET /workspaces` e `GET /forms` com um token.
 - Consulte os IDs de equipe com `GET /teams`.
 
-### Erro 403 `insufficient_scope` em chamadas com token OAuth
+### `insufficient_scope` em chamadas com token OAuth (403)
 
 - Verifique se o token tem o escopo necessário ([Escopos e operações permitidas](/pt-BR/docs/developer-docs/authentication#escopos-e-operações-permitidas)).
-- Verifique se você não enviou o parâmetro `resource` ao solicitar o token.
 
 Para mais informações, consulte [Códigos de erro](/pt-BR/docs/developer-docs/error-codes).

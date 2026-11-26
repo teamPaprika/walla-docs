@@ -91,7 +91,11 @@ Walla API は標準の HTTP ステータスコードでリクエストの成功�
    **解決方法**: `limit` パラメータは 100 以下にしてください。
 
 6. **OAuth トークンでの呼び出しで `teamId` が欠落**
-
+   ```json
+   {
+     "error": "teamId query parameter is required"
+   }
+   ```
    **解決方法**: トークンで `GET /workspaces`・`GET /forms` を呼び出すときは、`teamId` クエリパラメーターを含めてください。チーム ID は `GET /teams` で確認します。
 
 7. **機密ファイルのダウンロード理由の欠落**
@@ -134,7 +138,7 @@ await fetch(`${API_BASE}/forms/form_abc/delivery`, {
 
 ### 401 Unauthorized
 
-API キーがない、または無効で認証に失敗した場合に発生します。レスポンスには `WWW-Authenticate: ApiKey realm="walla-open-api"` ヘッダーも一緒に返されます。
+API キーまたは OAuth アクセストークンがない、または無効で認証に失敗した場合に発生します。API キー認証の失敗時には `WWW-Authenticate: ApiKey realm="walla-open-api"` ヘッダーが、OAuth トークン認証の失敗時には `WWW-Authenticate: Bearer error="invalid_token"` ヘッダーが返されます。
 
 **主な原因:**
 
@@ -154,7 +158,13 @@ API キーがない、または無効で認証に失敗した場合に発生し�
    ```
    **解決方法**: API キーが正しく、期限切れ・取り消し済みでないか確認してください。
 
-**OAuth トークンの場合**: トークンが無効または期限切れの場合、`WWW-Authenticate: Bearer error="invalid_token"` ヘッダーとともに 401 が返されます。この場合はトークンを更新してください。トークンのリクエスト時に `openid` スコープが含まれていなかった場合は、更新しても 401 が続くため、`openid` を含めてトークンを新たに発行し直す必要があります。
+3. **OAuth トークンの無効・期限切れ・種別不一致**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **解決方法**: 期限切れの場合はトークンを更新してください。ただし、Open API（`https://app.walla.my`）と一致しない `resource`（audience）の JWT や `client_credentials`・DPoP トークンの場合は、更新しても 401 が返り続けるため、正しい設定でトークンを発行し直す必要があります。
 
 **シナリオ例:**
 
@@ -202,36 +212,61 @@ await fetch(`${API_BASE}/workspaces`, {
      "scope": "project:response.read"
    }
    ```
-   **解決方法**: `scope` に表示されたスコープを含めてトークンを発行し直してください。トークンのリクエストで `resource` パラメーターを送っていないかも確認してください。
+   **解決方法**: `scope` に表示されたスコープを含めてトークンを発行し直してください。
 
-3. **`This endpoint does not accept OAuth tokens`**
-
+3. **OAuth トークン非対応エンドポイント**
+   ```json
+   {
+     "error": "This endpoint does not accept OAuth tokens"
+   }
+   ```
    **解決方法**: API キー専用の操作です。API キーで呼び出してください（[スコープと利用できる操作](/ja/docs/developer-docs/authentication#スコープと利用できる操作)）。
 
-4. **`Unauthorized`（ステータス 403、OAuth トークン）**
-
+4. **トークン検証の失敗（ステータス 403、OAuth トークン）**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
    **解決方法**: サーバーがトークンを確認できなかった場合です。トークンを更新せず、しばらくしてから再試行してください。
 
-5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+5. **チームの Open API 無効化または IP アクセス制限**
+   ```json
+   {
+     "error": "Open API is disabled for this team"
+   }
+   ```
+   **解決方法**: `Access from this IP address is not allowed` エラーが返る場合を含め、チームの Open API の利用設定と IP アクセス制限をチーム管理者に確認してください。
 
-   **解決方法**: チームの Open API の利用設定と IP アクセス制限をチーム管理者に確認してください。
-
-6. **`Access denied`**
-
+6. **リソースへのアクセス拒否（`Access denied`）**
+   ```json
+   {
+     "error": "Access denied"
+   }
+   ```
    **解決方法**: OAuth トークンのユーザーのワークスペースへのアクセス権限、またはファイルのダウンロード時は回答の閲覧・ファイルのダウンロード権限を確認してください。
 
-7. **回答ファイルのダウンロード関連**
+7. **回答ファイルのダウンロード制限**
+   ```json
+   {
+     "error": "Approval required",
+     "code": "APPROVAL_REQUIRED",
+     "actionKey": "project:response.download",
+     "projectId": "form_abc"
+   }
+   ```
+   **解決方法**: 回答ファイルのダウンロードがポリシー・プラン・マスキング制限により拒否された場合です。
    - `Approval required`（`code: "APPROVAL_REQUIRED"`、`actionKey`、`projectId`）: チームのダウンロード承認ポリシーにより、`projectId` のフォームに対する承認が必要です。
    - `This field is masked and cannot be downloaded.`: マスキングされたファイルフィールドは Open API でダウンロードできません。
    - `Secure file access requires an enterprise plan.`: 機密ファイルフィールドには、機密ファイル機能に対応したチームプランが必要です。
 
 **トラブルシューティングの手順:**
 
-1. API キーが環境に正しく設定されているか確認
-2. ヘッダー名が正確に `X-WALLA-API-KEY` か確認（大文字・小文字を区別）
-3. API キーが取り消されたり期限切れになっていないか確認
-4. リクエストしたワークスペースへのアクセス権限があるか確認
-5. 環境（開発／ステージング／本番）に合った API キーを使っているか確認
+1. API キー（`X-WALLA-API-KEY`）または OAuth トークン（`Authorization: Bearer`）が正しく設定され、期限切れ・取り消し済みでないか確認
+2. OAuth トークンの場合、必要なスコープ（`scope`）が含まれており、API キー専用の操作でないか確認
+3. チームの Open API の利用設定と IP アクセス制限がリクエストを許可しているか確認
+4. リクエストしたワークスペースやフォームへのアクセス権限（2 段階認証を含むチームメンバーシップ要件）があるか確認
+5. 環境（開発／ステージング／本番）に合った資格情報を使っているか確認
 
 ---
 
@@ -290,6 +325,30 @@ await sendForm('published_form_id', recipients);
 2. フォームが公開されているか確認（送信操作の場合）
 3. リソースが削除されていないか確認
 4. 正しい環境（開発／本番）を使っているか確認
+
+---
+
+### 413 Payload Too Large
+
+[回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) でサイズの上限を超えた場合に発生します。
+
+**主な原因:**
+
+1. **リクエストボディのサイズ超過**
+   ```json
+   {
+     "error": "Request body too large"
+   }
+   ```
+   **解決方法**: リクエストボディが 4KiB を超えました。`reason` を 500 文字以下にしてください。
+
+2. **ファイルサイズの超過**
+   ```json
+   {
+     "error": "File too large"
+   }
+   ```
+   **解決方法**: ファイルが 500MiB（524,288,000 バイト）を超えました。この上限は、ストレージがファイルサイズ（`Content-Length`）を通知した場合にのみ適用されます。
 
 ---
 
@@ -386,27 +445,6 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 
 ---
 
-### 413 Payload Too Large
-
-[回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) でサイズの上限を超えた場合に発生します。
-
-- `Request body too large`: リクエストボディが 4KiB を超えました。`reason` を 500 文字以下にしてください。
-- `File too large`: ファイルが 500MiB（524,288,000 バイト）を超えました。この上限は、ストレージがファイルサイズ（`Content-Length`）を通知した場合にのみ適用されます。
-
----
-
-### 502 Bad Gateway
-
-[回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) でストレージからファイルを取得できなかった場合に発生します。
-
-- `Failed to fetch file`: ストレージへの接続に失敗したか、ストレージがエラーを返しました。ストレージにファイルがない場合にもこのレスポンスが返ることがあります。
-- `Failed to resolve file`: 保護されたストレージのダウンロードアドレスを作成できませんでした。
-- `Invalid file source`: 保存されたファイルのアドレスをストレージの場所として解釈できませんでした。管理者が保存されたアドレスまたはデプロイ設定を確認する必要があります。
-
-**解決方法**: 一時的なエラーであれば、しばらくしてから再試行してください。続く場合は管理者にお問い合わせください。
-
----
-
 ### 500 Internal Server Error
 
 サーバーで予期しないエラーが発生した場合です。
@@ -474,6 +512,38 @@ def make_request_with_retry(url, headers, max_retries=3):
             if i == max_retries - 1:
                 raise
 ```
+
+---
+
+### 502 Bad Gateway
+
+[回答ファイルのダウンロード](/en/docs/developer-docs/responses#download-a-response-file) でストレージからファイルを取得できなかった場合に発生します。
+
+**主な原因:**
+
+1. **ファイルの取得に失敗**
+   ```json
+   {
+     "error": "Failed to fetch file"
+   }
+   ```
+   **解決方法**: ストレージへの接続に失敗したか、ストレージがエラーを返した場合です（ストレージにファイルがない場合にも返ることがあります）。一時的なエラーであればしばらくしてから再試行し、続く場合はファイルの存在とストレージの状態を確認してください。
+
+2. **保護されたストレージのダウンロードアドレス生成に失敗**
+   ```json
+   {
+     "error": "Failed to resolve file"
+   }
+   ```
+   **解決方法**: 保護されたストレージのダウンロードアドレスを作成できなかった場合です。しばらくしてから再試行し、続く場合は管理者にお問い合わせください。
+
+3. **不正なファイルソース**
+   ```json
+   {
+     "error": "Invalid file source"
+   }
+   ```
+   **解決方法**: 保存されたファイルのアドレスをストレージの場所として解釈できなかった場合です。管理者が保存されたアドレスまたはデプロイ設定を確認する必要があります。
 
 ## エラー処理のベストプラクティス
 

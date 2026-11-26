@@ -115,10 +115,10 @@ OAuth 액세스 토큰은 `Authorization: Bearer <액세스 토큰>` 헤더로 �
 
 토큰은 OAuth authorization code 흐름으로 받습니다. 요청할 때 아래 사항을 지켜주세요.
 
-- `openid` 스코프를 반드시 함께 요청하세요. 빠지면 모든 호출이 `401`이며, 토큰을 갱신해도 해결되지 않습니다.
-- 사용할 작업에 맞는 스코프(`project:read`, `project:response.read`, `project:response.download`)를 요청하세요.
+- `project:read`, `project:response.read`, `project:response.download` 중 사용할 작업에 맞는 스코프를 요청하세요. Open API 호출에는 `openid` 스코프가 필요하지 않습니다(단, `/oauth/api/*` 연동과 토큰을 공유할 때만 `openid`도 함께 요청하세요).
 - 토큰을 갱신하려면 `offline_access`도 요청하세요. 없으면 refresh 토큰이 발급되지 않습니다.
-- `resource` 파라미터(RFC 8707)는 보내지 마세요. 보내면 그 토큰으로 하는 모든 호출이 `403 insufficient_scope`입니다.
+- `resource` 파라미터(RFC 8707)를 생략한 opaque 토큰과, `resource`에 `https://app.walla.my`(끝에 `/` 없음)를 지정한 JWT 액세스 토큰을 모두 사용할 수 있습니다. MCP 전용 URI(`/api/mcp`)나 인증 기본 경로(`/api/auth`)만 audience에 있는 JWT, 사용자 없는 `client_credentials` 토큰, DPoP 증명이 필요한 토큰은 `401 invalid_token`으로 거부됩니다.
+- 토큰 하나만 즉시 폐기(revoke)해야 하는 연동은 `resource`를 생략한 opaque 토큰을 사용하세요. JWT 개별 폐기는 `unsupported_token_type`으로 거부되며, 만료되거나 연결된 세션이 종료되거나 클라이언트가 비활성화될 때 무효화됩니다.
 
 일부 배포 환경(예: 온프레미스)에서는 새 토큰 발급·갱신이 중지되어 있을 수 있습니다. 이 경우에도 이미 발급된 토큰은 만료되거나 폐기될 때까지 사용할 수 있습니다.
 
@@ -185,8 +185,9 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 ### 401 Unauthorized
 
 다음 경우에 발생합니다.
-- 요청에 API 키가 빠져 있는 경우
+- 요청에 API 키(`X-WALLA-API-KEY`) 또는 OAuth 토큰(`Authorization: Bearer`)이 빠져 있는 경우
 - API 키가 유효하지 않거나 만료·취소된 경우
+- OAuth 토큰이 유효하지 않거나 만료되었거나 Open API와 맞지 않는 유형인 경우 (자세한 내용은 아래 [OAuth 토큰 오류](#oauth-토큰-오류) 참고)
 
 **응답 예시:**
 
@@ -198,7 +199,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 
 ### 403 Forbidden
 
-인증은 통과했지만 해당 리소스에 접근할 권한이 없는 경우 발생합니다.
+인증은 통과했지만 해당 리소스에 접근할 권한이 없는 경우 발생합니다. OAuth 토큰 호출에서는 스코프 부족(`insufficient_scope`), API 키 전용 작업 호출 등 추가 403 오류가 반환될 수 있습니다 (아래 [OAuth 토큰 오류](#oauth-토큰-오류) 참고).
 
 **응답 예시:**
 
@@ -210,7 +211,7 @@ curl -X GET "https://api.walla.my/open-api/v1/forms/form_abc/responses" \
 
 ### OAuth 토큰 오류
 
-- **401**: 토큰이 유효하지 않거나 만료되었습니다. 응답에 `WWW-Authenticate: Bearer error="invalid_token"` 헤더가 포함됩니다. 토큰을 갱신해야 하는 경우는 이것뿐입니다.
+- **401**: 토큰이 유효하지 않거나 만료되었거나, Open API(`https://app.walla.my`)와 맞지 않는 `resource`·audience의 JWT, `client_credentials` 토큰, DPoP 토큰일 때 발생합니다. 응답에 `WWW-Authenticate: Bearer error="invalid_token"` 헤더가 포함됩니다. 만료된 토큰은 갱신하고, audience나 토큰 유형이 맞지 않으면 올바른 설정으로 다시 발급받으세요.
 - **403 `insufficient_scope`**: 토큰에 필요한 스코프가 없습니다. 본문은 `{"error":"insufficient_scope","scope":"<필요한 스코프>"}`입니다.
 - **403 `This endpoint does not accept OAuth tokens`**: [API 키 전용 작업](#스코프와-사용-가능한-작업)입니다. API 키로 호출하세요.
 - **403 `Forbidden`**: 팀 멤버가 아니거나, 2단계 인증을 켜지 않은 게스트이거나, 접근할 수 없는 워크스페이스 ID입니다.
@@ -304,12 +305,13 @@ OAuth 토큰 호출은 API 키의 시간당 6,000건 제한과 별도로 집계�
 **문제**: OAuth 토큰으로 `GET /workspaces` 또는 `GET /forms`를 호출하면 400 오류가 발생함
 
 **해결 방법**:
-- `teamId` 쿼리 파라미터를 포함하세요. 팀 ID는 `GET /teams`로 확인할 수 있습니다
+- `teamId` 쿼리 파라미터를 포함하세요
+- 팀 ID는 `GET /teams`로 확인하세요
 
 **문제**: OAuth 토큰 호출이 403 오류를 반환함
 
 **해결 방법**:
-- `insufficient_scope`이면 필요한 스코프를 요청했는지, 토큰 요청에 `resource` 파라미터를 보내지 않았는지 확인하세요
+- `insufficient_scope`이면 필요한 스코프를 요청했는지 확인하세요
 - `This endpoint does not accept OAuth tokens`이면 API 키로 호출하세요
 - `Unauthorized`이면 토큰을 갱신하지 말고 잠시 후 다시 시도하세요
 

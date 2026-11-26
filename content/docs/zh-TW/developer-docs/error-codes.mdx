@@ -91,7 +91,11 @@ Walla API 以標準 HTTP 狀態碼表示請求的成功／失敗。
    **解決方式**：請把 `limit` 參數維持在 100 以下。
 
 6. **OAuth 權杖呼叫缺少 `teamId`**
-
+   ```json
+   {
+     "error": "teamId query parameter is required"
+   }
+   ```
    **解決方式**：以權杖呼叫 `GET /workspaces`、`GET /forms` 時，請帶上 `teamId` 查詢參數。團隊 ID 可以用 `GET /teams` 確認。
 
 7. **下載敏感檔案時缺少原因**
@@ -134,7 +138,7 @@ await fetch(`${API_BASE}/forms/form_abc/delivery`, {
 
 ### 401 Unauthorized
 
-在缺少 API 金鑰或金鑰無效導致驗證失敗時發生。回應中會一併帶上 `WWW-Authenticate: ApiKey realm="walla-open-api"` 標頭。
+在缺少 API 金鑰或 OAuth 存取權杖，或憑證無效導致驗證失敗時發生。API 金鑰驗證失敗時會回傳 `WWW-Authenticate: ApiKey realm="walla-open-api"` 標頭，OAuth 權杖驗證失敗時則會回傳 `WWW-Authenticate: Bearer error="invalid_token"` 標頭。
 
 **主要原因：**
 
@@ -154,7 +158,13 @@ await fetch(`${API_BASE}/forms/form_abc/delivery`, {
    ```
    **解決方式**：請確認 API 金鑰正確，且尚未過期或被撤銷。
 
-**OAuth 權杖的情況**：權杖無效或已過期時，會回傳 401 並帶上 `WWW-Authenticate: Bearer error="invalid_token"` 標頭。此時請更新權杖。若請求權杖時缺少 `openid` 範圍，即使更新也會持續回傳 401，因此必須帶上 `openid` 重新取得權杖。
+3. **OAuth 權杖無效、已過期或類型不符**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **解決方式**：若權杖已過期請更新權杖。但若該權杖是 `resource`（audience）與 Open API（`https://app.walla.my`）不符的 JWT，或是 `client_credentials`／DPoP 權杖，即使更新仍會持續回傳 401，因此請改用正確設定重新取得權杖。
 
 **範例情境：**
 
@@ -202,36 +212,61 @@ await fetch(`${API_BASE}/workspaces`, {
      "scope": "project:response.read"
    }
    ```
-   **解決方式**：請帶上 `scope` 中顯示的範圍重新取得權杖。也請確認權杖請求中沒有送出 `resource` 參數。
+   **解決方式**：請帶上 `scope` 中顯示的範圍重新取得權杖。
 
-3. **`This endpoint does not accept OAuth tokens`**
-
+3. **不接受 OAuth 權杖的端點**
+   ```json
+   {
+     "error": "This endpoint does not accept OAuth tokens"
+   }
+   ```
    **解決方式**：這是僅限 API 金鑰的作業。請改用 API 金鑰呼叫（[範圍與可用作業](/zh-TW/docs/developer-docs/authentication#範圍與可用作業)）。
 
-4. **`Unauthorized`（狀態 403，OAuth 權杖）**
-
+4. **權杖驗證失敗（狀態 403，OAuth 權杖）**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
    **解決方式**：伺服器無法驗證權杖。請勿更新權杖，稍後再試。
 
-5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+5. **團隊停用 Open API 或 IP 存取受限**
+   ```json
+   {
+     "error": "Open API is disabled for this team"
+   }
+   ```
+   **解決方式**：包含回傳 `Access from this IP address is not allowed` 錯誤的情況在內，請向團隊管理者確認團隊的 Open API 啟用設定與 IP 存取限制。
 
-   **解決方式**：請向團隊管理者確認團隊的 Open API 啟用設定與 IP 存取限制。
-
-6. **`Access denied`**
-
+6. **資源存取遭拒（`Access denied`）**
+   ```json
+   {
+     "error": "Access denied"
+   }
+   ```
    **解決方式**：請確認 OAuth 權杖使用者的工作區存取權限；若是下載檔案，請確認回覆查詢與檔案下載權限。
 
-7. **與回覆檔案下載相關**
+7. **回覆檔案下載限制**
+   ```json
+   {
+     "error": "Approval required",
+     "code": "APPROVAL_REQUIRED",
+     "actionKey": "project:response.download",
+     "projectId": "form_abc"
+   }
+   ```
+   **解決方式**：回覆檔案下載受限於核准政策、方案或遮罩規則。
    - `Approval required`（`code: "APPROVAL_REQUIRED"`、`actionKey`、`projectId`）：依團隊的下載核准政策，需要取得 `projectId` 表單的核准。
    - `This field is masked and cannot be downloaded.`：已遮罩的檔案欄位無法透過 Open API 下載。
    - `Secure file access requires an enterprise plan.`：敏感檔案欄位需要團隊方案支援敏感檔案功能。
 
 **疑難排解步驟：**
 
-1. 確認 API 金鑰是否已在環境中正確設定
-2. 確認標頭名稱正好是 `X-WALLA-API-KEY`（區分大小寫）
-3. 確認 API 金鑰未被撤銷或過期
-4. 確認你對該工作區具有存取權限
-5. 確認你使用的是對應環境（開發／測試／正式）的正確 API 金鑰
+1. 確認 API 金鑰（`X-WALLA-API-KEY`）或 OAuth 權杖（`Authorization: Bearer`）已正確設定且未被撤銷或過期
+2. 若使用 OAuth 權杖呼叫，請確認已包含所需的 `scope`，且該端點支援 OAuth 權杖
+3. 確認團隊的 Open API 啟用設定與 IP 存取限制允許此請求
+4. 確認你對該工作區或表單具有存取權限（含兩步驟驗證等團隊成員資格條件）
+5. 確認你使用的是對應環境（開發／測試／正式）的正確憑證
 
 ---
 
@@ -290,6 +325,30 @@ await sendForm('published_form_id', recipients);
 2. 確認表單是否已發布（發送作業時）
 3. 確認資源是否已被刪除
 4. 確認你使用的是正確的環境（開發／正式）
+
+---
+
+### 413 Payload Too Large
+
+在[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)時超過大小上限會發生。
+
+**主要原因：**
+
+1. **請求本文過大**
+   ```json
+   {
+     "error": "Request body too large"
+   }
+   ```
+   **解決方式**：請求本文超過 4KiB。請把 `reason` 縮短到 500 個字元以內。
+
+2. **檔案過大**
+   ```json
+   {
+     "error": "File too large"
+   }
+   ```
+   **解決方式**：檔案超過 500MiB（524,288,000 位元組）。只有在儲存空間回報檔案大小（`Content-Length`）時才會套用此上限。
 
 ---
 
@@ -386,27 +445,6 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 
 ---
 
-### 413 Payload Too Large
-
-在[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)時超過大小上限會發生。
-
-- `Request body too large`：請求本文超過 4KiB。請把 `reason` 縮短到 500 個字元以內。
-- `File too large`：檔案超過 500MiB（524,288,000 位元組）。只有在儲存空間回報檔案大小（`Content-Length`）時才會套用此上限。
-
----
-
-### 502 Bad Gateway
-
-在[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)時無法從儲存空間取得檔案會發生。
-
-- `Failed to fetch file`：無法連線到儲存空間，或儲存空間回傳錯誤。儲存空間中沒有該檔案時也可能回傳此錯誤。
-- `Failed to resolve file`：無法產生受保護儲存空間的下載位址。
-- `Invalid file source`：無法把已儲存的檔案位址解析為儲存位置。需要由管理者確認已儲存的位址或部署設定。
-
-**解決方式**：若是暫時性錯誤，請稍後再試；若持續發生，請聯繫管理者。
-
----
-
 ### 500 Internal Server Error
 
 伺服器發生非預期錯誤的情況。
@@ -474,6 +512,38 @@ def make_request_with_retry(url, headers, max_retries=3):
             if i == max_retries - 1:
                 raise
 ```
+
+---
+
+### 502 Bad Gateway
+
+在[下載回覆檔案（英文）](/en/docs/developer-docs/responses#download-a-response-file)時無法從儲存空間取得檔案會發生。
+
+**主要原因：**
+
+1. **無法取得檔案**
+   ```json
+   {
+     "error": "Failed to fetch file"
+   }
+   ```
+   **解決方式**：無法連線到儲存空間，或儲存空間回傳錯誤（儲存空間中沒有該檔案時也可能回傳此錯誤）。若是暫時性錯誤請稍後再試；若持續發生，請確認檔案是否存在與儲存空間狀態。
+
+2. **無法產生受保護儲存空間下載位址**
+   ```json
+   {
+     "error": "Failed to resolve file"
+   }
+   ```
+   **解決方式**：無法產生受保護儲存空間的下載位址。請稍後再試，若持續發生請聯繫管理者。
+
+3. **無效的檔案來源**
+   ```json
+   {
+     "error": "Invalid file source"
+   }
+   ```
+   **解決方式**：無法把已儲存的檔案位址解析為儲存位置。需要由管理者確認已儲存的位址或部署設定。
 
 ## 錯誤處理最佳做法
 

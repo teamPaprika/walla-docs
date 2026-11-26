@@ -118,10 +118,10 @@ Send an OAuth access token in the `Authorization: Bearer <access token>` header.
 
 Tokens are obtained through the OAuth authorization code flow. Follow these rules when requesting one:
 
-- Always request the `openid` scope. Without it, every call returns `401`, and refreshing the token does not fix it.
-- Request the scopes that match the operations you need (`project:read`, `project:response.read`, `project:response.download`).
+- Request the scopes that match the operations you need (`project:read`, `project:response.read`, `project:response.download`). Open API calls do not require the `openid` scope (only request `openid` as well if you share the token with `/oauth/api/*` integrations).
 - To refresh tokens, also request `offline_access`. Without it, no refresh token is issued.
-- Do not send the `resource` parameter (RFC 8707). If you do, every call made with that token returns `403 insufficient_scope`.
+- You can use either an opaque token (omitting the RFC 8707 `resource` parameter) or a JWT access token with `resource` set to `https://app.walla.my` (no trailing `/`). JWTs whose audience only includes an MCP-only URI (`/api/mcp`) or the auth base path (`/api/auth`), userless `client_credentials` tokens, and tokens requiring DPoP proof are rejected with `401 invalid_token`.
+- For integrations that need to revoke a single token immediately, use an opaque token with `resource` omitted. Individual JWT revocation is rejected with `unsupported_token_type`; JWTs are invalidated when they expire, their linked session ends, or the client is deactivated.
 
 In some deployments (for example, on-premises), issuing and refreshing new tokens may be disabled. Even then, tokens that were already issued remain usable until they expire or are revoked.
 
@@ -188,8 +188,9 @@ If authentication fails, the API will return one of the following error response
 ### 401 Unauthorized
 
 This error occurs when:
-- The API key is missing from the request
+- The API key (`X-WALLA-API-KEY`) or OAuth token (`Authorization: Bearer`) is missing from the request
 - The API key is invalid, expired, or revoked
+- The OAuth token is invalid, expired, or a token type not accepted by Open API (see [OAuth token errors](#oauth-token-errors) below)
 
 **Response Example:**
 
@@ -201,7 +202,7 @@ This error occurs when:
 
 ### 403 Forbidden
 
-Authentication succeeded, but you don't have permission to access the requested resource.
+Authentication succeeded, but you don't have permission to access the requested resource. Calls with an OAuth token may also return 403 for insufficient scope (`insufficient_scope`) or API key-only operations (see [OAuth token errors](#oauth-token-errors) below).
 
 **Response Example:**
 
@@ -213,7 +214,7 @@ Authentication succeeded, but you don't have permission to access the requested 
 
 ### OAuth token errors
 
-- **401**: The token is invalid or expired. The response includes the `WWW-Authenticate: Bearer error="invalid_token"` header. This is the only case in which you should refresh the token.
+- **401**: The token is invalid or expired, or it is a JWT whose `resource`/audience does not match Open API (`https://app.walla.my`), a `client_credentials` token, or a DPoP token. The response includes the `WWW-Authenticate: Bearer error="invalid_token"` header. Refresh the token if it has expired, or re-issue it with the right audience and token type if there is a mismatch.
 - **403 `insufficient_scope`**: The token lacks a required scope. The body is `{"error":"insufficient_scope","scope":"<required scope>"}`.
 - **403 `This endpoint does not accept OAuth tokens`**: This is an [API key-only operation](#scopes-and-allowed-operations). Call it with an API key.
 - **403 `Forbidden`**: The user is not a team member, is a guest without two-factor authentication, or used a workspace ID they cannot access.
@@ -307,12 +308,13 @@ OAuth token calls are counted separately from the API key limit of 6,000 request
 **Problem**: Calling `GET /workspaces` or `GET /forms` with an OAuth token returns a 400 error
 
 **Solutions**:
-- Include the `teamId` query parameter. You can find team IDs with `GET /teams`
+- Include the `teamId` query parameter
+- Look up team IDs with `GET /teams`
 
 **Problem**: An OAuth token call returns a 403 error
 
 **Solutions**:
-- For `insufficient_scope`, check that you requested the required scope and did not send the `resource` parameter in the token request
+- For `insufficient_scope`, check that you requested the required scope
 - For `This endpoint does not accept OAuth tokens`, call the endpoint with an API key
 - For `Unauthorized`, do not refresh the token; try again shortly
 

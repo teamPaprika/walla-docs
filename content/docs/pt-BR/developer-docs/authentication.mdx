@@ -115,10 +115,10 @@ O token de acesso OAuth é enviado no cabeçalho `Authorization: Bearer <token d
 
 Os tokens são obtidos pelo fluxo OAuth authorization code. Ao solicitar, observe o seguinte.
 
-- Sempre solicite o escopo `openid`. Sem ele, todas as chamadas retornam `401`, e renovar o token não resolve.
-- Solicite os escopos correspondentes às operações que você vai usar (`project:read`, `project:response.read`, `project:response.download`).
+- Solicite os escopos correspondentes às operações que você vai usar (`project:read`, `project:response.read`, `project:response.download`). As chamadas à Open API não exigem o escopo `openid` (solicite `openid` também apenas se você compartilhar o token com integrações de `/oauth/api/*`).
 - Para poder renovar o token, solicite também `offline_access`. Sem ele, nenhum refresh token é emitido.
-- Não envie o parâmetro `resource` (RFC 8707). Se ele for enviado, todas as chamadas com esse token retornam `403 insufficient_scope`.
+- Você pode usar tanto um token opaco (omitindo o parâmetro `resource` da RFC 8707) quanto um token de acesso JWT com `resource` definido como `https://app.walla.my` (sem `/` no final). JWTs cujo público-alvo (`audience`) contenha apenas uma URI exclusiva de MCP (`/api/mcp`) ou o caminho base de autenticação (`/api/auth`), tokens `client_credentials` sem usuário e tokens que exijam prova DPoP são rejeitados com `401 invalid_token`.
+- Para integrações que precisem revogar um único token imediatamente, use um token opaco omitindo `resource`. A revogação individual de JWT é rejeitada com `unsupported_token_type`; os JWTs são invalidados quando expiram, quando a sessão vinculada termina ou quando o cliente é desativado.
 
 Em alguns ambientes de implantação (por exemplo, on-premises), a emissão e a renovação de novos tokens podem estar desativadas. Mesmo assim, os tokens já emitidos continuam válidos até expirarem ou serem revogados.
 
@@ -185,8 +185,9 @@ Se a autenticação falhar, serão retornados erros como os seguintes.
 ### 401 Unauthorized
 
 Ocorre nas seguintes situações.
-- A solicitação não contém uma chave de API.
+- A solicitação não contém uma chave de API (`X-WALLA-API-KEY`) nem um token OAuth (`Authorization: Bearer`).
 - A chave de API é inválida, expirou ou foi revogada.
+- O token OAuth é inválido, expirou ou é de um tipo não aceito pela Open API (consulte [Erros de token OAuth](#erros-de-token-oauth) abaixo).
 
 **Exemplo de resposta:**
 
@@ -198,7 +199,7 @@ Ocorre nas seguintes situações.
 
 ### 403 Forbidden
 
-Ocorre quando a autenticação é válida, mas você não tem permissão para acessar o recurso.
+Ocorre quando a autenticação é válida, mas você não tem permissão para acessar o recurso. Chamadas com token OAuth também podem retornar 403 por escopo insuficiente (`insufficient_scope`) ou em operações exclusivas de chave de API (consulte [Erros de token OAuth](#erros-de-token-oauth) abaixo).
 
 **Exemplo de resposta:**
 
@@ -210,7 +211,7 @@ Ocorre quando a autenticação é válida, mas você não tem permissão para ac
 
 ### Erros de token OAuth
 
-- **401**: o token é inválido ou expirou. A resposta inclui o cabeçalho `WWW-Authenticate: Bearer error="invalid_token"`. Este é o único caso em que o token deve ser renovado.
+- **401**: o token é inválido ou expirou, ou é um JWT cujo `resource` ou público-alvo (`audience`) não corresponde à Open API (`https://app.walla.my`), um token `client_credentials` ou um token DPoP. A resposta inclui o cabeçalho `WWW-Authenticate: Bearer error="invalid_token"`. Renove o token se ele tiver expirado ou emita-o novamente com o público-alvo e o tipo de token corretos se houver incompatibilidade.
 - **403 `insufficient_scope`**: falta ao token o escopo necessário. O corpo é `{"error":"insufficient_scope","scope":"<escopo necessário>"}`.
 - **403 `This endpoint does not accept OAuth tokens`**: é uma [operação exclusiva da chave de API](#escopos-e-operações-permitidas). Chame-a com uma chave de API.
 - **403 `Forbidden`**: você não é membro da equipe, é um convidado sem verificação em duas etapas ou o ID é de um espaço de trabalho ao qual você não tem acesso.
@@ -304,12 +305,13 @@ As chamadas com token OAuth são contabilizadas separadamente do limite de 6.000
 **Problema**: erro 400 ao chamar `GET /workspaces` ou `GET /forms` com um token OAuth
 
 **Solução**:
-- Inclua o parâmetro de consulta `teamId`. Os IDs de equipe podem ser consultados com `GET /teams`.
+- Inclua o parâmetro de consulta `teamId`.
+- Consulte os IDs de equipe com `GET /teams`.
 
 **Problema**: chamadas com token OAuth retornam erro 403
 
 **Solução**:
-- Se for `insufficient_scope`, verifique se você solicitou o escopo necessário e se não enviou o parâmetro `resource` ao solicitar o token.
+- Se for `insufficient_scope`, verifique se você solicitou o escopo necessário.
 - Se for `This endpoint does not accept OAuth tokens`, chame com uma chave de API.
 - Se for `Unauthorized`, não renove o token e tente novamente mais tarde.
 

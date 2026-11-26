@@ -91,7 +91,11 @@ Ocorre quando o formato da solicitação ou seus parâmetros são inválidos.
    **Solução**: mantenha o parâmetro `limit` em no máximo 100.
 
 6. **`teamId` ausente em uma chamada com token OAuth**
-
+   ```json
+   {
+     "error": "teamId query parameter is required"
+   }
+   ```
    **Solução**: ao chamar `GET /workspaces` ou `GET /forms` com um token, inclua o parâmetro de consulta `teamId`. Consulte os IDs de equipe com `GET /teams`.
 
 7. **Motivo de download ausente para um arquivo sensível**
@@ -134,7 +138,7 @@ await fetch(`${API_BASE}/forms/form_abc/delivery`, {
 
 ### 401 Unauthorized
 
-Ocorre quando a autenticação falha por uma chave ausente ou inválida. A resposta inclui o cabeçalho `WWW-Authenticate: ApiKey realm="walla-open-api"`.
+Ocorre quando a autenticação falha porque a chave de API ou o token de acesso OAuth está ausente ou é inválido. Falhas com chave de API retornam o cabeçalho `WWW-Authenticate: ApiKey realm="walla-open-api"`, e falhas com token OAuth retornam o cabeçalho `WWW-Authenticate: Bearer error="invalid_token"`.
 
 **Causas comuns:**
 
@@ -154,7 +158,13 @@ Ocorre quando a autenticação falha por uma chave ausente ou inválida. A respo
    ```
    **Solução**: verifique se a chave está correta e não expirou nem foi revogada.
 
-**Com tokens OAuth**: se o token for inválido ou tiver expirado, a API retorna 401 com o cabeçalho `WWW-Authenticate: Bearer error="invalid_token"`. Nesse caso, renove o token. Se o escopo `openid` não foi solicitado junto com o token, o erro 401 continua mesmo após a renovação; obtenha um novo token incluindo `openid`.
+3. **Token OAuth inválido, expirado ou incompatível**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
+   **Solução**: renove o token se ele tiver expirado. Porém, se for um JWT cujo `resource` (`audience`) não corresponde à Open API (`https://app.walla.my`), ou um token `client_credentials` ou DPoP, a renovação continuará retornando 401, portanto emita um novo token com a configuração correta.
 
 **Exemplo de cenário:**
 
@@ -202,36 +212,61 @@ Ocorre quando a autenticação é válida, mas você não tem permissão para ac
      "scope": "project:response.read"
    }
    ```
-   **Solução**: obtenha um novo token incluindo o escopo indicado em `scope`. Verifique também se o parâmetro `resource` não foi enviado na solicitação do token.
+   **Solução**: obtenha um novo token incluindo o escopo indicado em `scope`.
 
-3. **`This endpoint does not accept OAuth tokens`**
-
+3. **Endpoint incompatível com tokens OAuth**
+   ```json
+   {
+     "error": "This endpoint does not accept OAuth tokens"
+   }
+   ```
    **Solução**: é uma operação exclusiva da chave de API. Chame-a com uma chave de API ([Escopos e operações permitidas](/pt-BR/docs/developer-docs/authentication#escopos-e-operações-permitidas)).
 
-4. **`Unauthorized` (status 403, token OAuth)**
-
+4. **Falha na verificação do token (status 403, token OAuth)**
+   ```json
+   {
+     "error": "Unauthorized"
+   }
+   ```
    **Solução**: o servidor não conseguiu verificar o token. Não renove o token e tente novamente mais tarde.
 
-5. **`Open API is disabled for this team` / `Access from this IP address is not allowed`**
+5. **Open API desativada na equipe ou restrição por IP**
+   ```json
+   {
+     "error": "Open API is disabled for this team"
+   }
+   ```
+   **Solução**: inclusive quando `Access from this IP address is not allowed` for retornado, confirme com o administrador da equipe a configuração de uso da Open API e a restrição de acesso por IP.
 
-   **Solução**: confirme com o administrador da equipe a configuração de uso da Open API e a restrição de acesso por IP.
-
-6. **`Access denied`**
-
+6. **Acesso ao recurso negado (`Access denied`)**
+   ```json
+   {
+     "error": "Access denied"
+   }
+   ```
    **Solução**: verifique o acesso ao espaço de trabalho do usuário do token OAuth ou, no download de arquivos, as permissões de visualização de respostas e download de arquivos.
 
-7. **Relacionados ao download de arquivos de respostas**
+7. **Restrições no download de arquivos de respostas**
+   ```json
+   {
+     "error": "Approval required",
+     "code": "APPROVAL_REQUIRED",
+     "actionKey": "project:response.download",
+     "projectId": "form_abc"
+   }
+   ```
+   **Solução**: o download do arquivo foi bloqueado por uma política de aprovação, plano da equipe ou campo mascarado.
    - `Approval required` (`code: "APPROVAL_REQUIRED"`, `actionKey`, `projectId`): de acordo com a política de aprovação de downloads da equipe, é necessária aprovação para o formulário `projectId`.
    - `This field is masked and cannot be downloaded.`: campos de arquivo mascarados não podem ser baixados pela Open API.
    - `Secure file access requires an enterprise plan.`: campos de arquivos sensíveis exigem que o plano da equipe ofereça o recurso de arquivos sensíveis.
 
 **Etapas de solução:**
 
-1. Verifique se a chave de API está configurada corretamente no ambiente.
-2. Verifique se o nome do cabeçalho é exatamente `X-WALLA-API-KEY`.
-3. Verifique se a chave não foi revogada nem expirou.
-4. Verifique seu acesso ao espaço de trabalho solicitado.
-5. Verifique se a chave corresponde ao ambiente (desenvolvimento, homologação ou produção).
+1. Verifique se a chave de API (`X-WALLA-API-KEY`) ou o token OAuth (`Authorization: Bearer`) está configurado corretamente e não foi revogado nem expirou.
+2. Em chamadas com token OAuth, verifique se o token inclui o `scope` necessário e se o endpoint aceita tokens OAuth.
+3. Confirme se a configuração de Open API da equipe e as restrições de IP permitem a solicitação.
+4. Verifique seu acesso ao espaço de trabalho ou formulário solicitado (incluindo requisitos de associação à equipe, como autenticação em duas etapas).
+5. Verifique se você está usando as credenciais corretas para o ambiente (desenvolvimento, homologação ou produção).
 
 ---
 
@@ -290,6 +325,30 @@ await sendForm('published_form_id', recipients);
 2. Verifique se o formulário está publicado (para operações de envio).
 3. Verifique se o recurso não foi excluído.
 4. Verifique se está usando o ambiente correto (desenvolvimento ou produção).
+
+---
+
+### 413 Payload Too Large
+
+Ocorre quando um limite de tamanho é excedido ao [baixar um arquivo de resposta (em inglês)](/en/docs/developer-docs/responses#download-a-response-file).
+
+**Causas comuns:**
+
+1. **Corpo da solicitação muito grande**
+   ```json
+   {
+     "error": "Request body too large"
+   }
+   ```
+   **Solução**: o corpo da solicitação excede 4 KiB. Reduza `reason` para no máximo 500 caracteres.
+
+2. **Arquivo muito grande**
+   ```json
+   {
+     "error": "File too large"
+   }
+   ```
+   **Solução**: o arquivo excede 500 MiB (524.288.000 bytes). Esse limite só se aplica quando o armazenamento informa o tamanho do arquivo (`Content-Length`).
 
 ---
 
@@ -386,27 +445,6 @@ def make_request_with_rate_limit(url, headers, max_retries=3):
 
 ---
 
-### 413 Payload Too Large
-
-Ocorre quando um limite de tamanho é excedido ao [baixar um arquivo de resposta (em inglês)](/en/docs/developer-docs/responses#download-a-response-file).
-
-- `Request body too large`: o corpo da solicitação excede 4 KiB. Reduza `reason` para no máximo 500 caracteres.
-- `File too large`: o arquivo excede 500 MiB (524.288.000 bytes). Esse limite só se aplica quando o armazenamento informa o tamanho do arquivo (`Content-Length`).
-
----
-
-### 502 Bad Gateway
-
-Ocorre quando não é possível obter o arquivo do armazenamento ao [baixar um arquivo de resposta (em inglês)](/en/docs/developer-docs/responses#download-a-response-file).
-
-- `Failed to fetch file`: falha na conexão com o armazenamento ou o armazenamento respondeu com erro. Também pode ser retornado quando o arquivo não existe no armazenamento.
-- `Failed to resolve file`: não foi possível gerar o endereço de download do armazenamento protegido.
-- `Invalid file source`: não foi possível interpretar o endereço salvo do arquivo como um local do armazenamento. Um administrador precisa verificar o endereço salvo ou a configuração da implantação.
-
-**Solução**: se for um erro temporário, tente novamente mais tarde; se persistir, entre em contato com um administrador.
-
----
-
 ### 500 Internal Server Error
 
 Ocorre quando o servidor encontra um erro inesperado.
@@ -474,6 +512,38 @@ def make_request_with_retry(url, headers, max_retries=3):
             if i == max_retries - 1:
                 raise
 ```
+
+---
+
+### 502 Bad Gateway
+
+Ocorre quando não é possível obter o arquivo do armazenamento ao [baixar um arquivo de resposta (em inglês)](/en/docs/developer-docs/responses#download-a-response-file).
+
+**Causas comuns:**
+
+1. **Falha ao obter o arquivo**
+   ```json
+   {
+     "error": "Failed to fetch file"
+   }
+   ```
+   **Solução**: falha na conexão com o armazenamento ou o armazenamento respondeu com erro (também pode ocorrer quando o arquivo não existe no armazenamento). Se for temporário, tente novamente mais tarde; se persistir, verifique se o arquivo existe e o status do armazenamento.
+
+2. **Falha ao resolver a URL do armazenamento protegido**
+   ```json
+   {
+     "error": "Failed to resolve file"
+   }
+   ```
+   **Solução**: não foi possível gerar o endereço de download do armazenamento protegido. Tente novamente mais tarde e, se persistir, entre em contato com um administrador.
+
+3. **Origem de arquivo inválida**
+   ```json
+   {
+     "error": "Invalid file source"
+   }
+   ```
+   **Solução**: não foi possível interpretar o endereço salvo do arquivo como um local do armazenamento. Um administrador precisa verificar o endereço salvo ou a configuração da implantação.
 
 ## Boas práticas de tratamento de erros
 
