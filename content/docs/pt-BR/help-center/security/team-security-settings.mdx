@@ -1,0 +1,72 @@
+---
+title: "Configurações de segurança da equipe"
+description: "Gerencie as configurações de segurança e os controles de acesso da sua equipe."
+plan: enterprise
+---
+
+Em `Gerenciamento da equipe` → `Segurança`, você pode configurar políticas de segurança e controles de acesso para integrações válidos para toda a equipe. As alterações só entram em vigor após clicar em `Salvar alterações` na parte inferior da página.
+
+<Callout title="Observação">
+A maioria das configurações de segurança da equipe exige o plano **Enterprise**. No entanto, `Permitir Open API` pode ser configurado por administradores da equipe em qualquer plano, e políticas de `Ações que exigem aprovação` já ativadas também podem ser desativadas em qualquer plano.
+</Callout>
+
+## Visão geral rápida
+
+| Configuração | O que faz | Detalhes |
+| --- | --- | --- |
+| `Autenticação de dois fatores (MFA)` | Exigir 2FA para todos os membros da equipe | [Autenticação de dois fatores](/pt-BR/docs/help-center/security/two-factor-authentication) |
+| `Duração da sessão de login` | Limitar a duração máxima da sessão pessoal na equipe | Veja os detalhes abaixo |
+| `Restrições de acesso por IP` | Permitir acesso ao painel e às APIs apenas por IPs cadastrados | [Restrições de acesso por IP](/pt-BR/docs/help-center/security/ip-address-verification) |
+| `Motivo do download obrigatório` | Exigir motivo ao baixar respostas | Veja os detalhes abaixo |
+| `Impedir a cópia de informações sem máscara` | Impedir copiar ou recortar valores sem máscara | [Mascaramento de dados](/pt-BR/docs/help-center/security/data-masking) |
+| `Bloquear automações` | Bloquear automações de webhook, Zapier, Google Sheets e Gmail | Veja os detalhes abaixo |
+| `Bloquear uso de IA externa` | Desativar recursos de IA externa e evitar envio a LLMs externos | [Bloquear o uso de IA externa](/pt-BR/docs/help-center/security/blocking-external-ai) |
+| `Permitir MCP (conector de IA)` | Controlar chamadas MCP e permissões por recurso | Veja os detalhes abaixo |
+| `Permitir Open API` | Controlar se chamadas à Open API da equipe são permitidas | Veja os detalhes abaixo |
+| `Ações que exigem aprovação` | Exigir aprovação de administrador antes de ações sensíveis | [Ações que exigem aprovação](/pt-BR/docs/help-center/security/approval-workflow) |
+
+## Visão geral das configurações
+
+### Autenticação de dois fatores (MFA)
+Exija que os membros da equipe usem a autenticação de dois fatores. Quando ativada, os membros que ainda não configuraram o MFA precisam concluir a verificação para acessar a equipe.
+Consulte o guia [Autenticação de dois fatores](/pt-BR/docs/help-center/security/two-factor-authentication) para ver as etapas completas.
+
+### Duração da sessão de login
+Exija que a duração da sessão pessoal de cada membro da equipe não ultrapasse o limite definido para a equipe. O padrão é `Usar a configuração pessoal de cada membro`, e você pode definir um limite máximo menor.
+Membros com uma duração maior precisam reduzi-la nas suas configurações pessoais antes de acessar a equipe.
+
+### Restrições de acesso por IP
+Permita acesso ao painel web e às suas APIs apenas a partir dos endereços IP ou intervalos cadastrados. Você pode gerenciar a lista de IPs permitidos e escolher se deseja aplicar as mesmas restrições às integrações MCP e à Open API e integrações de respostas.
+Consulte o guia [Restrições de acesso por IP](/pt-BR/docs/help-center/security/ip-address-verification) para mais detalhes.
+
+### Motivo do download obrigatório
+Exija que os usuários informem um motivo ao baixar respostas. Os motivos registrados podem ser conferidos em [Logs de atividades](/pt-BR/docs/help-center/security/activity-logs).
+
+### Impedir a cópia de informações sem máscara
+Impede copiar ou recortar valores cuja máscara foi removida na planilha de respostas.
+Saiba mais no guia [Mascaramento de dados](/pt-BR/docs/help-center/security/data-masking).
+
+### Bloquear automações
+Bloqueia o novo uso e as solicitações de execução de automações de webhook, Zapier, Google Sheets e Gmail.
+
+### Bloquear uso de IA externa
+Ao ativar esta opção, os recursos que usam IA externa —como a geração de pesquisas com IA e o chat do Walla AI— são desativados, impedindo o envio de dados de respostas a provedores externos de LLM.
+Consulte o guia [Bloquear o uso de IA externa](/pt-BR/docs/help-center/security/blocking-external-ai) para mais informações.
+
+### Permitir MCP (conector de IA)
+Quando desativado, todas as chamadas de ferramentas MCP aos dados desta equipe são bloqueadas, e a equipe fica oculta nas listas de equipes dos clientes de IA. Esta configuração funciona independentemente de `Bloquear uso de IA externa`.
+
+Quando `Permitir MCP (conector de IA)` estiver ativado, você pode controlar o acesso por recurso:
+
+- `Explorar formulários e espaços de trabalho`: A IA pode ler os espaços de trabalho e as estruturas de formulários desta equipe.
+- `Ler dados de respostas`: A IA pode ler dados de respostas mascarados.
+- `Criar e editar formulários`: A IA pode criar formulários, editar perguntas e publicar.
+- `Gerenciar automações`: A IA pode listar, criar e atualizar automações.
+
+### Permitir Open API
+Ao desativar esta opção, todas as chamadas à Open API desta equipe são bloqueadas —inclusive as feitas com chaves de API existentes e tokens OAuth. Consulte a documentação de [Códigos de erro](/pt-BR/docs/developer-docs/error-codes) para mais detalhes sobre erros da API.
+Administradores da equipe podem alterar essa opção em qualquer plano.
+
+### Ações que exigem aprovação
+Exija aprovação de um administrador antes que os membros realizem ações sensíveis, como convidar membros, baixar respostas, remover mascaramento ou excluir pesquisas.
+Consulte o guia [Ações que exigem aprovação](/pt-BR/docs/help-center/security/approval-workflow) para ver o fluxo completo.

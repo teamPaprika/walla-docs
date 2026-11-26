@@ -1,6 +1,7 @@
 {
   "title": "Security",
   "pages": [
+    "team-security-settings",
     "auto-delete-responses",
     "two-factor-authentication",
     "ip-address-verification",

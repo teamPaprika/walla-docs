@@ -5,4 +5,6 @@ plan:
 ---
 
 ## 封鎖外部 AI 使用
-啟用 `封鎖外部 AI 使用` 選項後，這個團隊的回覆資料就不會被傳送到 OpenAI 等外部 LLM 供應商。啟用這個選項時，[用 AI 建立問卷](/zh-TW/docs/help-center/create-forms/creating-project-ai)功能會被停用。
+在 `團隊管理` → `安全性` 開啟 `封鎖外部 AI 使用` 選項後，使用外部 AI 的功能（包括[用 AI 建立問卷](/zh-TW/docs/help-center/create-forms/creating-project-ai)與 Walla AI 聊天）將停用，且團隊的回覆資料不會傳送給外部 LLM 供應商。
+
+此設定與[團隊安全性設定](/zh-TW/docs/help-center/security/team-security-settings)中的 `允許 MCP（AI 連接器）` 彼此獨立。即使封鎖外部 AI 使用，MCP 整合的允許狀態仍會分開控制。

@@ -1,14 +1,47 @@
 ---
-title: "Verificación de dirección IP"
-description: "La verificación de dirección IP restringe el acceso al proyecto a las direcciones IP o rangos de red que indiques."
-plan:
+title: "Restricciones de acceso por IP"
+description: "Permite el acceso al panel web y sus API solo desde las direcciones IP o rangos de red registrados."
+plan: enterprise
 ---
 
-## Activar la verificación de dirección IP
-- Al activar «Verificación de dirección IP» en la página de ajustes del proyecto, solo se podrá acceder al formulario desde las IP registradas.
-- Con la verificación de IP activada hay que registrar como mínimo una dirección.
-## Gestionar las IP y rangos permitidos
-- Puedes registrar direcciones o rangos con cualquiera de estos formatos.
-  - IP individual: `192.168.1.1`
-  - Rango CIDR: `192.168.1.0/24` (de 192.168.1.0 a 192.168.1.255)
-  - Comodín: `192.168.*.*` (de 192.168.0.0 a 192.168.255.255)
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Activar las restricciones de acceso por IP
+
+<Steps>
+  <Step>
+    ### Ve a Seguridad
+    Accede a `Gestión del equipo` → `Seguridad`.
+  </Step>
+  <Step>
+    ### Activa las restricciones por IP y registra direcciones
+    Activa `Restricciones de acceso por IP` y añade las direcciones IP o rangos permitidos. Cuando las restricciones de acceso por IP están activadas, debes registrar al menos una dirección IP o rango.
+  </Step>
+  <Step>
+    ### Revisa el ámbito y guarda
+    Comprueba los ámbitos de integración abajo y pulsa `Guardar cambios`. Este ajuste restringe el acceso al **panel web y sus API** del equipo; no impide que las personas encuestadas abran ni respondan los formularios.
+  </Step>
+</Steps>
+
+## Ámbito de aplicación
+Cuando las restricciones de acceso por IP están activadas, puedes elegir a qué integraciones se aplica la lista de IP permitidas de abajo. Los cambios se aplican tras pulsar `Guardar cambios`.
+
+- `Aplicar también a las integraciones MCP`: Aplica la lista de IP permitidas a las llamadas a herramientas MCP.
+- `Aplicar también a Open API y a las integraciones de respuestas`: Abarca todas las llamadas a Open API (con claves API y tokens OAuth), la consulta de respuestas mediante integraciones y la descarga de archivos adjuntos.
+
+Al activar las restricciones de acceso por IP por primera vez, ambos ámbitos quedan seleccionados de forma predeterminada.
+
+<Callout type="warning" title="Aviso sobre integraciones">
+Las integraciones en la nube usan la IP pública del servidor que realiza la llamada. Esta restricción puede interrumpir las integraciones existentes si no incluyes sus direcciones IP en la lista de permitidas.
+</Callout>
+
+## Gestionar la lista de IP permitidas
+Puedes registrar direcciones o rangos con cualquiera de estos formatos:
+
+- IP individual: `192.168.1.1`
+- Rango CIDR: `192.168.1.0/24` (de 192.168.1.0 a 192.168.1.255)
+- Comodín: `192.168.*.*` (de 192.168.0.0 a 192.168.255.255)
+
+<Callout type="warning" title="Advertencia">
+Antes de guardar, comprueba que la lista de IP permitidas incluya tu dirección IP actual. De lo contrario, perderás el acceso al equipo, aunque seas administrador.
+</Callout>

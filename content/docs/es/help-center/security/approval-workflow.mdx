@@ -12,7 +12,7 @@ Con las aprobaciones activadas, un miembro necesita la aprobación de un adminis
   <Step>
     ### Activa las acciones que requieren aprobación
 
-    Ve a Gestión del equipo → `Seguridad` → `Acciones que requieren aprobación`, activa el interruptor de cada acción y pulsa `Guardar cambios`.
+    Ve a `Gestión del equipo` → `Seguridad` → `Acciones que requieren aprobación`, activa el interruptor de cada acción y pulsa `Guardar cambios`.
 
     | Acción | Alcance de la aprobación |
     | --- | --- |
@@ -20,6 +20,8 @@ Con las aprobaciones activadas, un miembro necesita la aprobación de un adminis
     | Descargar respuestas | Permiso de descarga limitado en el tiempo sobre un formulario |
     | Quitar el enmascaramiento | Permiso limitado en el tiempo para ver los datos sin enmascarar |
     | Eliminar formulario | Una eliminación |
+
+    La política de aprobación `Descargar respuestas` también se aplica al descargar archivos de respuesta mediante la Open API, por lo que la descarga queda bloqueada sin aprobación. (Consulta [Códigos de error](/es/docs/developer-docs/error-codes) para ver los detalles de error de la API.)
 
     Los administradores y perfiles superiores actúan sin aprobación: el control se aplica a los miembros de rango inferior. Para cambiar estos ajustes hace falta el permiso de configuración de seguridad del equipo.
   </Step>
@@ -35,7 +37,7 @@ Con las aprobaciones activadas, un miembro necesita la aprobación de un adminis
   <Step>
     ### Un administrador aprueba o rechaza
 
-    Ve a Gestión del equipo → `Aprobaciones`, revisa en la pestaña `Pendientes` quién solicita, la acción, el destino, el motivo, la hora de solicitud y la caducidad, y pulsa `Aprobar` o `Rechazar`. El menú indica cuántas solicitudes están pendientes. No puedes aprobar tu propia solicitud.
+    Ve a `Gestión del equipo` → `Aprobaciones`, revisa en la pestaña `Pendientes` quién solicita, la acción, el destino, el motivo, la hora de solicitud y la caducidad, y pulsa `Aprobar` o `Rechazar`. El menú indica cuántas solicitudes están pendientes. No puedes aprobar tu propia solicitud.
   </Step>
   <Step>
     ### Elige el periodo de aprobación

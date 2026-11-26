@@ -1,0 +1,72 @@
+---
+title: "Team Security Settings"
+description: "Manage your team's security settings and access controls."
+plan: enterprise
+---
+
+You can configure team-wide security policies and integration access controls under `Team Management` → `Security`. Any changes take effect only after you click `Save Changes` at the bottom of the page.
+
+<Callout title="Note">
+Most team security settings require the **Enterprise** plan. However, `Allow Open API` can be configured by team admins on any plan, and already-enabled `Actions requiring approval` policies can also be turned off on any plan.
+</Callout>
+
+## At a Glance
+
+| Setting | What it does | Details |
+| --- | --- | --- |
+| `Two-Factor Authentication (MFA)` | Require 2FA across all team members | [Two-Factor Authentication](/en/docs/help-center/security/two-factor-authentication) |
+| `Login Session Duration` | Cap personal login session duration for the team | See details below |
+| `IP Access Restrictions` | Restrict dashboard and API access to allowed IPs | [IP Access Restrictions](/en/docs/help-center/security/ip-address-verification) |
+| `Download Reason Required` | Require a reason when downloading responses | See details below |
+| `Prevent copying unmasked data` | Prevent copying or cutting unmasked response values | [Data Masking](/en/docs/help-center/security/data-masking) |
+| `Block automation` | Block webhook, Zapier, Google Sheets, and Gmail automations | See details below |
+| `Block external AI usage` | Disable external AI features and outbound LLM data sharing | [Blocking External AI Use](/en/docs/help-center/security/blocking-external-ai) |
+| `Allow MCP (AI connector)` | Control MCP tool calls and per-feature permissions | See details below |
+| `Allow Open API` | Control whether Open API calls are allowed for the team | See details below |
+| `Actions requiring approval` | Require admin approval before sensitive actions | [Approvals](/en/docs/help-center/security/approval-workflow) |
+
+## Settings Overview
+
+### Two-Factor Authentication (MFA)
+Require team members to use two-factor authentication. Once enabled, members who have not set up 2FA must complete verification before accessing the team.
+See the [Two-Factor Authentication](/en/docs/help-center/security/two-factor-authentication) guide for full setup steps.
+
+### Login Session Duration
+Require each team member's personal login session duration to be no longer than the limit set for the team. By default, this is set to `Use each member's personal setting`, and you can enforce a shorter maximum duration.
+Members with a longer personal setting must shorten it in their personal settings before they can access the team.
+
+### IP Access Restrictions
+Allow access to the web dashboard and its APIs only from registered IP addresses or ranges. You can manage the allowed IP list and choose whether to apply the same restrictions to MCP integrations and Open API/response integrations.
+See the [IP Access Restrictions](/en/docs/help-center/security/ip-address-verification) guide for details.
+
+### Download Reason Required
+Require users to enter a reason when downloading responses. Recorded reasons can be reviewed in [Activity Logs](/en/docs/help-center/security/activity-logs).
+
+### Prevent copying unmasked data
+Prevents copying or cutting unmasked response values in the response sheet.
+See the [Data Masking](/en/docs/help-center/security/data-masking) guide for more details.
+
+### Block automation
+Blocks new use of and run requests for webhook, Zapier, Google Sheets, and Gmail automations.
+
+### Block external AI usage
+When enabled, features that use external AI—including AI Survey Generation and Walla AI chat—are disabled, and response data is not sent to external LLM providers.
+See the [Blocking External AI Use](/en/docs/help-center/security/blocking-external-ai) guide for details.
+
+### Allow MCP (AI connector)
+When turned off, every MCP tool call against this team's data is blocked, and the team is hidden from AI clients' team lists. This setting operates independently of `Block external AI usage`.
+
+When `Allow MCP (AI connector)` is on, you can control access per feature:
+
+- `Browse forms & workspaces`: AI can read this team's workspaces and form structures.
+- `Read response data`: AI can read masked response data.
+- `Create & edit forms`: AI can create forms, edit questions, and publish.
+- `Manage automations`: AI can list, create, and update automations.
+
+### Allow Open API
+When turned off, all Open API calls for this team are blocked—including calls made with existing API keys and OAuth tokens. See the [Error Codes](/en/docs/developer-docs/error-codes) developer documentation for API error details.
+Team admins can change this setting on any plan.
+
+### Actions requiring approval
+Require an admin's approval before members perform sensitive actions such as inviting team members, downloading responses, unmasking responses, or deleting surveys.
+See the [Approvals](/en/docs/help-center/security/approval-workflow) guide for the full workflow.

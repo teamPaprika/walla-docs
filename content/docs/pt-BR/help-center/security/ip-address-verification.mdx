@@ -1,16 +1,49 @@
 ---
-title: "Verificação de endereço IP"
-description: "Restrinja o acesso à equipe a endereços IP ou intervalos de rede específicos."
+title: "Restrições de acesso por IP"
+description: "Permita acesso ao painel web e às suas APIs apenas a partir dos endereços IP ou intervalos de rede cadastrados."
 plan: enterprise
 ---
 
-<img src="/images/guides/security/ip-verification.png" alt="Verificação de endereço IP" style={{ width: "100%", borderRadius: "8px", marginBottom: "24px", border: "1px solid var(--border)"}} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-## Ativar a verificação de endereço IP
-- Em `Configurações da equipe` → `Segurança`, ative `Verificação de endereço IP` para permitir acesso à equipe apenas pelos IPs cadastrados.
-- Com a verificação ativa, é obrigatório cadastrar pelo menos um endereço IP.
-## Gerenciar endereços e intervalos de IP permitidos
-- Cadastre endereços ou intervalos de IP em um dos formatos abaixo.
-  - IP individual: `192.168.1.1`
-  - Intervalo CIDR: `192.168.1.0/24` (192.168.1.0 ~ 192.168.1.255)
-  - Curinga: `192.168.*.*` (192.168.0.0 ~ 192.168.255.255)
+<img src="/images/guides/security/ip-verification.png" alt="Restrições de acesso por IP" style={{ width: "100%", borderRadius: "8px", marginBottom: "24px", border: "1px solid var(--border)"}} />
+
+## Ativar restrições de acesso por IP
+
+<Steps>
+  <Step>
+    ### Acesse as configurações de segurança
+    Vá para `Gerenciamento da equipe` → `Segurança`.
+  </Step>
+  <Step>
+    ### Ative a restrição por IP e cadastre os endereços
+    Ative `Restrições de acesso por IP` e adicione os endereços ou intervalos de IP permitidos. Quando as restrições de acesso por IP estiverem ativadas, é obrigatório cadastrar pelo menos um endereço ou intervalo de IP.
+  </Step>
+  <Step>
+    ### Confira o escopo e salve
+    Verifique os escopos de integração abaixo e clique em `Salvar alterações`. Essa configuração restringe o acesso ao **painel web e às suas APIs**; ela não bloqueia o acesso de respondentes para abrir e enviar pesquisas.
+  </Step>
+</Steps>
+
+## Escopo de aplicação
+Quando as restrições de acesso por IP estiverem ativadas, você pode escolher quais integrações compartilham a lista de IPs permitidos abaixo. As alterações são aplicadas após clicar em `Salvar alterações`.
+
+- `Aplicar também às integrações MCP`: Aplica a lista de IPs permitidos às chamadas de ferramentas MCP.
+- `Aplicar também à Open API e às integrações de respostas`: Abrange todas as chamadas à Open API (com chaves de API e tokens OAuth), a consulta de respostas por integrações e o download de arquivos anexados.
+
+Ao ativar as restrições de acesso por IP pela primeira vez, ambos os escopos vêm selecionados por padrão.
+
+<Callout type="warning" title="Aviso sobre integrações">
+As integrações na nuvem usam o IP público do servidor que faz a chamada. Esta restrição pode interromper integrações existentes caso os IPs desses servidores não estejam na lista de permitidos.
+</Callout>
+
+## Gerenciar a lista de IPs permitidos
+Cadastre endereços ou intervalos de IP em um dos formatos abaixo:
+
+- IP individual: `192.168.1.1`
+- Intervalo CIDR: `192.168.1.0/24` (192.168.1.0 ~ 192.168.1.255)
+- Curinga: `192.168.*.*` (192.168.0.0 ~ 192.168.255.255)
+
+<Callout type="warning" title="Atenção">
+Antes de salvar, verifique se a lista de IPs permitidos inclui seu endereço IP atual. Caso contrário, você perderá o acesso à equipe, mesmo sendo administrador.
+</Callout>
