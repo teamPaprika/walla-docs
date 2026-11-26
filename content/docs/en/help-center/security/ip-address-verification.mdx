@@ -1,16 +1,49 @@
 ---
-title: "IP Address Verification"
-description: "IP address verification restricts project access to specific IP addresses or network ranges."
-plan:
+title: "IP Access Restrictions"
+description: "Allow access to the web dashboard and its APIs only from registered IP addresses or network ranges."
+plan: enterprise
 ---
 
-<img src="/images/guides/security/ip-verification.png" alt="IP address verification" style={{ width: "100%", borderRadius: "8px", marginBottom: "24px", border: "1px solid var(--border)"}} />
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-## Enabling IP Address Verification
-- Turn on 'IP Address Verification' in the project settings to only allow access from registered IP addresses.
-- While IP verification is enabled, you must register at least one IP address.
-## Managing Allowed IPs and Ranges
-- You can register IP addresses or ranges in any of the following formats:
-  - Individual IP: `192.168.1.1`
-  - CIDR range: `192.168.1.0/24` (192.168.1.0 to 192.168.1.255)
-  - Wildcard: `192.168.*.*` (192.168.0.0 to 192.168.255.255)
+<img src="/images/guides/security/ip-verification.png" alt="IP Access Restrictions" style={{ width: "100%", borderRadius: "8px", marginBottom: "24px", border: "1px solid var(--border)"}} />
+
+## Enabling IP Access Restrictions
+
+<Steps>
+  <Step>
+    ### Open Security settings
+    Go to `Team Management` → `Security`.
+  </Step>
+  <Step>
+    ### Turn on IP Access Restrictions and add allowed IPs
+    Turn on `IP Access Restrictions` and add your allowed IP addresses or ranges. When IP access restrictions are enabled, at least one IP address or range must be registered.
+  </Step>
+  <Step>
+    ### Review scopes and save
+    Confirm the integration scopes below and click `Save Changes`. This setting restricts access to your team's **web dashboard and related APIs**; it does not restrict survey respondents from opening and submitting surveys.
+  </Step>
+</Steps>
+
+## Applies to
+When IP access restrictions are enabled, you can choose which integrations share the allowed IP list below. Changes apply after clicking `Save Changes`.
+
+- `Apply to MCP integrations`: Enforces the allowed IP list on MCP tool calls.
+- `Apply to Open API and response integrations`: Covers every Open API call (both API keys and OAuth tokens), response reads through integrations, and attachment downloads.
+
+When you enable IP Access Restrictions for the first time, both scopes are selected by default.
+
+<Callout type="warning" title="Integration Notice">
+Cloud integrations use the calling server's public IP address. Applying this restriction may interrupt existing integrations unless those server IPs are added to the allowed list.
+</Callout>
+
+## Managing the Allowed IP List
+You can register IP addresses or ranges in any of the following formats:
+
+- Individual IP: `192.168.1.1`
+- CIDR range: `192.168.1.0/24` (192.168.1.0 to 192.168.1.255)
+- Wildcard: `192.168.*.*` (192.168.0.0 to 192.168.255.255)
+
+<Callout type="warning" title="Warning">
+Before saving, make sure the allowed list includes your current IP address. Otherwise, you will lose access to the team, even as an administrator.
+</Callout>

@@ -12,7 +12,7 @@ Once approvals are on, a member has to get an admin's approval before performing
   <Step>
     ### Turn on the actions that require approval
 
-    Go to Team Management → `Security` → `Actions requiring approval`, switch on each action, and click `Save Changes`.
+    Go to `Team Management` → `Security` → `Actions requiring approval`, switch on each action, and click `Save Changes`.
 
     | Action | What the approval covers |
     | --- | --- |
@@ -20,6 +20,8 @@ Once approvals are on, a member has to get an admin's approval before performing
     | Download responses | Approval grants time-limited download access to a survey |
     | Unmask responses | Approval grants time-limited unmask access to a survey |
     | Delete survey | Approval covers a single deletion |
+
+    The `Download responses` approval policy also applies when downloading response files through the Open API, so downloads are blocked without approval. (See [Error Codes](/en/docs/developer-docs/error-codes) for API error details.)
 
     Admins and above act without approval — the gate applies to members below that rank. Changing these settings requires the team security settings permission.
   </Step>
@@ -35,7 +37,7 @@ Once approvals are on, a member has to get an admin's approval before performing
   <Step>
     ### An admin approves or rejects
 
-    Go to Team Management → `Approvals`, review the requester, action, target, reason, request time, and expiry in the `Pending` tab, then click `Approve` or `Reject`. The menu shows how many requests are waiting. You cannot approve your own request.
+    Go to `Team Management` → `Approvals`, review the requester, action, target, reason, request time, and expiry in the `Pending` tab, then click `Approve` or `Reject`. The menu shows how many requests are waiting. You cannot approve your own request.
   </Step>
   <Step>
     ### Choose the approval period

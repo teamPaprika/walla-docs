@@ -12,7 +12,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### Ative as ações que exigem aprovação
 
-    Em Configurações da equipe → `Segurança` → `Ações que exigem aprovação`, ative as opções desejadas e clique em `Salvar alterações`.
+    Em `Gerenciamento da equipe` → `Segurança` → `Ações que exigem aprovação`, ative as opções desejadas e clique em `Salvar alterações`.
 
     <img src="/images/guides/security/approval-policy-toggles.png" alt="Cartão Ações que exigem aprovação na página de segurança da equipe" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
 
@@ -22,6 +22,8 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
     | Baixar respostas | Permissão para baixar respostas do formulário por um período limitado |
     | Remover mascaramento de respostas | Permissão para remover o mascaramento do formulário por um período limitado |
     | Excluir formulário | Uma exclusão |
+
+    A política de aprovação `Baixar respostas` também se aplica ao download de arquivos de resposta via Open API, impedindo o download sem aprovação prévia. (Consulte [Códigos de erro](/pt-BR/docs/developer-docs/error-codes) para mais detalhes sobre erros da API.)
 
     Administradores (admin) e funções superiores podem realizar essas ações sem aprovação. A exigência se aplica aos membros com funções inferiores. Para alterar a configuração, é necessário ter permissão de segurança da equipe.
   </Step>
@@ -37,7 +39,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
   <Step>
     ### O administrador aprova ou rejeita
 
-    Acesse Configurações da equipe → `Aprovações`. Na aba `Pendente`, confira solicitante, ação, alvo, motivo, horário e vencimento, e clique em `Aprovar` ou `Rejeitar`. O menu mostra a quantidade de solicitações pendentes. Não é permitido aprovar a própria solicitação.
+    Acesse `Gerenciamento da equipe` → `Aprovações`. Na aba `Pendente`, confira solicitante, ação, alvo, motivo, horário e vencimento, e clique em `Aprovar` ou `Rejeitar`. O menu mostra a quantidade de solicitações pendentes. Não é permitido aprovar a própria solicitação.
 
     <img src="/images/guides/security/approval-pending-list.png" alt="Lista de solicitações e botões Aprovar e Rejeitar na aba Pendente da página de aprovações" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)"}} />
   </Step>

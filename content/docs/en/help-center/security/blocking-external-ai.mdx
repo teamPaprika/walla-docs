@@ -7,4 +7,6 @@ plan:
 <img src="/images/guides/security/blocking-external-ai.png" alt="The block external AI use toggle turned on in Team Management → Security settings" style={{ width: "100%", borderRadius: "8px", marginTop: "12px", marginBottom: "12px", border: "1px solid var(--border)" }} />
 
 ## Blocking external AI use
-Turning on `Block external AI use` stops this team's response data from being sent to external LLM providers such as OpenAI. Enabling this option disables the [Create a survey with AI](https://docs.walla.my/en/docs/help-center/create-forms/creating-project-ai) feature.
+Turning on `Block external AI usage` under `Team Management` → `Security` disables features that use external AI, including [Creating a Survey with AI](/en/docs/help-center/create-forms/creating-project-ai) and Walla AI chat, and prevents team response data from being sent to external LLM providers.
+
+This setting operates independently of `Allow MCP (AI connector)` in [Team Security Settings](/en/docs/help-center/security/team-security-settings). Blocking external AI usage does not disable MCP integrations.
